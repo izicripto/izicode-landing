@@ -25,7 +25,6 @@
     <meta name="twitter:description" content="Transforme sua escola com Hackathons, Robótica, STEAM e Cultura Maker.">
     <meta name="twitter:image" content="https://izicode.com.br/images/logo.png">
 
-    <!-- JSON-LD (Schema.org) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -61,7 +60,10 @@
             75% { transform: translateX(-2px) rotate(-1deg); }
             100% { transform: translateX(0); }
         }
-        .hover-shake:hover { animation: shake 0.3s ease-in-out infinite; }
+        .hover-shake:hover { 
+            animation: shake 0.3s ease-in-out infinite; 
+            box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.3);
+        }
     </style>
     <script>
         tailwind.config = {
@@ -89,7 +91,7 @@
                     <a href="#metodologia" class="text-sm font-medium text-slate-600 hover:text-brand-600">Metodologia</a>
                     <a href="#depoimentos" class="text-sm font-medium text-slate-600 hover:text-brand-600">Depoimentos</a>
                     <a href="#faq" class="text-sm font-medium text-slate-600 hover:text-brand-600">FAQ</a>
-                    <button id="loginBtnTop" class="bg-brand-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-brand-700 hover-shake transition-all shadow-md shadow-brand-100 flex items-center gap-2">
+                    <button id="loginBtnTop" class="bg-brand-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-brand-700 hover-shake transition-all shadow-md shadow-brand-100 flex items-center gap-2 text-sm">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.908 3.152-1.928 4.172-1.224 1.224-3.136 2.52-6.52 2.52-5.272 0-9.432-4.264-9.432-9.536s4.16-9.536 9.432-9.536c2.856 0 5.144 1.112 6.856 2.72l2.312-2.312C18.424 1.16 15.656 0 12.48 0 6.552 0 1.512 4.936 1.512 11s5.04 11 10.968 11c3.216 0 5.656-1.064 7.512-3.008 1.952-1.952 2.568-4.704 2.568-6.912 0-.664-.048-1.288-.152-1.872h-9.84z\"/></svg>
                         Plataforma
                     </button>
@@ -100,21 +102,16 @@
 
     <!-- Hero -->
     <main>
-        <section class="relative pt-24 pb-20 lg:pt-32 lg:pb-28">
+        <section class="relative pt-24 pb-20 lg:pt-32 lg:pb-28 overflow-hidden">
             <div class="absolute inset-0 bg-[radial-gradient(#bae6fd_1px,transparent_1px)] [background-size:24px_24px] opacity-50"></div>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid lg:grid-cols-2 gap-12 items-center">
                     <div class="text-center lg:text-left">
-                        <h1 class="font-display text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight mb-6">Transformando a Educação através da Inovação</h1>
+                        <h1 class="font-display text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight mb-6 animate-fade-in-up">Transformando a Educação através da Inovação</h1>
                         <p class="text-lg text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0">Hackathons, Olimpíadas, Robótica e Programação integrados às ODS, BNCC e Práticas Restaurativas. Cada escola é única — criamos soluções sob medida.</p>
                         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                            <a href="https://tally.so/r/mYRNQB" target="_blank" class="bg-brand-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-brand-700 hover-shake transition-all shadow-lg shadow-brand-200">Agendar Consultoria Gratuita</a>
-                            <a href="#solucoes" class="bg-white text-slate-700 border border-slate-200 px-8 py-3 rounded-xl font-bold hover:bg-slate-50 hover-shake">Conhecer Soluções</a>
-                        </div>
-                        <div class="mt-12 grid grid-cols-3 gap-6 text-center">
-                            <div><div class="font-display text-3xl font-bold text-brand-600">50+</div><div class="text-slate-500 text-sm">Escolas Parceiras</div></div>
-                            <div><div class="font-display text-3xl font-bold text-brand-600">5k+</div><div class="text-slate-500 text-sm">Alunos Impactados</div></div>
-                            <div><div class="font-display text-3xl font-bold text-brand-600">100%</div><div class="text-slate-500 text-sm">Personalizado</div></div>
+                            <a href="https://tally.so/r/mYRNQB" target="_blank" class="bg-brand-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-brand-700 hover-shake transition-all shadow-lg shadow-brand-200 text-center">Agendar Consultoria Gratuita</a>
+                            <a href="#solucoes" class="bg-white text-slate-700 border border-slate-200 px-8 py-3 rounded-xl font-bold hover:bg-slate-50 hover-shake text-center transition-all">Conhecer Soluções</a>
                         </div>
                     </div>
                     <div class="relative hidden lg:block"><img src="images/01.jpg" alt="Alunos participando de competição de robótica" class="rounded-3xl shadow-2xl w-full h-auto object-cover" loading="lazy"></div>
@@ -128,9 +125,9 @@
                 <div class="grid lg:grid-cols-2 gap-16 items-center">
                     <div><img src="images/close-up-making-robots.jpg" alt="Close-up de mãos construindo robôs educacionais" class="rounded-3xl shadow-xl w-full h-auto object-cover" loading="lazy"></div>
                     <div>
-                        <h2 class=\"font-display text-3xl font-bold text-slate-900 mb-6\">Educação que transforma vidas e comunidades</h2>
-                        <p class=\"text-lg text-slate-600 mb-6\">A Izicode Edu nasceu da paixão por unir tecnologia, educação e impacto social. Acreditamos que cada escola tem potencial único — por isso, não oferecemos pacotes prontos.</p>
-                        <p class=\"text-lg text-slate-600\">Nossa abordagem integra Práticas Restaurativas, ODS, BNCC e Ecologia em projetos que engajam alunos e transformam a comunidade escolar.</p>
+                        <h2 class="font-display text-3xl font-bold text-slate-900 mb-6">Educação que transforma vidas e comunidades</h2>
+                        <p class="text-lg text-slate-600 mb-6">A Izicode Edu nasceu da paixão por unir tecnologia, educação e impacto social. Acreditamos que cada escola tem potencial único — por isso, não oferecemos pacotes prontos.</p>
+                        <p class="text-lg text-slate-600">Nossa abordagem integra Práticas Restaurativas, ODS, BNCC e Ecologia em projetos que engajam alunos e transformam a comunidade escolar.</p>
                     </div>
                 </div>
             </div>
@@ -139,17 +136,17 @@
         <!-- Nossas Soluções -->
         <section id="solucoes" class="py-24">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class=\"text-center max-w-3xl mx-auto mb-16\">
-                    <h2 class=\"font-display text-4xl font-bold text-slate-900 mb-4\">Soluções completas para sua escola</h2>
-                    <p class=\"text-slate-600 text-lg\">Da consultoria inicial à implementação completa, oferecemos tudo que sua escola precisa para se tornar referência em tecnologia educacional.</p>
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="font-display text-4xl font-bold text-slate-900 mb-4">Soluções completas para sua escola</h2>
+                    <p class="text-slate-600 text-lg">Oferecemos tudo que sua escola precisa para se tornar referência em tecnologia educacional.</p>
                 </div>
-                <div class=\"grid md:grid-cols-2 lg:grid-cols-3 gap-8\">
-                    <div class=\"bg-slate-50 p-8 rounded-2xl\"><h3 class=\"font-bold text-slate-900 mb-2\">Consultoria Personalizada</h3><p class=\"text-sm text-slate-600\">Diagnóstico completo da sua escola para desenvolver um plano de ação sob medida.</p></div>
-                    <div class=\"bg-slate-50 p-8 rounded-2xl\"><h3 class=\"font-bold text-slate-900 mb-2\">Capacitação de Professores</h3><p class=\"text-sm text-slate-600\">Formação hands-on para sua equipe dominar ferramentas e metodologias ativas.</p></div>
-                    <div class=\"bg-slate-50 p-8 rounded-2xl\"><h3 class=\"font-bold text-slate-900 mb-2\">Robótica Educacional</h3><p class=\"text-sm text-slate-600\">Implementação de laboratórios com Arduino, Micro:bit e materiais recicláveis.</p></div>
-                    <div class=\"bg-slate-50 p-8 rounded-2xl\"><h3 class=\"font-bold text-slate-900 mb-2\">Programação para Todas as Idades</h3><p class=\"text-sm text-slate-600\">Do Scratch ao Python, implementamos programas de ensino adequados a cada faixa etária.</p></div>
-                    <div class=\"bg-slate-50 p-8 rounded-2xl\"><h3 class=\"font-bold text-slate-900 mb-2\">Projetos Interdisciplinares</h3><p class=\"text-sm text-slate-600\">Integramos tecnologia com Ciências, Matemática, Arte e Sustentabilidade.</p></div>
-                    <div class=\"bg-slate-50 p-8 rounded-2xl\"><h3 class=\"font-bold text-slate-900 mb-2\">Acompanhamento Contínuo</h3><p class=\"text-sm text-slate-600\">Suporte permanente via WhatsApp, reuniões mensais e relatórios de progresso.</p></div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-slate-50 p-8 rounded-2xl border border-transparent hover:border-brand-100 transition-all"><h3 class="font-bold text-slate-900 mb-2">Consultoria Personalizada</h3><p class="text-sm text-slate-600">Diagnóstico completo da sua escola para desenvolver um plano de ação sob medida.</p></div>
+                    <div class="bg-slate-50 p-8 rounded-2xl border border-transparent hover:border-brand-100 transition-all"><h3 class="font-bold text-slate-900 mb-2">Capacitação de Professores</h3><p class="text-sm text-slate-600">Formação hands-on para sua equipe dominar ferramentas e metodologias ativas.</p></div>
+                    <div class="bg-slate-50 p-8 rounded-2xl border border-transparent hover:border-brand-100 transition-all"><h3 class="font-bold text-slate-900 mb-2">Robótica Educacional</h3><p class="text-sm text-slate-600">Implementação de laboratórios com Arduino, Micro:bit e materiais recicláveis.</p></div>
+                    <div class="bg-slate-50 p-8 rounded-2xl border border-transparent hover:border-brand-100 transition-all"><h3 class="font-bold text-slate-900 mb-2">Programação para Todas as Idades</h3><p class="text-sm text-slate-600">Do Scratch ao Python, implementamos programas de ensino adequados a cada faixa etária.</p></div>
+                    <div class="bg-slate-50 p-8 rounded-2xl border border-transparent hover:border-brand-100 transition-all"><h3 class="font-bold text-slate-900 mb-2">Projetos Interdisciplinares</h3><p class="text-sm text-slate-600">Integramos tecnologia com Ciências, Matemática, Arte e Sustentabilidade.</p></div>
+                    <div class="bg-slate-50 p-8 rounded-2xl border border-transparent hover:border-brand-100 transition-all"><h3 class="font-bold text-slate-900 mb-2">Acompanhamento Contínuo</h3><p class="text-sm text-slate-600">Suporte permanente via WhatsApp, reuniões mensais e relatórios de progresso.</p></div>
                 </div>
             </div>
         </section>
@@ -162,17 +159,16 @@
                     <div>
                         <h3 class="font-display text-2xl font-bold text-slate-900 mb-4">Inovação e Metodologias Ativas</h3>
                         <p class="text-slate-600 mb-6">Não ensinamos apenas ferramentas; ensinamos a pensar. Nossa abordagem é baseada em pilares fundamentais da educação moderna.</p>
-                        <div class="space-y-4">
+                        <div class="space-y-4 text-sm md:text-base">
                             <p><strong class="text-brand-600">STEAM & PBL:</strong> Aprendizagem Baseada em Projetos integrando Ciência, Tecnologia, Engenharia, Artes e Matemática.</p>
-                            <p><strong class="text-brand-600">RPG Pedagógico:</strong> Gamificação imersiva onde alunos assumem papéis, formam guildas e resolvem missões épicas.</p>
-                            <p><strong class="text-brand-600">Startup Thinking:</strong> Mentalidade empreendedora desde cedo: ideação, criação de MVP, validação e pitch.</p>
-                            <p><strong class="text-brand-600">Cidadania Digital:</strong> Uso seguro, ético e consciente da tecnologia, com base nas diretrizes do <a href="https://cartilha.cert.br/" target="_blank" class="underline hover:text-brand-800">CERT.br</a>.</p>
-                            <p><strong class="text-brand-600">Práticas Restaurativas:</strong> Círculos de diálogo para construir empatia, resolver conflitos e fortalecer a comunidade.</p>
+                            <p><strong class="text-brand-600">RPG Pedagógico:</strong> Gamificação imersiva onde alunos assumem papéis e resolvem missões épicas.</p>
+                            <p><strong class="text-brand-600">Startup Thinking:</strong> Mentalidade empreendedora desde cedo: ideação, MVP, validação e pitch.</p>
+                            <p><strong class="text-brand-600">Cidadania Digital:</strong> Uso seguro e ético da tecnologia, com base nas diretrizes do <a href="https://cartilha.cert.br/" target="_blank" class="underline hover:text-brand-800">CERT.br</a>.</p>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
                         <h3 class="font-display text-2xl font-bold text-slate-900 mb-4">Alinhamento BNCC e ODS</h3>
-                        <p class="text-slate-600 mb-6">Todos os projetos conectam tecnologia aos Objetivos de Desenvolvimento Sustentável (ODS) da ONU e desenvolvem as competências gerais da BNCC.</p>
+                        <p class="text-slate-600 mb-6">Todos os projetos conectam tecnologia aos ODS da ONU e desenvolvem as competências gerais da BNCC.</p>
                         <div class="flex items-center gap-6 mt-4 opacity-80 grayscale hover:grayscale-0 transition-all">
                             <img src="images/ods.jpg" alt="Logo ODS" class="h-16 w-auto object-contain">
                             <img src="images/bncc.jpg" alt="Logo BNCC" class="h-12 w-auto object-contain">
@@ -187,9 +183,8 @@
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16"><h2 class="font-display text-4xl font-bold text-slate-900">Dúvidas Frequentes</h2></div>
                 <div x-data="{ open: 1 }" class="space-y-4">
-                    <div x-data="{ id: 1 }"><h3 @click="open = (open === id ? 0 : id)" class="cursor-pointer flex justify-between items-center p-4 bg-white rounded-lg border font-bold">Quais são os serviços específicos? <svg :class="{'rotate-180': open === id}" class="w-5 h-5 text-brand-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></h3><div x-show="open === id" x-collapse class="p-4 text-slate-600">Oferecemos consultoria, treinamentos, implementação de programas de programação (Scratch, Arduino), robótica e desenvolvimento de projetos interdisciplinares.</div></div>
-                    <div x-data="{ id: 2 }"><h3 @click="open = (open === id ? 0 : id)" class="cursor-pointer flex justify-between items-center p-4 bg-white rounded-lg border font-bold">A Izicode ajuda na adequação à BNCC? <svg :class="{'rotate-180': open === id}" class="w-5 h-5 text-brand-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 9l-7 7-7-7\"/></svg></h3><div x-show=\"open === id\" x-collapse class=\"p-4 text-slate-600\">Sim! Nossa plataforma e consultoria são 100% focadas nas competências gerais da BNCC, especialmente em Cultura Digital e Pensamento Científico.</div></div>
-                    <div x-data=\"{ id: 3 }\"><h3 @click=\"open = (open === id ? 0 : id)\" class=\"cursor-pointer flex justify-between items-center p-4 bg-white rounded-lg border font-bold\">Existe suporte contínuo? <svg :class=\"{'rotate-180': open === id}\" class=\"w-5 h-5 text-brand-600 transform transition-transform\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 9l-7 7-7-7\"/></svg></h3><div x-show=\"open === id\" x-collapse class=\"p-4 text-slate-600\">Sim, reconhecemos que a adoção da tecnologia é um processo contínuo e estamos disponíveis para fornecer orientações permanentes via WhatsApp.</div></div>
+                    <div x-data="{ id: 1 }"><h3 @click="open = (open === id ? 0 : id)" class="cursor-pointer flex justify-between items-center p-4 bg-white rounded-lg border font-bold hover:bg-slate-50 transition-all">Quais são os serviços específicos? <svg :class="{'rotate-180': open === id}" class="w-5 h-5 text-brand-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></h3><div x-show="open === id" x-collapse class="p-4 text-slate-600">Oferecemos consultoria personalizada, treinamentos para professores e implementação de laboratórios maker.</div></div>
+                    <div x-data="{ id: 2 }"><h3 @click="open = (open === id ? 0 : id)" class="cursor-pointer flex justify-between items-center p-4 bg-white rounded-lg border font-bold hover:bg-slate-50 transition-all">A Izicode ajuda na adequação à BNCC? <svg :class="{'rotate-180': open === id}" class="w-5 h-5 text-brand-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></h3><div x-show="open === id" x-collapse class="p-4 text-slate-600">Sim! Nossa plataforma e consultoria são 100% focadas nas competências da BNCC, como Cultura Digital e Pensamento Científico.</div></div>
                 </div>
             </div>
         </section>
@@ -199,33 +194,33 @@
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                 <h2 class="font-display text-4xl font-bold mb-6">Fale conosco, queremos te ajudar!</h2>
                 <p class="text-brand-200 text-lg mb-8">Nossa equipe está pronta para responder às suas perguntas e oferecer soluções personalizadas para sua escola.</p>
-                <a href="https://tally.so/r/mYRNQB" target="_blank" class="bg-white text-brand-600 px-10 py-4 rounded-xl font-bold hover:bg-brand-50 hover-shake transition-colors text-lg">Entrar em Contato Agora!</a>
+                <a href="https://tally.so/r/mYRNQB" target="_blank" class="bg-white text-brand-600 px-10 py-4 rounded-xl font-bold hover:bg-brand-50 hover-shake transition-all text-lg inline-block shadow-xl">Entrar em Contato Agora!</a>
             </div>
             
-            <!-- Logo Flutuante (Selo) -->
-            <div class=\"absolute left-1/2 transform -translate-x-1/2 -bottom-16 z-20\">
-                <div class=\"bg-white p-4 rounded-2xl shadow-2xl border-4 border-slate-900\">
-                    <img src=\"images/logo.png\" alt=\"Izicode Logo\" class=\"w-20 h-20 object-contain\">
+            <!-- Logo Flutuante (Corrigida) -->
+            <div class="absolute left-1/2 transform -translate-x-1/2 bottom-[-40px] z-30">
+                <div class="bg-white p-4 rounded-2xl shadow-2xl border-4 border-slate-900">
+                    <img src="images/logo.png" alt="Izicode Logo" class="w-16 h-16 object-contain">
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class=\"bg-slate-900 text-white pt-24 pb-12\">
-        <div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center\">
-            <div class=\"flex justify-center gap-6 mb-8\">
-                <a href=\"https://www.linkedin.com/company/izicode-edu\" target=\"_blank\" class=\"text-slate-400 hover:text-white transition-colors\">
-                    <span class=\"sr-only\">LinkedIn</span>
-                    <svg class=\"h-8 w-8\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z\"/></svg>
+    <!-- Footer Corrigido -->
+    <footer class="bg-slate-900 text-white pt-20 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex justify-center gap-6 mb-8 mt-4">
+                <a href="https://www.linkedin.com/company/izicode-edu" target="_blank" class="text-slate-400 hover:text-white transition-colors hover-shake">
+                    <span class="sr-only">LinkedIn</span>
+                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z\"/></svg>
                 </a>
             </div>
-            <p class=\"text-slate-400\">&copy; 2026 Izicode Edu. Todos os direitos reservados.</p>
+            <p class="text-slate-400 text-sm">&copy; 2026 Izicode Edu. Todos os direitos reservados.</p>
         </div>
     </footer>
 
-    <!-- Firebase Integration & Auth Logic -->
-    <script type=\"module\">
+    <!-- Firebase Auth Logic -->
+    <script type="module">
         import { auth, provider, signInWithPopup, db, doc, setDoc } from './js/firebase-config.js';
 
         const loginBtn = document.getElementById('loginBtnTop');
@@ -236,19 +231,19 @@
                     const result = await signInWithPopup(auth, provider);
                     const user = result.user;
                     
-                    const userRef = doc(db, \"extreme_clients\", user.uid);
+                    const userRef = doc(db, "extreme_clients", user.uid);
                     await setDoc(userRef, {
                         uid: user.uid,
                         name: user.displayName,
                         email: user.email,
-                        photo: user.photoURL,
-                        status: \"interessado_plataforma\",\n                        createdAt: new Date()
+                        status: "interessado_plataforma",
+                        createdAt: new Date()
                     });
 
-                    window.location.href = \"platform-dev.html\";
-
-                } catch (error) {\n                    console.error(\"Erro no login:\", error);
-                    alert(\"Erro ao acessar a plataforma: \" + error.message);
+                    window.location.href = "platform-dev.html";
+                } catch (error) {
+                    console.error("Erro no login:", error);
+                    alert("Erro ao acessar a plataforma: " + error.message);
                 }
             });
         }
