@@ -3,9 +3,9 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://izicode-landing.vercel.app/sitemap.xml
+Sitemap: https://izicodeedu-532ac.web.app/sitemap.xml
 
-# Bloquear áreas privadas
+# Bloquear áreas privadas (painéis administrativos e de usuário logado)
 Disallow: /dashboard.html
 Disallow: /student-area.html
 Disallow: /my-projects.html
