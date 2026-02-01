@@ -9,14 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      # Instala dependências (se houver no futuro, hoje é HTML estático)
-      # - run: npm ci && npm run build
-      
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_IZICODEEDU_532AC }}' # Mantém como fallback
-          channelId: live
-          projectId: izicodeedu-532ac
-        env:
-          FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}' # Adiciona suporte ao token CI
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Deploy to Firebase
+        run: firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}" --project izicodeedu-532ac
