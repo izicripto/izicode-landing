@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Em Desenvolvimento - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 500: '#0ea5e9', 600: '#0284c7' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-2xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden text-center p-8 md:p-12 border border-slate-100">
+        <!-- Ilustração amigável de obra/tech -->
+        <div class="mb-8 flex justify-center">
+            <div class="bg-brand-50 p-6 rounded-full">
+                <svg class="w-24 h-24 text-brand-500 animate-bounce" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4\"/></svg>
+            </div>
+        </div>
+
+        <h1 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+            Obrigado por se conectar! 🚀
+        </h1>
+        
+        <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+            Nossa plataforma está sendo construída com muito cuidado para transformar a educação na sua escola. 
+            <span class="block mt-4 font-semibold text-brand-600">Identificamos o seu acesso e, por isso, você será um dos primeiros a saber quando as portas se abrirem!</span>
+        </p>
+
+        <div class="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100 italic text-slate-500 text-sm">
+            "Grandes projetos levam tempo para serem perfeitos. Estamos na fase de testes finais da nossa IA Pedagógica e do sistema de Gamificação."
+        </div>
+
+        <a href="index.html" class="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-700 transition-colors">
+            <svg class="w-5 h-5" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M10 19l-7-7m0 0l7-7m-7 7h18\"/></svg>
+            Voltar para o site principal
+        </a>
+    </div>
+</body>
+</html>
