@@ -220,7 +220,7 @@
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
         import { auth, db, doc, setDoc, onAuthStateChanged } from './js/firebase-config.js';
-        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { collection, addDoc, serverTimestamp, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         let genAI = null;
         let generatedContent = '';
@@ -405,7 +405,19 @@
                     public: false // Privado por padrão
                 });
 
-                alert("Projeto salvo com sucesso! 💾");
+                // Gamificação: Dar +100 XP por criar projeto
+                try {
+                    const userRef = doc(db, "users", currentUser.uid);
+                    await updateDoc(userRef, {
+                        xp: increment(100),
+                        projectsCount: increment(1)
+                    });
+                    alert("Projeto salvo! 🎉 Você ganhou +100 XP!");
+                } catch (xpError) {
+                    console.error("Erro ao dar XP:", xpError);
+                    alert("Projeto salvo, mas erro ao computar XP.");
+                }
+
                 window.location.href = "my-projects.html"; // Redireciona para ver a lista
 
             } catch (error) {

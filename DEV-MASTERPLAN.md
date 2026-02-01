@@ -55,23 +55,24 @@ Plataforma educacional Maker/Robótica que une **Marketing** (Landing Page de al
 
 ### ETAPA 1: O "Cérebro" da Aplicação (PRIORIDADE IMEDIATA) 🚨
 O Gerador de Projetos (IA) funciona, mas não salva nada.
-- [ ] Criar coleção `projects` no Firestore.
-- [ ] Conectar o botão "Salvar" do `create-project.html` ao Firestore.
-- [ ] Fazer a `dashboard.html` ler os projetos salvos do usuário.
+- [x] Criar coleção `projects` no Firestore.
+- [x] Conectar o botão "Salvar" do `create-project.html` ao Firestore.
+- [x] Fazer a `dashboard.html` ler os projetos salvos do usuário. (Feito via `my-projects.html`)
 
 ### ETAPA 2: Biblioteca de Conteúdo (SEO Dinâmico)
 A biblioteca está vazia. Precisamos de conteúdo para atrair tráfego.
-- [ ] Criar arquivo semente `projects-data.js` com 10 projetos prontos.
-- [ ] Popular `library.html` com esses dados via JS.
-- [ ] Criar página de visualização de projeto (`project-view.html?id=XYZ`) para renderizar o conteúdo.
+- [x] Criar arquivo semente `projects-data.js` com 10 projetos prontos.
+- [x] Popular `library.html` com esses dados via JS.
+- [x] Criar página de visualização de projeto (`project-view.html?id=XYZ`) para renderizar o conteúdo.
 
 ### ETAPA 3: Gamificação Real
 A área do aluno é apenas visual.
-- [ ] Criar lógica de XP no Firestore.
-- [ ] Fazer o Quiz dar XP real para o usuário logado.
+- [x] Criar lógica de XP no Firestore. (Integrado no `student-area.html`)
+- [x] Fazer o Quiz dar XP real para o usuário logado.
+- [ ] Recompensar criação de projetos com XP.
 
 ### ETAPA 4: Monetização
-- [ ] Criar página de venda do "Kit Missão Maker".
+- [x] Criar página de venda do "Kit Missão Maker". (`shop-kit.html`)
 - [ ] Botão de compra integrado (Link de pagamento).
 
 ---
