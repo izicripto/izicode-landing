@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Izicode Edu - Consultoria em Tecnologia Educacional</title>
-    <meta name="description" content="Consultoria personalizada para escolas. Implementamos Hackathons, Olimpíadas, Robótica e Programação integrados às ODS, BNCC e Práticas Restaurativas.">
+    <title>Izicode Edu - Inovação e Robótica Escolar</title>
+    <meta name="description" content="Transforme sua escola com Hackathons, Robótica, STEAM e Cultura Maker. Metodologia alinhada à BNCC e ODS.">
     <meta name="keywords" content="tecnologia educacional, robótica escolar, programação para crianças, BNCC, ODS, hackathon escolar, Arduino educação, Scratch, maker education, STEM Brasil">
     <meta name="author" content="Izicode Edu">
     <meta name="robots" content="index, follow">
@@ -25,7 +25,7 @@
     <meta name="twitter:description" content="Transforme sua escola com Hackathons, Robótica, STEAM e Cultura Maker.">
     <meta name="twitter:image" content="https://izicode.com.br/images/logo.png">
 
-    <!-- JSON-LD (Schema.org) - O Segredo do SEO -->
+    <!-- JSON-LD (Schema.org) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -34,7 +34,7 @@
       "url": "https://izicode.com.br/",
       "logo": "https://izicode.com.br/images/logo.png",
       "sameAs": [
-        "https://instagram.com/izicodeedu",
+        "https://www.linkedin.com/company/izicode-edu",
         "https://github.com/izicripto/izicode-landing"
       ],
       "description": "Consultoria em Tecnologia Educacional, Robótica e Cultura Maker para escolas.",
@@ -49,10 +49,20 @@
       }
     }
     </script>
-    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="icon" type="image/png" href="images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-2px) rotate(-1deg); }
+            50% { transform: translateX(2px) rotate(1deg); }
+            75% { transform: translateX(-2px) rotate(-1deg); }
+            100% { transform: translateX(0); }
+        }
+        .hover-shake:hover { animation: shake 0.3s ease-in-out infinite; }
+    </style>
     <script>
         tailwind.config = {
             theme: {
@@ -75,10 +85,14 @@
                     <span class="font-display font-bold text-xl text-slate-900">Izicode Edu</span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="#servicos" class="text-sm font-medium text-slate-600 hover:text-brand-600">Serviços</a>
+                    <a href="#solucoes" class="text-sm font-medium text-slate-600 hover:text-brand-600">Soluções</a>
                     <a href="#metodologia" class="text-sm font-medium text-slate-600 hover:text-brand-600">Metodologia</a>
                     <a href="#depoimentos" class="text-sm font-medium text-slate-600 hover:text-brand-600">Depoimentos</a>
                     <a href="#faq" class="text-sm font-medium text-slate-600 hover:text-brand-600">FAQ</a>
+                    <button id="loginBtnTop" class="bg-brand-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-brand-700 hover-shake transition-all shadow-md shadow-brand-100 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.908 3.152-1.928 4.172-1.224 1.224-3.136 2.52-6.52 2.52-5.272 0-9.432-4.264-9.432-9.536s4.16-9.536 9.432-9.536c2.856 0 5.144 1.112 6.856 2.72l2.312-2.312C18.424 1.16 15.656 0 12.48 0 6.552 0 1.512 4.936 1.512 11s5.04 11 10.968 11c3.216 0 5.656-1.064 7.512-3.008 1.952-1.952 2.568-4.704 2.568-6.912 0-.664-.048-1.288-.152-1.872h-9.84z\"/></svg>
+                        Plataforma
+                    </button>
                 </div>
             </div>
         </div>
@@ -94,8 +108,8 @@
                         <h1 class="font-display text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight mb-6">Transformando a Educação através da Inovação</h1>
                         <p class="text-lg text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0">Hackathons, Olimpíadas, Robótica e Programação integrados às ODS, BNCC e Práticas Restaurativas. Cada escola é única — criamos soluções sob medida.</p>
                         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                            <a href="https://tally.so/r/mYRNQB" target="_blank" class="bg-brand-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-200">Agendar Consultoria Gratuita</a>
-                            <a href="#servicos" class="bg-white text-slate-700 border border-slate-200 px-8 py-3 rounded-xl font-bold hover:bg-slate-50">Conhecer Serviços</a>
+                            <a href="https://tally.so/r/mYRNQB" target="_blank" class="bg-brand-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-brand-700 hover-shake transition-all shadow-lg shadow-brand-200">Agendar Consultoria Gratuita</a>
+                            <a href="#solucoes" class="bg-white text-slate-700 border border-slate-200 px-8 py-3 rounded-xl font-bold hover:bg-slate-50 hover-shake">Conhecer Soluções</a>
                         </div>
                         <div class="mt-12 grid grid-cols-3 gap-6 text-center">
                             <div><div class="font-display text-3xl font-bold text-brand-600">50+</div><div class="text-slate-500 text-sm">Escolas Parceiras</div></div>
@@ -114,48 +128,34 @@
                 <div class="grid lg:grid-cols-2 gap-16 items-center">
                     <div><img src="images/close-up-making-robots.jpg" alt="Close-up de mãos construindo robôs educacionais" class="rounded-3xl shadow-xl w-full h-auto object-cover" loading="lazy"></div>
                     <div>
-                        <h2 class="font-display text-3xl font-bold text-slate-900 mb-6">Educação que transforma vidas e comunidades</h2>
-                        <p class="text-lg text-slate-600 mb-6">A Izicode Edu nasceu da paixão por unir tecnologia, educação e impacto social. Acreditamos que cada escola tem potencial único — por isso, não oferecemos pacotes prontos.</p>
-                        <p class="text-lg text-slate-600">Nossa abordagem integra Práticas Restaurativas, ODS, BNCC e Ecologia em projetos que engajam alunos e transformam a comunidade escolar.</p>
+                        <h2 class=\"font-display text-3xl font-bold text-slate-900 mb-6\">Educação que transforma vidas e comunidades</h2>
+                        <p class=\"text-lg text-slate-600 mb-6\">A Izicode Edu nasceu da paixão por unir tecnologia, educação e impacto social. Acreditamos que cada escola tem potencial único — por isso, não oferecemos pacotes prontos.</p>
+                        <p class=\"text-lg text-slate-600\">Nossa abordagem integra Práticas Restaurativas, ODS, BNCC e Ecologia em projetos que engajam alunos e transformam a comunidade escolar.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Nossos Serviços -->
-        <section id="servicos" class="py-24">
+        <!-- Nossas Soluções -->
+        <section id="solucoes" class="py-24">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16">
-                    <h2 class="font-display text-4xl font-bold text-slate-900 mb-4">Soluções completas para sua escola</h2>
-                    <p class="text-slate-600 text-lg">Da consultoria inicial à implementação completa, oferecemos tudo que sua escola precisa para se tornar referência em tecnologia educacional.</p>
+                <div class=\"text-center max-w-3xl mx-auto mb-16\">
+                    <h2 class=\"font-display text-4xl font-bold text-slate-900 mb-4\">Soluções completas para sua escola</h2>
+                    <p class=\"text-slate-600 text-lg\">Da consultoria inicial à implementação completa, oferecemos tudo que sua escola precisa para se tornar referência em tecnologia educacional.</p>
                 </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="bg-slate-50 p-8 rounded-2xl"><h3 class="font-bold text-slate-900 mb-2">Consultoria Personalizada</h3><p class="text-sm text-slate-600">Diagnóstico completo da sua escola para desenvolver um plano de ação sob medida.</p></div>
-                    <div class="bg-slate-50 p-8 rounded-2xl"><h3 class="font-bold text-slate-900 mb-2">Capacitação de Professores</h3><p class="text-sm text-slate-600">Formação hands-on para sua equipe dominar ferramentas e metodologias ativas.</p></div>
-                    <div class="bg-slate-50 p-8 rounded-2xl"><h3 class="font-bold text-slate-900 mb-2">Robótica Educacional</h3><p class="text-sm text-slate-600">Implementação de laboratórios com Arduino, Micro:bit e materiais recicláveis.</p></div>
-                    <div class="bg-slate-50 p-8 rounded-2xl"><h3 class="font-bold text-slate-900 mb-2">Programação para Todas as Idades</h3><p class="text-sm text-slate-600">Do Scratch ao Python, implementamos programas de ensino adequados a cada faixa etária.</p></div>
-                    <div class="bg-slate-50 p-8 rounded-2xl"><h3 class="font-bold text-slate-900 mb-2">Projetos Interdisciplinares</h3><p class="text-sm text-slate-600">Integramos tecnologia com Ciências, Matemática, Arte e Sustentabilidade.</p></div>
-                    <div class="bg-slate-50 p-8 rounded-2xl"><h3 class="font-bold text-slate-900 mb-2">Acompanhamento Contínuo</h3><p class="text-sm text-slate-600">Suporte permanente via WhatsApp, reuniões mensais e relatórios de progresso.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Eventos -->
-        <section class="py-24 bg-brand-600 text-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16">
-                    <h2 class="font-display text-4xl font-bold mb-4">Eventos & Competições</h2>
-                    <p class="text-brand-200 text-lg">Preparamos e apoiamos sua escola em competições que desenvolvem habilidades essenciais para o século XXI.</p>
-                </div>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div><h3 class="font-bold text-xl mb-2">Hackathons Escolares</h3><p class="text-brand-200">Organizamos hackathons temáticos com desafios reais, soluções criativas e trabalho em equipe.</p></div>
-                    <div><h3 class="font-bold text-xl mb-2">Olimpíadas & Campeonatos</h3><p class="text-brand-200">Preparamos alunos para competições como OBI, OBR, FIRST LEGO League e Technovation Girls.</p></div>
+                <div class=\"grid md:grid-cols-2 lg:grid-cols-3 gap-8\">
+                    <div class=\"bg-slate-50 p-8 rounded-2xl\"><h3 class=\"font-bold text-slate-900 mb-2\">Consultoria Personalizada</h3><p class=\"text-sm text-slate-600\">Diagnóstico completo da sua escola para desenvolver um plano de ação sob medida.</p></div>
+                    <div class=\"bg-slate-50 p-8 rounded-2xl\"><h3 class=\"font-bold text-slate-900 mb-2\">Capacitação de Professores</h3><p class=\"text-sm text-slate-600\">Formação hands-on para sua equipe dominar ferramentas e metodologias ativas.</p></div>
+                    <div class=\"bg-slate-50 p-8 rounded-2xl\"><h3 class=\"font-bold text-slate-900 mb-2\">Robótica Educacional</h3><p class=\"text-sm text-slate-600\">Implementação de laboratórios com Arduino, Micro:bit e materiais recicláveis.</p></div>
+                    <div class=\"bg-slate-50 p-8 rounded-2xl\"><h3 class=\"font-bold text-slate-900 mb-2\">Programação para Todas as Idades</h3><p class=\"text-sm text-slate-600\">Do Scratch ao Python, implementamos programas de ensino adequados a cada faixa etária.</p></div>
+                    <div class=\"bg-slate-50 p-8 rounded-2xl\"><h3 class=\"font-bold text-slate-900 mb-2\">Projetos Interdisciplinares</h3><p class=\"text-sm text-slate-600\">Integramos tecnologia com Ciências, Matemática, Arte e Sustentabilidade.</p></div>
+                    <div class=\"bg-slate-50 p-8 rounded-2xl\"><h3 class=\"font-bold text-slate-900 mb-2\">Acompanhamento Contínuo</h3><p class=\"text-sm text-slate-600\">Suporte permanente via WhatsApp, reuniões mensais e relatórios de progresso.</p></div>
                 </div>
             </div>
         </section>
 
         <!-- Metodologia -->
-        <section id="metodologia" class="py-24">
+        <section id="metodologia" class="py-24 bg-slate-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="font-display text-4xl font-bold text-slate-900">Nossa Metodologia</h2></div>
                 <div class="grid lg:grid-cols-2 gap-12 items-center">
@@ -170,61 +170,13 @@
                             <p><strong class="text-brand-600">Práticas Restaurativas:</strong> Círculos de diálogo para construir empatia, resolver conflitos e fortalecer a comunidade.</p>
                         </div>
                     </div>
-                    <div class="bg-slate-50 p-6 rounded-2xl">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                         <h3 class="font-display text-2xl font-bold text-slate-900 mb-4">Alinhamento BNCC e ODS</h3>
-                        <p class="text-slate-600 mb-6">Todos os projetos conectam tecnologia aos Objetivos de Desenvolvimento Sustentável (ODS) da ONU e desenvolvem as competências gerais da BNCC, como Cultura Digital e Pensamento Científico.</p>
+                        <p class="text-slate-600 mb-6">Todos os projetos conectam tecnologia aos Objetivos de Desenvolvimento Sustentável (ODS) da ONU e desenvolvem as competências gerais da BNCC.</p>
                         <div class="flex items-center gap-6 mt-4 opacity-80 grayscale hover:grayscale-0 transition-all">
-                            <img src="images/ods.jpg" alt="Logo ODS - Objetivos de Desenvolvimento Sustentável" class="h-16 w-auto object-contain">
-                            <img src="images/bncc.jpg" alt="Logo BNCC - Base Nacional Comum Curricular" class="h-12 w-auto object-contain">
+                            <img src="images/ods.jpg" alt="Logo ODS" class="h-16 w-auto object-contain">
+                            <img src="images/bncc.jpg" alt="Logo BNCC" class="h-12 w-auto object-contain">
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Ferramentas -->
-        <section class="py-24 bg-slate-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="font-display text-4xl font-bold text-slate-900">100% Open Source e Acessível</h2></div>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 text-center">
-                    <div class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"><img src="/images/scratch.png" alt="Scratch" class="h-12 mx-auto mb-2 object-contain"><p class="font-medium text-slate-700">Scratch</p></div>
-                    <div class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"><img src="/images/arduino.png" alt="Arduino" class="h-12 mx-auto mb-2 object-contain"><p class="font-medium text-slate-700">Arduino</p></div>
-                    <div class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"><img src="/images/pi.png" alt="Raspberry Pi" class="h-12 mx-auto mb-2 object-contain"><p class="font-medium text-slate-700">Raspberry Pi</p></div>
-                    <div class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"><img src="/images/code.png" alt="Code.org" class="h-12 mx-auto mb-2 object-contain"><p class="font-medium text-slate-700">Code.org</p></div>
-                    <div class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"><img src="/images/tinkercad.jpg" alt="Tinkercad" class="h-12 mx-auto mb-2 object-contain"><p class="font-medium text-slate-700">Tinkercad</p></div>
-                    <div class="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow"><img src="/images/makey-makey.jpg" alt="Makey Makey" class="h-12 mx-auto mb-2 object-contain"><p class="font-medium text-slate-700">Makey Makey</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Depoimentos -->
-        <section id="depoimentos" class="py-24">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16"><h2 class="font-display text-4xl font-bold text-slate-900">O que dizem nossos parceiros</h2></div>
-                <div class="grid md:grid-cols-3 gap-8 text-center">
-                    <div class="bg-slate-50 p-8 rounded-2xl"><p class="italic">"A Izicode transformou nossa escola. Os alunos estão engajados como nunca."</p><div class="mt-4 font-bold">Maria Clara</div><div class="text-sm text-slate-500">Diretora - Colégio Exemplo</div></div>
-                    <div class="bg-slate-50 p-8 rounded-2xl"><p class="italic">"O hackathon que organizaram foi incrível! Nossos alunos desenvolveram um app de reciclagem usado pela comunidade."</p><div class="mt-4 font-bold">Roberto Silva</div><div class="text-sm text-slate-500">Coordenador - Escola Municipal</div></div>
-                    <div class="bg-slate-50 p-8 rounded-2xl"><p class="italic">"A capacitação mudou minha forma de ensinar. Agora uso programação até nas aulas de História!"</p><div class="mt-4 font-bold">Ana Ferreira</div><div class="text-sm text-slate-500">Professora - Ensino Fundamental</div></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Olimpíadas e Campeonatos Section -->
-        <section id="olimpiadas" class="py-24 bg-slate-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <h2 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-6">Prepare sua Escola para Vencer</h2>
-                        <p class="text-slate-600 text-lg mb-6">Nossa consultoria vai além da sala de aula. Preparamos seus alunos e professores para competir e se destacar nas maiores olimpíadas de tecnologia e robótica do Brasil e do mundo.</p>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-white p-4 rounded-xl font-medium text-slate-700 border">OBI (Olimpíada de Informática)</div>
-                            <div class="bg-white p-4 rounded-xl font-medium text-slate-700 border">OBR (Olimpíada de Robótica)</div>
-                            <div class="bg-white p-4 rounded-xl font-medium text-slate-700 border">FIRST LEGO League</div>
-                            <div class="bg-white p-4 rounded-xl font-medium text-slate-700 border">Technovation Girls</div>
-                        </div>
-                    </div>
-                    <div class="bg-slate-100 p-6 rounded-3xl">
-                        <img src="images/children-making-robot-2.jpg" alt="Crianças construindo robôs e aprendendo" class="rounded-2xl shadow-xl w-full h-auto object-cover" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -235,9 +187,9 @@
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16"><h2 class="font-display text-4xl font-bold text-slate-900">Dúvidas Frequentes</h2></div>
                 <div x-data="{ open: 1 }" class="space-y-4">
-                    <div x-data="{ id: 1 }"><h3 @click="open = (open === id ? 0 : id)" class="cursor-pointer flex justify-between items-center p-4 bg-white rounded-lg border font-bold">Quais são os serviços específicos? <svg :class="{'rotate-180': open === id}" class="w-5 h-5 text-brand-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></h3><div x-show="open === id" x-collapse class="p-4">Oferecemos consultoria, treinamentos, implementação de programas de programação (Scratch, Arduino), robótica e desenvolvimento de projetos interdisciplinares.</div></div>
-                    <div x-data="{ id: 2 }"><h3 @click="open = (open === id ? 0 : id)" class="cursor-pointer flex justify-between items-center p-4 bg-white rounded-lg border font-bold">Como a Izicode pode auxiliar na implementação? <svg :class="{'rotate-180': open === id}" class="w-5 h-5 text-brand-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></h3><div x-show="open === id" x-collapse class="p-4">Trabalhamos para entender suas necessidades, desenvolver um plano personalizado, selecionar as ferramentas, treinar professores e oferecer suporte contínuo.</div></div>
-                    <div x-data="{ id: 3 }"><h3 @click="open = (open === id ? 0 : id)" class="cursor-pointer flex justify-between items-center p-4 bg-white rounded-lg border font-bold">Existe suporte contínuo? <svg :class="{'rotate-180': open === id}" class="w-5 h-5 text-brand-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></h3><div x-show="open === id" x-collapse class="p-4">Sim, reconhecemos que a adoção da tecnologia é um processo contínuo e estamos disponíveis para responder a quaisquer perguntas e fornecer orientações.</div></div>
+                    <div x-data="{ id: 1 }"><h3 @click="open = (open === id ? 0 : id)" class="cursor-pointer flex justify-between items-center p-4 bg-white rounded-lg border font-bold">Quais são os serviços específicos? <svg :class="{'rotate-180': open === id}" class="w-5 h-5 text-brand-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></h3><div x-show="open === id" x-collapse class="p-4 text-slate-600">Oferecemos consultoria, treinamentos, implementação de programas de programação (Scratch, Arduino), robótica e desenvolvimento de projetos interdisciplinares.</div></div>
+                    <div x-data="{ id: 2 }"><h3 @click="open = (open === id ? 0 : id)" class="cursor-pointer flex justify-between items-center p-4 bg-white rounded-lg border font-bold">A Izicode ajuda na adequação à BNCC? <svg :class="{'rotate-180': open === id}" class="w-5 h-5 text-brand-600 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 9l-7 7-7-7\"/></svg></h3><div x-show=\"open === id\" x-collapse class=\"p-4 text-slate-600\">Sim! Nossa plataforma e consultoria são 100% focadas nas competências gerais da BNCC, especialmente em Cultura Digital e Pensamento Científico.</div></div>
+                    <div x-data=\"{ id: 3 }\"><h3 @click=\"open = (open === id ? 0 : id)\" class=\"cursor-pointer flex justify-between items-center p-4 bg-white rounded-lg border font-bold\">Existe suporte contínuo? <svg :class=\"{'rotate-180': open === id}\" class=\"w-5 h-5 text-brand-600 transform transition-transform\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 9l-7 7-7-7\"/></svg></h3><div x-show=\"open === id\" x-collapse class=\"p-4 text-slate-600\">Sim, reconhecemos que a adoção da tecnologia é um processo contínuo e estamos disponíveis para fornecer orientações permanentes via WhatsApp.</div></div>
                 </div>
             </div>
         </section>
@@ -246,34 +198,60 @@
         <section id="contato" class="py-24 bg-brand-600 text-white relative">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                 <h2 class="font-display text-4xl font-bold mb-6">Fale conosco, queremos te ajudar!</h2>
-                <p class="text-brand-200 text-lg mb-8">Nossa equipe está pronta para responder às suas perguntas, discutir suas necessidades e oferecer soluções personalizadas. Clique no botão abaixo para dar o próximo passo rumo a uma educação moderna e inovadora.</p>
-                <a href="https://tally.so/r/mYRNQB" target="_blank" class="bg-white text-brand-600 px-10 py-4 rounded-xl font-bold hover:bg-brand-50 transition-colors">Entrar em Contato Agora!</a>
+                <p class="text-brand-200 text-lg mb-8">Nossa equipe está pronta para responder às suas perguntas e oferecer soluções personalizadas para sua escola.</p>
+                <a href="https://tally.so/r/mYRNQB" target="_blank" class="bg-white text-brand-600 px-10 py-4 rounded-xl font-bold hover:bg-brand-50 hover-shake transition-colors text-lg">Entrar em Contato Agora!</a>
             </div>
             
             <!-- Logo Flutuante (Selo) -->
-            <div class="absolute left-1/2 transform -translate-x-1/2 -bottom-16 z-20">
-                <div class="bg-white p-4 rounded-2xl shadow-2xl border-4 border-slate-900">
-                    <img src="images/logo.png" alt="Izicode Logo" class="w-20 h-20 object-contain">
+            <div class=\"absolute left-1/2 transform -translate-x-1/2 -bottom-16 z-20\">
+                <div class=\"bg-white p-4 rounded-2xl shadow-2xl border-4 border-slate-900\">
+                    <img src=\"images/logo.png\" alt=\"Izicode Logo\" class=\"w-20 h-20 object-contain\">
                 </div>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-white pt-24 pb-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="flex justify-center gap-6 mb-8">
-                <a href="https://www.linkedin.com/company/izicode-edu" target="_blank" class="text-slate-400 hover:text-white transition-colors">
-                    <span class="sr-only">LinkedIn</span>
-                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                </a>
-                <a href="https://instagram.com/izicodeedu" target="_blank" class="text-slate-400 hover:text-white transition-colors">
-                    <span class="sr-only">Instagram</span>
-                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.468 2.53c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
+    <footer class=\"bg-slate-900 text-white pt-24 pb-12\">
+        <div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center\">
+            <div class=\"flex justify-center gap-6 mb-8\">
+                <a href=\"https://www.linkedin.com/company/izicode-edu\" target=\"_blank\" class=\"text-slate-400 hover:text-white transition-colors\">
+                    <span class=\"sr-only\">LinkedIn</span>
+                    <svg class=\"h-8 w-8\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z\"/></svg>
                 </a>
             </div>
-            <p class="text-slate-400">&copy; 2026 Izicode Edu. Todos os direitos reservados.</p>
+            <p class=\"text-slate-400\">&copy; 2026 Izicode Edu. Todos os direitos reservados.</p>
         </div>
     </footer>
+
+    <!-- Firebase Integration & Auth Logic -->
+    <script type=\"module\">
+        import { auth, provider, signInWithPopup, db, doc, setDoc } from './js/firebase-config.js';
+
+        const loginBtn = document.getElementById('loginBtnTop');
+
+        if (loginBtn) {
+            loginBtn.addEventListener('click', async () => {
+                try {
+                    const result = await signInWithPopup(auth, provider);
+                    const user = result.user;
+                    
+                    const userRef = doc(db, \"extreme_clients\", user.uid);
+                    await setDoc(userRef, {
+                        uid: user.uid,
+                        name: user.displayName,
+                        email: user.email,
+                        photo: user.photoURL,
+                        status: \"interessado_plataforma\",\n                        createdAt: new Date()
+                    });
+
+                    window.location.href = \"platform-dev.html\";
+
+                } catch (error) {\n                    console.error(\"Erro no login:\", error);
+                    alert(\"Erro ao acessar a plataforma: \" + error.message);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
