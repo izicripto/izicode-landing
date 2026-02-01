@@ -1,0 +1,12 @@
+# Robots.txt - Izicode Edu
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://izicode-landing.vercel.app/sitemap.xml
+
+# Bloquear áreas privadas
+Disallow: /dashboard.html
+Disallow: /student-area.html
+Disallow: /my-projects.html
+Disallow: /create-project.html

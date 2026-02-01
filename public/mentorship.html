@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jornada do Professor - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 500: '#0ea5e9', 600: '#0284c7' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50">
+
+    <div class="max-w-4xl mx-auto p-8">
+        <header class="text-center mb-12">
+            <a href="dashboard.html" class="text-brand-600 hover:text-brand-700 no-underline mb-4 inline-block">&larr; Voltar ao Dashboard</a>
+            <h1 class="font-display text-4xl font-extrabold text-slate-900">Jornada do Professor Inovador</h1>
+            <p class="text-slate-600 text-lg mt-4">Um programa de mentoria contínua para transformar sua prática pedagógica com tecnologia.</p>
+        </header>
+
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+            <h2 class="font-bold text-2xl text-slate-800 mb-6">O que é a Jornada?</h2>
+            <p class="mb-4 text-slate-600">Um programa de assinatura que oferece encontros quinzenais em grupo, onde nossa equipe de especialistas aborda temas essenciais da tecnologia educacional. É um espaço para aprender, tirar dúvidas e trocar experiências com outros professores.</p>
+
+            <h3 class="font-bold text-xl text-slate-800 mt-8 mb-4">Cronograma de Mentorias (Exemplo)</h3>
+            <div class="space-y-4">
+                <div class="border border-slate-200 p-4 rounded-xl">
+                    <p class="font-bold text-brand-700">Encontro 1 (15/02): Desvendando a BNCC e a Cultura Digital</p>
+                    <p class="text-sm text-slate-500">Como alinhar seus projetos às competências gerais e específicas.</p>
+                </div>
+                <div class="border border-slate-200 p-4 rounded-xl">
+                    <p class="font-bold text-brand-700">Encontro 2 (01/03): Primeiros Passos com Arduino</p>
+                    <p class="text-sm text-slate-500">Do Blink ao controle de sensores. Perda o medo da eletrônica!</p>
+                </div>
+                <div class="border border-slate-200 p-4 rounded-xl">
+                    <p class="font-bold text-brand-700">Encontro 3 (15/03): Gamificação com Scratch</p>
+                    <p class="text-sm text-slate-500">Como criar jogos que ensinam e engajam os alunos.</p>
+                </div>
+                <div class="border border-slate-200 p-4 rounded-xl">
+                    <p class="font-bold text-brand-700">Encontro 4 (29/03): Projetos Maker com Orçamento Zero</p>
+                    <p class="text-sm text-slate-500">Ideias e técnicas para criar usando sucata e materiais do dia a dia.</p>
+                </div>
+            </div>
+
+            <h3 class="font-bold text-xl text-slate-800 mt-8 mb-4">Benefícios do Programa</h3>
+            <ul class="list-disc list-inside text-slate-600 space-y-2">
+                <li>2 encontros ao vivo por mês (online, em grupo).</li>
+                <li>Acesso às gravações de todas as mentorias.</li>
+                <li>Comunidade exclusiva no WhatsApp para troca de experiências.</li>
+                <li>Certificado de participação.</li>
+                <li>Desafios práticos para aplicar o conhecimento em sala de aula.</li>
+            </ul>
+
+            <div class="mt-8 text-center bg-brand-50 p-6 rounded-2xl">
+                <h3 class="font-display font-bold text-2xl text-brand-700">Pronto para começar sua jornada?</h3>
+                <p class="text-slate-600 my-4">Este serviço é um complemento exclusivo para nossas escolas parceiras ou pode ser adquirido como uma assinatura individual.</p>
+                <a href="#" class="bg-brand-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-brand-700 transition-colors">Quero Saber Mais</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

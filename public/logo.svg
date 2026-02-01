@@ -1,0 +1,79 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- 
+    Logo Izicode Edu
+    Conceito: A fusão da mente humana com a tecnologia.
+    - O processador (CPU) representa a base tecnológica.
+    - O cérebro no centro simboliza a educação e o conhecimento.
+    - A divisão meio-a-meio (circuito e orgânico) representa a união das duas áreas.
+    -->
+    <defs>
+        <!-- Clip path para cortar a parte esquerda (circuito) do cérebro -->
+        <clipPath id="clip-circuit">
+            <path d="M50 25 V 75 H 25 C 25 75 15 65 15 50 C 15 35 25 25 25 25 Z" />
+        </clipPath>
+    </defs>
+
+    <!-- Fundo e Pinos do Processador -->
+    <g id="processor">
+        <rect x="5" y="5" width="90" height="90" rx="5" fill="#0c4a6e" />
+        <rect x="15" y="15" width="70" height="70" rx="2" fill="#075985" />
+        <!-- Pinos -->
+        <line x1="25" y1="2" x2="25" y2="5" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="35" y1="2" x2="35" y2="5" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="45" y1="2" x2="45" y2="5" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="55" y1="2" x2="55" y2="5" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="65" y1="2" x2="65" y2="5" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="75" y1="2" x2="75" y2="5" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="25" y1="95" x2="25" y2="98" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="35" y1="95" x2="35" y2="98" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="45" y1="95" x2="45" y2="98" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="55" y1="95" x2="55" y2="98" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="65" y1="95" x2="65" y2="98" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="75" y1="95" x2="75" y2="98" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="2" y1="25" x2="5" y2="25" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="2" y1="35" x2="5" y2="35" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="2" y1="45" x2="5" y2="45" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="2" y1="55" x2="5" y2="55" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="2" y1="65" x2="5" y2="65" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="2" y1="75" x2="5" y2="75" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="95" y1="25" x2="98" y2="25" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="95" y1="35" x2="98" y2="35" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="95" y1="45" x2="98" y2="45" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="95" y1="55" x2="98" y2="55" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="95" y1="65" x2="98" y2="65" stroke="#0c4a6e" stroke-width="2"/>
+        <line x1="95" y1="75" x2="98" y2="75" stroke="#0c4a6e" stroke-width="2"/>
+    </g>
+
+    <!-- Cérebro -->
+    <g id="brain">
+        <!-- Parte Direita (Orgânica) -->
+        <path d="M50 25 V 75 H 75 C 75 75 85 65 85 50 C 85 35 75 25 75 25 Z" fill="#7dd3fc" />
+        <path d="M62,40 C 58,45 60,55 65,55 S 72,50 70,45 C 68,40 65,35 62,40 Z" fill="none" stroke="#bae6fd" stroke-width="1.5" />
+        <path d="M55,65 C 60,68 65,60 70,62" fill="none" stroke="#bae6fd" stroke-width="1.5" />
+
+        <!-- Parte Esquerda (Circuito) -->
+        <g clip-path="url(#clip-circuit)">
+            <g id="circuit-pattern" stroke="#38bdf8" stroke-width="1.5">
+                <!-- Linhas do circuito -->
+                <path d="M50 50 H 40 V 35 H 30" fill="none"/>
+                <path d="M50 50 V 65 H 40" fill="none"/>
+                <path d="M30 35 H 25" fill="none"/>
+                <path d="M40 65 V 70 H 30" fill="none"/>
+                <path d="M50 30 H 45" fill="none"/>
+                
+                <!-- Círculos/Nós -->
+                <circle cx="50" cy="50" r="2" fill="#0ea5e9"/>
+                <circle cx="40" cy="35" r="2" fill="#0ea5e9"/>
+                <circle cx="40" cy="65" r="2" fill="#0ea5e9"/>
+                <circle cx="30" cy="35" r="2" fill="#0ea5e9"/>
+                <circle cx="30" cy="70" r="2" fill="#0ea5e9"/>
+                <circle cx="50" cy="30" r="1.5" fill="#0ea5e9"/>
+                <circle cx="25" cy="60" r="1.5" fill="#0ea5e9"/>
+            </g>
+        </g>
+        
+        <!-- Contorno do cérebro -->
+        <path d="M50,25 C 25,25 15,35 15,50 C 15,65 25,75 50,75 C 75,75 85,65 85,50 C 85,35 75,25 50,25 Z" 
+              fill="none" stroke="#0284c7" stroke-width="2.5" />
+    </g>
+</svg>
