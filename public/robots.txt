@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://izicodeedu-532ac.web.app/sitemap.xml
+Sitemap: https://izicode.com.br/sitemap.xml
 
 # Bloquear áreas privadas (painéis administrativos e de usuário logado)
 Disallow: /dashboard.html
