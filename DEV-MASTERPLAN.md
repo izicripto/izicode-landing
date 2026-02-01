@@ -69,11 +69,17 @@ A biblioteca está vazia. Precisamos de conteúdo para atrair tráfego.
 A área do aluno é apenas visual.
 - [x] Criar lógica de XP no Firestore. (Integrado no `student-area.html`)
 - [x] Fazer o Quiz dar XP real para o usuário logado.
-- [ ] Recompensar criação de projetos com XP.
+- [x] Recompensar criação de projetos com XP.
 
 ### ETAPA 4: Monetização
 - [x] Criar página de venda do "Kit Missão Maker". (`shop-kit.html`)
 - [ ] Botão de compra integrado (Link de pagamento).
+
+### ETAPA 5: Marketing Ops (Radar de Tendências) 📡
+Central de inteligência para consultores.
+- [ ] Criar Bot do Telegram para envio de Insights.
+- [ ] Script de curadoria de notícias (BNCC, Robótica).
+- [ ] Integração com LinkedIn (Link no rodapé feito, falta estratégia de conteúdo).
 
 ---
 
