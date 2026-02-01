@@ -6,74 +6,228 @@
     <title>Visualizar Projeto - Izicode Edu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
-    <script type="module" src="js/firebase-config.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
-                    colors: { brand: { 500: '#0ea5e9', 600: '#0284c7' } }
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
                 }
             }
         }
     </script>
+    <style>
+        .prose { max-width: none; }
+        .prose h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 1rem; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+        .prose h2 { font-size: 1.35rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.75rem; color: #334155; }
+        .prose h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.25rem; margin-bottom: 0.5rem; color: #475569; }
+        .prose ul { list-style-type: disc; padding-left: 1.5rem; margin: 0.75rem 0; }
+        .prose ol { list-style-type: decimal; padding-left: 1.5rem; margin: 0.75rem 0; }
+        .prose li { margin: 0.35rem 0; line-height: 1.6; }
+        .prose p { margin: 0.75rem 0; line-height: 1.7; }
+        .prose strong { font-weight: 600; color: #1e293b; }
+        .prose table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .prose th, .prose td { border: 1px solid #e2e8f0; padding: 0.75rem; text-align: left; }
+        .prose th { background: #f8fafc; font-weight: 600; }
+        .prose code { background: #f1f5f9; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.9rem; font-family: 'Fira Code', monospace; }
+        .prose pre { background: #1e293b; color: #e2e8f0; padding: 1.25rem; border-radius: 0.75rem; overflow-x: auto; margin: 1rem 0; }
+        .prose pre code { background: transparent; padding: 0; color: #e2e8f0; }
+        .prose blockquote { border-left: 4px solid #0ea5e9; padding-left: 1rem; margin: 1rem 0; color: #64748b; font-style: italic; }
+        .prose hr { border-color: #e2e8f0; margin: 2rem 0; }
+    </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-slate-50 min-h-screen">
 
-    <main class="max-w-4xl mx-auto p-8">
-        <a href="my-projects.html" class="text-brand-600 hover:text-brand-700 no-underline mb-4 inline-block">&larr; Voltar para Meus Projetos</a>
-        
-        <div id="projectContainer" class="prose prose-slate bg-white p-8 rounded-xl shadow-sm border border-slate-200 min-h-[80vh]">
-            <!-- Loading State -->
-            <div id="loadingState">
-                <h1 class="text-center">Carregando projeto...</h1>
-                <p class="text-center text-slate-500">Buscando informações no banco de dados.</p>
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="library.html" class="text-slate-400 hover:text-slate-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                </a>
+                <div class="flex items-center gap-3">
+                    <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-8 h-8">
+                    <span class="font-display font-bold text-lg text-slate-900">Izicode Edu</span>
+                </div>
+            </div>
+            <div id="actionButtons" class="flex items-center gap-2">
+                <button onclick="copyToClipboard()" class="px-4 py-2 text-sm bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    Copiar
+                </button>
+                <button onclick="downloadMarkdown()" class="px-4 py-2 text-sm bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Download
+                </button>
+                <button onclick="window.print()" class="px-4 py-2 text-sm bg-brand-600 text-white hover:bg-brand-700 rounded-lg transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                    Imprimir
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-6 py-8">
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-20">
+            <div class="animate-spin w-12 h-12 border-4 border-brand-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+            <p class="text-slate-600">Carregando projeto...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="hidden text-center py-20">
+            <svg class="w-16 h-16 mx-auto mb-4 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <h2 class="text-xl font-bold text-slate-700 mb-2">Projeto não encontrado</h2>
+            <p class="text-slate-500 mb-4">O projeto que você está procurando não existe ou foi removido.</p>
+            <a href="library.html" class="text-brand-600 hover:underline">← Voltar para a Biblioteca</a>
+        </div>
+
+        <!-- Project Content -->
+        <div id="projectContent" class="hidden">
+            <!-- Project Meta -->
+            <div id="projectMeta" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
+                <!-- Preenchido via JS -->
             </div>
 
-            <!-- Content will be injected here -->
+            <!-- Project Body -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                <div id="projectBody" class="prose">
+                    <!-- Conteúdo Markdown renderizado -->
+                </div>
+            </div>
         </div>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script type="module">
-        import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
-        import { auth, db, onAuthStateChanged, doc, getDoc } from './js/firebase-config.js';
+        import { getProjectById } from './js/projects-data.js';
+        import { auth, db } from './js/firebase-config.js';
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const projectContainer = document.getElementById('projectContainer');
         const loadingState = document.getElementById('loadingState');
+        const errorState = document.getElementById('errorState');
+        const projectContent = document.getElementById('projectContent');
+        const projectMeta = document.getElementById('projectMeta');
+        const projectBody = document.getElementById('projectBody');
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                loadProject(user.uid);
-            } else {
-                window.location.href = "index.html";
-            }
-        });
+        let currentContent = '';
 
-        async function loadProject(userId) {
-            const urlParams = new URLSearchParams(window.location.search);
-            const projectId = urlParams.get('userProject');
-
-            if (!projectId) {
-                projectContainer.innerHTML = '<h1>Erro: ID do projeto não encontrado.</h1>';
-                return;
-            }
+        async function loadProject() {
+            const params = new URLSearchParams(window.location.search);
+            const libraryId = params.get('id');
+            const userProjectId = params.get('userProject');
 
             try {
-                const projectRef = doc(db, `users/${userId}/projects`, projectId);
-                const docSnap = await getDoc(projectRef);
+                let project = null;
 
-                if (docSnap.exists()) {
-                    const project = docSnap.data();
-                    projectContainer.innerHTML = marked.parse(project.content);
+                if (libraryId) {
+                    // Projeto da biblioteca
+                    project = getProjectById(libraryId);
+                    if (project) {
+                        currentContent = project.content;
+                        renderLibraryProject(project);
+                    }
+                } else if (userProjectId && auth.currentUser) {
+                    // Projeto salvo do usuário
+                    const projectRef = doc(db, `users/${auth.currentUser.uid}/projects`, userProjectId);
+                    const projectSnap = await getDoc(projectRef);
+                    if (projectSnap.exists()) {
+                        project = projectSnap.data();
+                        currentContent = project.content;
+                        renderUserProject(project);
+                    }
+                }
+
+                if (project) {
+                    loadingState.classList.add('hidden');
+                    projectContent.classList.remove('hidden');
                 } else {
-                    projectContainer.innerHTML = '<h1>Projeto não encontrado.</h1><p>Parece que este projeto não existe ou você não tem permissão para vê-lo.</p>';
+                    throw new Error('Projeto não encontrado');
                 }
             } catch (error) {
-                console.error("Erro ao buscar projeto:", error);
-                projectContainer.innerHTML = '<h1>Ocorreu um erro ao carregar o projeto.</h1>';
+                console.error('Erro ao carregar projeto:', error);
+                loadingState.classList.add('hidden');
+                errorState.classList.remove('hidden');
             }
         }
 
+        function renderLibraryProject(project) {
+            const difficultyLabels = {
+                'basico': '⭐ Básico',
+                'intermediario': '⭐⭐ Intermediário',
+                'avancado': '⭐⭐⭐ Avançado'
+            };
+
+            projectMeta.innerHTML = `
+                <div class="flex flex-wrap gap-4 items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-green-700 bg-green-100 px-2 py-1 rounded-full">✅ Projeto da Biblioteca</span>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="text-sm bg-slate-100 text-slate-700 px-3 py-1 rounded-full">${project.grade}</span>
+                        <span class="text-sm bg-slate-100 text-slate-700 px-3 py-1 rounded-full">${project.duration}</span>
+                        <span class="text-sm bg-slate-100 text-slate-700 px-3 py-1 rounded-full">${difficultyLabels[project.difficulty]}</span>
+                        <span class="text-sm bg-brand-100 text-brand-700 px-3 py-1 rounded-full">${project.ods}</span>
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="text-xs text-slate-500">Ferramentas:</span>
+                    ${project.tools.map(t => `<span class="text-xs bg-slate-200 text-slate-700 px-2 py-0.5 rounded">${t}</span>`).join('')}
+                </div>
+            `;
+
+            projectBody.innerHTML = marked.parse(project.content);
+        }
+
+        function renderUserProject(project) {
+            const createdDate = project.createdAt ? new Date(project.createdAt.seconds * 1000).toLocaleDateString('pt-BR') : 'Data desconhecida';
+
+            projectMeta.innerHTML = `
+                <div class="flex flex-wrap gap-4 items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-brand-700 bg-brand-100 px-2 py-1 rounded-full">📁 Meu Projeto</span>
+                        <h1 class="text-xl font-bold text-slate-900 mt-2">${project.title || 'Projeto sem título'}</h1>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        ${project.grade ? `<span class="text-sm bg-slate-100 text-slate-700 px-3 py-1 rounded-full">${project.grade}</span>` : ''}
+                        ${project.ods ? `<span class="text-sm bg-brand-100 text-brand-700 px-3 py-1 rounded-full">${project.ods}</span>` : ''}
+                        <span class="text-sm bg-slate-100 text-slate-500 px-3 py-1 rounded-full">Criado em ${createdDate}</span>
+                    </div>
+                </div>
+            `;
+
+            projectBody.innerHTML = marked.parse(project.content);
+        }
+
+        window.copyToClipboard = function() {
+            navigator.clipboard.writeText(currentContent);
+            alert('✅ Conteúdo copiado para a área de transferência!');
+        };
+
+        window.downloadMarkdown = function() {
+            const blob = new Blob([currentContent], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'projeto-izicode.md';
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        // Aguardar auth e carregar
+        import { onAuthStateChanged } from './js/firebase-config.js';
+        
+        // Tentar carregar imediatamente (para projetos da biblioteca)
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('id')) {
+            loadProject();
+        } else {
+            // Para projetos do usuário, esperar auth
+            onAuthStateChanged(auth, (user) => {
+                loadProject();
+            });
+        }
     </script>
 </body>
 </html>
