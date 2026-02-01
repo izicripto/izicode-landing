@@ -219,9 +219,23 @@
 
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+        import { auth, db, doc, setDoc, onAuthStateChanged } from './js/firebase-config.js';
+        import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         let genAI = null;
         let generatedContent = '';
+        let currentUser = null;
+
+        // Monitor Auth State
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                console.log("Usuário logado:", user.email);
+            } else {
+                // Opcional: Redirecionar se não estiver logado
+                // window.location.href = "index.html";
+            }
+        });
 
         // Check saved API key
         const savedKey = localStorage.getItem('gemini_api_key');
@@ -360,40 +374,46 @@
         };
 
         window.saveToFirebase = async function() {
-            // Import Firebase functions
-            const { auth, db } = await import('./js/firebase-config.js');
-            const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-            
-            const user = auth.currentUser;
-            if (!user) {
-                alert('Você precisa estar logado para salvar projetos. Faça login primeiro!');
+            if (!currentUser) {
+                alert("Você precisa estar logado para salvar projetos!");
                 return;
             }
-            
+
             if (!generatedContent) {
-                alert('Nenhum projeto gerado para salvar!');
+                alert("Gere um projeto primeiro antes de salvar.");
                 return;
             }
-            
+
+            const btn = document.querySelector('button[onclick="saveToFirebase()"]');
+            const originalText = btn.innerText;
+            btn.innerText = "Salvando...";
+            btn.disabled = true;
+
             try {
-                const projectTitle = document.getElementById('projectTitle').value || 'Projeto sem título';
-                const projectGrade = document.getElementById('projectGrade').value || '';
-                const projectODS = document.getElementById('projectODS').value || '';
+                const title = document.getElementById('projectTitle').value || "Projeto Sem Título";
+                const grade = document.getElementById('projectGrade').value;
                 
-                const projectsRef = collection(db, `users/${user.uid}/projects`);
+                // Referência à sub-coleção de projetos do usuário
+                const projectsRef = collection(db, "users", currentUser.uid, "projects");
+                
                 await addDoc(projectsRef, {
-                    title: projectTitle,
-                    grade: projectGrade,
-                    ods: projectODS,
+                    title: title,
+                    grade: grade,
                     content: generatedContent,
                     createdAt: serverTimestamp(),
-                    updatedAt: serverTimestamp()
+                    type: "ai-generated",
+                    public: false // Privado por padrão
                 });
-                
-                alert('✅ Projeto salvo com sucesso! Você pode acessá-lo em "Meus Projetos".');
+
+                alert("Projeto salvo com sucesso! 💾");
+                window.location.href = "my-projects.html"; // Redireciona para ver a lista
+
             } catch (error) {
-                console.error('Erro ao salvar:', error);
-                alert('❌ Erro ao salvar projeto: ' + error.message);
+                console.error("Erro ao salvar:", error);
+                alert("Erro ao salvar projeto: " + error.message);
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
             }
         };
     </script>

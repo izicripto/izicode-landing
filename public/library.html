@@ -17,136 +17,114 @@
         }
     </script>
 </head>
-<body class="bg-slate-50">
+<body class="bg-slate-50 min-h-screen flex text-slate-800">
 
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col fixed h-full">
-            <div class="p-6 border-b border-slate-100 flex items-center gap-3">
-                <a href="dashboard.html" class="flex items-center gap-3">
-                    <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
-                    <span class="font-display font-bold text-xl text-slate-900">Izicode</span>
-                </a>
-            </div>
-            <nav class="flex-1 p-4 space-y-1">
-                <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                    Voltar ao Dashboard
-                </a>
-                <a href="create-project.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    Criar com IA
-                </a>
-                <a href="my-projects.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
-                    Meus Projetos
-                </a>
-            </nav>
-        </aside>
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col fixed h-full z-10">
+        <div class="p-6 border-b border-slate-100 flex items-center gap-3">
+            <a href="dashboard.html" class="flex items-center gap-3">
+                <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
+                <span class="font-display font-bold text-xl text-slate-900">Izicode</span>
+            </a>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Voltar ao Dashboard
+            </a>
+            <a href="library.html" class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                Biblioteca de Projetos
+            </a>
+            <a href="create-project.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Novo Projeto
+            </a>
+        </nav>
+    </aside>
 
-        <!-- Main Content -->
-        <main class="flex-1 md:ml-64 p-8">
-            <header class="mb-8">
-                <h1 class="font-display text-3xl font-bold text-slate-900">📚 Biblioteca de Projetos</h1>
-                <p class="text-slate-500 mt-1">Projetos prontos para aplicar em sala de aula. Clique em qualquer um para ver o roteiro completo.</p>
-            </header>
+    <!-- Main Content -->
+    <main class="flex-1 md:ml-64 p-8">
+        <header class="mb-10">
+            <h1 class="font-display text-3xl font-bold text-slate-900">📚 Biblioteca de Projetos</h1>
+            <p class="text-slate-500 mt-1">Planos de aula prontos, criados por especialistas e pela comunidade.</p>
+        </header>
 
-            <!-- Filtros -->
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-wrap gap-4">
-                <div>
-                    <label class="text-xs font-medium text-slate-500 block mb-1">Categoria</label>
-                    <select id="filterCategory" onchange="applyFilters()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm">
-                        <option value="">Todas</option>
-                        <option value="hardware">🔧 Hardware</option>
-                        <option value="software">💻 Software</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-xs font-medium text-slate-500 block mb-1">Dificuldade</label>
-                    <select id="filterDifficulty" onchange="applyFilters()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm">
-                        <option value="">Todas</option>
-                        <option value="basico">⭐ Básico</option>
-                        <option value="intermediario">⭐⭐ Intermediário</option>
-                        <option value="avancado">⭐⭐⭐ Avançado</option>
-                    </select>
-                </div>
-                <div class="flex-1"></div>
-                <div class="flex items-end">
-                    <span id="projectCount" class="text-sm text-slate-500">6 projetos</span>
-                </div>
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-4 mb-8">
+            <button class="px-4 py-2 bg-brand-600 text-white rounded-full text-sm font-medium shadow-sm">Todos</button>
+            <button class="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 rounded-full text-sm font-medium transition-colors">Arduino</button>
+            <button class="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 rounded-full text-sm font-medium transition-colors">Scratch</button>
+            <button class="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 rounded-full text-sm font-medium transition-colors">Micro:bit</button>
+            <button class="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 rounded-full text-sm font-medium transition-colors">Sem Computador</button>
+        </div>
+
+        <!-- Projects Grid -->
+        <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Loading -->
+            <div class="col-span-full text-center py-20 text-slate-500">
+                <div class="animate-spin w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+                Carregando projetos...
             </div>
-            
-            <!-- Grid de Projetos -->
-            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Projetos serão inseridos via JS -->
-            </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <script type="module">
-        import { projectsLibrary, filterProjects } from './js/projects-data.js';
+        import { getAllProjects } from './js/projects-data.js';
 
-        const projectsGrid = document.getElementById('projectsGrid');
-        const projectCount = document.getElementById('projectCount');
+        const grid = document.getElementById('projectsGrid');
+        const projects = getAllProjects();
 
-        function renderProjects(projects) {
-            projectsGrid.innerHTML = '';
-            projectCount.textContent = `${projects.length} projetos`;
-
+        function renderProjects() {
+            grid.innerHTML = '';
+            
             projects.forEach(project => {
-                const difficultyStars = {
-                    'basico': '⭐',
-                    'intermediario': '⭐⭐',
-                    'avancado': '⭐⭐⭐'
-                };
-                const difficultyLabels = {
-                    'basico': 'Básico',
-                    'intermediario': 'Intermediário',
-                    'avancado': 'Avançado'
-                };
-                const categoryIcons = {
-                    'hardware': '🔧',
-                    'software': '💻'
-                };
-
-                const card = document.createElement('a');
-                card.href = `project-view.html?id=${project.id}`;
-                card.className = 'bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg hover:border-brand-300 hover:-translate-y-1 transition-all cursor-pointer block';
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-3">
-                        <span class="text-xs font-bold text-green-700 bg-green-100 px-2 py-1 rounded-full">✅ Pronto</span>
-                        <span class="text-xs font-medium text-slate-400">${project.duration}</span>
-                    </div>
-                    <h3 class="font-bold text-lg text-slate-900 mb-2">${project.title}</h3>
-                    <p class="text-sm text-slate-600 mb-4">${project.description}</p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="text-xs font-medium bg-slate-100 text-slate-700 px-2 py-1 rounded">${categoryIcons[project.category]} ${project.category === 'hardware' ? 'Hardware' : 'Software'}</span>
-                        <span class="text-xs font-medium bg-slate-100 text-slate-700 px-2 py-1 rounded">${difficultyStars[project.difficulty]} ${difficultyLabels[project.difficulty]}</span>
-                    </div>
-                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
-                        <span class="text-xs text-slate-500">${project.grade}</span>
-                        <span class="text-xs font-medium text-brand-600">${project.ods.split(' - ')[0]}</span>
-                    </div>
+                const card = `
+                    <article class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full">
+                        <div class="h-32 bg-slate-100 relative overflow-hidden group">
+                            <!-- Placeholder image based on tool -->
+                            <div class="absolute inset-0 bg-gradient-to-br from-brand-50 to-slate-100 flex items-center justify-center text-4xl group-hover:scale-105 transition-transform duration-500">
+                                ${getEmojiForTool(project.tools[0])}
+                            </div>
+                            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-xs font-bold text-slate-700 shadow-sm border border-slate-100">
+                                ${project.duration}
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <div class="flex gap-2 mb-3">
+                                <span class="px-2 py-1 bg-brand-50 text-brand-700 text-xs font-bold rounded-md uppercase tracking-wide">${project.tools[0]}</span>
+                                <span class="px-2 py-1 bg-slate-50 text-slate-600 text-xs font-medium rounded-md">${project.difficulty}</span>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-900 mb-2 leading-tight">${project.title}</h3>
+                            <p class="text-sm text-slate-500 line-clamp-2 mb-4 flex-1">${project.description}</p>
+                            
+                            <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                                <span class="text-xs text-slate-400 font-medium">${project.grade}</span>
+                                <a href="project-view.html?id=${project.id}" class="text-brand-600 hover:text-brand-700 text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                                    Ver Roteiro <span class="transition-transform group-hover:translate-x-1">→</span>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
                 `;
-                projectsGrid.appendChild(card);
+                grid.innerHTML += card;
             });
         }
 
-        window.applyFilters = function() {
-            const category = document.getElementById('filterCategory').value;
-            const difficulty = document.getElementById('filterDifficulty').value;
-            
-            const filtered = filterProjects({
-                category: category || undefined,
-                difficulty: difficulty || undefined,
-                status: 'ready'
-            });
-            
-            renderProjects(filtered);
-        };
+        function getEmojiForTool(tool) {
+            const map = {
+                'Arduino': '⚡',
+                'Scratch': '🐱',
+                'Micro:bit': '🤖',
+                'Makey Makey': '🎹',
+                'Python': '🐍',
+                'Tinkercad': '🧊'
+            };
+            return map[tool] || '🚀';
+        }
 
-        // Render inicial
-        renderProjects(projectsLibrary.filter(p => p.status === 'ready'));
+        // Render immediately
+        renderProjects();
     </script>
 </body>
 </html>
