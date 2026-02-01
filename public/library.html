@@ -6,17 +6,12 @@
     <title>Biblioteca de Projetos - Izicode Edu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
-    <script type="module" src="js/firebase-config.js"></script>
-    <script type="module">
-        import { auth, onAuthStateChanged } from './js/firebase-config.js';
-        onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "index.html"; });
-    </script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
-                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7' } }
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
                 }
             }
         }
@@ -26,88 +21,132 @@
 
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col">
+        <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col fixed h-full">
             <div class="p-6 border-b border-slate-100 flex items-center gap-3">
                 <a href="dashboard.html" class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand-200"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/></svg></div>
+                    <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
                     <span class="font-display font-bold text-xl text-slate-900">Izicode</span>
                 </a>
             </div>
-            <nav class="flex-1 p-4"><a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>Voltar</a></nav>
+            <nav class="flex-1 p-4 space-y-1">
+                <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    Voltar ao Dashboard
+                </a>
+                <a href="create-project.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    Criar com IA
+                </a>
+                <a href="my-projects.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                    Meus Projetos
+                </a>
+            </nav>
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 p-8">
-            <header class="mb-10">
-                <h1 class="font-display text-3xl font-bold text-slate-900">Biblioteca de Projetos</h1>
-                <p class="text-slate-500 mt-1">Navegue por projetos prontos para aplicar. Os projetos marcados como "A criar" serão adicionados em breve.</p>
+        <main class="flex-1 md:ml-64 p-8">
+            <header class="mb-8">
+                <h1 class="font-display text-3xl font-bold text-slate-900">📚 Biblioteca de Projetos</h1>
+                <p class="text-slate-500 mt-1">Projetos prontos para aplicar em sala de aula. Clique em qualquer um para ver o roteiro completo.</p>
             </header>
-            
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Projeto Disponível -->
-                    <a href="project-view.html" class="border border-brand-200 bg-brand-50 p-4 rounded-xl hover:shadow-lg hover:-translate-y-1 transition-all">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-bold text-green-700 bg-green-100 px-2 py-1 rounded-full">✅ Pronto</span>
-                            <span class="text-xs font-bold text-slate-500">#10</span>
-                        </div>
-                        <h3 class="font-bold text-brand-700">Instrumento Musical com Makey Makey</h3>
-                        <p class="text-sm text-slate-600 mt-1">Crie um piano de frutas e aprenda sobre circuitos e condutividade.</p>
-                        <div class="mt-3 text-xs space-x-2">
-                            <span class="font-medium bg-slate-200 px-2 py-1 rounded">🔧 Hardware</span>
-                            <span class="font-medium bg-slate-200 px-2 py-1 rounded">⭐ Básico</span>
-                        </div>
-                    </a>
 
-                    <!-- Projeto Indisponível (Exemplo) -->
-                    <div class="border border-slate-200 p-4 rounded-xl bg-slate-50 opacity-70">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-1 rounded-full">📝 A criar</span>
-                            <span class="text-xs font-bold text-slate-500">#01</span>
-                        </div>
-                        <h3 class="font-bold text-slate-600">Horta Inteligente com Arduino</h3>
-                        <p class="text-sm text-slate-500 mt-1">Monitore a umidade do solo e automatize a irrigação de plantas.</p>
-                        <div class="mt-3 text-xs space-x-2">
-                            <span class="font-medium bg-slate-200 px-2 py-1 rounded">🔧 Hardware</span>
-                            <span class="font-medium bg-slate-200 px-2 py-1 rounded">⭐⭐ Intermediário</span>
-                        </div>
-                    </div>
-                    
-                    <div class="border border-slate-200 p-4 rounded-xl bg-slate-50 opacity-70">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-1 rounded-full">📝 A criar</span>
-                            <span class="text-xs font-bold text-slate-500">#23</span>
-                        </div>
-                        <h3 class="font-bold text-slate-600">Cidade Inteligente no Minecraft</h3>
-                        <p class="text-sm text-slate-500 mt-1">Programe sistemas urbanos usando Redstone e Command Blocks.</p>
-                        <div class="mt-3 text-xs space-x-2">
-                            <span class="font-medium bg-slate-200 px-2 py-1 rounded">💻 Software</span>
-                            <span class="font-medium bg-slate-200 px-2 py-1 rounded">⭐ Básico</span>
-                        </div>
-                    </div>
-                    
-                    <div class="border border-slate-200 p-4 rounded-xl bg-slate-50 opacity-70">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-1 rounded-full">📝 A criar</span>
-                            <span class="text-xs font-bold text-slate-500">#29</span>
-                        </div>
-                        <h3 class="font-bold text-slate-600">Jogo Reciclagem no Scratch</h3>
-                        <p class="text-sm text-slate-500 mt-1">Crie um game interativo sobre coleta seletiva.</p>
-                        <div class="mt-3 text-xs space-x-2">
-                            <span class="font-medium bg-slate-200 px-2 py-1 rounded">💻 Software</span>
-                            <span class="font-medium bg-slate-200 px-2 py-1 rounded">⭐ Básico</span>
-                        </div>
-                    </div>
-
-                    <!-- E assim por diante para todos os 45 projetos -->
-                     <div class="border border-dashed border-slate-300 p-4 rounded-xl text-center text-slate-500 flex items-center justify-center">
-                        <p>+41 outros projetos em breve...</p>
-                    </div>
-
+            <!-- Filtros -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-wrap gap-4">
+                <div>
+                    <label class="text-xs font-medium text-slate-500 block mb-1">Categoria</label>
+                    <select id="filterCategory" onchange="applyFilters()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                        <option value="">Todas</option>
+                        <option value="hardware">🔧 Hardware</option>
+                        <option value="software">💻 Software</option>
+                    </select>
                 </div>
+                <div>
+                    <label class="text-xs font-medium text-slate-500 block mb-1">Dificuldade</label>
+                    <select id="filterDifficulty" onchange="applyFilters()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                        <option value="">Todas</option>
+                        <option value="basico">⭐ Básico</option>
+                        <option value="intermediario">⭐⭐ Intermediário</option>
+                        <option value="avancado">⭐⭐⭐ Avançado</option>
+                    </select>
+                </div>
+                <div class="flex-1"></div>
+                <div class="flex items-end">
+                    <span id="projectCount" class="text-sm text-slate-500">6 projetos</span>
+                </div>
+            </div>
+            
+            <!-- Grid de Projetos -->
+            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Projetos serão inseridos via JS -->
             </div>
         </main>
     </div>
 
+    <script type="module">
+        import { projectsLibrary, filterProjects } from './js/projects-data.js';
+
+        const projectsGrid = document.getElementById('projectsGrid');
+        const projectCount = document.getElementById('projectCount');
+
+        function renderProjects(projects) {
+            projectsGrid.innerHTML = '';
+            projectCount.textContent = `${projects.length} projetos`;
+
+            projects.forEach(project => {
+                const difficultyStars = {
+                    'basico': '⭐',
+                    'intermediario': '⭐⭐',
+                    'avancado': '⭐⭐⭐'
+                };
+                const difficultyLabels = {
+                    'basico': 'Básico',
+                    'intermediario': 'Intermediário',
+                    'avancado': 'Avançado'
+                };
+                const categoryIcons = {
+                    'hardware': '🔧',
+                    'software': '💻'
+                };
+
+                const card = document.createElement('a');
+                card.href = `project-view.html?id=${project.id}`;
+                card.className = 'bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg hover:border-brand-300 hover:-translate-y-1 transition-all cursor-pointer block';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-bold text-green-700 bg-green-100 px-2 py-1 rounded-full">✅ Pronto</span>
+                        <span class="text-xs font-medium text-slate-400">${project.duration}</span>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-2">${project.title}</h3>
+                    <p class="text-sm text-slate-600 mb-4">${project.description}</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs font-medium bg-slate-100 text-slate-700 px-2 py-1 rounded">${categoryIcons[project.category]} ${project.category === 'hardware' ? 'Hardware' : 'Software'}</span>
+                        <span class="text-xs font-medium bg-slate-100 text-slate-700 px-2 py-1 rounded">${difficultyStars[project.difficulty]} ${difficultyLabels[project.difficulty]}</span>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <span class="text-xs text-slate-500">${project.grade}</span>
+                        <span class="text-xs font-medium text-brand-600">${project.ods.split(' - ')[0]}</span>
+                    </div>
+                `;
+                projectsGrid.appendChild(card);
+            });
+        }
+
+        window.applyFilters = function() {
+            const category = document.getElementById('filterCategory').value;
+            const difficulty = document.getElementById('filterDifficulty').value;
+            
+            const filtered = filterProjects({
+                category: category || undefined,
+                difficulty: difficulty || undefined,
+                status: 'ready'
+            });
+            
+            renderProjects(filtered);
+        };
+
+        // Render inicial
+        renderProjects(projectsLibrary.filter(p => p.status === 'ready'));
+    </script>
 </body>
 </html>

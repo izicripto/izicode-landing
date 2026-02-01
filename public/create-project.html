@@ -6,64 +6,396 @@
     <title>Criar Novo Projeto - Izicode Edu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
-    <script type="module" src="js/firebase-config.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
-                    colors: { brand: { 500: '#0ea5e9', 600: '#0284c7' } }
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
                 }
             }
         }
     </script>
+    <style>
+        .prose h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #1e293b; }
+        .prose h2 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #334155; }
+        .prose h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; color: #475569; }
+        .prose ul { list-style-type: disc; padding-left: 1.5rem; margin: 0.5rem 0; }
+        .prose ol { list-style-type: decimal; padding-left: 1.5rem; margin: 0.5rem 0; }
+        .prose li { margin: 0.25rem 0; }
+        .prose p { margin: 0.5rem 0; line-height: 1.6; }
+        .prose strong { font-weight: 600; color: #1e293b; }
+        .prose table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .prose th, .prose td { border: 1px solid #e2e8f0; padding: 0.5rem; text-align: left; }
+        .prose th { background: #f8fafc; font-weight: 600; }
+        .prose code { background: #f1f5f9; padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-size: 0.875rem; }
+        .prose pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+        .prose blockquote { border-left: 4px solid #0ea5e9; padding-left: 1rem; margin: 1rem 0; color: #64748b; }
+    </style>
 </head>
 <body class="bg-slate-50 min-h-screen flex text-slate-800">
 
-    <!-- Sidebar & Main Content -->
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col fixed h-full z-10">
+        <div class="p-6 border-b border-slate-100 flex items-center gap-3">
+            <a href="dashboard.html" class="flex items-center gap-3">
+                <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
+                <span class="font-display font-bold text-xl text-slate-900">Izicode</span>
+            </a>
+        </div>
+        <nav class="flex-1 p-4 space-y-1">
+            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Voltar ao Dashboard
+            </a>
+            <a href="library.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                Biblioteca de Projetos
+            </a>
+            <a href="my-projects.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                Meus Projetos
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
     <main class="flex-1 md:ml-64 p-8">
-        <!-- ... (resto do HTML do formulário, que não muda) ... -->
+        <header class="mb-8">
+            <h1 class="font-display text-3xl font-bold text-slate-900">🚀 Gerador de Projetos com IA</h1>
+            <p class="text-slate-500 mt-1">Descreva sua ideia e a IA criará um roteiro completo alinhado à BNCC e ODS.</p>
+        </header>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Formulário -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <form id="projectForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Tema ou Título do Projeto *</label>
+                        <input type="text" id="projectTitle" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-brand-500 focus:border-brand-500" placeholder="Ex: Semáforo inteligente com Arduino">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Série/Ano Escolar *</label>
+                        <select id="projectGrade" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-brand-500">
+                            <option value="">Selecione...</option>
+                            <option value="1º ao 3º ano (Fund. I)">1º ao 3º ano (Fund. I)</option>
+                            <option value="4º ao 5º ano (Fund. I)">4º ao 5º ano (Fund. I)</option>
+                            <option value="6º ao 7º ano (Fund. II)">6º ao 7º ano (Fund. II)</option>
+                            <option value="8º ao 9º ano (Fund. II)">8º ao 9º ano (Fund. II)</option>
+                            <option value="Ensino Médio">Ensino Médio</option>
+                            <option value="Todas as idades">Todas as idades</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Tecnologias/Ferramentas</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50 cursor-pointer">
+                                <input type="checkbox" name="tech" value="Scratch" class="rounded text-brand-600"> Scratch
+                            </label>
+                            <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50 cursor-pointer">
+                                <input type="checkbox" name="tech" value="Arduino" class="rounded text-brand-600"> Arduino
+                            </label>
+                            <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50 cursor-pointer">
+                                <input type="checkbox" name="tech" value="Micro:bit" class="rounded text-brand-600"> Micro:bit
+                            </label>
+                            <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50 cursor-pointer">
+                                <input type="checkbox" name="tech" value="Python" class="rounded text-brand-600"> Python
+                            </label>
+                            <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50 cursor-pointer">
+                                <input type="checkbox" name="tech" value="Tinkercad" class="rounded text-brand-600"> Tinkercad
+                            </label>
+                            <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50 cursor-pointer">
+                                <input type="checkbox" name="tech" value="Makey Makey" class="rounded text-brand-600"> Makey Makey
+                            </label>
+                            <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50 cursor-pointer">
+                                <input type="checkbox" name="tech" value="Materiais Recicláveis" class="rounded text-brand-600"> Recicláveis
+                            </label>
+                            <label class="flex items-center gap-2 p-2 border rounded-lg hover:bg-slate-50 cursor-pointer">
+                                <input type="checkbox" name="tech" value="Minecraft Education" class="rounded text-brand-600"> Minecraft Edu
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">ODS (Objetivo de Desenvolvimento Sustentável)</label>
+                        <select id="projectODS" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-brand-500">
+                            <option value="">Selecione (opcional)...</option>
+                            <option value="ODS 3 - Saúde e Bem-estar">ODS 3 - Saúde e Bem-estar</option>
+                            <option value="ODS 4 - Educação de Qualidade">ODS 4 - Educação de Qualidade</option>
+                            <option value="ODS 6 - Água Potável">ODS 6 - Água Potável</option>
+                            <option value="ODS 7 - Energia Limpa">ODS 7 - Energia Limpa</option>
+                            <option value="ODS 11 - Cidades Sustentáveis">ODS 11 - Cidades Sustentáveis</option>
+                            <option value="ODS 12 - Consumo Responsável">ODS 12 - Consumo Responsável</option>
+                            <option value="ODS 13 - Ação Climática">ODS 13 - Ação Climática</option>
+                            <option value="ODS 15 - Vida Terrestre">ODS 15 - Vida Terrestre</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Número de Aulas</label>
+                        <select id="projectDuration" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-brand-500">
+                            <option value="2-3 aulas">2-3 aulas (Projeto curto)</option>
+                            <option value="4-6 aulas" selected>4-6 aulas (Projeto médio)</option>
+                            <option value="8-12 aulas">8-12 aulas (Projeto longo)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Observações Adicionais</label>
+                        <textarea id="projectNotes" rows="3" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-brand-500" placeholder="Ex: Incluir práticas restaurativas, usar materiais de baixo custo, foco em trabalho em equipe..."></textarea>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-brand-200 flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        Gerar Projeto com IA
+                    </button>
+                </form>
+
+                <!-- API Key Config -->
+                <div class="mt-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div id="apiStatus" class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <span id="apiStatusText" class="text-sm text-slate-600">API não configurada</span>
+                        </div>
+                        <button onclick="document.getElementById('apiModal').classList.remove('hidden')" class="text-sm text-brand-600 hover:underline">Configurar API</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resultado -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="font-display text-xl font-bold text-slate-900">📄 Roteiro Gerado</h2>
+                    <div id="resultActions" class="hidden space-x-2">
+                        <button onclick="copyToClipboard()" class="px-3 py-1 text-sm bg-slate-100 hover:bg-slate-200 rounded-lg">📋 Copiar</button>
+                        <button onclick="downloadMarkdown()" class="px-3 py-1 text-sm bg-slate-100 hover:bg-slate-200 rounded-lg">⬇️ Download</button>
+                        <button onclick="saveToFirebase()" class="px-3 py-1 text-sm bg-brand-100 text-brand-700 hover:bg-brand-200 rounded-lg">💾 Salvar</button>
+                    </div>
+                </div>
+                
+                <div id="resultArea" class="min-h-[400px] border border-dashed border-slate-300 rounded-xl p-6 bg-slate-50">
+                    <div id="placeholder" class="text-center text-slate-400 py-20">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                        <p>Preencha o formulário e clique em <strong>"Gerar Projeto"</strong></p>
+                        <p class="text-sm mt-2">A IA criará um roteiro completo em segundos!</p>
+                    </div>
+                    <div id="loading" class="hidden text-center py-20">
+                        <div class="animate-spin w-12 h-12 border-4 border-brand-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+                        <p class="text-slate-600 font-medium">Gerando seu projeto...</p>
+                        <p class="text-sm text-slate-400 mt-1">Isso pode levar alguns segundos</p>
+                    </div>
+                    <div id="result" class="hidden prose max-w-none"></div>
+                </div>
+            </div>
+        </div>
     </main>
+
+    <!-- Modal API Key -->
+    <div id="apiModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 class="font-display text-xl font-bold text-slate-900 mb-4">🔑 Configurar API do Gemini</h2>
+            <p class="text-sm text-slate-600 mb-4">Para usar o gerador de projetos, você precisa de uma chave API gratuita do Google Gemini.</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Chave API</label>
+                    <input type="password" id="apiKeyInput" class="w-full border border-slate-300 rounded-xl p-3" placeholder="AIzaSy...">
+                </div>
+                <a href="https://makersuite.google.com/app/apikey" target="_blank" class="inline-flex items-center gap-1 text-sm text-brand-600 hover:underline">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    Criar chave gratuita no Google AI Studio
+                </a>
+            </div>
+            
+            <div class="flex justify-end gap-3 mt-6">
+                <button onclick="document.getElementById('apiModal').classList.add('hidden')" class="px-4 py-2 text-slate-500 hover:text-slate-700">Cancelar</button>
+                <button onclick="saveApiKey()" class="px-6 py-2 bg-brand-600 text-white rounded-xl font-medium hover:bg-brand-700">Salvar</button>
+            </div>
+        </div>
+    </div>
 
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
-        import { db, auth, doc, setDoc, onAuthStateChanged } from './js/firebase-config.js';
 
-        // ... (resto do JS que não muda, como os event listeners) ...
-        
-        const izicodeReferenceMaterial = `(conteúdo do guia do Makey Makey)`;
-        const izicodeProjectCatalog = `(conteúdo do catálogo de projetos)`;
+        let genAI = null;
+        let generatedContent = '';
 
-        projectForm.addEventListener('submit', async (e) => {
+        // Check saved API key
+        const savedKey = localStorage.getItem('gemini_api_key');
+        if (savedKey) {
+            initAI(savedKey);
+        }
+
+        function initAI(key) {
+            try {
+                genAI = new GoogleGenerativeAI(key);
+                document.getElementById('apiStatus').className = 'w-3 h-3 rounded-full bg-green-500';
+                document.getElementById('apiStatusText').textContent = 'API conectada ✅';
+            } catch (e) {
+                console.error('Erro ao inicializar API:', e);
+            }
+        }
+
+        window.saveApiKey = function() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (key) {
+                localStorage.setItem('gemini_api_key', key);
+                initAI(key);
+                document.getElementById('apiModal').classList.add('hidden');
+            }
+        };
+
+        // Form submit
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            // ... (lógica de loading) ...
             
+            if (!genAI) {
+                document.getElementById('apiModal').classList.remove('hidden');
+                return;
+            }
+
             const title = document.getElementById('projectTitle').value;
             const grade = document.getElementById('projectGrade').value;
-            const tech = document.getElementById('projectTech').value;
+            const techs = Array.from(document.querySelectorAll('input[name="tech"]:checked')).map(cb => cb.value);
+            const ods = document.getElementById('projectODS').value;
+            const duration = document.getElementById('projectDuration').value;
+            const notes = document.getElementById('projectNotes').value;
 
-            const prompt = `
-                Você é um especialista em educação maker e robótica da Izicode Edu.
-                Seu universo de projetos e possibilidades está descrito no **Catálogo de Projetos** a seguir:
-                ---
-                ${izicodeProjectCatalog}
-                ---
-                
-                Use o seguinte **Guia de Referência** como inspiração principal para o ESTILO e ESTRUTURA de um roteiro:
-                ---
-                ${izicodeReferenceMaterial}
-                ---
+            // Show loading
+            document.getElementById('placeholder').classList.add('hidden');
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('submitBtn').disabled = true;
 
-                Agora, com base em todo esse contexto, crie um roteiro de projeto educacional completo em Markdown para o seguinte pedido:
-                - **Tema do Projeto:** ${title}
-                - **Série Alvo:** ${grade}
-                - **Tecnologias Envolvidas:** ${tech}
+            const prompt = `Você é um especialista em tecnologia educacional da Izicode Edu. Crie um roteiro de projeto educacional completo em Markdown.
 
-                O roteiro final deve ser detalhado e prático, seguindo a estrutura do guia de referência (Objetivos, Materiais, Cronograma em Aulas, Avaliação). Se o tema pedido estiver no catálogo, use as informações de lá (ODS, dificuldade) como base.
-            `;
+**INFORMAÇÕES DO PROJETO:**
+- Tema: ${title}
+- Série/Ano: ${grade}
+- Tecnologias: ${techs.length > 0 ? techs.join(', ') : 'A definir pela IA'}
+- ODS: ${ods || 'Identificar o mais adequado'}
+- Duração: ${duration}
+- Observações: ${notes || 'Nenhuma'}
 
-            // ... (resto da lógica de chamada da API e salvamento) ...
+**ESTRUTURA DO ROTEIRO (siga exatamente):**
+
+# [Título do Projeto]
+
+## 📋 Visão Geral
+- **Série:** [série]
+- **Duração:** [X aulas de 50 min]
+- **Dificuldade:** [Básico/Intermediário/Avançado]
+- **ODS:** [número e nome]
+- **Competências BNCC:** [listar 2-3 competências]
+
+## 🎯 Objetivos de Aprendizagem
+[3-5 objetivos claros e mensuráveis]
+
+## 🔧 Materiais Necessários
+[Lista detalhada com quantidades]
+
+## 📚 Cronograma de Aulas
+
+### Aula 1: [Título]
+**Objetivos:** [específicos da aula]
+**Atividades:**
+1. [atividade detalhada]
+2. [atividade detalhada]
+**Avaliação:** [como avaliar]
+
+[Repetir para cada aula]
+
+## 💡 Dicas para o Professor
+[3-5 dicas práticas]
+
+## 🔄 Práticas Restaurativas
+[Como integrar círculos de diálogo e trabalho colaborativo]
+
+## 📊 Rubrica de Avaliação
+[Tabela com critérios e níveis]
+
+## 🚀 Extensões e Desafios
+[Ideias para aprofundar o projeto]
+
+---
+*Projeto gerado pela Izicode Edu com IA*`;
+
+            try {
+                const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                generatedContent = response.text();
+
+                // Show result
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('result').innerHTML = marked.parse(generatedContent);
+                document.getElementById('resultActions').classList.remove('hidden');
+
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('result').innerHTML = `<div class="text-red-600">❌ Erro ao gerar projeto: ${error.message}</div>`;
+            } finally {
+                document.getElementById('submitBtn').disabled = false;
+            }
         });
+
+        window.copyToClipboard = function() {
+            navigator.clipboard.writeText(generatedContent);
+            alert('Copiado para a área de transferência!');
+        };
+
+        window.downloadMarkdown = function() {
+            const blob = new Blob([generatedContent], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'projeto-izicode.md';
+            a.click();
+        };
+
+        window.saveToFirebase = async function() {
+            // Import Firebase functions
+            const { auth, db } = await import('./js/firebase-config.js');
+            const { collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+            
+            const user = auth.currentUser;
+            if (!user) {
+                alert('Você precisa estar logado para salvar projetos. Faça login primeiro!');
+                return;
+            }
+            
+            if (!generatedContent) {
+                alert('Nenhum projeto gerado para salvar!');
+                return;
+            }
+            
+            try {
+                const projectTitle = document.getElementById('projectTitle').value || 'Projeto sem título';
+                const projectGrade = document.getElementById('projectGrade').value || '';
+                const projectODS = document.getElementById('projectODS').value || '';
+                
+                const projectsRef = collection(db, `users/${user.uid}/projects`);
+                await addDoc(projectsRef, {
+                    title: projectTitle,
+                    grade: projectGrade,
+                    ods: projectODS,
+                    content: generatedContent,
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
+                });
+                
+                alert('✅ Projeto salvo com sucesso! Você pode acessá-lo em "Meus Projetos".');
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                alert('❌ Erro ao salvar projeto: ' + error.message);
+            }
+        };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </body>
