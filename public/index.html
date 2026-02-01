@@ -219,17 +219,24 @@
         </section>
 
         <!-- Contato -->
-        <section id="contato" class="py-24 bg-brand-600 text-white">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <section id="contato" class="py-24 bg-brand-600 text-white relative">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                 <h2 class="font-display text-4xl font-bold mb-6">Fale conosco, queremos te ajudar!</h2>
                 <p class="text-brand-200 text-lg mb-8">Nossa equipe está pronta para responder às suas perguntas, discutir suas necessidades e oferecer soluções personalizadas. Clique no botão abaixo para dar o próximo passo rumo a uma educação moderna e inovadora.</p>
                 <a href="https://tally.so/r/mYRNQB" target="_blank" class="bg-white text-brand-600 px-10 py-4 rounded-xl font-bold hover:bg-brand-50 transition-colors">Entrar em Contato Agora!</a>
+            </div>
+            
+            <!-- Logo Flutuante (Selo) -->
+            <div class="absolute left-1/2 transform -translate-x-1/2 -bottom-16 z-20">
+                <div class="bg-white p-4 rounded-full shadow-2xl border-4 border-slate-900">
+                    <img src="images/logo.png" alt="Izicode Logo" class="w-20 h-20 object-contain">
+                </div>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-white py-12">
+    <footer class="bg-slate-900 text-white pt-24 pb-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center"><p class="text-slate-400">&copy; 2026 Izicode Edu. Todos os direitos reservados.</p></div>
     </footer>
 </body>
