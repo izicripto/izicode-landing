@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module">
+        import { auth, onAuthStateChanged, signOut } from './js/firebase-config.js';
+        
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('userName').innerText = user.displayName;
+                document.getElementById('userAvatar').src = user.photoURL;
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+
+        window.logout = () => {
+            signOut(auth).then(() => window.location.href = "index.html");
+        };
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen flex text-slate-800">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col fixed h-full z-10">
+        <div class="p-6 border-b border-slate-100 flex items-center gap-3">
+            <div class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand-200">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/></svg>
+            </div>
+            <span class="font-display font-bold text-xl text-slate-900">Izicode</span>
+        </div>
+        
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider px-4 mb-2 mt-4">Principal</div>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                Dashboard
+            </a>
+            <a href="my-projects.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                Meus Projetos
+            </a>
+            <a href="library.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                Biblioteca de Projetos
+            </a>
+            <a href="ia-assistant.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                Assistente IA
+            </a>
+            <a href="student-area.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                Área do Aluno
+            </a>
+
+            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider px-4 mb-2 mt-6">Biblioteca</div>
+            <a href="/docs/01-GUIA-HACKATHON-ESCOLAR.md" target="_blank" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:text-brand-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Guia Hackathon
+            </a>
+            <a href="/docs/05-GUIA-BNCC-TECNOLOGIA.md" target="_blank" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:text-brand-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Manual BNCC
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-slate-100">
+            <button onclick="logout()" class="flex items-center gap-3 text-red-500 hover:text-red-700 px-4 py-2 w-full text-sm font-medium transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                Sair
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 md:ml-64 p-8">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-10">
+            <div>
+                <h1 class="font-display text-3xl font-bold text-slate-900">Olá, <span id="userName">...</span> 👋</h1>
+                <p class="text-slate-500">Vamos transformar a educação hoje?</p>
+            </div>
+            <a href="create-project.html" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-brand-200 flex items-center gap-2">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    <span>Novo Projeto com IA</span>
+</a>
+        </header>
+
+        <!-- Integration Hub -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-10">
+            <h2 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                Hub de Ferramentas
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <a href="https://scratch.mit.edu/" target="_blank" class="flex flex-col items-center justify-center p-4 rounded-xl hover:bg-orange-50 hover:border-orange-200 border border-transparent transition-all group">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Scratch_Logo.svg/200px-Scratch_Logo.svg.png" class="h-8 mb-2 group-hover:scale-110 transition-transform">
+                    <span class="text-xs font-medium text-slate-600">Scratch</span>
+                </a>
+                <a href="https://www.tinkercad.com/" target="_blank" class="flex flex-col items-center justify-center p-4 rounded-xl hover:bg-blue-50 hover:border-blue-200 border border-transparent transition-all group">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Tinkercad_logo.png/200px-Tinkercad_logo.png" class="h-6 mb-2 group-hover:scale-110 transition-transform">
+                    <span class="text-xs font-medium text-slate-600">Tinkercad</span>
+                </a>
+                <a href="https://code.org/" target="_blank" class="flex flex-col items-center justify-center p-4 rounded-xl hover:bg-slate-50 hover:border-slate-200 border border-transparent transition-all group">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Code.org_logo.svg/200px-Code.org_logo.svg.png" class="h-8 mb-2 group-hover:scale-110 transition-transform">
+                    <span class="text-xs font-medium text-slate-600">Code.org</span>
+                </a>
+                <a href="https://www.arduino.cc/en/software" target="_blank" class="flex flex-col items-center justify-center p-4 rounded-xl hover:bg-teal-50 hover:border-teal-200 border border-transparent transition-all group">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Arduino_Logo.svg/200px-Arduino_Logo.svg.png" class="h-8 mb-2 group-hover:scale-110 transition-transform">
+                    <span class="text-xs font-medium text-slate-600">Arduino IDE</span>
+                </a>
+                <a href="https://github.com/" target="_blank" class="flex flex-col items-center justify-center p-4 rounded-xl hover:bg-slate-100 hover:border-slate-300 border border-transparent transition-all group">
+                    <svg class="w-8 h-8 text-slate-900 mb-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <span class="text-xs font-medium text-slate-600">GitHub</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- AI Tools Section -->
+        <h2 class="font-display text-xl font-bold text-slate-900 mb-6">Ferramentas de Criação</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <a href="ia-assistant.html" class="group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-brand-300 hover:shadow-lg transition-all">
+                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 mb-4 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                </div>
+                <h3 class="font-bold text-slate-900">Assistente Pedagógico</h3>
+                <p class="text-sm text-slate-500 mt-2">Crie planos de aula e roteiros com IA.</p>
+            </a>
+            
+            <a href="/docs/04-GUIA-PROJETOS-ODS.md" target="_blank" class="group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-green-300 hover:shadow-lg transition-all">
+                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-green-600 mb-4 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
+                </div>
+                <h3 class="font-bold text-slate-900">Projetos ODS</h3>
+                <p class="text-sm text-slate-500 mt-2">Banco de ideias sustentáveis.</p>
+            </a>
+
+            <a href="student-area.html" class="group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all">
+                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </div>
+                <h3 class="font-bold text-slate-900">Ambiente do Aluno</h3>
+                <p class="text-sm text-slate-500 mt-2">Veja a visão gamificada da turma.</p>
+            </a>
+        </div>
+    </main>
+
+</body>
+</html>

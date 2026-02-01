@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente Pedagógico IA - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-display { font-family: 'Space Grotesk', sans-serif; }
+        .typing-indicator span {
+            animation: blink 1.4s infinite both;
+            height: 5px;
+            width: 5px;
+            background-color: #3B82F6;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 1px;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink {
+            0% { opacity: 0.1; }
+            20% { opacity: 1; }
+            100% { opacity: 0.1; }
+        }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+    </style>
+</head>
+<body class="bg-gray-50 h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center space-x-3">
+            <a href="dashboard.html" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            </a>
+            <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl flex items-center justify-center text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+            </div>
+            <div>
+                <h1 class="font-display font-bold text-lg text-gray-900">Assistente Pedagógico IA</h1>
+                <div class="text-xs text-emerald-600 flex items-center">
+                    <span class="w-2 h-2 bg-emerald-500 rounded-full mr-1.5 animate-pulse"></span>
+                    Powered by Google Gemini
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-3">
+            <div id="apiKeyStatus" class="text-xs text-gray-500 hidden md:block">Chave API configurada</div>
+            <button onclick="document.getElementById('settingsModal').classList.remove('hidden')" class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Chat Area -->
+    <main id="chatContainer" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scroll-smooth">
+        <!-- Welcome Message -->
+        <div class="flex items-start space-x-4 max-w-3xl mx-auto">
+            <div class="w-8 h-8 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-lg flex-shrink-0 flex items-center justify-center text-white text-xs font-bold">IA</div>
+            <div class="bg-white p-5 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 text-gray-800">
+                <p class="mb-2 font-medium">Olá, Professor! Sou seu assistente pedagógico.</p>
+                <p class="mb-4 text-sm text-gray-600">Posso ajudar você a criar conteúdos incríveis para suas aulas de tecnologia. O que vamos criar hoje?</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <button onclick="sendPreset('Crie um plano de aula sobre Lógica de Programação para o 6º ano, usando Scratch e focado na BNCC.')" class="text-left p-3 rounded-xl border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-all text-sm group">
+                        <span class="font-medium text-gray-900 block mb-1">📝 Plano de Aula BNCC</span>
+                        <span class="text-gray-500 text-xs group-hover:text-emerald-600">Lógica para 6º ano com Scratch</span>
+                    </button>
+                    <button onclick="sendPreset('Sugira 3 projetos maker com materiais recicláveis para ensinar sobre energia sustentável (ODS 7).')" class="text-left p-3 rounded-xl border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-all text-sm group">
+                        <span class="font-medium text-gray-900 block mb-1">♻️ Projetos Maker</span>
+                        <span class="text-gray-500 text-xs group-hover:text-emerald-600">Energia sustentável com recicláveis</span>
+                    </button>
+                    <button onclick="sendPreset('Analise este código Arduino e encontre erros:\n\nvoid setup() {\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(13, HIGH);\n  delay(1000);\n  digitalWrite(13, LOW);\n}')" class="text-left p-3 rounded-xl border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-all text-sm group">
+                        <span class="font-medium text-gray-900 block mb-1">🐞 Corretor de Código</span>
+                        <span class="text-gray-500 text-xs group-hover:text-emerald-600">Analisar Blink do Arduino</span>
+                    </button>
+                    <button onclick="sendPreset('Como explicar o conceito de Loop (Laço de Repetição) para crianças de 8 anos sem usar computador?')" class="text-left p-3 rounded-xl border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-all text-sm group">
+                        <span class="font-medium text-gray-900 block mb-1">💡 Didática Desplugada</span>
+                        <span class="text-gray-500 text-xs group-hover:text-emerald-600">Explicar Loops para crianças</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Input Area -->
+    <footer class="bg-white border-t border-gray-200 p-4 flex-shrink-0">
+        <div class="max-w-3xl mx-auto relative">
+            <form id="chatForm" class="flex items-end space-x-2">
+                <div class="flex-1 bg-gray-50 border border-gray-200 rounded-2xl p-2 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-transparent transition-all">
+                    <textarea id="promptInput" rows="1" class="w-full bg-transparent border-none focus:ring-0 resize-none p-2 max-h-32 text-gray-900 placeholder-gray-400" placeholder="Digite sua dúvida ou pedido... (Shift+Enter para pular linha)"></textarea>
+                </div>
+                <button type="submit" id="sendBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-xl shadow-lg shadow-emerald-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                </button>
+            </form>
+            <div class="text-center mt-2 text-xs text-gray-400">
+                A IA pode cometer erros. Verifique informações importantes.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Settings Modal (API Key) -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 class="font-display text-xl font-bold text-gray-900 mb-4">Configurações</h2>
+            <p class="text-sm text-gray-600 mb-4">Para usar a IA, você precisa de uma chave API do Google Gemini (gratuita).</p>
+            
+            <label class="block text-sm font-medium text-gray-700 mb-1">Chave API do Gemini</label>
+            <input type="password" id="apiKeyInput" class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 mb-2" placeholder="Cole sua chave aqui...">
+            <a href="https://makersuite.google.com/app/apikey" target="_blank" class="text-xs text-emerald-600 hover:underline">Gerar chave gratuita aqui ↗</a>
+            
+            <div class="flex justify-end space-x-3 mt-6">
+                <button onclick="document.getElementById('settingsModal').classList.add('hidden')" class="px-4 py-2 text-gray-500 hover:text-gray-700 font-medium">Cancelar</button>
+                <button onclick="saveApiKey()" class="px-6 py-2 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 shadow-lg shadow-emerald-500/20">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+
+        const chatContainer = document.getElementById('chatContainer');
+        const promptInput = document.getElementById('promptInput');
+        const chatForm = document.getElementById('chatForm');
+        const sendBtn = document.getElementById('sendBtn');
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        
+        let genAI;
+        let model;
+        let chat;
+
+        // Load API Key
+        const savedKey = localStorage.getItem('gemini_api_key');
+        if (savedKey) {
+            apiKeyInput.value = savedKey;
+            initAI(savedKey);
+        } else {
+            document.getElementById('settingsModal').classList.remove('hidden');
+        }
+
+        window.saveApiKey = function() {
+            const key = apiKeyInput.value.trim();
+            if (key) {
+                localStorage.setItem('gemini_api_key', key);
+                initAI(key);
+                document.getElementById('settingsModal').classList.add('hidden');
+            }
+        };
+
+        function initAI(key) {
+            try {
+                genAI = new GoogleGenerativeAI(key);
+                model = genAI.getGenerativeModel({ model: "gemini-pro"});
+                chat = model.startChat({
+                    history: [
+                        {
+                            role: "user",
+                            parts: "Você é um assistente pedagógico especializado em tecnologia educacional, BNCC, cultura maker e robótica. Ajude professores a criar aulas criativas e inovadoras. Responda sempre em português, com formatação Markdown clara.",
+                        },
+                        {
+                            role: "model",
+                            parts: "Entendido! Estou pronto para ajudar professores a transformar suas aulas com tecnologia, maker e robótica. Como posso ajudar hoje?",
+                        },
+                    ],
+                });
+                document.getElementById('apiKeyStatus').classList.remove('hidden');
+                document.getElementById('apiKeyStatus').innerText = 'IA Conectada ✅';
+            } catch (error) {
+                console.error("Erro ao iniciar IA:", error);
+                alert("Erro ao conectar com Gemini. Verifique sua chave API.");
+            }
+        }
+
+        window.sendPreset = function(text) {
+            promptInput.value = text;
+            handleSend(new Event('submit'));
+        };
+
+        async function handleSend(e) {
+            e.preventDefault();
+            const text = promptInput.value.trim();
+            if (!text || !chat) return;
+
+            // User Message
+            appendMessage('user', text);
+            promptInput.value = '';
+            promptInput.style.height = 'auto';
+            sendBtn.disabled = true;
+
+            // Loading
+            const loadingId = appendLoading();
+
+            try {
+                const result = await chat.sendMessage(text);
+                const response = await result.response;
+                const markdown = response.text();
+                
+                removeLoading(loadingId);
+                appendMessage('ai', markdown);
+            } catch (error) {
+                removeLoading(loadingId);
+                appendMessage('ai', '❌ Desculpe, ocorreu um erro. Verifique sua chave API ou tente novamente.');
+                console.error(error);
+            } finally {
+                sendBtn.disabled = false;
+                promptInput.focus();
+            }
+        }
+
+        chatForm.addEventListener('submit', handleSend);
+
+        // Auto-resize textarea
+        promptInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Shift+Enter
+        promptInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend(new Event('submit'));
+            }
+        });
+
+        function appendMessage(role, text) {
+            const div = document.createElement('div');
+            div.className = `flex items-start space-x-4 max-w-3xl mx-auto ${role === 'user' ? 'justify-end' : ''}`;
+            
+            if (role === 'ai') {
+                div.innerHTML = `
+                    <div class="w-8 h-8 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-lg flex-shrink-0 flex items-center justify-center text-white text-xs font-bold">IA</div>
+                    <div class="bg-white p-5 rounded-2xl rounded-tl-none shadow-sm border border-gray-100 text-gray-800 prose prose-sm max-w-none">
+                        ${marked.parse(text)}
+                    </div>
+                `;
+            } else {
+                div.innerHTML = `
+                    <div class="bg-emerald-50 p-4 rounded-2xl rounded-tr-none text-gray-800 border border-emerald-100">
+                        ${text.replace(/\n/g, '<br>')}
+                    </div>
+                `;
+            }
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function appendLoading() {
+            const id = 'loading-' + Date.now();
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = 'flex items-start space-x-4 max-w-3xl mx-auto';
+            div.innerHTML = `
+                <div class="w-8 h-8 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-lg flex-shrink-0 flex items-center justify-center text-white text-xs font-bold">IA</div>
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-gray-100">
+                    <div class="typing-indicator">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            `;
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return id;
+        }
+
+        function removeLoading(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</body>
+</html>

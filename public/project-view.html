@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar Projeto - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <script type="module" src="js/firebase-config.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 500: '#0ea5e9', 600: '#0284c7' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50">
+
+    <main class="max-w-4xl mx-auto p-8">
+        <a href="my-projects.html" class="text-brand-600 hover:text-brand-700 no-underline mb-4 inline-block">&larr; Voltar para Meus Projetos</a>
+        
+        <div id="projectContainer" class="prose prose-slate bg-white p-8 rounded-xl shadow-sm border border-slate-200 min-h-[80vh]">
+            <!-- Loading State -->
+            <div id="loadingState">
+                <h1 class="text-center">Carregando projeto...</h1>
+                <p class="text-center text-slate-500">Buscando informações no banco de dados.</p>
+            </div>
+
+            <!-- Content will be injected here -->
+        </div>
+    </main>
+
+    <script type="module">
+        import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+        import { auth, db, onAuthStateChanged, doc, getDoc } from './js/firebase-config.js';
+
+        const projectContainer = document.getElementById('projectContainer');
+        const loadingState = document.getElementById('loadingState');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadProject(user.uid);
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+
+        async function loadProject(userId) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = urlParams.get('userProject');
+
+            if (!projectId) {
+                projectContainer.innerHTML = '<h1>Erro: ID do projeto não encontrado.</h1>';
+                return;
+            }
+
+            try {
+                const projectRef = doc(db, `users/${userId}/projects`, projectId);
+                const docSnap = await getDoc(projectRef);
+
+                if (docSnap.exists()) {
+                    const project = docSnap.data();
+                    projectContainer.innerHTML = marked.parse(project.content);
+                } else {
+                    projectContainer.innerHTML = '<h1>Projeto não encontrado.</h1><p>Parece que este projeto não existe ou você não tem permissão para vê-lo.</p>';
+                }
+            } catch (error) {
+                console.error("Erro ao buscar projeto:", error);
+                projectContainer.innerHTML = '<h1>Ocorreu um erro ao carregar o projeto.</h1>';
+            }
+        }
+
+    </script>
+</body>
+</html>

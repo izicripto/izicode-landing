@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Novo Projeto - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <script type="module" src="js/firebase-config.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 500: '#0ea5e9', 600: '#0284c7' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen flex text-slate-800">
+
+    <!-- Sidebar & Main Content -->
+    <main class="flex-1 md:ml-64 p-8">
+        <!-- ... (resto do HTML do formulário, que não muda) ... -->
+    </main>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+        import { db, auth, doc, setDoc, onAuthStateChanged } from './js/firebase-config.js';
+
+        // ... (resto do JS que não muda, como os event listeners) ...
+        
+        const izicodeReferenceMaterial = `(conteúdo do guia do Makey Makey)`;
+        const izicodeProjectCatalog = `(conteúdo do catálogo de projetos)`;
+
+        projectForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            // ... (lógica de loading) ...
+            
+            const title = document.getElementById('projectTitle').value;
+            const grade = document.getElementById('projectGrade').value;
+            const tech = document.getElementById('projectTech').value;
+
+            const prompt = `
+                Você é um especialista em educação maker e robótica da Izicode Edu.
+                Seu universo de projetos e possibilidades está descrito no **Catálogo de Projetos** a seguir:
+                ---
+                ${izicodeProjectCatalog}
+                ---
+                
+                Use o seguinte **Guia de Referência** como inspiração principal para o ESTILO e ESTRUTURA de um roteiro:
+                ---
+                ${izicodeReferenceMaterial}
+                ---
+
+                Agora, com base em todo esse contexto, crie um roteiro de projeto educacional completo em Markdown para o seguinte pedido:
+                - **Tema do Projeto:** ${title}
+                - **Série Alvo:** ${grade}
+                - **Tecnologias Envolvidas:** ${tech}
+
+                O roteiro final deve ser detalhado e prático, seguindo a estrutura do guia de referência (Objetivos, Materiais, Cronograma em Aulas, Avaliação). Se o tema pedido estiver no catálogo, use as informações de lá (ODS, dificuldade) como base.
+            `;
+
+            // ... (resto da lógica de chamada da API e salvamento) ...
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</body>
+</html>
