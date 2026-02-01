@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script type="module" src="js/firebase-config.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         .font-display { font-family: 'Space Grotesk', sans-serif; }
@@ -21,10 +22,10 @@
     <!-- Navbar -->
     <nav class="bg-white border-b border-indigo-100 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                Iz
-            </div>
-            <span class="font-display font-bold text-xl text-gray-900">Izicode <span class="text-indigo-600">Alunos</span></span>
+            <a href="dashboard.html" class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">Iz</div>
+                <span class="font-display font-bold text-xl text-gray-900">Izicode <span class="text-indigo-600">Alunos</span></span>
+            </a>
         </div>
         
         <div class="flex items-center space-x-6">
@@ -34,10 +35,10 @@
             </div>
             <div class="flex items-center space-x-2 bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-200">
                 <span class="text-xl">💎</span>
-                <span class="font-bold text-indigo-700">450 XP</span>
+                <span id="navXp" class="font-bold text-indigo-700">... XP</span>
             </div>
             <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-sm">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar">
+                <img id="navAvatar" src="" alt="Avatar">
             </div>
         </div>
     </nav>
@@ -53,11 +54,10 @@
                     <span class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider mb-4 inline-block">Missão da Semana</span>
                     <h1 class="font-display text-3xl font-bold mb-4">Construa um Semáforo Inteligente 🚦</h1>
                     <p class="text-indigo-100 mb-6 max-w-md">Aprenda a controlar LEDs com Arduino e crie um sistema de trânsito seguro para sua cidade maquete.</p>
-                    <button class="bg-white text-indigo-600 px-6 py-3 rounded-xl font-bold hover:bg-indigo-50 transition-colors shadow-lg">
+                    <a href="project-view.html?id=arduino-semaforo" class="inline-block bg-white text-indigo-600 px-6 py-3 rounded-xl font-bold hover:bg-indigo-50 transition-colors shadow-lg">
                         Começar Missão
-                    </button>
+                    </a>
                 </div>
-                <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" class="absolute right-0 bottom-0 w-64 opacity-20 transform translate-x-10 translate-y-10" alt="Robot">
             </div>
 
             <!-- Learning Path -->
@@ -74,7 +74,7 @@
                         </div>
                         <div class="flex-1">
                             <h3 class="font-bold text-gray-900 line-through">Introdução ao Arduino</h3>
-                            <p class="text-xs text-gray-500">Concluído em 28/01</p>
+                            <p class="text-xs text-gray-500">Concluído</p>
                         </div>
                         <span class="text-green-600 font-bold">+50 XP</span>
                     </div>
@@ -95,17 +95,6 @@
                             Continuar
                         </button>
                     </div>
-
-                    <!-- Step 3: Locked -->
-                    <div class="bg-gray-100 p-4 rounded-2xl border border-gray-200 flex items-center space-x-4 grayscale opacity-60">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-gray-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="font-bold text-gray-600">Sensores e Inputs</h3>
-                            <p class="text-xs text-gray-400">Desbloqueia no Nível 3</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -117,10 +106,10 @@
                 <div class="absolute top-0 left-0 w-full h-20 bg-indigo-50"></div>
                 <div class="relative z-10">
                     <div class="w-24 h-24 mx-auto bg-white rounded-full p-1 shadow-md mb-4">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" class="w-full h-full rounded-full">
+                        <img id="profileAvatar" src="" alt="Avatar" class="w-full h-full rounded-full object-cover">
                     </div>
-                    <h2 class="font-display text-xl font-bold text-gray-900">Felix Coder</h2>
-                    <p class="text-indigo-600 font-medium text-sm mb-6">Aprendiz Maker • Nível 2</p>
+                    <h2 id="profileName" class="font-display text-xl font-bold text-gray-900">...</h2>
+                    <p id="profileLevel" class="text-indigo-600 font-medium text-sm mb-6">Nível 1</p>
                     
                     <div class="grid grid-cols-2 gap-4 text-left">
                         <div class="bg-gray-50 p-3 rounded-xl">
@@ -131,25 +120,6 @@
                             <div class="text-xs text-gray-500">Conquistas</div>
                             <div class="font-bold text-gray-900">5/20</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Badges -->
-            <div>
-                <h2 class="font-display text-lg font-bold text-gray-900 mb-4">Suas Conquistas</h2>
-                <div class="grid grid-cols-3 gap-3">
-                    <div class="aspect-square bg-yellow-50 rounded-xl flex flex-col items-center justify-center p-2 border border-yellow-200 cursor-pointer hover:bg-yellow-100 transition-colors" title="Primeiro Código">
-                        <span class="text-2xl mb-1">🐣</span>
-                        <span class="text-[10px] font-bold text-yellow-800 text-center leading-tight">Hello World</span>
-                    </div>
-                    <div class="aspect-square bg-green-50 rounded-xl flex flex-col items-center justify-center p-2 border border-green-200 cursor-pointer hover:bg-green-100 transition-colors" title="Semana Perfeita">
-                        <span class="text-2xl mb-1">🔥</span>
-                        <span class="text-[10px] font-bold text-green-800 text-center leading-tight">On Fire</span>
-                    </div>
-                    <div class="aspect-square bg-gray-100 rounded-xl flex flex-col items-center justify-center p-2 border border-dashed border-gray-300 grayscale opacity-50">
-                        <span class="text-2xl mb-1">🤖</span>
-                        <span class="text-[10px] font-bold text-gray-500 text-center leading-tight">Mestre Robô</span>
                     </div>
                 </div>
             </div>
@@ -173,17 +143,58 @@
 
     </main>
 
-    <script>
-        function checkAnswer(btn, isCorrect) {
+    <script type="module">
+        import { auth, db, onAuthStateChanged, doc, getDoc, setDoc } from './js/firebase-config.js';
+        import { updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        let currentUser = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                // Update UI with Auth Data
+                document.getElementById('navAvatar').src = user.photoURL;
+                document.getElementById('profileAvatar').src = user.photoURL;
+                document.getElementById('profileName').innerText = user.displayName;
+
+                // Fetch Real DB Data
+                try {
+                    const userRef = doc(db, "users", user.uid);
+                    const userSnap = await getDoc(userRef);
+                    
+                    if (userSnap.exists()) {
+                        const data = userSnap.data();
+                        updateXPUI(data.xp || 0, data.level || 1);
+                    }
+                } catch (e) {
+                    console.error("Erro ao buscar dados do usuário:", e);
+                }
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+
+        window.checkAnswer = async function(btn, isCorrect) {
             if (isCorrect) {
                 btn.classList.remove('bg-white/10');
                 btn.classList.add('bg-green-500', 'border-green-400');
-                confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 }
-                });
-                setTimeout(() => alert('Parabéns! +50 XP adicionados! 🎉'), 500);
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                
+                // Add XP if logged in
+                if (currentUser) {
+                    try {
+                        const userRef = doc(db, "users", currentUser.uid);
+                        await updateDoc(userRef, {
+                            xp: increment(50)
+                        });
+                        // Optimistic update
+                        alert('Resposta Certa! +50 XP salvos no seu perfil! 🎉');
+                        location.reload(); // Reload to show new XP
+                    } catch (e) {
+                        console.error("Erro ao salvar XP:", e);
+                        alert("Certo! Mas houve erro ao salvar XP: " + e.message);
+                    }
+                }
             } else {
                 btn.classList.remove('bg-white/10');
                 btn.classList.add('bg-red-500', 'border-red-400', 'shake');
@@ -192,6 +203,11 @@
                     btn.classList.add('bg-white/10');
                 }, 1000);
             }
+        };
+
+        function updateXPUI(xp, level) {
+            document.getElementById('navXp').innerText = `${xp} XP`;
+            document.getElementById('profileLevel').innerText = `Nível ${level}`;
         }
     </script>
     <style>
