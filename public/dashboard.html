@@ -8,12 +8,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module">
-        import { auth, onAuthStateChanged, signOut } from './js/firebase-config.js';
+        import { auth, db, onAuthStateChanged, signOut, doc, getDoc } from './js/firebase-config.js';
         
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 document.getElementById('userName').innerText = user.displayName;
                 document.getElementById('userAvatar').src = user.photoURL;
+
+                // Buscar dados de Gamificação (XP/Nível)
+                try {
+                    const userRef = doc(db, "users", user.uid);
+                    const userSnap = await getDoc(userRef);
+                    if (userSnap.exists()) {
+                        const data = userSnap.data();
+                        const xp = data.xp || 0;
+                        const level = data.level || 1;
+                        document.getElementById('userStats').innerHTML = `
+                            <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-bold border border-indigo-200">⭐ Nível ${level}</span>
+                            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-bold border border-yellow-200">⚡ ${xp} XP</span>
+                        `;
+                    }
+                } catch (e) {
+                    console.error("Erro ao carregar stats:", e);
+                }
+
             } else {
                 window.location.href = "index.html";
             }
@@ -93,7 +111,8 @@
         <header class="flex justify-between items-center mb-10">
             <div>
                 <h1 class="font-display text-3xl font-bold text-slate-900">Olá, <span id="userName">...</span> 👋</h1>
-                <p class="text-slate-500">Vamos transformar a educação hoje?</p>
+                <div id="userStats" class="flex gap-2 mt-2"></div>
+                <p class="text-slate-500 mt-2">Vamos transformar a educação hoje?</p>
             </div>
             <a href="create-project.html" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-brand-200 flex items-center gap-2">
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>

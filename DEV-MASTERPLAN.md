@@ -70,6 +70,7 @@ A área do aluno é apenas visual.
 - [x] Criar lógica de XP no Firestore. (Integrado no `student-area.html`)
 - [x] Fazer o Quiz dar XP real para o usuário logado.
 - [x] Recompensar criação de projetos com XP.
+- [x] Mostrar resumo de XP/Nível na Dashboard principal.
 
 ### ETAPA 4: Monetização
 - [x] Criar página de venda do "Kit Missão Maker". (`shop-kit.html`)
