@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izicode Edu - Lâmina de Ferramentas para Professores</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-display { font-family: 'Outfit', sans-serif; }
+        .bg-brand-gradient { background: linear-gradient(to right, #0ea5e9, #0284c7); }
+        .text-brand-gradient {
+            background: linear-gradient(to right, #0ea5e9, #0284c7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-container {
+            min-width: 64px; height: 64px;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white text-slate-800 antialiased">
+
+    <div class="max-w-4xl mx-auto p-8">
+
+        <header class="text-center mb-16">
+            <img src="../images/logo.png" alt="Izicode Logo" class="w-20 h-20 mx-auto mb-8 bg-white p-3 rounded-3xl shadow-xl border border-slate-700">
+            <h1 class="font-display text-5xl font-bold text-brand-gradient leading-tight mb-6">
+                Lâmina de Ferramentas Maker
+            </h1>
+            <p class="text-2xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                Um guia rápido para você, professor, explorar o potencial das tecnologias em suas aulas de Robótica e STEAM.
+            </p>
+        </header>
+
+        <main>
+            <!-- Seção: Ferramentas Essenciais -->
+            <section class="mb-16">
+                <h2 class="font-display text-3xl font-bold text-slate-900 text-center mb-10">Nossas Ferramentas Mágicas</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    
+                    <!-- Ferramenta 1: Scratch -->
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-6">
+                        <div class="icon-container bg-slate-100 rounded-2xl flex items-center justify-center">
+                            <img src="../assets/professors/icons/scratch.png" alt="Ícone Scratch" class="w-10 h-10 object-contain">
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-2xl mb-3">Scratch</h3>
+                            <p class="text-slate-600 text-base leading-relaxed">A linguagem de programação visual baseada em blocos que introduz lógica e criatividade. Perfeita para os primeiros passos no mundo do código.</p>
+                            <p class="text-brand-600 font-medium mt-4">💡 Ideia de Projeto: <span class="text-slate-700">Piano interativo com frutas; Criação de jogos simples; Animação de personagens.</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Ferramenta 2: Arduino -->
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-6">
+                        <div class="icon-container bg-slate-100 rounded-2xl flex items-center justify-center">
+                            <img src="../assets/professors/icons/arduino.png" alt="Ícone Arduino" class="w-10 h-10 object-contain">
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-2xl mb-3">Arduino</h3>
+                            <p class="text-slate-600 text-base leading-relaxed">A plataforma de prototipagem eletrônica mais popular. Com sensores e atuadores, os alunos criam projetos reais e interativos.</p>
+                            <p class="text-brand-600 font-medium mt-4">💡 Ideia de Projeto: <span class="text-slate-700">Semáforo inteligente; Estação meteorológica simples; Alarme de proximidade.</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Ferramenta 3: Micro:bit -->
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-6">
+                        <div class="icon-container bg-slate-100 rounded-2xl flex items-center justify-center">
+                            <img src="../assets/professors/icons/microbit.png" alt="Ícone Micro:bit" class="w-10 h-10 object-contain">
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-2xl mb-3">Micro:bit</h3>
+                            <p class="text-slate-600 text-base leading-relaxed">Um mini-computador programável, ideal para introduzir conceitos de robótica e IoT de forma acessível e amigável.</p>
+                            <p class="text-brand-600 font-medium mt-4">💡 Ideia de Projeto: <span class="text-slate-700">Contador de passos; Jogo de memória com LEDs; Medidor de temperatura.</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Ferramenta 4: Makey Makey -->
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex items-start gap-6">
+                        <div class="icon-container bg-slate-100 rounded-2xl flex items-center justify-center">
+                            <img src="../assets/professors/icons/makey-makey.png" alt="Ícone Makey Makey" class="w-10 h-10 object-contain">
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-2xl mb-3">Makey Makey</h3>
+                            <p class="text-slate-600 text-base leading-relaxed">Conecte o mundo físico ao digital! Transforme frutas, massinha ou qualquer objeto condutor em controles de computador.</p>
+                            <p class="text-brand-600 font-medium mt-4">💡 Ideia de Projeto: <span class="text-slate-700">Piano de bananas; Controlador de jogos com massinha; Teclado musical.</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Placeholder para mais ferramentas (se necessário) -->
+                    <div class="bg-slate-700 p-8 rounded-3xl border border-slate-600 flex flex-col items-center justify-center text-center animate-pulse">
+                        <p class="text-brand-300 text-xl font-bold mb-4">+ Ferramentas em Breve!</p>
+                        <p class="text-slate-300 text-base">Estamos sempre explorando novas tecnologias para enriquecer o aprendizado.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção: Por que Izicode? -->
+            <section class="mb-20 bg-slate-800 p-12 rounded-3xl border border-slate-700">
+                <h2 class="font-display text-3xl font-bold text-white text-center mb-10">Izicode: Seu Aliado na Transformação Digital</h2>
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="flex items-start gap-5">
+                        <div class="icon-container bg-brand-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-10 h-10 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-2xl mb-3">Metodologia Comprovada</h3>
+                            <p class="text-slate-300 text-lg">Nosso método é testado e aprovado, focado em engajamento, aprendizado prático e desenvolvimento de competências.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-5">
+                        <div class="icon-container bg-purple-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-2xl mb-3">Suporte Contínuo</h3>
+                            <p class="text-slate-300 text-lg">Oferecemos suporte pedagógico e técnico para garantir o sucesso do professor e dos alunos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Final -->
+            <section class="text-center py-16 bg-brand-600 rounded-3xl mt-20">
+                <h2 class="font-display text-4xl font-bold text-white mb-6">Transforme suas aulas com a Izicode!</h2>
+                <p class="text-xl text-brand-100 mb-10 max-w-2xl mx-auto">Entre em contato para implementar a cultura maker na sua escola ou para se tornar um parceiro.</p>
+                <a href="https://tally.so/r/mYRNQB" target="_blank" class="inline-block bg-white text-brand-700 px-10 py-5 rounded-2xl font-bold hover:bg-brand-50 hover-shake transition-all text-2xl shadow-lg shadow-brand-500/30">
+                    FALAR COM UM ESPECIALISTA
+                </a>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

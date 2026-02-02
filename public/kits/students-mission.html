@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izicode Edu - Sua Missão Maker</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-display { font-family: 'Outfit', sans-serif; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25%, 75% { transform: translateX(-2px) rotate(-1deg); } 50% { transform: translateX(2px) rotate(1deg); } }
+        .hover-shake:hover { animation: shake 0.3s ease-in-out infinite; }
+        .gradient-text {
+            background: linear-gradient(to right, #0ea5e9, #0284c7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .bg-dots {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .tech-bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(14, 165, 233, 0.15) 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px);
+            background-size: 10px 10px;
+            opacity: 0;
+            animation: fade 3s infinite;
+        }
+        .particle1 { top: 10%; left: 20%; width: 15px; height: 15px; animation-delay: 0s; }
+        .particle2 { top: 30%; left: 70%; width: 20px; height: 20px; animation-delay: 1s; }
+        .particle3 { top: 70%; left: 40%; width: 10px; height: 10px; animation-delay: 2s; }
+        .particle4 { top: 50%; left: 10%; width: 25px; height: 25px; animation-delay: 0.5s; }
+        .particle5 { top: 80%; left: 80%; width: 18px; height: 18px; animation-delay: 1.5s; }
+        @keyframes fade { 0% { opacity: 0; transform: scale(0); } 50% { opacity: 0.7; transform: scale(1); } 100% { opacity: 0; transform: scale(1.2); } }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-900 text-white antialiased relative overflow-hidden">
+
+    <!-- Partículas de fundo -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="particle particle1"></div>
+        <div class="particle particle2"></div>
+        <div class="particle particle3"></div>
+        <div class="particle particle4"></div>
+        <div class="particle particle5"></div>
+    </div>
+
+    <div class="max-w-5xl mx-auto p-8 relative z-20">
+
+        <header class="text-center mb-16 animate-fade-in">
+            <img src="../images/logo.png" alt="Izicode Logo" class="w-24 h-24 mx-auto mb-8 bg-white p-3 rounded-3xl shadow-xl border border-slate-700">
+            <h1 class="font-display text-6xl font-extrabold gradient-text leading-tight mb-6 animate-fade-in-delay-1">
+                Sua Missão Maker Começa Agora!
+            </h1>
+            <p class="text-3xl text-slate-300 max-w-3xl mx-auto leading-relaxed animate-fade-in-delay-2">
+                Prepare-se para desvendar mistérios, criar invenções e se tornar um verdadeiro mestre maker!
+            </p>
+        </header>
+
+        <main>
+            <!-- Seção: Bem-vindo ao Universo Maker -->
+            <section class="mb-20">
+                <h2 class="font-display text-5xl font-bold text-brand-300 text-center mb-10 animate-fade-in">
+                    Bem-vindo ao Universo Maker!
+                </h2>
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div class="animate-fade-in animate-fade-in-delay-1">
+                        <h3 class="font-display text-3xl font-bold text-white mb-6">O Que é Ser um Maker?</h3>
+                        <p class="text-slate-300 text-2xl leading-relaxed mb-8">
+                            Um Maker é alguém que cria, que inventa, que resolve problemas usando a tecnologia como aliada. É sobre transformar ideias em realidade, aprender fazendo e se divertir no processo!
+                        </p>
+                        <h3 class="font-display text-3xl font-bold text-white mb-6">Sua Jornada de Aprendizado</h3>
+                        <p class="text-slate-300 text-2xl leading-relaxed">
+                            Na Izicode, você vai explorar: Robótica, Programação, Eletrônica, Design 3D e muito mais! Cada projeto é uma nova aventura.
+                        </p>
+                    </div>
+                    <div class="animate-fade-in animate-fade-in-delay-2">
+                        <img src="../assets/students/main-image.jpg" alt="Aluno Criando Robo" class="rounded-3xl shadow-2xl w-full h-auto object-cover">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção: Sua Primeira Missão -->
+            <section class="mb-20 bg-slate-800 p-12 rounded-3xl border border-slate-700 animate-fade-in animate-fade-in-delay-1">
+                <h2 class="font-display text-4xl font-bold text-white text-center mb-10">Sua Primeira Missão Secreta: O Desafio do Robô Falante!</h2>
+                <div class="grid md:grid-cols-2 gap-10 items-center">
+                    <div class="animate-fade-in animate-fade-in-delay-2">
+                        <img src="../assets/students/robot-challenge.jpg" alt="Robô com desafio" class="rounded-3xl shadow-xl w-full h-auto object-cover">
+                    </div>
+                    <div class="animate-fade-in animate-fade-in-delay-3">
+                        <h3 class="font-display text-3xl font-bold text-brand-300 mb-6">O Que Fazer?</h3>
+                        <p class="text-slate-300 text-2xl leading-relaxed mb-8">Seu desafio é criar um pequeno robô que responda quando você falar! Você vai aprender a usar sensores, motores e talvez até um microcontrolador!</p>
+                        <h3 class="font-display text-3xl font-bold text-brand-300 mb-6">Como Começar?</h3>
+                        <p class="text-slate-300 text-2xl leading-relaxed">Explore os projetos na nossa biblioteca e use o Gerador de Projetos IA para criar o seu primeiro robô.</p>
+                        <a href="/library.html" class="inline-block bg-brand-500 text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-600 hover-shake transition-all text-xl mt-6">EXPLORAR BIBLIOTECA</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção: Sua Jornada de XP -->
+            <section class="mb-20">
+                <h2 class="font-display text-5xl font-bold text-slate-900 text-center mb-10 animate-fade-in">
+                    Suba de Nível! Sua Jornada de XP Começa Aqui!
+                </h2>
+                <div class="grid md:grid-cols-3 gap-12 text-center">
+                    <div class="bg-slate-100 p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center animate-fade-in animate-fade-in-delay-1">
+                        <div class="w-20 h-20 bg-yellow-400 rounded-full flex items-center justify-center mb-6 text-4xl font-bold text-yellow-800">1</div>
+                        <h3 class="font-bold text-slate-900 text-2xl mb-3">XP por Projeto</h3>
+                        <p class="text-slate-600 text-lg">Cada projeto concluído te dá pontos de experiência para subir de nível.</p>
+                    </div>
+                    <div class="bg-slate-100 p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center animate-fade-in animate-fade-in-delay-2">
+                        <div class="w-20 h-20 bg-blue-400 rounded-full flex items-center justify-center mb-6 text-4xl font-bold text-blue-800">10</div>
+                        <h3 class="font-bold text-slate-900 text-2xl mb-3">Níveis de Mestre Maker</h3>
+                        <p class="text-slate-600 text-lg">Desbloqueie novos desafios e ferramentas à medida que avança.</p>
+                    </div>
+                    <div class="bg-slate-100 p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center animate-fade-in animate-fade-in-delay-3">
+                        <div class="w-20 h-20 bg-purple-400 rounded-full flex items-center justify-center mb-6 text-4xl font-bold text-purple-800">★</div>
+                        <h3 class="font-bold text-slate-900 text-2xl mb-3">Missões Especiais</h3>
+                        <p class="text-slate-600 text-lg">Participe de desafios extras e ganhe reconhecimento especial!</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="pt-20 pb-10 text-center">
+            <p class="text-slate-400 text-base">Izicode Edu - Todos os direitos reservados.</p>
+            <p class="text-slate-400 text-sm">Contato: contato@izicode.com.br</p>
+        </footer>
+
+    </div>
+</body>
+
+</html>
