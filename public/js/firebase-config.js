@@ -6,7 +6,7 @@ import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } 
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyC8mUecORyilxkA7bNAZ7GA8q6BBg3klsI",
+    apiKey: "AIzaSyBhdrACOna_u_zrrqYrR3Ou5FDCO77Zp5A",
     authDomain: "izicodeedu-532ac.firebaseapp.com",
     projectId: "izicodeedu-532ac",
     storageBucket: "izicodeedu-532ac.firebasestorage.app",
