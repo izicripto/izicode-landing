@@ -105,19 +105,35 @@
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
 
-                btnText.textContent = 'Salvando dados...';
+                btnText.textContent = 'Verificando permissão...';
 
-                // Guardar email como Cliente Extremo
-                const userRef = doc(db, "extreme_clients", user.uid);
-                await setDoc(userRef, {
+                // 1. Verificar se usuário já existe e está aprovado na coleção principal
+                const userDocRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userDocRef);
+
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    if (userData.status === 'approved' || userData.role === 'admin' || userData.role === 'teacher') {
+                        // ACESSO LIBERADO
+                        console.log("Acesso permitido:", userData.role);
+                        window.location.href = "dashboard.html";
+                        return;
+                    }
+                }
+
+                // 2. Se não tem acesso, salvar como Lead/Espera
+                const leadRef = doc(db, "extreme_clients", user.uid);
+                await setDoc(leadRef, {
                     uid: user.uid,
                     name: user.displayName,
                     email: user.email,
-                    status: "interessado_plataforma",
-                    lastLogin: new Date()
+                    photoURL: user.photoURL,
+                    status: "waiting_list",
+                    lastLogin: new Date(),
+                    provider: "google"
                 }, { merge: true });
 
-                btnText.textContent = 'Redirecionando...';
+                btnText.textContent = 'Redirecionando para espera...';
                 setTimeout(() => {
                     window.location.href = "platform-dev.html";
                 }, 500);
