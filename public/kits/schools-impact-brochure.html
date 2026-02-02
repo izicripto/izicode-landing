@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izicode Edu - Folheto de Impacto para Escolas</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="../images/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-display { font-family: 'Outfit', sans-serif; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25%, 75% { transform: translateX(-2px) rotate(-1deg); } 50% { transform: translateX(2px) rotate(1deg); } }
+        .hover-shake:hover { animation: shake 0.3s ease-in-out infinite; }
+        .gradient-text {
+            background: linear-gradient(to right, #0ea5e9, #0284c7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        .bg-dots {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .tech-bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(14, 165, 233, 0.15) 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <div class="max-w-5xl mx-auto p-8">
+
+        <header class="text-center mb-16">
+            <img src="../images/logo.png" alt="Izicode Logo" class="w-20 h-20 mx-auto mb-8 bg-white p-3 rounded-3xl shadow-xl border border-slate-700">
+            <h1 class="font-display text-5xl font-extrabold gradient-text leading-tight mb-6">
+                Izicode Edu: Inovação e Tecnologia na Sua Escola
+            </h1>
+            <p class="text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                Transformamos o aprendizado com Robótica, STEAM e Cultura Maker, alinhados à BNCC e aos ODS. Simples, eficaz e acessível.
+            </p>
+        </header>
+
+        <main>
+            <!-- Seção: Por que escolher Izicode? -->
+            <section class="mb-20">
+                <h2 class="font-display text-4xl font-bold text-slate-900 text-center mb-10">Por que Transformar Sua Escola Conosco?</h2>
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-2xl mb-3">Impacto Pedagógico</h3>
+                        <p class="text-slate-600 text-lg">Alinhamento com BNCC e ODS, foco em STEAM, PBL e RPG, garantindo aprendizado significativo.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-2xl mb-3">Implementação Simples</h3>
+                        <p class="text-slate-600 text-lg">Nosso plano de 4 semanas e suporte total descomplica a adoção.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-2xl mb-3">Custo-Benefício Imbatível</h3>
+                        <p class="text-slate-600 text-lg">Utilizamos ferramentas Open Source e materiais acessíveis, garantindo tecnologia de ponta sem custo extra.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção: Nosso Processo de Implementação (4 Semanas) -->
+            <section class="mb-20 bg-slate-800 p-12 rounded-3xl border border-slate-700">
+                <h2 class="font-display text-4xl font-bold text-white text-center mb-10">Nosso Processo: Implementação em 4 Semanas</h2>
+                <div class="grid md:grid-cols-4 gap-8 text-center">
+                    <div class="flex flex-col items-center">
+                        <div class="w-20 h-20 bg-brand-500 rounded-full flex items-center justify-center mb-4 text-4xl font-bold">1</div>
+                        <h3 class="font-bold text-white text-2xl mb-3">Diagnóstico & Planejamento</h3>
+                        <p class="text-slate-300 text-lg">Entendemos sua realidade, definimos metas e alinhamos o projeto.</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-20 h-20 bg-brand-500 rounded-full flex items-center justify-center mb-4 text-4xl font-bold">2</div>
+                        <h3 class="font-bold text-white text-2xl mb-3">Imersão Maker</h3>
+                        <p class="text-slate-300 text-lg">Capacitação inicial para professores e alunos, introduzindo as ferramentas.</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-20 h-20 bg-brand-500 rounded-full flex items-center justify-center mb-4 text-4xl font-bold">3</div>
+                        <h3 class="font-bold text-white text-2xl mb-3">Mãos na Massa!</h3>
+                        <p class="text-slate-300 text-lg">Projetos práticos e gamificados com robótica e programação.</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-20 h-20 bg-brand-500 rounded-full flex items-center justify-center mb-4 text-4xl font-bold">4</div>
+                        <h3 class="font-bold text-white text-2xl mb-3">Feira de Invenções & Validação</h3>
+                        <p class="text-slate-300 text-lg">Mostra de projetos, avaliação de aprendizado e próximos passos.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção: Depoimentos -->
+            <section class="mb-20">
+                <h2 class="font-display text-4xl font-bold text-slate-900 text-center mb-10">Resultados Reais</h2>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center mb-6">
+                            <img src="../assets/schools/depoimentos/escola-federal.jpg" alt="Avatar Diretor" class="w-16 h-16 rounded-full shadow-lg border-4 border-brand-500 mr-5">
+                            <div>
+                                <p class="text-xl font-bold text-slate-900">Dr. Carlos Almeida</p>
+                                <p class="text-lg text-brand-600 font-semibold">Diretor, Colégio Federal XYZ</p>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-lg leading-relaxed italic">"Desde que implementamos a Izicode, nossos alunos estão mais engajados e criativos. A robótica não é mais um bicho de sete cabeças, é uma ferramenta de aprendizado poderosa."</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center mb-6">
+                            <img src="../assets/schools/depoimentos/escola-estadual.jpg" alt="Avatar Coordenador" class="w-16 h-16 rounded-full shadow-lg border-4 border-brand-500 mr-5">
+                            <div>
+                                <p class="text-xl font-bold text-slate-900">Profª. Mariana Costa</p>
+                                <p class="text-lg text-brand-600 font-semibold">Coordenadora Pedagógica, Escola Estadual ABC</p>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-lg leading-relaxed italic">"A Izicode facilitou a integração da tecnologia em nosso currículo. O suporte foi excelente e os professores se sentiram capacitados rapidamente. Um antes e depois visível."</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Final -->
+            <section class="text-center py-16 bg-brand-50 rounded-3xl">
+                <h2 class="font-display text-4xl font-bold text-brand-700 mb-6">Pronto para Inovar?</h2>
+                <p class="text-xl text-slate-600 mb-10 max-w-2xl mx-auto">Vamos construir juntos o futuro da educação na sua escola.</p>
+                <a href="https://tally.so/r/mYRNQB" target="_blank" class="inline-block bg-brand-600 text-white px-10 py-5 rounded-2xl font-bold hover:bg-brand-700 hover-shake transition-all text-2xl shadow-lg shadow-brand-500/30">
+                    AGENDE UMA CONVERSA
+                </a>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
