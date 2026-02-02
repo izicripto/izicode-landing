@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kit Missão Maker - Izicode Edu</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -17,6 +20,7 @@
         }
     </script>
 </head>
+
 <body class="bg-slate-50 text-slate-800">
 
     <!-- Navbar -->
@@ -27,7 +31,8 @@
                     <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
                     <span class="font-display font-bold text-xl text-slate-900">Izicode Edu</span>
                 </a>
-                <a href="https://pay.hotmart.com/SEU_LINK_AQUI" class="bg-green-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-green-700 transition-colors shadow-lg shadow-green-200">
+                <a href="https://pay.hotmart.com/SEU_LINK_AQUI"
+                    class="bg-green-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-green-700 transition-colors shadow-lg shadow-green-200">
                     Comprar Agora
                 </a>
             </div>
@@ -40,48 +45,161 @@
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
                     <span class="text-brand-600 font-bold tracking-wide uppercase text-sm">Lançamento Exclusivo</span>
-                    <h1 class="font-display text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight mt-2 mb-6">Kit Missão Maker: A Jornada Começa Aqui</h1>
-                    <p class="text-lg text-slate-600 mb-8">Tudo que seu aluno precisa para começar na robótica e programação. Arduino, sensores, motores e acesso exclusivo à nossa plataforma gamificada.</p>
-                    
+                    <h1 class="font-display text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight mt-2 mb-6">
+                        Kit Missão Maker: A Jornada Começa Aqui</h1>
+                    <p class="text-lg text-slate-600 mb-8">Tudo que seu aluno precisa para começar na robótica e
+                        programação. Arduino, sensores, motores e acesso exclusivo à nossa plataforma gamificada.</p>
+
                     <div class="space-y-4 mb-8">
                         <div class="flex items-center gap-3">
-                            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
                             <span class="font-medium">Placa Arduino Uno R3 Compatível</span>
                         </div>
                         <div class="flex items-center gap-3">
-                            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
                             <span class="font-medium">Kit de Sensores Essenciais</span>
                         </div>
                         <div class="flex items-center gap-3">
-                            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
                             <span class="font-medium">Acesso Premium à Área do Aluno</span>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-4">
-                        <span class="text-3xl font-bold text-slate-900">R$ 297,00</span>
-                        <span class="text-sm text-slate-500">ou 12x de R$ 29,70</span>
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mb-6">
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Possui um cupom?</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="coupon" placeholder="IZICODE10"
+                                    class="flex-1 px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 outline-none uppercase">
+                                <button onclick="checkCoupon()"
+                                    class="bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition">
+                                    Aplicar
+                                </button>
+                            </div>
+                            <p id="coupon-msg" class="text-xs mt-2 hidden"></p>
+                        </div>
+
+                        <div class="flex items-center gap-4 mb-2">
+                            <div>
+                                <span class="text-xs text-slate-400 line-through block" id="old-price"></span>
+                                <span class="text-3xl font-bold text-slate-900" id="current-price">R$ 297,00</span>
+                            </div>
+                            <span class="text-sm text-slate-500">ou 12x de <span id="installment-price">R$
+                                    29,70</span></span>
+                        </div>
+
+                        <button onclick="goToCheckout()"
+                            class="w-full bg-brand-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-700 transition-all shadow-xl shadow-brand-200 text-lg flex items-center justify-center gap-2 group">
+                            <span>Garantir Meu Kit Agora</span>
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </button>
+
+                        <script>
+                            const BASE_PRICE = 297.00;
+                            const HOTMART_ID = 'H12345678X'; // Placeholder ID
+                            let activeDiscount = 0;
+
+                            function checkCoupon() {
+                                const code = document.getElementById('coupon').value.toUpperCase();
+                                const msgEl = document.getElementById('coupon-msg');
+
+                                // Lógica simples de cupom (mock)
+                                // Na produção, validar via API ou lista segura
+                                const coupons = {
+                                    'IZICODE10': 0.10, // 10% off
+                                    'PROFESSOR20': 0.20 // 20% off
+                                };
+
+                                if (coupons[code]) {
+                                    activeDiscount = coupons[code];
+                                    updatePrice();
+                                    showMsg('Cupom aplicado com sucesso! 🎉', 'text-green-600');
+                                } else {
+                                    activeDiscount = 0;
+                                    updatePrice();
+                                    showMsg('Cupom inválido 😢', 'text-red-500');
+                                }
+                            }
+
+                            function showMsg(text, colorClass) {
+                                const el = document.getElementById('coupon-msg');
+                                el.textContent = text;
+                                el.className = `text-xs mt-2 font-bold ${colorClass}`;
+                                el.classList.remove('hidden');
+                            }
+
+                            function updatePrice() {
+                                const newPrice = BASE_PRICE * (1 - activeDiscount);
+                                const oldPriceEl = document.getElementById('old-price');
+
+                                if (activeDiscount > 0) {
+                                    oldPriceEl.textContent = `R$ ${BASE_PRICE.toFixed(2).replace('.', ',')}`;
+                                    document.getElementById('current-price').classList.add('text-green-600');
+                                } else {
+                                    oldPriceEl.textContent = '';
+                                    document.getElementById('current-price').classList.remove('text-green-600');
+                                }
+
+                                document.getElementById('current-price').textContent = `R$ ${newPrice.toFixed(2).replace('.', ',')}`;
+                                document.getElementById('installment-price').textContent = `R$ ${(newPrice / 12).toFixed(2).replace('.', ',')}`;
+                            }
+
+                            function goToCheckout() {
+                                // Link real para Hotmart Checkout
+                                // Se tiver cupom, passa como parâmetro
+                                const baseUrl = `https://pay.hotmart.com/${HOTMART_ID}`;
+                                const params = new URLSearchParams();
+                                params.append('checkoutMode', '10'); // Modo customizado
+
+                                if (activeDiscount > 0) {
+                                    const couponCode = document.getElementById('coupon').value.toUpperCase();
+                                    params.append('offDiscount', couponCode); // Parâmetro hipotético
+                                }
+
+                                // Redirecionamento (simulado para demo)
+                                console.log(`Redirecionando para: ${baseUrl}?${params.toString()}`);
+                                alert('Redirecionando para o Checkout Seguro da Hotmart...');
+                                // window.location.href = `${baseUrl}?${params.toString()}`;
+                            }
+                        </script>
                     </div>
-                    <a href="https://pay.hotmart.com/SEU_LINK_AQUI" class="mt-6 inline-block w-full text-center bg-brand-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-700 transition-all shadow-xl shadow-brand-200 text-lg">
-                        Garantir Meu Kit Agora
-                    </a>
-                </div>
-                <div class="bg-slate-100 rounded-3xl p-8 flex items-center justify-center min-h-[400px]">
-                    <!-- Placeholder para Foto do Kit -->
-                    <div class="text-center">
-                        <svg class="w-24 h-24 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-                        <p class="text-slate-500 font-medium">Foto do Kit Missão Maker</p>
-                        <p class="text-xs text-slate-400">(Adicione uma foto real aqui: public/images/kit-maker.jpg)</p>
+                    <div class="bg-slate-100 rounded-3xl p-8 flex items-center justify-center min-h-[400px]">
+                        <!-- Placeholder para Foto do Kit -->
+                        <div class="text-center">
+                            <svg class="w-24 h-24 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                            <p class="text-slate-500 font-medium">Foto do Kit Missão Maker</p>
+                            <p class="text-xs text-slate-400">(Adicione uma foto real aqui: public/images/kit-maker.jpg)
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
 
     <!-- Footer -->
     <footer class="bg-slate-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center"><p class="text-slate-400">&copy; 2026 Izicode Edu.</p></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-slate-400">&copy; 2026 Izicode Edu.</p>
+        </div>
     </footer>
 
 </body>
+
 </html>
