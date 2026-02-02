@@ -10,41 +10,22 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
         rel="stylesheet">
     <script type="module" src="js/firebase-config.js"></script>
+    <!-- Auth Guard -->
+    <script type="module" src="/js/auth-guard.js"></script>
+    <script src="/js/pwa-install.js"></script>
+
     <script type="module">
-        import { auth, db, onAuthStateChanged, signOut, doc, getDoc } from './js/firebase-config.js';
+        import { auth, db, doc, getDoc, collection, query, where, getDocs } from './js/firebase-config.js';
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                document.getElementById('userName').innerText = user.displayName || 'Professor';
-                document.getElementById('userNameMobile').innerText = user.displayName || 'Professor';
-                const firstName = user.displayName ? user.displayName.split(' ')[0] : 'Professor';
-                document.getElementById('userFirstName').innerText = firstName;
+        // O Auth Guard já cuida da verificação de login e preenchimento de nome/foto
+        // Aqui focamos apenas na lógica específica do Dashboard (carregar projetos, etc)
 
-                if (user.photoURL) {
-                    document.getElementById('userAvatar').src = user.photoURL;
-                    document.getElementById('userAvatarMobile').src = user.photoURL;
-                }
+        async function loadDashboardData() {
+            // Exemplo: Carregar contagem de projetos
+            // ...
+        }
 
-                // Buscar dados de Gamificação (XP/Nível)
-                try {
-                    const userRef = doc(db, "users", user.uid);
-                    const userSnap = await getDoc(userRef);
-                    if (userSnap.exists()) {
-                        const data = userSnap.data();
-                        const xp = data.xp || 0;
-                        const level = data.level || 1;
-                        document.getElementById('userLevel').innerText = level;
-                        document.getElementById('userXP').innerText = xp;
-                    }
-                } catch (e) {
-                    console.error("Erro ao carregar stats:", e);
-                }
-
-            } else {
-                window.location.href = "login.html";
-            }
-        });
-
+        // Existing logout and toggleMobileMenu functions should remain if not explicitly removed
         window.logout = () => {
             signOut(auth).then(() => window.location.href = "index.html");
         };
@@ -98,9 +79,9 @@
         <div class="p-6 border-b border-slate-100">
             <div class="flex items-center gap-3">
                 <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff"
-                    class="w-12 h-12 rounded-full border-2 border-brand-200">
+                    class="w-12 h-12 rounded-full border-2 border-brand-200 user-avatar-display">
                 <div class="flex-1 min-w-0">
-                    <p class="font-semibold text-slate-900 truncate" id="userName">Carregando...</p>
+                    <p class="font-semibold text-slate-900 truncate user-name-display" id="userName">Carregando...</p>
                     <div class="flex gap-2 mt-1">
                         <span class="text-xs bg-brand-100 text-brand-700 px-2 py-0.5 rounded-full font-medium">Nível
                             <span id="userLevel">1</span></span>
@@ -203,8 +184,8 @@
         <div id="mobileMenu" class="hidden bg-white border-t border-slate-100 p-4">
             <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
                 <img id="userAvatarMobile" src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff"
-                    class="w-10 h-10 rounded-full">
-                <p class="font-semibold" id="userNameMobile">Carregando...</p>
+                    class="w-10 h-10 rounded-full user-avatar-display">
+                <p class="font-semibold user-name-display" id="userNameMobile">Carregando...</p>
             </div>
             <nav class="space-y-1">
                 <a href="dashboard.html"
@@ -228,7 +209,7 @@
         <!-- Header -->
         <header class="mb-10">
             <h1 class="font-display text-4xl md:text-5xl font-bold text-slate-900 mb-2">
-                Olá, <span id="userFirstName">Professor</span>! 👋
+                Olá, <span id="userFirstName" class="user-name-display">Professor</span>! 👋
             </h1>
             <p class="text-slate-600 text-lg">Vamos transformar a educação hoje?</p>
         </header>

@@ -1,33 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Área do Aluno - Izicode Edu</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="/js/auth-guard.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .font-display { font-family: 'Space Grotesk', sans-serif; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
         .level-badge {
             background: linear-gradient(135deg, #FFD700, #FFA500);
             box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
         }
     </style>
 </head>
+
 <body class="bg-indigo-50 min-h-screen flex flex-col">
 
     <!-- Navbar -->
     <nav class="bg-white border-b border-indigo-100 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
         <div class="flex items-center space-x-3">
             <a href="dashboard.html" class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">Iz</div>
-                <span class="font-display font-bold text-xl text-gray-900">Izicode <span class="text-indigo-600">Alunos</span></span>
+                <div
+                    class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
+                    Iz</div>
+                <span class="font-display font-bold text-xl text-gray-900">Izicode <span
+                        class="text-indigo-600">Alunos</span></span>
             </a>
         </div>
-        
+
         <div class="flex items-center space-x-6">
             <div class="flex items-center space-x-2 bg-yellow-50 px-3 py-1.5 rounded-full border border-yellow-200">
                 <span class="text-xl">🔥</span>
@@ -45,16 +59,21 @@
 
     <!-- Main Content -->
     <main class="flex-1 max-w-6xl mx-auto w-full p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+
         <!-- Left Column: Challenges -->
         <div class="lg:col-span-2 space-y-8">
             <!-- Hero Banner -->
-            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-8 text-white relative overflow-hidden shadow-xl shadow-indigo-500/20">
+            <div
+                class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-8 text-white relative overflow-hidden shadow-xl shadow-indigo-500/20">
                 <div class="relative z-10">
-                    <span class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider mb-4 inline-block">Missão da Semana</span>
+                    <span
+                        class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider mb-4 inline-block">Missão
+                        da Semana</span>
                     <h1 class="font-display text-3xl font-bold mb-4">Construa um Semáforo Inteligente 🚦</h1>
-                    <p class="text-indigo-100 mb-6 max-w-md">Aprenda a controlar LEDs com Arduino e crie um sistema de trânsito seguro para sua cidade maquete.</p>
-                    <a href="project-view.html?id=arduino-semaforo" class="inline-block bg-white text-indigo-600 px-6 py-3 rounded-xl font-bold hover:bg-indigo-50 transition-colors shadow-lg">
+                    <p class="text-indigo-100 mb-6 max-w-md">Aprenda a controlar LEDs com Arduino e crie um sistema de
+                        trânsito seguro para sua cidade maquete.</p>
+                    <a href="project-view.html?id=arduino-semaforo"
+                        class="inline-block bg-white text-indigo-600 px-6 py-3 rounded-xl font-bold hover:bg-indigo-50 transition-colors shadow-lg">
                         Começar Missão
                     </a>
                 </div>
@@ -68,9 +87,13 @@
                 </h2>
                 <div class="space-y-4">
                     <!-- Step 1: Done -->
-                    <div class="bg-white p-4 rounded-2xl border border-indigo-100 flex items-center space-x-4 opacity-70">
+                    <div
+                        class="bg-white p-4 rounded-2xl border border-indigo-100 flex items-center space-x-4 opacity-70">
                         <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
                         </div>
                         <div class="flex-1">
                             <h3 class="font-bold text-gray-900 line-through">Introdução ao Arduino</h3>
@@ -80,8 +103,10 @@
                     </div>
 
                     <!-- Step 2: Active -->
-                    <div class="bg-white p-6 rounded-2xl border-2 border-indigo-500 shadow-lg shadow-indigo-500/10 flex items-center space-x-4 transform scale-105 transition-transform">
-                        <div class="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white animate-pulse">
+                    <div
+                        class="bg-white p-6 rounded-2xl border-2 border-indigo-500 shadow-lg shadow-indigo-500/10 flex items-center space-x-4 transform scale-105 transition-transform">
+                        <div
+                            class="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white animate-pulse">
                             <span class="font-bold">2</span>
                         </div>
                         <div class="flex-1">
@@ -91,7 +116,8 @@
                                 <div class="bg-indigo-600 h-2 rounded-full" style="width: 60%"></div>
                             </div>
                         </div>
-                        <button class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg font-bold hover:bg-indigo-200">
+                        <button
+                            class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg font-bold hover:bg-indigo-200">
                             Continuar
                         </button>
                     </div>
@@ -110,7 +136,7 @@
                     </div>
                     <h2 id="profileName" class="font-display text-xl font-bold text-gray-900">...</h2>
                     <p id="profileLevel" class="text-indigo-600 font-medium text-sm mb-6">Nível 1</p>
-                    
+
                     <div class="grid grid-cols-2 gap-4 text-left">
                         <div class="bg-gray-50 p-3 rounded-xl">
                             <div class="text-xs text-gray-500">Rank Global</div>
@@ -129,12 +155,16 @@
                 <div class="relative z-10">
                     <h3 class="font-bold text-lg mb-2">Quiz Rápido ⚡</h3>
                     <p class="text-indigo-200 text-sm mb-4">Ganhe +50 XP respondendo corretamente!</p>
-                    
+
                     <div class="bg-white/10 rounded-xl p-4 mb-4 backdrop-blur-sm">
                         <p class="font-medium text-sm mb-3">Qual função do Arduino roda apenas uma vez?</p>
                         <div class="space-y-2">
-                            <button onclick="checkAnswer(this, true)" class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-sm transition-colors border border-white/10">void setup()</button>
-                            <button onclick="checkAnswer(this, false)" class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-sm transition-colors border border-white/10">void loop()</button>
+                            <button onclick="checkAnswer(this, true)"
+                                class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-sm transition-colors border border-white/10">void
+                                setup()</button>
+                            <button onclick="checkAnswer(this, false)"
+                                class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-sm transition-colors border border-white/10">void
+                                loop()</button>
                         </div>
                     </div>
                 </div>
@@ -161,7 +191,7 @@
                 try {
                     const userRef = doc(db, "users", user.uid);
                     const userSnap = await getDoc(userRef);
-                    
+
                     if (userSnap.exists()) {
                         const data = userSnap.data();
                         updateXPUI(data.xp || 0, data.level || 1);
@@ -174,12 +204,12 @@
             }
         });
 
-        window.checkAnswer = async function(btn, isCorrect) {
+        window.checkAnswer = async function (btn, isCorrect) {
             if (isCorrect) {
                 btn.classList.remove('bg-white/10');
                 btn.classList.add('bg-green-500', 'border-green-400');
                 confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-                
+
                 // Add XP if logged in
                 if (currentUser) {
                     try {
@@ -211,13 +241,34 @@
         }
     </script>
     <style>
-        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
         @keyframes shake {
-            10%, 90% { transform: translate3d(-1px, 0, 0); }
-            20%, 80% { transform: translate3d(2px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-            40%, 60% { transform: translate3d(4px, 0, 0); }
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
         }
     </style>
 </body>
+
 </html>
