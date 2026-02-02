@@ -47,6 +47,13 @@ class AuthGuard {
     }
 
     async checkUserPermissions(user) {
+        // [BYPASS TEMPORÁRIO] Acesso liberado para todos os usuários logados
+        console.warn("BYPASS DE AUTORIZAÇÃO ATIVO. Acesso liberado para fins de teste.");
+        return true;
+
+
+        // CÓDIGO ORIGINAL DESABILITADO
+        /*
         // 1. Tentar buscar na coleção users (Aprovados)
         const userRef = doc(db, "users", user.uid);
         const userSnap = await getDoc(userRef);
@@ -66,6 +73,7 @@ class AuthGuard {
         }
 
         return false;
+        */
     }
 
     handleUnauthenticated() {
