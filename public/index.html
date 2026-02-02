@@ -133,8 +133,9 @@
             <div class="flex justify-between items-center h-28">
                 <a href="#" class="flex items-center gap-4 group">
                     <div
-                        class="bg-white p-2 rounded-2xl shadow-sm border border-slate-100 group-hover:border-brand-200 transition-all">
-                        <img src="images/logo.png" alt="Izicode Logo" class="w-16 h-16 object-contain">
+                        class="bg-white p-2 rounded-2xl shadow-sm border border-slate-100 group-hover:border-brand-200 group-hover:shadow-brand-200/50 group-hover:scale-105 transition-all duration-300">
+                        <img src="images/logo.png" alt="Izicode Logo"
+                            class="w-16 h-16 object-contain group-hover:rotate-6 transition-transform duration-300">
                     </div>
                     <span class="font-display font-black text-5xl text-slate-900 tracking-tight">Izicode Edu</span>
                 </a>
@@ -197,6 +198,24 @@
         <!-- Nossas Soluções -->
         <section id="solucoes" class="py-32 bg-slate-50/50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <style>
+                    @keyframes pulse-scale {
+
+                        0%,
+                        100% {
+                            transform: scale(1);
+                        }
+
+                        50% {
+                            transform: scale(1.05);
+                        }
+                    }
+
+                    .animate-pulse-scale {
+                        animation: pulse-scale 2s ease-in-out infinite;
+                        display: inline-block;
+                    }
+                </style>
                 <div class="max-w-4xl mx-auto mb-20 text-center">
                     <h2 class="font-display text-6xl lg:text-7xl font-bold text-slate-900 mb-8 tracking-tight">Soluções
                         Completas
@@ -337,7 +356,7 @@
 
                     <div class="lg:pl-10 mt-20 lg:mt-0">
                         <h2 class="font-display text-6xl font-bold text-slate-900 mb-10 tracking-tight leading-[1]">
-                            O Futuro se Constrói <span class="text-brand-600">Agora!</span>
+                            O Futuro se Constrói <span class="text-brand-600 animate-pulse-scale">Agora!</span>
                         </h2>
                         <p class="text-slate-600 text-3xl leading-relaxed font-light mb-12">
                             Não é só sobre aprender robótica. É sobre desenvolver <strong>protagonismo, criatividade e
@@ -368,7 +387,8 @@
                     <div class="space-y-10">
                         <h2
                             class="font-display text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight leading-tight">
-                            Ensinamos a Pensar, não apenas a usar</h2>
+                            Ensinamos a Pensar, não apenas a usar
+                        </h2>
 
                         <div class="space-y-6">
                             <div class="flex items-start gap-5">
@@ -541,70 +561,77 @@
 
 
         <!-- Apoio a Competições -->
-        <section class="py-32 bg-slate-900 relative overflow-hidden">
+        <section class="py-32 bg-slate-900/95 relative overflow-hidden">
+            <!-- Background mais limpo e sutil -->
             <div
-                class="absolute inset-0 bg-[radial-gradient(#0ea5e9_1px,transparent_1px)] [background-size:48px_48px] opacity-10">
+                class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.03]">
             </div>
+
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
                 <span
-                    class="inline-flex items-center gap-2 px-6 py-3 mb-10 text-xl font-bold tracking-widest text-brand-300 uppercase bg-white/5 rounded-full border border-white/10">
+                    class="inline-flex items-center gap-2 px-5 py-2 mb-8 text-sm font-bold tracking-widest text-brand-200 uppercase bg-white/5 rounded-full border border-white/5">
                     Nossos alunos vão além
                 </span>
-                <h2 class="font-display text-7xl lg:text-9xl font-bold text-white mb-10 tracking-tight">Apoio a Campeões
+                <h2 class="font-display text-7xl lg:text-8xl font-bold text-white mb-8 tracking-tight">
+                    Apoio a <span class="text-brand-400">Campeões</span>
                 </h2>
-                <p class="text-slate-300 text-3xl max-w-4xl mx-auto mb-24 leading-relaxed font-light">
+                <p class="text-slate-200 text-3xl max-w-4xl mx-auto mb-20 leading-relaxed font-light">
                     Apoiamos ativamente a participação de nossos alunos e escolas parceiras nos maiores eventos de
                     tecnologia do Brasil e do mundo.
                 </p>
 
-                <div class="grid md:grid-cols-3 gap-12">
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
                     <div
-                        class="bg-white/5 backdrop-blur-md p-12 rounded-[2rem] border border-white/10 hover:border-brand-500/50 hover:bg-white/10 transition-all hover:-translate-y-2 group">
+                        class="bg-white/[0.02] p-10 rounded-[2rem] border border-white/5 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 hover:-translate-y-1 group/card text-left">
                         <div
-                            class="bg-brand-600 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-brand-900/50 group-hover:scale-110 transition-transform">
-                            <svg class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            class="bg-brand-500/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 group-hover/card:bg-brand-500/20 transition-colors">
+                            <svg class="w-8 h-8 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                             </svg>
                         </div>
-                        <h3 class="font-bold text-white text-4xl mb-6">Olimpíadas Científicas</h3>
-                        <p class="text-slate-400 text-2xl font-light leading-relaxed">Preparação intensiva para OBR, OBI
+                        <h3 class="font-display font-bold text-white text-3xl mb-4 tracking-tight">Olimpíadas
+                            Científicas</h3>
+                        <p class="text-slate-300 text-xl leading-relaxed font-normal">Preparação intensiva para OBR, OBI
                             e torneios acadêmicos.</p>
                     </div>
 
+                    <!-- Card 2 -->
                     <div
-                        class="bg-white/5 backdrop-blur-md p-12 rounded-[2rem] border border-white/10 hover:border-brand-500/50 hover:bg-white/10 transition-all hover:-translate-y-2 group">
+                        class="bg-white/[0.02] p-10 rounded-[2rem] border border-white/5 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 hover:-translate-y-1 group/card text-left">
                         <div
-                            class="bg-purple-600 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-purple-900/50 group-hover:scale-110 transition-transform">
-                            <svg class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            class="bg-purple-500/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 group-hover/card:bg-purple-500/20 transition-colors">
+                            <svg class="w-8 h-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                             </svg>
                         </div>
-                        <h3 class="font-bold text-white text-4xl mb-6">Hackathons</h3>
-                        <p class="text-slate-400 text-2xl font-light leading-relaxed">Maratonas de programação para
+                        <h3 class="font-display font-bold text-white text-3xl mb-4 tracking-tight">Hackathons</h3>
+                        <p class="text-slate-300 text-xl leading-relaxed font-normal">Maratonas de programação para
                             resolver problemas reais.</p>
                     </div>
 
+                    <!-- Card 3 -->
                     <div
-                        class="bg-white/5 backdrop-blur-md p-12 rounded-[2rem] border border-white/10 hover:border-brand-500/50 hover:bg-white/10 transition-all hover:-translate-y-2 group">
+                        class="bg-white/[0.02] p-10 rounded-[2rem] border border-white/5 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 hover:-translate-y-1 group/card text-left">
                         <div
-                            class="bg-amber-500 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-amber-900/50 group-hover:scale-110 transition-transform">
-                            <svg class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            class="bg-amber-500/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 group-hover/card:bg-amber-500/20 transition-colors">
+                            <svg class="w-8 h-8 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                             </svg>
                         </div>
-                        <h3 class="font-bold text-white text-4xl mb-6">Robótica</h3>
-                        <p class="text-slate-400 text-2xl font-light leading-relaxed">Mentoria técnica para equipes de
+                        <h3 class="font-display font-bold text-white text-3xl mb-4 tracking-tight">Robótica</h3>
+                        <p class="text-slate-300 text-xl leading-relaxed font-normal">Mentoria técnica para equipes de
                             FLL, FRC e competições locais.</p>
                     </div>
                 </div>
 
-                <div
-                    class="mt-24 inline-flex items-center gap-4 bg-white/10 backdrop-blur border border-white/20 rounded-full px-12 py-6 text-white text-3xl font-medium">
-                    Apoiamos para ver nossos alunos vencerem
-
+                <div class="mt-20">
+                    <p class="text-slate-400 text-xl font-medium tracking-wide uppercase opacity-80">
+                        Apoiamos para ver nossos alunos vencerem
+                    </p>
                 </div>
             </div>
         </section>
@@ -614,13 +641,19 @@
             <div
                 class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] animate-[gradient_15s_ease_infinite]">
             </div>
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                <h2 class="font-display text-6xl lg:text-8xl font-black mb-6 tracking-tight leading-tight">Transforme
-                    sua Escola<br>em um Polo de Inovação</h2>
-                <p class="text-3xl font-bold text-brand-100 mb-12 uppercase tracking-wide">Invista no futuro da sua
-                    instituição</p>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-10">
+                <h2
+                    class="font-display text-6xl lg:text-[6rem] font-black mb-12 tracking-tight leading-tight drop-shadow-xl">
+                    Transforme sua Escola<br>
+                    em um Polo de<br>
+                    <span class="text-blue-950 animate-pulse-scale inline-block">Inovação!</span>
+                </h2>
+                <p
+                    class="text-[2.5rem] md:text-[5rem] leading-[0.9] font-bold text-brand-50 mb-16 uppercase tracking-wide max-w-5xl mx-auto drop-shadow-md">
+                    Invista no futuro da sua instituição
+                </p>
                 <a href="https://tally.so/r/mYRNQB" target="_blank"
-                    class="inline-block bg-white text-brand-700 px-16 py-8 rounded-[2.5rem] font-display font-black hover:bg-brand-50 hover:scale-105 hover:shadow-2xl transition-all text-3xl tracking-wide">
+                    class="inline-block bg-white text-brand-700 px-16 py-8 rounded-[2.5rem] font-display font-black hover:bg-slate-50 hover:scale-105 hover:shadow-2xl transition-all text-3xl tracking-wide">
                     Falar com Especialista
                 </a>
             </div>
