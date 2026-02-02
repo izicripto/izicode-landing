@@ -1,69 +1,148 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Izicode Edu - Inovação e Robótica Escolar</title>
-    <meta name="description" content="Especialistas em Robótica Educacional, Metodologias STEAM e Adequação à BNCC. Transformamos sua escola em um polo de inovação com projetos maker de alto impacto.">
-    <meta name="keywords" content="robótica educacional, cultura maker na escola, consultoria tecnologia educacional, bncc tecnologia, steam educação, projetos maker escolares, laboratório de robótica">
+    <meta name="description"
+        content="Especialistas em Robótica Educacional, Metodologias STEAM e Adequação à BNCC. Transformamos sua escola em um polo de inovação com projetos maker de alto impacto.">
+    <meta name="keywords"
+        content="robótica educacional, cultura maker na escola, consultoria tecnologia educacional, bncc tecnologia, steam educação, projetos maker escolares, laboratório de robótica">
     <meta name="author" content="Izicode Edu">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://izicode.com.br/">
-    
+
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://izicode.com.br/">
     <meta property="og:title" content="Izicode Edu - Inovação e Robótica Escolar">
-    <meta property="og:description" content="Leve a Robótica Educacional e a Cultura Maker para sua escola com quem entende de BNCC e Metodologias Ativas.">
+    <meta property="og:description"
+        content="Leve a Robótica Educacional e a Cultura Maker para sua escola com quem entende de BNCC e Metodologias Ativas.">
     <meta property="og:image" content="https://izicode.com.br/images/logo.png">
-    
+
     <link rel="icon" type="image/png" href="images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <style>
         @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-2px) rotate(-1deg); }
-            50% { transform: translateX(2px) rotate(1deg); }
-            75% { transform: translateX(-2px) rotate(-1deg); }
-            100% { transform: translateX(0); }
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-2px) rotate(-1deg);
+            }
+
+            50% {
+                transform: translateX(2px) rotate(1deg);
+            }
+
+            75% {
+                transform: translateX(-2px) rotate(-1deg);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
         }
-        .hover-shake:hover { 
-            animation: shake 0.3s ease-in-out infinite; 
+
+        .hover-shake:hover {
+            animation: shake 0.3s ease-in-out infinite;
             box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.3);
+        }
+
+        @keyframes sway-4 {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(2deg);
+            }
+
+            75% {
+                transform: rotate(-2deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        .animate-sway {
+            animation: sway-4 6s ease-in-out infinite;
+            display: inline-block;
+            /* Required for transform to work on text elements sometimes better */
+            transform-origin: center bottom;
         }
     </style>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
-                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif']
+                    },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } },
+                    backgroundImage: {
+                        'tech-dots': 'radial-gradient(circle, #e0f2fe 1px, transparent 1px)'
+                    }
                 }
             }
         }
     </script>
+    <style>
+        .bg-dots {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Fade visual suave para o fundo */
+        .tech-bg {
+            position: relative;
+        }
+
+        .tech-bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(14, 165, 233, 0.15) 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
 </head>
+
 <body class="bg-white text-slate-800 antialiased">
 
     <!-- Navbar -->
-    <nav class="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
+    <nav class="sticky top-0 w-full z-50 bg-white/90 backdrop-blur-xl border-b border-slate-100 transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-24">
-                <a href="#" class="flex items-center gap-3 group">
-                    <div class="bg-white p-2 rounded-xl shadow-sm border border-slate-50">
-                        <img src="images/logo.png" alt="Izicode Logo" class="w-14 h-14 object-contain">
+            <div class="flex justify-between items-center h-28">
+                <a href="#" class="flex items-center gap-4 group">
+                    <div
+                        class="bg-white p-2 rounded-2xl shadow-sm border border-slate-100 group-hover:border-brand-200 transition-all">
+                        <img src="images/logo.png" alt="Izicode Logo" class="w-16 h-16 object-contain">
                     </div>
-                    <span class="font-display font-black text-2xl text-slate-900 tracking-tight">Izicode Edu</span>
+                    <span class="font-display font-black text-5xl text-slate-900 tracking-tight">Izicode Edu</span>
                 </a>
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="#solucoes" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors text-center">Soluções</a>
-                    <a href="#metodologia" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors text-center">Metodologia</a>
-                    <a href="#depoimentos" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors text-center">Depoimentos</a>
-                    <a href="#faq" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors text-center">FAQ</a>
-                    <a href="login.html" class="bg-brand-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-brand-700 hover-shake transition-all shadow-md shadow-brand-100 text-sm text-center">
-                        Plataforma
+                <div class="hidden md:flex items-center gap-10">
+                    <a href="#solucoes"
+                        class="text-2xl font-semibold text-slate-600 hover:text-brand-600 transition-colors">Soluções</a>
+                    <a href="#metodologia"
+                        class="text-2xl font-semibold text-slate-600 hover:text-brand-600 transition-colors">Metodologia</a>
+                    <a href="#faq"
+                        class="text-2xl font-semibold text-slate-600 hover:text-brand-600 transition-colors">FAQ</a>
+                    <a href="login.html"
+                        class="bg-brand-600 text-white px-10 py-5 rounded-2xl font-bold hover:bg-brand-700 hover:scale-105 transition-all shadow-lg shadow-brand-500/20 text-xl">
+                        Acessar Plataforma
                     </a>
                 </div>
             </div>
@@ -71,121 +150,290 @@
     </nav>
 
     <!-- Hero Section -->
-    <main>
-        <section class="relative pt-20 pb-16 lg:pt-28 lg:pb-24 overflow-hidden text-center lg:text-left">
-            <div class="absolute inset-0 bg-[radial-gradient(#bae6fd_1px,transparent_1px)] [background-size:24px_24px] opacity-50"></div>
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-12 items-center">
+    <main class="tech-bg">
+        <section class="relative pt-24 pb-20 lg:pt-32 lg:pb-32 overflow-hidden text-center lg:text-left z-10">
+            <!-- Background removido daqui pois está global na classe tech-bg imitando "main" -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
                     <div class="z-10">
-                        <span class="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-wider text-brand-700 uppercase bg-brand-50 rounded-full">Consultoria Especializada em Tecnologia</span>
-                        <h1 class="font-display text-4xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
-                            Robótica Educacional e Inovação para sua Escola
+                        <span
+                            class="inline-flex items-center gap-2 px-6 py-3 mb-8 text-lg font-bold tracking-wide text-brand-700 uppercase bg-brand-50 rounded-full border border-brand-100">
+                            <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                            Consultoria em Tecnologia Educacional
+                        </span>
+                        <h1
+                            class="font-display text-5xl lg:text-7xl font-extrabold text-slate-900 leading-[1.05] mb-10 tracking-tight animate-sway">
+                            Robótica e Inovação para sua Escola
                         </h1>
-                        <p class="text-xl text-slate-600 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                            Implementamos <strong>Cultura Maker, STEAM e Robótica</strong> integrados à BNCC e ODS. Criamos soluções sob medida para transformar alunos em criadores de tecnologia.
+                        <p
+                            class="text-3xl lg:text-4xl text-slate-600 mb-16 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+                            Implementamos <strong>Cultura Maker, STEAM e Robótica</strong> integrados à BNCC.
+                            Transformamos alunos em criadores de tecnologia.
                         </p>
-                        
-                        <div class="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
-                            <a href="https://tally.so/r/mYRNQB" target="_blank" 
-                               class="inline-flex items-center justify-center bg-brand-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-700 hover-shake transition-all shadow-lg shadow-brand-200 text-lg">
-                               Agendar Consultoria Gratuita
-                            </a>
-                            <a href="#solucoes" 
-                               class="inline-flex items-center justify-center bg-white text-slate-800 border-2 border-slate-200 px-8 py-4 rounded-xl font-bold hover:bg-slate-50 hover-shake transition-all text-lg">
-                               Conhecer Soluções
+
+                        <div class="flex flex-col sm:flex-row gap-8 justify-center lg:justify-start">
+                            <a href="https://tally.so/r/mYRNQB" target="_blank"
+                                class="inline-flex items-center justify-center bg-brand-600 text-white px-12 py-7 rounded-3xl font-display font-bold hover:bg-brand-700 hover:-translate-y-1 transition-all shadow-xl shadow-brand-500/30 text-2xl tracking-wide whitespace-nowrap">
+                                Contratar Consultoria
                             </a>
                         </div>
                     </div>
-                    <div class="relative hidden lg:block"><img src="images/01.jpg" alt="Alunos trabalhando com robótica educacional" class="rounded-3xl shadow-2xl w-full h-auto object-cover"></div>
+                    <div class="relative hidden lg:block group">
+                        <div
+                            class="absolute -inset-4 bg-brand-200 rounded-[2.5rem] rotate-3 group-hover:rotate-1 transition-all opacity-40 blur-lg">
+                        </div>
+                        <img src="images/01.jpg" alt="Alunos trabalhando"
+                            class="relative rounded-[2rem] shadow-2xl w-full h-auto object-cover transform transition-transform group-hover:scale-[1.01]">
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Nossas Soluções -->
-        <section id="solucoes" class="py-24">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <div class="max-w-3xl mx-auto mb-16">
-                    <h2 class="font-display text-4xl font-bold text-slate-900 mb-4 uppercase tracking-tighter">Nossas Soluções</h2>
-                    <p class="text-slate-600 text-lg">Tudo que sua escola precisa para se tornar referência em inovação.</p>
+        <section id="solucoes" class="py-32 bg-slate-50/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto mb-20 text-center">
+                    <h2 class="font-display text-6xl lg:text-7xl font-bold text-slate-900 mb-8 tracking-tight">Soluções
+                        Completas
+                    </h2>
+                    <p class="text-slate-600 text-2xl leading-relaxed">Tudo que sua escola precisa para se tornar
+                        referência em ensino de tecnologia.</p>
                 </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
-                    <div class="bg-slate-50 p-8 rounded-2xl border border-transparent hover:border-brand-200 transition-all shadow-sm text-center">
-                        <h3 class="font-bold text-slate-900 mb-3 text-xl">Consultoria Estratégica</h3>
-                        <p class="text-slate-600 leading-relaxed text-sm">Diagnóstico completo e plano de implementação de laboratórios maker personalizados.</p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+                    <div
+                        class="bg-white p-12 rounded-[2.5rem] border border-slate-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/20 transition-all group">
+                        <div
+                            class="w-20 h-20 bg-brand-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-brand-100 transition-colors">
+                            <svg class="w-10 h-10 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-display font-bold text-slate-900 mb-6 text-3xl">Consultoria Estratégica</h3>
+                        <p class="text-slate-600 text-2xl leading-relaxed">Diagnóstico completo e plano de implementação
+                            de laboratórios maker personalizados.</p>
                     </div>
-                    <div class="bg-slate-50 p-8 rounded-2xl border border-transparent hover:border-brand-200 transition-all shadow-sm text-center">
-                        <h3 class="font-bold text-slate-900 mb-3 text-xl">Formação Docente</h3>
-                        <p class="text-slate-600 leading-relaxed text-sm">Capacitação hands-on para professores dominarem as tecnologias e metodologias ativas.</p>
+                    <div
+                        class="bg-white p-12 rounded-[2.5rem] border border-slate-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/20 transition-all group">
+                        <div
+                            class="w-20 h-20 bg-purple-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-purple-100 transition-colors">
+                            <svg class="w-10 h-10 text-purple-600" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
+                        <h3 class="font-display font-bold text-slate-900 mb-6 text-3xl">Formação Docente</h3>
+                        <p class="text-slate-600 text-2xl leading-relaxed">Capacitação prática para professores
+                            dominarem
+                            as tecnologias e metodologias ativas.</p>
                     </div>
-                    <div class="bg-slate-50 p-8 rounded-2xl border border-transparent hover:border-brand-200 transition-all shadow-sm text-center">
-                        <h3 class="font-bold text-slate-900 mb-3 text-xl">Projetos Maker e STEAM</h3>
-                        <p class="text-slate-600 leading-relaxed text-sm">Implementação de robótica com Arduino e Micro:bit usando materiais de baixo custo.</p>
+                    <div
+                        class="bg-white p-12 rounded-[2.5rem] border border-slate-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/20 transition-all group">
+                        <div
+                            class="w-20 h-20 bg-amber-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-amber-100 transition-colors">
+                            <svg class="w-10 h-10 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-display font-bold text-slate-900 mb-6 text-3xl">Projetos Maker</h3>
+                        <p class="text-slate-600 text-2xl leading-relaxed">Implementação de robótica com Arduino,
+                            Micro:bit e materiais acessíveis.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Ferramentas Open Source (RESTAURADA E MELHORADA) -->
-        <section class="py-24 bg-white border-y border-slate-100">
+        <!-- Ferramentas Open Source -->
+        <section class="py-32 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="font-display text-4xl font-bold text-slate-900 mb-16 uppercase tracking-tighter">Tecnologias Acessíveis e Poderosas</h2>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-                    <div class="p-6 bg-slate-50 rounded-2xl flex flex-col items-center hover:bg-brand-50 transition-all group">
-                        <img src="images/scratch.png" alt="Scratch Logo" class="h-12 mb-4 grayscale group-hover:grayscale-0 transition-all">
-                        <span class="font-bold text-slate-700">Scratch</span>
+                <h2 class="font-display text-6xl font-bold text-slate-900 mb-20 tracking-tight">Tecnologias que
+                    Ensinamos</h2>
+                <!-- Mantendo grid de imagens pois são logos essenciais -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10">
+                    <div
+                        class="p-8 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100">
+                        <img src="images/scratch.png" alt="Scratch"
+                            class="h-14 mb-4 object-contain grayscale hover:grayscale-0 transition-all">
+                        <span class="font-bold text-slate-700 text-lg">Scratch</span>
                     </div>
-                    <div class="p-6 bg-slate-50 rounded-2xl flex flex-col items-center hover:bg-brand-50 transition-all group">
-                        <img src="images/arduino.png" alt="Arduino Logo" class="h-12 mb-4 grayscale group-hover:grayscale-0 transition-all">
-                        <span class="font-bold text-slate-700">Arduino</span>
+                    <div
+                        class="p-8 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100">
+                        <img src="images/arduino.png" alt="Arduino"
+                            class="h-14 mb-4 object-contain grayscale hover:grayscale-0 transition-all">
+                        <span class="font-bold text-slate-700 text-lg">Arduino</span>
                     </div>
-                    <div class="p-6 bg-slate-50 rounded-2xl flex flex-col items-center hover:bg-brand-50 transition-all group">
-                        <img src="images/pi.png" alt="Raspberry Pi Logo" class="h-12 mb-4 grayscale group-hover:grayscale-0 transition-all">
-                        <span class="font-bold text-slate-700">Raspberry Pi</span>
+                    <div
+                        class="p-8 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100">
+                        <img src="images/pi.png" alt="Raspberry Pi"
+                            class="h-14 mb-4 object-contain grayscale hover:grayscale-0 transition-all">
+                        <span class="font-bold text-slate-700 text-lg">Raspberry Pi</span>
                     </div>
-                    <div class="p-6 bg-slate-50 rounded-2xl flex flex-col items-center hover:bg-brand-50 transition-all group">
-                        <img src="images/code.png" alt="Code.org Logo" class="h-12 mb-4 grayscale group-hover:grayscale-0 transition-all">
-                        <span class="font-bold text-slate-700">Code.org</span>
+                    <div
+                        class="p-8 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100">
+                        <img src="images/code.png" alt="Code.org"
+                            class="h-14 mb-4 object-contain grayscale hover:grayscale-0 transition-all">
+                        <span class="font-bold text-slate-700 text-lg">Code.org</span>
                     </div>
-                    <div class="p-6 bg-slate-50 rounded-2xl flex flex-col items-center hover:bg-brand-50 transition-all group">
-                        <img src="images/tinkercad.jpg" alt="Tinkercad Logo" class="h-12 mb-4 grayscale group-hover:grayscale-0 transition-all">
-                        <span class="font-bold text-slate-700">Tinkercad</span>
+                    <div
+                        class="p-8 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100">
+                        <img src="images/tinkercad.jpg" alt="Tinkercad"
+                            class="h-14 mb-4 object-contain grayscale hover:grayscale-0 transition-all">
+                        <span class="font-bold text-slate-700 text-lg">Tinkercad</span>
                     </div>
-                    <div class="p-6 bg-slate-50 rounded-2xl flex flex-col items-center hover:bg-brand-50 transition-all group">
-                        <img src="images/makey-makey.jpg" alt="Makey Makey Logo" class="h-12 mb-4 grayscale group-hover:grayscale-0 transition-all">
-                        <span class="font-bold text-slate-700">Makey Makey</span>
+                    <div
+                        class="p-8 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100">
+                        <img src="images/makey-makey.jpg" alt="Makey Makey"
+                            class="h-14 mb-4 object-contain grayscale hover:grayscale-0 transition-all">
+                        <span class="font-bold text-slate-700 text-lg">Makey Makey</span>
                     </div>
                 </div>
-                <p class="mt-12 text-slate-500 max-w-2xl mx-auto">
-                    Utilizamos apenas ferramentas de código aberto ou gratuitas para garantir que a escola não tenha custos extras com licenças e possa escalar sem limites.
-                </p>
+            </div>
+        </section>
+
+        <!-- Galeria Inovadora (Mãos na Massa) -->
+        <section class="py-32 overflow-hidden relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid lg:grid-cols-2 gap-20 items-center">
+                    <div class="relative group">
+                        <!-- Elementos decorativos de fundo -->
+                        <div
+                            class="absolute -inset-4 bg-gradient-to-tr from-brand-200 to-purple-200 rounded-[3rem] rotate-2 opacity-30 group-hover:rotate-1 transition-all duration-700 blur-xl">
+                        </div>
+
+                        <!-- Colagem de imagens -->
+                        <div class="relative">
+                            <img src="images/children-making-robot-2.jpg" alt="Crianças construindo robôs"
+                                class="rounded-[2.5rem] shadow-2xl w-full object-cover h-[500px] relative border-4 border-white transform transition-transform duration-700 group-hover:scale-[1.01]">
+
+                            <!-- Segunda imagem flutuante (Parallax effect visual) -->
+                            <div class="absolute -bottom-16 -right-16 w-2/3 hidden md:block z-20">
+                                <img src="images/close-up-making-robots.jpg" alt="Detalhe robótica"
+                                    class="rounded-[2rem] shadow-2xl border-8 border-white transform rotate-3 transition-transform duration-700 group-hover:rotate-1 hover:scale-105">
+                            </div>
+
+                            <!-- Badge Flutuante -->
+                            <div
+                                class="absolute top-10 -left-10 bg-white/90 backdrop-blur-xl p-6 rounded-3xl shadow-xl border border-white/20 hidden lg:block animate-bounce [animation-duration:3s] z-30">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center text-3xl font-bold text-brand-600">
+                                        100%
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-slate-900 text-xl leading-none">Prático</p>
+                                        <p class="text-slate-500 text-lg">Mãos na massa</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:pl-10 mt-20 lg:mt-0">
+                        <h2 class="font-display text-6xl font-bold text-slate-900 mb-10 tracking-tight leading-[1]">
+                            O Futuro se Constrói <span class="text-brand-600">Agora!</span>
+                        </h2>
+                        <p class="text-slate-600 text-3xl leading-relaxed font-light mb-12">
+                            Não é só sobre aprender robótica. É sobre desenvolver <strong>protagonismo, criatividade e
+                                colaboração</strong>. Nossos alunos não apenas assistem ao futuro, eles o criam.
+                        </p>
+
+                        <div class="grid grid-cols-2 gap-8">
+                            <div class="pl-6 border-l-4 border-brand-300">
+                                <span class="block text-5xl font-bold text-slate-900 mb-2">+50</span>
+                                <span class="text-xl text-slate-500 font-medium uppercase tracking-wider">Escolas
+                                    Parceiras</span>
+                            </div>
+                            <div class="pl-6 border-l-4 border-purple-300">
+                                <span class="block text-5xl font-bold text-slate-900 mb-2">+10k</span>
+                                <span class="text-xl text-slate-500 font-medium uppercase tracking-wider">Alunos
+                                    Impactados</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- Metodologia -->
-        <section id="metodologia" class="py-24 bg-slate-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="font-display text-4xl font-bold text-slate-900 mb-16 text-center uppercase tracking-tighter">Metodologia e Impacto</h2>
-                <div class="grid lg:grid-cols-2 gap-12 items-center">
-                    <div class="space-y-6">
-                        <h3 class="font-display text-2xl font-bold text-slate-900">Ensinamos a Pensar, não apenas a usar</h3>
-                        <ul class="space-y-4">
-                            <li><strong class="text-brand-600">STEAM & PBL:</strong> Aprendizagem prática baseada em desafios reais.</li>
-                            <li><strong class="text-brand-600">RPG Pedagógico:</strong> O aprendizado transformado em uma jornada imersiva.</li>
-                            <li><strong class="text-brand-600">Startup Thinking:</strong> Mentalidade de criação e foco em soluções.</li>
-                            <li><strong class="text-brand-600">Cidadania Digital:</strong> Segurança e ética baseadas no CERT.br.</li>
-                        </ul>
+        <section id="metodologia" class="py-32 bg-slate-50 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <div class="space-y-10">
+                        <h2
+                            class="font-display text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight leading-tight">
+                            Ensinamos a Pensar, não apenas a usar</h2>
+
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-5">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-3xl font-bold text-slate-900">STEAM & PBL</h4>
+                                    <p class="text-slate-600 text-2xl">Aprendizagem prática baseada em desafios reais e
+                                        interdisciplinaridade.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-5">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-3xl font-bold text-slate-900">Gamificação e Narrativa</h4>
+                                    <p class="text-slate-600 text-2xl">Engajamento total com missões, RPG e
+                                        storytelling.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-5">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                    <svg class="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-3xl font-bold text-slate-900">Startup Thinking</h4>
+                                    <p class="text-slate-600 text-2xl">Foco em resolução de problemas, ideação e
+                                        projetos
+                                        autorais.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-white p-8 rounded-3xl shadow-xl border border-brand-100">
-                        <div class="flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
-                            <div class="flex-1">
-                                <h4 class="font-display text-xl font-bold text-slate-900 mb-3 text-center md:text-left">Compromisso Global e Nacional</h4>
-                                <p class="text-slate-600 text-sm leading-relaxed mb-4 text-center md:text-left">
-                                    Nossa curadoria garante o cumprimento das 10 competências da <strong>BNCC</strong> e contribui para os <strong>ODS</strong> da ONU. 🚀
+                    <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl border border-slate-100">
+                        <div class="flex flex-col gap-8">
+                            <div>
+                                <h4 class="font-display text-2xl font-bold text-slate-900 mb-4">Compromisso com a
+                                    Educação</h4>
+                                <p class="text-slate-600 text-lg leading-relaxed">
+                                    Nossa curadoria garante o cumprimento rigoroso das 10 competências da
+                                    <strong>BNCC</strong> e contribui diretamente para os <strong>ODS</strong> da ONU.
                                 </p>
                             </div>
-                            <div class="flex flex-row md:flex-col gap-6 items-center justify-center">
-                                <img src="images/ods.jpg" alt="Logo ODS" class="h-14 w-auto grayscale hover:grayscale-0 transition-all">
-                                <img src="images/bncc.jpg" alt="Logo BNCC" class="h-10 w-auto grayscale hover:grayscale-0 transition-all">
+                            <div class="flex gap-8 items-center pt-6 border-t border-slate-100">
+                                <img src="images/ods.jpg" alt="Logo ODS"
+                                    class="h-16 w-auto mix-blend-multiply opacity-80 hover:opacity-100 transition-opacity">
+                                <img src="images/bncc.jpg" alt="Logo BNCC"
+                                    class="h-12 w-auto mix-blend-multiply opacity-80 hover:opacity-100 transition-opacity">
+                                <img src="images/cert-logo.svg" alt="Logo CERT.br"
+                                    class="h-12 w-auto mix-blend-multiply opacity-80 hover:opacity-100 transition-opacity">
                             </div>
                         </div>
                     </div>
@@ -194,64 +442,182 @@
         </section>
 
         <!-- FAQ -->
-        <section id="faq" class="py-24">
+        <section id="faq" class="py-32 bg-white">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <h2 class="font-display text-4xl font-bold text-slate-900 uppercase tracking-tighter">Dúvidas Frequentes</h2>
+                <div class="text-center mb-20">
+                    <h2 class="font-display text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight">Dúvidas
+                        Frequentes</h2>
                 </div>
-                <div x-data="{ open: 1 }" class="space-y-4">
-                    <div class="bg-white border rounded-xl overflow-hidden shadow-sm">
-                        <h3 @click="open = 1" class="cursor-pointer flex justify-between items-center p-5 font-bold text-slate-800 hover:bg-slate-50 transition-all text-sm md:text-base">
-                            1. Quais são os serviços específicos da Izicode? 
-                            <svg :class="{'rotate-180': open === 1}" class="w-5 h-5 text-brand-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                <div x-data="{ open: 1 }" class="space-y-6">
+                    <!-- Perguntas com visual clean e fonte aumentada -->
+                    <div
+                        class="bg-white border text-xl border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                        <h3 @click="open = 1"
+                            class="cursor-pointer flex justify-between items-center p-8 font-bold text-slate-800 hover:bg-slate-50 transition-colors text-2xl">
+                            1. Quais são os serviços específicos da Izicode?
+                            <svg :class="{'rotate-180': open === 1}"
+                                class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 9l-7 7-7-7" />
+                            </svg>
                         </h3>
-                        <div x-show="open === 1" x-collapse class="p-5 border-t text-slate-600 text-sm bg-slate-50/30">Consultoria para escolas, laboratórios maker, treinamento de professores e projetos BNCC.</div>
+                        <div x-show="open === 1" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Consultoria
+                            completa para implementação de laboratórios maker, treinamento de professores, fornecimento
+                            de material didático (apostilas e kits) e plataforma de gestão de aprendizado.</div>
                     </div>
-                    <div class="bg-white border rounded-xl overflow-hidden shadow-sm">
-                        <h3 @click="open = 2" class="cursor-pointer flex justify-between items-center p-5 font-bold text-slate-800 hover:bg-slate-50 transition-all text-sm md:text-base">
-                            2. A Izicode ajuda na adequação à BNCC? 
-                            <svg :class="{'rotate-180': open === 2}" class="w-5 h-5 text-brand-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                    <!-- Repetindo padrão para outros itens... -->
+                    <!-- Item 2 -->
+                    <div
+                        class="bg-white border text-lg border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                        <h3 @click="open = 2"
+                            class="cursor-pointer flex justify-between items-center p-6 font-bold text-slate-800 hover:bg-slate-50 transition-colors">
+                            2. A Izicode ajuda na adequação à BNCC?
+                            <svg :class="{'rotate-180': open === 2}"
+                                class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 9l-7 7-7-7" />
+                            </svg>
                         </h3>
-                        <div x-show="open === 2" x-collapse class="p-5 border-t text-slate-600 text-sm bg-slate-50/30">Sim! Focamos 100% nas competências de Cultura Digital e Pensamento Científico.</div>
+                        <div x-show="open === 2" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Sim! Todo
+                            nosso material é alinhado à Base Nacional Comum Curricular, focando especificamente nas
+                            competências de Cultura Digital, Pensamento Científico e Argumentação.</div>
+                    </div>
+                    <!-- Item 3 -->
+                    <div
+                        class="bg-white border text-lg border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                        <h3 @click="open = 3"
+                            class="cursor-pointer flex justify-between items-center p-6 font-bold text-slate-800 hover:bg-slate-50 transition-colors">
+                            3. Preciso de um laboratório caro para começar?
+                            <svg :class="{'rotate-180': open === 3}"
+                                class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </h3>
+                        <div x-show="open === 3" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Não! Nossa
+                            metodologia é flexível. Começamos com "Robótica Desplugada" e materiais acessíveis (sucata,
+                            papelão) e evoluímos para kits eletrônicos conforme o orçamento da escola permite.</div>
+                    </div>
+                    <!-- Item 4 -->
+                    <div
+                        class="bg-white border text-lg border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                        <h3 @click="open = 4"
+                            class="cursor-pointer flex justify-between items-center p-6 font-bold text-slate-800 hover:bg-slate-50 transition-colors">
+                            4. Vocês oferecem suporte aos professores?
+                            <svg :class="{'rotate-180': open === 4}"
+                                class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </h3>
+                        <div x-show="open === 4" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Totalmente.
+                            O grande diferencial da Izicode é a Formação Docente continuada. Não apenas entregamos o
+                            kit, nós ensinamos o professor a ser um mentor maker confiante.</div>
+                    </div>
+                    <!-- Item 5 -->
+                    <div
+                        class="bg-white border text-lg border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                        <h3 @click="open = 5"
+                            class="cursor-pointer flex justify-between items-center p-6 font-bold text-slate-800 hover:bg-slate-50 transition-colors">
+                            5. A robótica atrapalha as aulas tradicionais?
+                            <svg :class="{'rotate-180': open === 5}"
+                                class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </h3>
+                        <div x-show="open === 5" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Pelo
+                            contrário! Ela potencializa. Alunos que aprendem lógica e programação melhoram
+                            significativamente o desempenho em Matemática e Ciências.</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Olimpíadas e Campeonatos Section (RESTAURADA) -->
-        <section id="olimpiadas" class="py-24 bg-slate-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <h2 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-6 uppercase tracking-tight">Prepare sua Escola para Vencer</h2>
-                        <p class="text-slate-600 text-lg mb-8 leading-relaxed">Nossa consultoria vai além da sala de aula. Preparamos seus alunos e professores para competir e se destacar nas maiores olimpíadas de tecnologia e robótica do Brasil e do mundo.</p>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="bg-white p-4 rounded-xl font-bold text-slate-700 border border-slate-200 shadow-sm flex items-center gap-3">
-                                <span class="text-brand-600">🏆</span> OBI (Informática)
-                            </div>
-                            <div class="bg-white p-4 rounded-xl font-bold text-slate-700 border border-slate-200 shadow-sm flex items-center gap-3">
-                                <span class="text-brand-600">🤖</span> OBR (Robótica)
-                            </div>
-                            <div class="bg-white p-4 rounded-xl font-bold text-slate-700 border border-slate-200 shadow-sm flex items-center gap-3">
-                                <span class="text-brand-600">🧱</span> FIRST LEGO League
-                            </div>
-                            <div class="bg-white p-4 rounded-xl font-bold text-slate-700 border border-slate-200 shadow-sm flex items-center gap-3">
-                                <span class="text-brand-600">👩‍💻</span> Technovation Girls
-                            </div>
+
+        <!-- Apoio a Competições -->
+        <section class="py-32 bg-slate-900 relative overflow-hidden">
+            <div
+                class="absolute inset-0 bg-[radial-gradient(#0ea5e9_1px,transparent_1px)] [background-size:48px_48px] opacity-10">
+            </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <span
+                    class="inline-flex items-center gap-2 px-6 py-3 mb-10 text-xl font-bold tracking-widest text-brand-300 uppercase bg-white/5 rounded-full border border-white/10">
+                    Nossos alunos vão além
+                </span>
+                <h2 class="font-display text-7xl lg:text-9xl font-bold text-white mb-10 tracking-tight">Apoio a Campeões
+                </h2>
+                <p class="text-slate-300 text-3xl max-w-4xl mx-auto mb-24 leading-relaxed font-light">
+                    Apoiamos ativamente a participação de nossos alunos e escolas parceiras nos maiores eventos de
+                    tecnologia do Brasil e do mundo.
+                </p>
+
+                <div class="grid md:grid-cols-3 gap-12">
+                    <div
+                        class="bg-white/5 backdrop-blur-md p-12 rounded-[2rem] border border-white/10 hover:border-brand-500/50 hover:bg-white/10 transition-all hover:-translate-y-2 group">
+                        <div
+                            class="bg-brand-600 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-brand-900/50 group-hover:scale-110 transition-transform">
+                            <svg class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                            </svg>
                         </div>
+                        <h3 class="font-bold text-white text-4xl mb-6">Olimpíadas Científicas</h3>
+                        <p class="text-slate-400 text-2xl font-light leading-relaxed">Preparação intensiva para OBR, OBI
+                            e torneios acadêmicos.</p>
                     </div>
-                    <div class="bg-slate-100 p-6 rounded-3xl">
-                        <img src="images/children-making-robot-2.jpg" alt="Alunos se preparando para olimpíadas de robótica" class="rounded-2xl shadow-xl w-full h-auto object-cover">
+
+                    <div
+                        class="bg-white/5 backdrop-blur-md p-12 rounded-[2rem] border border-white/10 hover:border-brand-500/50 hover:bg-white/10 transition-all hover:-translate-y-2 group">
+                        <div
+                            class="bg-purple-600 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-purple-900/50 group-hover:scale-110 transition-transform">
+                            <svg class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                            </svg>
+                        </div>
+                        <h3 class="font-bold text-white text-4xl mb-6">Hackathons</h3>
+                        <p class="text-slate-400 text-2xl font-light leading-relaxed">Maratonas de programação para
+                            resolver problemas reais.</p>
                     </div>
+
+                    <div
+                        class="bg-white/5 backdrop-blur-md p-12 rounded-[2rem] border border-white/10 hover:border-brand-500/50 hover:bg-white/10 transition-all hover:-translate-y-2 group">
+                        <div
+                            class="bg-amber-500 w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-amber-900/50 group-hover:scale-110 transition-transform">
+                            <svg class="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-bold text-white text-4xl mb-6">Robótica</h3>
+                        <p class="text-slate-400 text-2xl font-light leading-relaxed">Mentoria técnica para equipes de
+                            FLL, FRC e competições locais.</p>
+                    </div>
+                </div>
+
+                <div
+                    class="mt-24 inline-flex items-center gap-4 bg-white/10 backdrop-blur border border-white/20 rounded-full px-12 py-6 text-white text-3xl font-medium">
+                    Apoiamos para ver nossos alunos vencerem
+
                 </div>
             </div>
         </section>
 
         <!-- Contato -->
-        <section id="contato" class="py-24 bg-brand-600 text-white">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="font-display text-4xl font-bold mb-6">Transforme sua Escola Hoje</h2>
-                <a href="https://tally.so/r/mYRNQB" target="_blank" class="inline-block bg-white text-brand-600 px-10 py-5 rounded-2xl font-black hover:bg-brand-50 hover-shake transition-all text-xl shadow-2xl">SOLICITAR CONSULTORIA AGORA!</a>
+        <section id="contato" class="py-32 bg-brand-600 text-white relative overflow-hidden">
+            <div
+                class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] animate-[gradient_15s_ease_infinite]">
+            </div>
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                <h2 class="font-display text-6xl lg:text-8xl font-black mb-6 tracking-tight leading-tight">Transforme
+                    sua Escola<br>em um Polo de Inovação</h2>
+                <p class="text-3xl font-bold text-brand-100 mb-12 uppercase tracking-wide">Invista no futuro da sua
+                    instituição</p>
+                <a href="https://tally.so/r/mYRNQB" target="_blank"
+                    class="inline-block bg-white text-brand-700 px-16 py-8 rounded-[2.5rem] font-display font-black hover:bg-brand-50 hover:scale-105 hover:shadow-2xl transition-all text-3xl tracking-wide">
+                    Falar com Especialista
+                </a>
             </div>
         </section>
     </main>
@@ -260,12 +626,18 @@
     <footer class="bg-slate-900 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="flex justify-center gap-8 mb-10 mt-4">
-                <a href="https://www.linkedin.com/company/izicodepf" target="_blank" class="text-slate-400 hover:text-white transition-all hover-shake scale-125">
-                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z\"/></svg>
+                <a href="https://www.linkedin.com/company/izicodepf" target="_blank"
+                    class="text-slate-400 hover:text-white transition-all hover-shake scale-125">
+                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z\" />
+                    </svg>
                 </a>
             </div>
-            <p class="text-slate-500 text-sm font-medium tracking-wide">&copy; 2026 Izicode Edu - Excelência em Tecnologia Educacional.</p>
+            <p class="text-slate-500 text-sm font-medium tracking-wide">&copy; 2026 Izicode Edu - Excelência em
+                Tecnologia Educacional.</p>
         </div>
     </footer>
 </body>
+
 </html>
