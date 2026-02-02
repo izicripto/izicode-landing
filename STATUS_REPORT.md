@@ -1,20 +1,21 @@
 # 📊 RELATÓRIO DE STATUS - IZICODE EDU
-**Atualizado em:** 01/02/2026
+**Atualizado em:** 02/02/2026
 
 ## ✅ CONCLUÍDO RECENTEMENTE
-- **Landing Page:** Imagens integradas, metodologias (RPG/STEAM) e logos ODS/BNCC adicionados.
-- **UI:** Selo de logo quadrado no rodapé e ícones sociais (LinkedIn/Instagram).
-- **SEO:** Domínio `izicode.com.br` configurado em todos os metas.
-- **Gamificação:** XP no Gerador de Projetos implementado e marcado no Roadmap.
-- **Ops:** Criado guia `docs/TELEGRAM-SETUP.md` para iniciar a operação de inteligência.
+- **Lançamento MVP:** Deploy final realizado, site completo no ar.
+- **Domínio:** `izicode.com.br` ativo e servindo o conteúdo.
+- **Conteúdo:** Seções de Ferramentas e Olimpíadas restauradas.
+- **IA:** Chave da API do Gemini atualizada no Gerador de Projetos.
+- **PWA:** Criado o `manifest.json` inicial para futura conversão em App.
 
 ## 🚧 EM ANDAMENTO
-- **Monetização:** Aguardando link de pagamento Hotmart.
-- **Marketing Ops:** Aguardando Token do Telegram e Chat ID para ativar o Radar de Insights.
+- **Marketing Ops:** Aguardando autorização e Chat ID para configurar o canal do Telegram e ativar alertas de leads.
+- **Monetização:** Aguardando link de pagamento da Hotmart para integrar ao `shop-kit.html`.
 
 ## 📅 PRÓXIMOS PASSOS (Roadmap)
-1. **Ativar Bot Telegram:** Configurar envio de notícias.
+1. **Ativar Bot Telegram:** Configurar e enviar mensagem de teste.
 2. **Integração Hotmart:** Atualizar botão de compra.
+3. **PWA:** Implementar um Service Worker para funcionalidade offline.
 
 ## ⚠️ NOTAS TÉCNICAS
-- Deploy automático funcionando via GitHub Actions + Firebase CLI.
+- O site agora é "instalável" em dispositivos móveis, um primeiro passo para a experiência de App.
