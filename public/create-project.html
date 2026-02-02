@@ -239,8 +239,12 @@
 
         // Check saved API key
         const savedKey = localStorage.getItem('gemini_api_key');
-        if (savedKey) {
-            initAI(savedKey);
+        // Default key for immediate functionality
+        const defaultKey = "AIzaSyARHcMeggEFXCtb6QUTCRwEoe_QumATZEM";
+        const effectiveKey = savedKey || defaultKey;
+        
+        if (effectiveKey) {
+            initAI(effectiveKey);
         }
 
         function initAI(key) {
