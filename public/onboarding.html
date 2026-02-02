@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurando seu Perfil - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <script type="module" src="js/firebase-config.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            border-color: #0ea5e9;
+        }
+
+        .selected-card {
+            border-color: #0ea5e9;
+            background-color: #f0f9ff;
+            ring: 2px solid #0ea5e9;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+    <!-- Navbar Simplificada -->
+    <nav class="bg-white border-b border-slate-100 py-4">
+        <div class="max-w-3xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="images/logo.png" alt="Logo" class="w-8 h-8">
+                <span class="font-display font-bold text-xl text-slate-900">Izicode</span>
+            </div>
+            <div class="text-sm text-slate-500 font-medium">Configuração Inicial</div>
+        </div>
+    </nav>
+
+    <main class="flex-1 flex items-center justify-center p-6">
+        <div class="max-w-2xl w-full bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden relative">
+
+            <!-- Barra de Progresso -->
+            <div class="h-2 bg-slate-100 w-full">
+                <div id="progressBar" class="h-full bg-brand-500 transition-all duration-500" style="width: 33%"></div>
+            </div>
+
+            <div class="p-8 md:p-12">
+
+                <!-- STEP 1: Boas-vindas e Perfil -->
+                <div id="step1" class="step-content active">
+                    <div class="text-center mb-10">
+                        <h1 class="font-display text-3xl font-bold text-slate-900 mb-3">Bem-vindo à Izicode! 👋</h1>
+                        <p class="text-slate-600 text-lg">Para começarmos, conte-nos como você deseja transformar a
+                            educação hoje.</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-4 mb-10">
+                        <!-- Card Escola -->
+                        <label
+                            class="cursor-pointer relative profile-card border-2 border-slate-100 rounded-2xl p-6 text-center transition-all group">
+                            <input type="radio" name="profile" value="school_admin" class="peer sr-only"
+                                onchange="selectProfile(this)">
+                            <div
+                                class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
+                                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                    </path>
+                                </svg>
+                            </div>
+                            <h3 class="font-bold text-slate-900 mb-1">Gestor Escolar</h3>
+                            <p class="text-xs text-slate-500">Quero inovar em minha escola</p>
+                            <div
+                                class="absolute inset-0 border-2 border-brand-500 rounded-2xl opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none">
+                            </div>
+                        </label>
+
+                        <!-- Card Professor -->
+                        <label
+                            class="cursor-pointer relative profile-card border-2 border-slate-100 rounded-2xl p-6 text-center transition-all group">
+                            <input type="radio" name="profile" value="teacher" class="peer sr-only"
+                                onchange="selectProfile(this)">
+                            <div
+                                class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition-colors">
+                                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                                    </path>
+                                </svg>
+                            </div>
+                            <h3 class="font-bold text-slate-900 mb-1">Professor</h3>
+                            <p class="text-xs text-slate-500">Busco recursos para aulas</p>
+                            <div
+                                class="absolute inset-0 border-2 border-brand-500 rounded-2xl opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none">
+                            </div>
+                        </label>
+
+                        <!-- Card Aluno -->
+                        <label
+                            class="cursor-pointer relative profile-card border-2 border-slate-100 rounded-2xl p-6 text-center transition-all group">
+                            <input type="radio" name="profile" value="student" class="peer sr-only"
+                                onchange="selectProfile(this)">
+                            <div
+                                class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-200 transition-colors">
+                                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <h3 class="font-bold text-slate-900 mb-1">Aluno / Maker</h3>
+                            <p class="text-xs text-slate-500">Quero aprender e criar</p>
+                            <div
+                                class="absolute inset-0 border-2 border-brand-500 rounded-2xl opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none">
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="text-center">
+                        <button onclick="nextStep(2)" id="btnStep1"
+                            class="bg-slate-200 text-slate-400 font-bold py-4 px-10 rounded-xl cursor-not-allowed transition-all"
+                            disabled>
+                            Continuar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Detalhes -->
+                <div id="step2" class="step-content">
+                    <div class="text-center mb-8">
+                        <button onclick="prevStep(1)"
+                            class="text-slate-400 hover:text-brand-600 text-sm mb-4 font-medium flex items-center justify-center gap-1 mx-auto">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            Voltar
+                        </button>
+                        <h2 class="font-display text-2xl font-bold text-slate-900" id="step2Title">Conte mais sobre você
+                        </h2>
+                    </div>
+
+                    <div class="space-y-4 max-w-md mx-auto mb-10">
+                        <!-- Formulário Dinâmico -->
+                        <div id="dynamicForm"></div>
+                    </div>
+
+                    <div class="text-center">
+                        <button onclick="finishOnboarding()" id="btnFinish"
+                            class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 px-10 rounded-xl shadow-lg shadow-brand-200/50 transition-all transform hover:scale-105 flex items-center gap-2 mx-auto">
+                            <span id="btnFinishText">Acessar Plataforma</span>
+                            <div id="spinner"
+                                class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin">
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { auth, db, doc, setDoc, onAuthStateChanged } from './js/firebase-config.js';
+
+        let selectedProfile = null;
+        let userData = {};
+
+        // Verificar auth
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    name: user.displayName,
+                    photoURL: user.photoURL
+                };
+            }
+        });
+
+        window.selectProfile = (radio) => {
+            selectedProfile = radio.value;
+            const btn = document.getElementById('btnStep1');
+            btn.disabled = false;
+            btn.classList.remove('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+            btn.classList.add('bg-brand-600', 'text-white', 'hover:bg-brand-700', 'shadow-lg');
+        }
+
+        window.nextStep = (step) => {
+            if (step === 2) {
+                renderStep2();
+            }
+
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step${step}`).classList.add('active');
+
+            const progress = step === 1 ? '33%' : '80%';
+            document.getElementById('progressBar').style.width = progress;
+        }
+
+        window.prevStep = (step) => {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step${step}`).classList.add('active');
+            document.getElementById('progressBar').style.width = '33%';
+        }
+
+        function renderStep2() {
+            const container = document.getElementById('dynamicForm');
+            const title = document.getElementById('step2Title');
+            container.innerHTML = '';
+
+            if (selectedProfile === 'school_admin') {
+                title.textContent = "Sobre sua Escola";
+                container.innerHTML = `
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Nome da Escola</label>
+                        <input type="text" id="institutionName" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="Ex: Escola Estadual Inovação">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Número de Alunos</label>
+                        <select id="studentsCount" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 outline-none">
+                            <option value="">Selecione...</option>
+                            <option value="0-100">Até 100</option>
+                            <option value="100-500">100 a 500</option>
+                            <option value="500+">Mais de 500</option>
+                        </select>
+                    </div>
+                `;
+            } else if (selectedProfile === 'teacher') {
+                title.textContent = "Sobre suas Aulas";
+                container.innerHTML = `
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Disciplina Principal</label>
+                        <input type="text" id="subject" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="Ex: Matemática, Ciências, Robótica...">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Nível de Ensino</label>
+                        <select id="gradeLevel" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 outline-none">
+                            <option value="">Selecione...</option>
+                            <option value="fundamental1">Fundamental I</option>
+                            <option value="fundamental2">Fundamental II</option>
+                            <option value="medio">Ensino Médio</option>
+                        </select>
+                    </div>
+                `;
+            } else {
+                title.textContent = "Sobre seus Interesses";
+                container.innerHTML = `
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Sua Série/Ano</label>
+                        <select id="studentGrade" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 outline-none">
+                            <option value="">Selecione...</option>
+                            <option value="6ano">6º Ano</option>
+                            <option value="7ano">7º Ano</option>
+                            <option value="8ano">8º Ano</option>
+                            <option value="9ano">9º Ano</option>
+                            <option value="medio">Ensino Médio</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">O que você mais curte?</label>
+                        <div class="flex flex-wrap gap-2">
+                            <label class="cursor-pointer bg-slate-100 px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">
+                                <input type="checkbox" class="sr-only" name="interest" value="robotica"> Robótica
+                            </label>
+                            <label class="cursor-pointer bg-slate-100 px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">
+                                <input type="checkbox" class="sr-only" name="interest" value="programacao"> Programação
+                            </label>
+                            <label class="cursor-pointer bg-slate-100 px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors">
+                                <input type="checkbox" class="sr-only" name="interest" value="games"> Games
+                            </label>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        window.finishOnboarding = async () => {
+            const btn = document.getElementById('btnFinish');
+            const btnText = document.getElementById('btnFinishText');
+            const spinner = document.getElementById('spinner');
+
+            btn.disabled = true;
+            btnText.textContent = "Configurando...";
+            spinner.classList.remove('hidden');
+
+            // Coletar dados extras
+            let extraData = {};
+            if (selectedProfile === 'school_admin') {
+                extraData.institution = document.getElementById('institutionName')?.value;
+                extraData.size = document.getElementById('studentsCount')?.value;
+            } else if (selectedProfile === 'teacher') {
+                extraData.subject = document.getElementById('subject')?.value;
+                extraData.level = document.getElementById('gradeLevel')?.value;
+            } else {
+                extraData.grade = document.getElementById('studentGrade')?.value;
+            }
+
+            try {
+                // Salvar no Firestore
+                const userRef = doc(db, "users", userData.uid);
+                await setDoc(userRef, {
+                    ...userData,
+                    role: selectedProfile,
+                    ...extraData,
+                    status: 'approved', // Auto-aprovar no onboarding por enquanto
+                    onboardingCompleted: true,
+                    createdAt: new Date()
+                }, { merge: true });
+
+                // Redirecionar
+                setTimeout(() => {
+                    if (selectedProfile === 'student') {
+                        window.location.href = 'student-area.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                }, 1000);
+
+            } catch (error) {
+                console.error("Erro ao salvar:", error);
+                alert("Erro ao salvar perfil. Tente novamente.");
+                btn.disabled = false;
+                btnText.textContent = "Acessar Plataforma";
+                spinner.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+
+</html>
