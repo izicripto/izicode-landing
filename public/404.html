@@ -1,16 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
+
 <head>
-    <title>Página Não Encontrada</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Em Construção - Izicode Edu</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
 </head>
-<body class="bg-slate-100 flex items-center justify-center h-screen">
-    <div class="text-center">
-        <h1 class="text-6xl font-bold text-blue-600">404</h1>
-        <p class="text-2xl font-medium text-slate-800 mt-4">Página Não Encontrada</p>
-        <p class="text-slate-600 mt-2">O arquivo que você está procurando não existe em nosso servidor.</p>
-        <p class="text-sm text-red-500 mt-8"><strong>Info de Debug:</strong> Se você está vendo esta página customizada, o deploy funcionou, mas a rota está errada.</p>
-        <a href="/" class="mt-6 inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium">Voltar para a Home</a>
+
+<body
+    class="bg-gradient-to-br from-slate-50 via-brand-50 to-slate-100 min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-3xl w-full">
+        <!-- Card Principal -->
+        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+            <!-- Header com Logo -->
+            <div class="bg-gradient-to-r from-brand-500 to-brand-600 p-8 text-center">
+                <img src="images/logo.png" alt="Izicode Logo"
+                    class="w-24 h-24 mx-auto mb-4 bg-white rounded-2xl p-3 shadow-lg float-animation">
+                <h1 class="font-display text-2xl md:text-3xl font-bold text-white">Izicode Edu</h1>
+            </div>
+
+            <!-- Conteúdo -->
+            <div class="p-8 md:p-12 text-center">
+                <!-- Ilustração de Construção -->
+                <div class="mb-8 flex justify-center">
+                    <img src="images/construction.png" alt="Em Construção" class="w-64 h-64 object-contain">
+                </div>
+
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                    Esta Página Está em Construção 🚧
+                </h2>
+
+                <p class="text-lg text-slate-600 mb-6 leading-relaxed">
+                    Estamos trabalhando para trazer novidades incríveis! Nossa equipe está construindo algo especial
+                    para transformar a educação.
+                </p>
+
+                <!-- Destaque VIP -->
+                <div class="bg-gradient-to-r from-brand-50 to-blue-50 rounded-2xl p-6 mb-8 border-2 border-brand-200">
+                    <p class="font-display font-bold text-brand-700 text-2xl mb-3">✨ Acesso Antecipado Garantido!</p>
+                    <p class="text-slate-700 font-medium">
+                        Quando esta página estiver pronta, <span class="text-brand-600 font-bold">você será um dos
+                            primeiros a receber acesso exclusivo</span> às nossas novidades e funcionalidades.
+                    </p>
+                </div>
+
+                <!-- Info Box -->
+                <div class="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100">
+                    <div class="text-left">
+                        <div>
+                            <p class="font-semibold text-slate-900 mb-1">O que está acontecendo?</p>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Esta funcionalidade ainda está sendo desenvolvida. Estamos criando uma experiência
+                                incrível para você e sua escola. Fique ligado!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão de Retorno -->
+                <a href="/"
+                    class="inline-flex items-center justify-center gap-2 bg-brand-600 text-white font-bold px-10 py-4 rounded-xl hover:bg-brand-700 transition-all shadow-lg hover:shadow-xl hover:scale-105">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Voltar para a Home
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="text-center mt-6">
+            <p class="text-slate-500 text-sm">
+                Precisa de ajuda? Entre em contato através do nosso
+                <a href="/#contato"
+                    class="text-brand-600 font-semibold hover:text-brand-700 transition-colors">formulário de
+                    contato</a>
+            </p>
+        </div>
     </div>
 </body>
+
 </html>
