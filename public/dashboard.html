@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Izicode Edu</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module">
         import { auth, db, onAuthStateChanged, signOut, doc, getDoc } from './js/firebase-config.js';
-        
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                document.getElementById('userName').innerText = user.displayName;
-                document.getElementById('userAvatar').src = user.photoURL;
+                document.getElementById('userName').innerText = user.displayName || 'Professor';
+                document.getElementById('userNameMobile').innerText = user.displayName || 'Professor';
+                const firstName = user.displayName ? user.displayName.split(' ')[0] : 'Professor';
+                document.getElementById('userFirstName').innerText = firstName;
+
+                if (user.photoURL) {
+                    document.getElementById('userAvatar').src = user.photoURL;
+                    document.getElementById('userAvatarMobile').src = user.photoURL;
+                }
 
                 // Buscar dados de Gamificação (XP/Nível)
                 try {
@@ -23,22 +33,25 @@
                         const data = userSnap.data();
                         const xp = data.xp || 0;
                         const level = data.level || 1;
-                        document.getElementById('userStats').innerHTML = `
-                            <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-bold border border-indigo-200">⭐ Nível ${level}</span>
-                            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-bold border border-yellow-200">⚡ ${xp} XP</span>
-                        `;
+                        document.getElementById('userLevel').innerText = level;
+                        document.getElementById('userXP').innerText = xp;
                     }
                 } catch (e) {
                     console.error("Erro ao carregar stats:", e);
                 }
 
             } else {
-                window.location.href = "index.html";
+                window.location.href = "login.html";
             }
         });
 
         window.logout = () => {
             signOut(auth).then(() => window.location.href = "index.html");
+        };
+
+        // Toggle mobile menu
+        window.toggleMobileMenu = () => {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
         };
     </script>
     <script>
@@ -46,126 +59,303 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
-                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e' } }
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e' } }
                 }
             }
         }
     </script>
-</head>
-<body class="bg-slate-50 min-h-screen flex text-slate-800">
+    <style>
+        @keyframes gradient {
 
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col fixed h-full z-10">
-        <div class="p-6 border-b border-slate-100 flex items-center gap-3">
-            <a href="dashboard.html" class="flex items-center gap-3">
-                <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
-                <span class="font-display font-bold text-xl text-slate-900">Izicode</span>
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-brand-50/30 to-slate-100 min-h-screen">
+
+    <!-- Sidebar Desktop -->
+    <aside
+        class="w-72 bg-white/80 backdrop-blur-xl border-r border-slate-200/50 hidden lg:flex flex-col fixed h-full z-20 shadow-xl">
+        <div class="p-6 border-b border-slate-100">
+            <a href="dashboard.html" class="flex items-center gap-3 group">
+                <div
+                    class="bg-brand-50 p-2 rounded-2xl border border-brand-100 group-hover:scale-110 transition-transform">
+                    <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
+                </div>
+                <span class="font-display font-bold text-2xl text-slate-900">Izicode</span>
             </a>
         </div>
-        
+
+        <!-- User Profile -->
+        <div class="p-6 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff"
+                    class="w-12 h-12 rounded-full border-2 border-brand-200">
+                <div class="flex-1 min-w-0">
+                    <p class="font-semibold text-slate-900 truncate" id="userName">Carregando...</p>
+                    <div class="flex gap-2 mt-1">
+                        <span class="text-xs bg-brand-100 text-brand-700 px-2 py-0.5 rounded-full font-medium">Nível
+                            <span id="userLevel">1</span></span>
+                        <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium"><span
+                                id="userXP">0</span> XP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider px-4 mb-2 mt-4">Principal</div>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-medium">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider px-4 mb-3">Principal</div>
+            <a href="dashboard.html"
+                class="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-brand-500 to-brand-600 text-white rounded-xl font-medium shadow-lg shadow-brand-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
                 Dashboard
             </a>
-            <a href="my-projects.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+            <a href="my-projects.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                </svg>
                 Meus Projetos
             </a>
-            <a href="library.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
-                Biblioteca de Projetos
+            <a href="library.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                Biblioteca
             </a>
-            <a href="ia-assistant.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-                Assistente IA
+            <a href="create-project.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+                Gerador IA
             </a>
-            <a href="student-area.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            <a href="student-area.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
                 Área do Aluno
             </a>
 
-            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider px-4 mb-2 mt-6">Biblioteca</div>
-            <a href="/docs/01-GUIA-HACKATHON-ESCOLAR.md" target="_blank" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:text-brand-600">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                Guia Hackathon
+            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider px-4 mb-3 mt-6">Recursos</div>
+            <a href="/docs/welcome-guide.html" target="_blank"
+                class="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:text-brand-600 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Guia de Boas-Vindas
             </a>
-            <a href="/docs/05-GUIA-BNCC-TECNOLOGIA.md" target="_blank" class="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:text-brand-600">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                Manual BNCC
+            <a href="/docs/media-kit.html" target="_blank"
+                class="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:text-brand-600 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                </svg>
+                Media Kit
             </a>
         </nav>
 
         <div class="p-4 border-t border-slate-100">
-            <button onclick="logout()" class="flex items-center gap-3 text-red-500 hover:text-red-700 px-4 py-2 w-full text-sm font-medium transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            <button onclick="logout()"
+                class="flex items-center gap-3 text-red-500 hover:text-red-700 hover:bg-red-50 px-4 py-3 w-full text-sm font-medium transition-all rounded-xl">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
                 Sair
             </button>
         </div>
     </aside>
 
-    <!-- Main Content -->
-    <main class="flex-1 md:ml-64 p-8">
-        <!-- Header -->
-        <header class="flex justify-between items-center mb-10">
-            <div>
-                <h1 class="font-display text-3xl font-bold text-slate-900">Olá, <span id="userName">...</span> 👋</h1>
-                <div id="userStats" class="flex gap-2 mt-2"></div>
-                <p class="text-slate-500 mt-2">Vamos transformar a educação hoje?</p>
+    <!-- Mobile Header -->
+    <div class="lg:hidden bg-white/80 backdrop-blur-xl border-b border-slate-200/50 sticky top-0 z-30 shadow-sm">
+        <div class="flex items-center justify-between p-4">
+            <div class="flex items-center gap-3">
+                <img src="/images/logo.png" alt="Logo" class="w-10 h-10">
+                <span class="font-display font-bold text-xl">Izicode</span>
             </div>
-            <a href="create-project.html" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-brand-200 flex items-center gap-2">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-    <span>Novo Projeto com IA</span>
-</a>
+            <button onclick="toggleMobileMenu()" class="p-2 hover:bg-slate-100 rounded-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden bg-white border-t border-slate-100 p-4">
+            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
+                <img id="userAvatarMobile" src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff"
+                    class="w-10 h-10 rounded-full">
+                <p class="font-semibold" id="userNameMobile">Carregando...</p>
+            </div>
+            <nav class="space-y-1">
+                <a href="dashboard.html"
+                    class="block px-4 py-2 bg-brand-50 text-brand-700 rounded-lg font-medium">Dashboard</a>
+                <a href="my-projects.html" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg">Meus
+                    Projetos</a>
+                <a href="library.html"
+                    class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg">Biblioteca</a>
+                <a href="create-project.html"
+                    class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg">Gerador IA</a>
+                <a href="student-area.html" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg">Área do
+                    Aluno</a>
+                <button onclick="logout()"
+                    class="block w-full text-left px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg mt-4">Sair</button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-72 p-6 md:p-10">
+        <!-- Header -->
+        <header class="mb-10">
+            <h1 class="font-display text-4xl md:text-5xl font-bold text-slate-900 mb-2">
+                Olá, <span id="userFirstName">Professor</span>! 👋
+            </h1>
+            <p class="text-slate-600 text-lg">Vamos transformar a educação hoje?</p>
         </header>
 
-        <!-- Integration Hub -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 mb-10">
-            <h2 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-                Hub de Ferramentas Open Source
-            </h2>
-            <p class="text-sm text-slate-500 mb-6">Acesse rapidamente as principais plataformas e seus tutoriais oficiais.</p>
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            <!-- Card 1: Novo Projeto -->
+            <a href="create-project.html"
+                class="group bg-gradient-to-br from-brand-500 to-brand-600 p-8 rounded-3xl shadow-xl shadow-brand-200 hover:shadow-2xl hover:scale-105 transition-all text-white relative overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent)] opacity-0 group-hover:opacity-100 transition-opacity">
+                </div>
+                <div class="relative z-10">
+                    <div class="w-14 h-14 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center mb-4">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold mb-2">Criar Projeto</h3>
+                    <p class="text-brand-100">Use IA para gerar projetos completos em minutos</p>
+                </div>
+            </a>
+
+            <!-- Card 2: Biblioteca -->
+            <a href="library.html"
+                class="group bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-lg border border-slate-200 hover:border-brand-300 hover:shadow-xl hover:scale-105 transition-all relative overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-brand-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                </div>
+                <div class="relative z-10">
+                    <div
+                        class="w-14 h-14 bg-brand-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-slate-900 mb-2">Biblioteca</h3>
+                    <p class="text-slate-600">Explore projetos prontos e inspiradores</p>
+                </div>
+            </a>
+
+            <!-- Card 3: Área do Aluno -->
+            <a href="student-area.html"
+                class="group bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-lg border border-slate-200 hover:border-purple-300 hover:shadow-xl hover:scale-105 transition-all relative overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                </div>
+                <div class="relative z-10">
+                    <div
+                        class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-slate-900 mb-2">Área do Aluno</h3>
+                    <p class="text-slate-600">Gamificação e acompanhamento de progresso</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Hub de Ferramentas -->
+        <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg border border-slate-200 mb-10">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="font-display text-2xl font-bold text-slate-900">Hub de Ferramentas</h2>
+                    <p class="text-slate-600">Plataformas open source para suas aulas</p>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <a href="https://scratch.mit.edu/" target="_blank" class="p-4 rounded-xl hover:bg-slate-50 border border-slate-200 transition-all group">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Scratch_Logo.svg/200px-Scratch_Logo.svg.png" class="h-8 mb-2">
-                    <h4 class="font-bold text-slate-800">Scratch</h4>
-                    <p class="text-xs text-slate-500">Programação em blocos para iniciantes.</p>
+                <a href="https://scratch.mit.edu/" target="_blank"
+                    class="group p-6 rounded-2xl hover:bg-slate-50 border border-slate-200 hover:border-brand-300 transition-all">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Scratch_Logo.svg/200px-Scratch_Logo.svg.png"
+                        class="h-10 mb-3 group-hover:scale-110 transition-transform">
+                    <h4 class="font-bold text-slate-900 mb-1">Scratch</h4>
+                    <p class="text-sm text-slate-600">Programação em blocos para iniciantes</p>
                 </a>
-                <a href="https://www.tinkercad.com/" target="_blank" class="p-4 rounded-xl hover:bg-slate-50 border border-slate-200 transition-all group">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Tinkercad_logo.png/200px-Tinkercad_logo.png" class="h-7 mb-2">
-                    <h4 class="font-bold text-slate-800">Tinkercad</h4>
-                    <p class="text-xs text-slate-500">Simulação 3D e de circuitos Arduino.</p>
+                <a href="https://www.tinkercad.com/" target="_blank"
+                    class="group p-6 rounded-2xl hover:bg-slate-50 border border-slate-200 hover:border-brand-300 transition-all">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Tinkercad_logo.png/200px-Tinkercad_logo.png"
+                        class="h-9 mb-3 group-hover:scale-110 transition-transform">
+                    <h4 class="font-bold text-slate-900 mb-1">Tinkercad</h4>
+                    <p class="text-sm text-slate-600">Simulação 3D e circuitos Arduino</p>
                 </a>
-                <a href="https://code.org/" target="_blank" class="p-4 rounded-xl hover:bg-slate-50 border border-slate-200 transition-all group">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Code.org_logo.svg/200px-Code.org_logo.svg.png" class="h-8 mb-2">
-                    <h4 class="font-bold text-slate-800">Code.org</h4>
-                    <p class="text-xs text-slate-500">Currículo completo de computação.</p>
+                <a href="https://code.org/" target="_blank"
+                    class="group p-6 rounded-2xl hover:bg-slate-50 border border-slate-200 hover:border-brand-300 transition-all">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Code.org_logo.svg/200px-Code.org_logo.svg.png"
+                        class="h-10 mb-3 group-hover:scale-110 transition-transform">
+                    <h4 class="font-bold text-slate-900 mb-1">Code.org</h4>
+                    <p class="text-sm text-slate-600">Currículo completo de computação</p>
                 </a>
             </div>
         </div>
 
-        <!-- AI Tools Section -->
-        <h2 class="font-display text-xl font-bold text-slate-900 mb-6">Ferramentas de Criação</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-            <a href="create-project.html" class="group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-brand-300 hover:shadow-lg transition-all">
-                <h3 class="font-bold text-slate-900">Gerador de Projetos IA</h3>
-                <p class="text-sm text-slate-500 mt-2">Crie roteiros completos com nossa IA treinada.</p>
-            </a>
-            <a href="library.html" class="group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-brand-300 hover:shadow-lg transition-all">
-                <h3 class="font-bold text-slate-900">Biblioteca de Projetos</h3>
-                <p class="text-sm text-slate-500 mt-2">Navegue por dezenas de projetos prontos para usar.</p>
-            </a>
-        </div>
-
-        <!-- Mentorship Program -->
-        <div class="bg-gradient-to-r from-brand-600 to-blue-700 text-white p-8 rounded-2xl shadow-xl shadow-brand-200">
-            <h2 class="font-display text-2xl font-bold">Nova Jornada do Professor Inovador</h2>
-            <p class="mt-2 mb-6 text-brand-200 max-w-xl">Participe de mentorias quinzenais ao vivo, tire dúvidas e conecte-se com outros educadores. Acelere seu desenvolvimento profissional.</p>
-            <a href="mentorship.html" class="bg-white text-brand-600 px-6 py-3 rounded-xl font-bold hover:bg-brand-50 transition-colors">Conhecer o Programa</a>
+        <!-- Mentorship Banner -->
+        <div
+            class="bg-gradient-to-r from-brand-600 via-blue-600 to-brand-700 text-white p-10 rounded-3xl shadow-2xl shadow-brand-200 relative overflow-hidden">
+            <div class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%)] bg-[length:250%_250%]"
+                style="animation: gradient 15s ease infinite;"></div>
+            <div class="relative z-10 max-w-3xl">
+                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur px-4 py-2 rounded-full mb-4">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <span class="text-sm font-semibold">Programa Ativo</span>
+                </div>
+                <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">Jornada do Professor Inovador</h2>
+                <p class="text-brand-100 text-lg mb-6 max-w-2xl">Participe de mentorias quinzenais ao vivo, tire dúvidas
+                    e conecte-se com outros educadores. Acelere seu desenvolvimento profissional.</p>
+                <a href="mentorship.html"
+                    class="inline-flex items-center gap-2 bg-white text-brand-600 px-8 py-4 rounded-xl font-bold hover:bg-brand-50 transition-all shadow-lg hover:shadow-xl hover:scale-105">
+                    <span>Conhecer o Programa</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                </a>
+            </div>
         </div>
     </main>
 
 </body>
+
 </html>
