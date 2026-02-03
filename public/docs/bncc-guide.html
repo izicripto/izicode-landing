@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BNCC e Tecnologia - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Space Grotesk', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-800 to-slate-900 text-white pt-24 pb-20 px-6 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="inline-block py-1 px-3 rounded-full bg-brand-500/20 text-brand-300 text-xs font-bold uppercase tracking-widest mb-6 border border-brand-500/30">Currículo Escolar</span>
+            <h1 class="font-display text-4xl md:text-6xl font-bold mb-6">Tecnologia na BNCC</h1>
+            <p class="text-xl text-slate-300 max-w-2xl mx-auto">Um guia prático para alinhar projetos de robótica e programação à Base Nacional Comum Curricular.</p>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <main class="max-w-6xl mx-auto px-6 -mt-12 pb-20">
+        
+        <!-- Competencia 5 -->
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-16 border border-slate-100">
+            <div class="bg-brand-600 p-8 md:p-10 text-white">
+                <div class="flex items-start gap-6">
+                    <div class="hidden md:flex w-20 h-20 bg-white/20 rounded-2xl items-center justify-center text-4xl font-bold">5</div>
+                    <div>
+                        <h2 class="font-display text-3xl font-bold mb-2">Competência Geral 5: Cultura Digital</h2>
+                        <p class="opacity-90 italic">"Compreender, utilizar e criar tecnologias digitais de informação e comunicação de forma crítica, significativa, reflexiva e ética..."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-8 md:p-12 grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="text-brand-500">01.</span> Compreender
+                    </h3>
+                    <p class="text-slate-600 text-sm">Entender como a tecnologia funciona, não apenas consumi-la.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="text-brand-500">02.</span> Criar
+                    </h3>
+                    <p class="text-slate-600 text-sm">Produzir soluções, apps e robôs para resolver problemas.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="text-brand-500">03.</span> Criticar
+                    </h3>
+                    <p class="text-slate-600 text-sm">Avaliar impactos éticos, sociais e ambientais da tecnologia.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Areas Grid -->
+        <h3 class="font-display text-2xl font-bold text-slate-900 mb-8 pl-4 border-l-4 border-brand-500">Aplicações por Área</h3>
+        <div class="grid md:grid-cols-2 gap-8 mb-16">
+            
+            <!-- Linguagens -->
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:border-purple-300 transition-colors">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 font-bold">L</div>
+                    <h4 class="font-bold text-xl text-slate-900">Linguagens</h4>
+                </div>
+                <ul class="space-y-3">
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <span class="text-purple-500 font-bold">→</span> Blog da Turma (WordPress)
+                    </li>
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <span class="text-purple-500 font-bold">→</span> Podcast Escolar (Audacity)
+                    </li>
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <span class="text-purple-500 font-bold">→</span> Narrativa Digital (Scratch)
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Matemática -->
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold">M</div>
+                    <h4 class="font-bold text-xl text-slate-900">Matemática</h4>
+                </div>
+                <ul class="space-y-3">
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <span class="text-blue-500 font-bold">→</span> Pensamento Computacional
+                    </li>
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <span class="text-blue-500 font-bold">→</span> Geometria com GeoGebra
+                    </li>
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <span class="text-blue-500 font-bold">→</span> Estatística com Planilhas
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Ciências -->
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:border-green-300 transition-colors">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 font-bold">CN</div>
+                    <h4 class="font-bold text-xl text-slate-900">Ciências da Natureza</h4>
+                </div>
+                <ul class="space-y-3">
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <span class="text-green-500 font-bold">→</span> Estação Meteorológica (Arduino)
+                    </li>
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <span class="text-green-500 font-bold">→</span> Simulador de Ecossistema
+                    </li>
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <span class="text-green-500 font-bold">→</span> Circuitos Elétricos
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Humanas -->
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:border-amber-300 transition-colors">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center text-amber-600 font-bold">CH</div>
+                    <h4 class="font-bold text-xl text-slate-900">Ciências Humanas</h4>
+                </div>
+                <ul class="space-y-3">
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <span class="text-amber-500 font-bold">→</span> Linha do Tempo Interativa
+                    </li>
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <span class="text-amber-500 font-bold">→</span> Mapas Colaborativos (GIS)
+                    </li>
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <span class="text-amber-500 font-bold">→</span> Museu Virtual
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Progression Table -->
+        <div class="bg-slate-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl">
+            <h3 class="font-display text-2xl font-bold mb-8 text-center">Progressão Curricular Sugerida</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-300">
+                    <thead class="border-b border-slate-700 text-brand-400 uppercase tracking-wider">
+                        <tr>
+                            <th class="py-4 px-2">Etapa</th>
+                            <th class="py-4 px-2">Foco</th>
+                            <th class="py-4 px-2">Ferramentas</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800">
+                        <tr>
+                            <td class="py-4 px-2 font-bold text-white">Anos Iniciais</td>
+                            <td class="py-4 px-2">Letramento Digital, Lógica</td>
+                            <td class="py-4 px-2">ScratchJr, Code.org</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-2 font-bold text-white">Anos Finais</td>
+                            <td class="py-4 px-2">Programação, Maker</td>
+                            <td class="py-4 px-2">Scratch, Arduino, App Inventor</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-2 font-bold text-white">Ensino Médio</td>
+                            <td class="py-4 px-2">Projetos Complexos, Profissão</td>
+                            <td class="py-4 px-2">Python, Web, Banco de Dados</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-500 py-12 text-center text-sm border-t border-slate-800">
+        <p>&copy; 2026 Izicode Edu. Em conformidade com a Base Nacional Comum Curricular.</p>
+    </footer>
+
+</body>
+</html>

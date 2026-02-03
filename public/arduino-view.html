@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Arduino - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- Syntax Highlighting for C++ (Arduino) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-arduino.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0fdfa', 100: '#ccfbf1', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e' } } // Teal theme for Arduino
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="library.html" class="flex items-center gap-2 text-slate-600 hover:text-brand-600 transition-colors group">
+                    <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span class="font-medium">Voltar para Biblioteca</span>
+                </a>
+                <div class="flex items-center gap-2">
+                    <span class="bg-brand-100 text-brand-700 text-xs font-bold px-3 py-1 rounded-full uppercase">Arduino Hub</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Header -->
+        <header class="mb-10">
+            <div class="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="px-2 py-1 bg-brand-100 text-brand-700 text-xs font-bold rounded uppercase">Hardware</span>
+                        <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded uppercase">Nível: Iniciante</span>
+                    </div>
+                    <h1 class="font-display text-3xl md:text-5xl font-bold text-slate-900 mb-4">Semáforo Inteligente</h1>
+                    <p class="text-xl text-slate-600 max-w-3xl">Aprenda a controlar LEDs e temporização simulando um sistema de trânsito real.</p>
+                </div>
+                
+                <div class="flex flex-col gap-3 min-w-[200px]">
+                     <a href="#" class="bg-brand-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-200 text-center flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Baixar Código (.ino)
+                    </a>
+                    <button class="bg-white border border-slate-300 text-slate-700 px-6 py-3 rounded-xl font-medium hover:bg-slate-50 transition-colors text-center">
+                        Ver Esquemático PDF
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left: Schematic & Components -->
+            <div class="space-y-8">
+                <!-- Schematic Viewer -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <div class="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-800">Esquemático</h3>
+                        <span class="text-xs text-slate-500">Clique para ampliar</span>
+                    </div>
+                    <div class="aspect-video bg-slate-100 relative group cursor-pointer flex items-center justify-center">
+                        <!-- Placeholder for schematic image -->
+                        <div class="text-slate-400 flex flex-col items-center">
+                            <svg class="w-16 h-16 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            <span class="text-sm font-medium">Imagem do Circuito</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Components List -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <h3 class="font-display font-bold text-lg text-slate-900 mb-4">Lista de Materiais</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center justify-between text-sm p-2 bg-slate-50 rounded-lg">
+                            <span class="font-medium text-slate-700">Arduino Uno R3</span>
+                            <span class="text-slate-500 bg-white px-2 py-1 rounded border border-slate-100">1x</span>
+                        </li>
+                        <li class="flex items-center justify-between text-sm p-2 bg-slate-50 rounded-lg">
+                            <span class="font-medium text-slate-700">LED Vermelho (5mm)</span>
+                            <span class="text-slate-500 bg-white px-2 py-1 rounded border border-slate-100">1x</span>
+                        </li>
+                        <li class="flex items-center justify-between text-sm p-2 bg-slate-50 rounded-lg">
+                            <span class="font-medium text-slate-700">LED Amarelo (5mm)</span>
+                            <span class="text-slate-500 bg-white px-2 py-1 rounded border border-slate-100">1x</span>
+                        </li>
+                        <li class="flex items-center justify-between text-sm p-2 bg-slate-50 rounded-lg">
+                            <span class="font-medium text-slate-700">LED Verde (5mm)</span>
+                            <span class="text-slate-500 bg-white px-2 py-1 rounded border border-slate-100">1x</span>
+                        </li>
+                        <li class="flex items-center justify-between text-sm p-2 bg-slate-50 rounded-lg">
+                            <span class="font-medium text-slate-700">Resistores 220Ω</span>
+                            <span class="text-slate-500 bg-white px-2 py-1 rounded border border-slate-100">3x</span>
+                        </li>
+                        <li class="flex items-center justify-between text-sm p-2 bg-slate-50 rounded-lg">
+                            <span class="font-medium text-slate-700">Protoboard + Jumpers</span>
+                            <span class="text-slate-500 bg-white px-2 py-1 rounded border border-slate-100">Kit</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right: Code & Instructions -->
+            <div class="lg:col-span-2 space-y-8">
+                
+                <!-- Code Block -->
+                <div class="bg-[#2d2d2d] rounded-2xl overflow-hidden shadow-xl border border-slate-700">
+                    <div class="flex items-center justify-between px-4 py-3 bg-[#1e1e1e] border-b border-slate-700">
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="text-xs font-mono text-slate-400">traffic_light.ino</span>
+                        <button class="text-xs text-brand-400 hover:text-brand-300 font-medium" onclick="copyCode()">Copiar</button>
+                    </div>
+                    <div class="relative group">
+                        <pre class="!m-0 !p-6 !bg-[#2d2d2d] text-sm overflow-x-auto h-[500px] custom-scrollbar"><code id="codeBlock" class="language-cpp">/*
+  Semáforo Inteligente
+  Acende LEDs em sequência para simular um semáforo.
+*/
+
+// Definição dos pinos
+const int PIN_VERMELHO = 13;
+const int PIN_AMARELO = 12;
+const int PIN_VERDE = 11;
+
+// Tempos em milissegundos
+const int TEMPO_VERDE = 5000;
+const int TEMPO_AMARELO = 2000;
+const int TEMPO_VERMELHO = 5000;
+
+void setup() {
+  // Configura os pinos como saída
+  pinMode(PIN_VERMELHO, OUTPUT);
+  pinMode(PIN_AMARELO, OUTPUT);
+  pinMode(PIN_VERDE, OUTPUT);
+}
+
+void loop() {
+  // 1. Sinal Verde
+  digitalWrite(PIN_VERDE, HIGH);
+  digitalWrite(PIN_AMARELO, LOW);
+  digitalWrite(PIN_VERMELHO, LOW);
+  delay(TEMPO_VERDE);
+
+  // 2. Sinal Amarelo
+  digitalWrite(PIN_VERDE, LOW);
+  digitalWrite(PIN_AMARELO, HIGH);
+  delay(TEMPO_AMARELO);
+
+  // 3. Sinal Vermelho
+  digitalWrite(PIN_AMARELO, LOW);
+  digitalWrite(PIN_VERMELHO, HIGH);
+  delay(TEMPO_VERMELHO);
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Explanation Steps -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+                    <h3 class="font-display font-bold text-2xl text-slate-900 mb-6">Como funciona?</h3>
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-bold">1</div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Configuração (Setup)</h4>
+                                <p class="text-slate-600 mt-1">No bloco <code>setup()</code>, definimos os pinos 11, 12 e 13 como SAÍDAS de energia, pois eles vão alimentar os LEDs.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-bold">2</div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">O Loop Infinito</h4>
+                                <p class="text-slate-600 mt-1">A função <code>loop()</code> roda para sempre. Ela liga um LED, espera um tempo com <code>delay()</code>, desliga e passa para o próximo.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-bold">3</div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">Desafio para o Aluno</h4>
+                                <p class="text-slate-600 mt-1">Tente adicionar um "botão de pedestre" que, quando pressionado, força o sinal a ficar vermelho para os carros.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function copyCode() {
+            const code = document.getElementById('codeBlock').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Código copiado para a área de transferência!');
+            });
+        }
+    </script>
+</body>
+</html>

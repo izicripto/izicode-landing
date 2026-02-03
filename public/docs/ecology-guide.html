@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tecnologia & Sustentabilidade - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Space Grotesk', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-emerald-700 to-green-800 text-white pt-24 pb-20 px-6 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/leaves.png')]"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="inline-block py-1 px-3 rounded-full bg-green-500/20 text-green-200 text-xs font-bold uppercase tracking-widest mb-6 border border-green-500/30">Educação Ambiental</span>
+            <h1 class="font-display text-4xl md:text-6xl font-bold mb-6">Tecnologia Verde</h1>
+            <p class="text-xl text-green-100 max-w-2xl mx-auto">Guia de projetos práticos que unem programação, IoT e maker para resolver problemas ambientais reais.</p>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <main class="max-w-6xl mx-auto px-6 -mt-12 pb-20">
+        
+        <!-- Principles -->
+        <div class="grid md:grid-cols-4 gap-6 mb-16">
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-emerald-500 text-center">
+                <div class="text-3xl mb-2">🎯</div>
+                <h3 class="font-bold text-slate-900">Propósito</h3>
+                <p class="text-sm text-slate-600">Impacto mensurável</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-emerald-500 text-center">
+                <div class="text-3xl mb-2">♻️</div>
+                <h3 class="font-bold text-slate-900">Baixo Impacto</h3>
+                <p class="text-sm text-slate-600">Reuso de materiais</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-emerald-500 text-center">
+                <div class="text-3xl mb-2">🤝</div>
+                <h3 class="font-bold text-slate-900">Open Source</h3>
+                <p class="text-sm text-slate-600">Conhecimento livre</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-emerald-500 text-center">
+                <div class="text-3xl mb-2">🌍</div>
+                <h3 class="font-bold text-slate-900">Local-Global</h3>
+                <p class="text-sm text-slate-600">Ação local, visão global</p>
+            </div>
+        </div>
+
+        <!-- Project Categories -->
+        <div class="grid lg:grid-cols-2 gap-8 mb-16">
+            
+            <!-- Water -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 hover:border-blue-300 transition-all shadow-sm group">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-2xl">💧</div>
+                    <div>
+                        <h3 class="font-display text-2xl font-bold text-slate-900">Água (ODS 6)</h3>
+                        <p class="text-sm text-slate-500">Monitoramento e economia</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <h4 class="font-bold text-blue-800">Monitor de Qualidade IoT</h4>
+                        <p class="text-sm text-slate-600 mb-2">Sensores de pH e turbidez conectados.</p>
+                        <span class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded font-bold">Intermediário</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <h4 class="font-bold text-blue-800">Cisterna Inteligente</h4>
+                        <p class="text-sm text-slate-600 mb-2">Automação para captação de chuva.</p>
+                        <span class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded font-bold">Avançado</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Energy -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 hover:border-yellow-300 transition-all shadow-sm group">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-2xl">⚡</div>
+                    <div>
+                        <h3 class="font-display text-2xl font-bold text-slate-900">Energia (ODS 7)</h3>
+                        <p class="text-sm text-slate-500">Eficiência e fontes renováveis</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <h4 class="font-bold text-yellow-800">Auditoria Energética</h4>
+                        <p class="text-sm text-slate-600 mb-2">Caça ao desperdício na escola.</p>
+                        <span class="text-xs bg-yellow-200 text-yellow-800 px-2 py-1 rounded font-bold">Básico</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <h4 class="font-bold text-yellow-800">Mini Usina Solar</h4>
+                        <p class="text-sm text-slate-600 mb-2">Carregador de celular fotovoltaico.</p>
+                        <span class="text-xs bg-yellow-200 text-yellow-800 px-2 py-1 rounded font-bold">Avançado</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Waste -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 hover:border-orange-300 transition-all shadow-sm group">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-2xl">♻️</div>
+                    <div>
+                        <h3 class="font-display text-2xl font-bold text-slate-900">Resíduos (ODS 12)</h3>
+                        <p class="text-sm text-slate-500">Reciclagem e redução</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <h4 class="font-bold text-orange-800">Lixeira Inteligente</h4>
+                        <p class="text-sm text-slate-600 mb-2">Sensor de nível e abertura automática.</p>
+                        <span class="text-xs bg-orange-200 text-orange-800 px-2 py-1 rounded font-bold">Intermediário</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <h4 class="font-bold text-orange-800">Composteira Tech</h4>
+                        <p class="text-sm text-slate-600 mb-2">Monitoramento de temperatura/umidade.</p>
+                        <span class="text-xs bg-orange-200 text-orange-800 px-2 py-1 rounded font-bold">Básico</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Biodiversity -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 hover:border-green-300 transition-all shadow-sm group">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-2xl">🌿</div>
+                    <div>
+                        <h3 class="font-display text-2xl font-bold text-slate-900">Biodiversidade (ODS 15)</h3>
+                        <p class="text-sm text-slate-500">Flora e fauna local</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <h4 class="font-bold text-green-800">Armadilha Fotográfica</h4>
+                        <p class="text-sm text-slate-600 mb-2">Câmera noturna para registrar animais.</p>
+                        <span class="text-xs bg-green-200 text-green-800 px-2 py-1 rounded font-bold">Intermediário</span>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <h4 class="font-bold text-green-800">Catálogo Digital</h4>
+                        <p class="text-sm text-slate-600 mb-2">Identificação de plantas com IA.</p>
+                        <span class="text-xs bg-green-200 text-green-800 px-2 py-1 rounded font-bold">Básico</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Materials Section -->
+        <div class="bg-slate-900 text-white rounded-3xl p-8 md:p-12 mb-16">
+            <h2 class="font-display text-3xl font-bold mb-8 text-center">Materiais Sustentáveis</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold text-emerald-400 mb-4">Substitua...</h3>
+                    <ul class="space-y-3 text-slate-300">
+                        <li class="flex items-center gap-2"><span class="text-red-400">❌</span> Plástico virgem</li>
+                        <li class="flex items-center gap-2"><span class="text-red-400">❌</span> Papelão comprado</li>
+                        <li class="flex items-center gap-2"><span class="text-red-400">❌</span> Madeira nova</li>
+                        <li class="flex items-center gap-2"><span class="text-red-400">❌</span> Cases impressos em 3D (sem necessidade)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-emerald-400 mb-4">Por...</h3>
+                    <ul class="space-y-3 text-slate-300">
+                        <li class="flex items-center gap-2"><span class="text-green-400">✅</span> Garrafas PET, Tampinhas</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">✅</span> Caixas de entrega reutilizadas</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">✅</span> Pallets, sobras de marcenaria</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">✅</span> Estruturas de papelão ou madeira</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar -->
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="font-display text-3xl font-bold text-slate-900 mb-8">Calendário Ecológico</h2>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="bg-white px-6 py-3 rounded-full border border-slate-200 shadow-sm text-sm">
+                    <span class="font-bold text-blue-600">22 Mar</span> Dia da Água
+                </div>
+                <div class="bg-white px-6 py-3 rounded-full border border-slate-200 shadow-sm text-sm">
+                    <span class="font-bold text-green-600">22 Abr</span> Dia da Terra
+                </div>
+                <div class="bg-white px-6 py-3 rounded-full border border-slate-200 shadow-sm text-sm">
+                    <span class="font-bold text-emerald-600">05 Jun</span> Meio Ambiente
+                </div>
+                <div class="bg-white px-6 py-3 rounded-full border border-slate-200 shadow-sm text-sm">
+                    <span class="font-bold text-amber-600">16 Out</span> Alimentação
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-emerald-900 text-emerald-200 py-12 text-center text-sm mt-20">
+        <p>&copy; 2026 Izicode Edu. Tecnologia para um planeta melhor.</p>
+    </footer>
+
+</body>
+</html>

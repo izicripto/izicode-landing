@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Olimpíadas e Competições - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Space Grotesk', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-slate-900 to-indigo-900 text-white pt-24 pb-20 px-6 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="inline-block py-1 px-3 rounded-full bg-yellow-500/20 text-yellow-300 text-xs font-bold uppercase tracking-widest mb-6 border border-yellow-500/30">Caminho do Campeão</span>
+            <h1 class="font-display text-4xl md:text-6xl font-bold mb-6">Olimpíadas de Tecnologia</h1>
+            <p class="text-xl text-slate-300 max-w-2xl mx-auto">Desenvolva talentos e coloque sua escola no mapa da inovação nacional.</p>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <main class="max-w-6xl mx-auto px-6 -mt-12 pb-20">
+        
+        <!-- Competitions Grid -->
+        <div class="grid lg:grid-cols-3 gap-8 mb-16">
+            
+            <!-- OBI -->
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow border border-slate-100 group">
+                <div class="h-2 bg-brand-500"></div>
+                <div class="p-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-display text-2xl font-bold text-slate-900">OBI</h3>
+                        <span class="bg-brand-50 text-brand-700 text-xs font-bold px-2 py-1 rounded">Informática</span>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-6">Olimpíada Brasileira de Informática. Foco em lógica e algoritmos.</p>
+                    
+                    <div class="space-y-3 mb-8">
+                        <div class="flex items-center gap-3 text-sm text-slate-500">
+                            <svg class="w-5 h-5 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span>Inscrições: Março</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-slate-500">
+                            <svg class="w-5 h-5 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                            <span>4º Ano ao Médio</span>
+                        </div>
+                    </div>
+                    
+                    <a href="https://olimpiada.ic.unicamp.br/" target="_blank" class="block text-center w-full py-3 border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-slate-50 transition-colors">Site Oficial</a>
+                </div>
+            </div>
+
+            <!-- OBR -->
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow border border-slate-100 group">
+                <div class="h-2 bg-yellow-500"></div>
+                <div class="p-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-display text-2xl font-bold text-slate-900">OBR</h3>
+                        <span class="bg-yellow-50 text-yellow-700 text-xs font-bold px-2 py-1 rounded">Robótica</span>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-6">Olimpíada Brasileira de Robótica. Provas teóricas e desafios práticos de arena.</p>
+                    
+                    <div class="space-y-3 mb-8">
+                        <div class="flex items-center gap-3 text-sm text-slate-500">
+                            <svg class="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span>Teórica: Junho / Prática: Set</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-slate-500">
+                            <svg class="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                            <span>Fundamental e Médio</span>
+                        </div>
+                    </div>
+                    
+                    <a href="http://www.obr.robocup.org.br/" target="_blank" class="block text-center w-full py-3 border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-slate-50 transition-colors">Site Oficial</a>
+                </div>
+            </div>
+
+            <!-- FLL -->
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow border border-slate-100 group">
+                <div class="h-2 bg-red-500"></div>
+                <div class="p-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-display text-2xl font-bold text-slate-900">FLL</h3>
+                        <span class="bg-red-50 text-red-700 text-xs font-bold px-2 py-1 rounded">LEGO</span>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-6">FIRST LEGO League. Torneio global com robôs LEGO e projetos de inovação.</p>
+                    
+                    <div class="space-y-3 mb-8">
+                        <div class="flex items-center gap-3 text-sm text-slate-500">
+                            <svg class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span>Temporada: Nov - Dez</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-slate-500">
+                            <svg class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                            <span>9 a 16 anos</span>
+                        </div>
+                    </div>
+                    
+                    <a href="https://www.portaldaindustria.com.br/sesi/canais/torneio-de-robotica/fll/" target="_blank" class="block text-center w-full py-3 border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-slate-50 transition-colors">Site Oficial</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Preparation Timeline -->
+        <div class="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-200">
+            <h2 class="font-display text-3xl font-bold text-slate-900 mb-8">Cronograma de Preparação (6 Meses)</h2>
+            
+            <div class="relative border-l-4 border-slate-100 pl-8 space-y-10">
+                <div class="relative">
+                    <div class="absolute -left-[42px] top-0 w-6 h-6 rounded-full bg-brand-500 border-4 border-white shadow"></div>
+                    <h4 class="font-bold text-lg text-slate-900">Mês 1-2: Fundamentos</h4>
+                    <p class="text-slate-600 mt-1">Montagem básica do robô, lógica de programação inicial e calibração de sensores.</p>
+                </div>
+                <div class="relative">
+                    <div class="absolute -left-[42px] top-0 w-6 h-6 rounded-full bg-brand-500 border-4 border-white shadow"></div>
+                    <h4 class="font-bold text-lg text-slate-900">Mês 3-4: Arena & Missões</h4>
+                    <p class="text-slate-600 mt-1">Treino específico: seguir linha, detectar obstáculos, subir rampas e identificar vítimas (OBR).</p>
+                </div>
+                <div class="relative">
+                    <div class="absolute -left-[42px] top-0 w-6 h-6 rounded-full bg-brand-500 border-4 border-white shadow"></div>
+                    <h4 class="font-bold text-lg text-slate-900">Mês 5: Estratégia</h4>
+                    <p class="text-slate-600 mt-1">Otimização de código, estratégias de pontuação e design thinking para o projeto de pesquisa (FLL).</p>
+                </div>
+                <div class="relative">
+                    <div class="absolute -left-[42px] top-0 w-6 h-6 rounded-full bg-green-500 border-4 border-white shadow"></div>
+                    <h4 class="font-bold text-lg text-slate-900">Mês 6: Simulados</h4>
+                    <p class="text-slate-600 mt-1">Simulações de campeonato com tempo cronometrado, torcida e pressão real.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="mt-16 text-center">
+            <h2 class="font-display text-3xl font-bold text-slate-900 mb-4">Quer preparar sua equipe campeã?</h2>
+            <p class="text-slate-600 mb-8 max-w-xl mx-auto">A Izicode oferece mentoria especializada para escolas que desejam competir em alto nível.</p>
+            <a href="https://tally.so/r/mYRNQB" target="_blank" class="inline-flex items-center gap-2 bg-brand-600 text-white px-8 py-4 rounded-full font-bold hover:bg-brand-700 transition-all shadow-lg hover:shadow-brand-500/25">
+                Falar com Treinador
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </a>
+        </div>
+
+    </main>
+
+</body>
+</html>

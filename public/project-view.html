@@ -203,53 +203,97 @@
 
     <script type="module">
         import { getProjectById } from './js/projects-data.js';
+        import { auth, db, onAuthStateChanged } from './js/firebase-config.js';
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Get ID from URL
-        const params = new URLSearchParams(window.location.search);
-        const projectId = params.get('id');
+        // Global variable to store current project for PDF export
+        let currentProject = null;
 
-        const project = getProjectById(projectId);
+        async function init() {
+            const params = new URLSearchParams(window.location.search);
+            const staticId = params.get('id');
+            const userProjectId = params.get('userProject');
 
-        if (!project) {
-            document.querySelector('main').innerHTML = `
-                <div class="text-center py-20">
-                    <h2 class="text-2xl font-bold text-slate-800">Projeto não encontrado 😢</h2>
-                    <a href="library.html" class="text-brand-600 hover:underline mt-4 block">Voltar para Biblioteca</a>
-                </div>
-            `;
-        } else {
+            if (userProjectId) {
+                // Load from Firestore
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        try {
+                            const docRef = doc(db, `users/${user.uid}/projects`, userProjectId);
+                            const docSnap = await getDoc(docRef);
+                            
+                            if (docSnap.exists()) {
+                                const data = docSnap.data();
+                                // Map Firestore data to view format
+                                currentProject = {
+                                    id: docSnap.id,
+                                    title: data.title,
+                                    description: data.description || "Sem descrição",
+                                    tools: data.tools || ["IA"],
+                                    difficulty: data.difficulty || "Adapte",
+                                    duration: data.duration || "N/A",
+                                    bncc: data.bncc || [],
+                                    ods: data.ods || "Geral",
+                                    content: data.content || "Conteúdo não disponível."
+                                };
+                                renderProject(currentProject);
+                            } else {
+                                showError();
+                            }
+                        } catch (e) {
+                            console.error(e);
+                            showError("Erro ao carregar projeto do usuário.");
+                        }
+                    } else {
+                        // Redirect if not logged in
+                        window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
+                    }
+                });
+            } else if (staticId) {
+                // Load from Static JS
+                currentProject = getProjectById(staticId);
+                if (currentProject) {
+                    renderProject(currentProject);
+                } else {
+                    showError();
+                }
+            } else {
+                showError();
+            }
+        }
+
+        function renderProject(project) {
             // Populate Header
             document.getElementById('projectTitle').textContent = project.title;
             document.title = `${project.title} - Izicode Edu`;
             document.getElementById('projectDesc').textContent = project.description;
-            document.getElementById('projectTool').textContent = project.tools[0];
+            
+            // Handle array or string for tools
+            const tool = Array.isArray(project.tools) ? project.tools[0] : project.tools;
+            document.getElementById('projectTool').textContent = tool || "Geral";
+            
             document.getElementById('projectDiff').textContent = project.difficulty;
             document.getElementById('projectTime').innerHTML = `⏱️ ${project.duration}`;
 
-            document.getElementById('projectBNCC').textContent = project.bncc ? project.bncc.join(', ') : 'Não especificado';
+            document.getElementById('projectBNCC').textContent = project.bncc && project.bncc.length ? (Array.isArray(project.bncc) ? project.bncc.join(', ') : project.bncc) : 'Não especificado';
             document.getElementById('projectODS').textContent = project.ods || 'Geral';
 
             // Render Markdown Content
             document.getElementById('projectContent').innerHTML = marked.parse(project.content);
         }
 
+        function showError(msg) {
+            document.querySelector('main').innerHTML = `
+                <div class="text-center py-20">
+                    <h2 class="text-2xl font-bold text-slate-800">${msg || 'Projeto não encontrado 😢'}</h2>
+                    <a href="library.html" class="text-brand-600 hover:underline mt-4 block">Voltar para Biblioteca</a>
+                </div>
+            `;
+        }
+
         // Export PDF Function
         window.exportToPDF = function () {
-            if (!project) return;
-
-            // Usar o gerador de PDF
-            // Opção 1: Gerar baseado nos dados estruturados (Melhor qualidade)
-            /*
-            pdfGenerator.generateProjectPDF({
-                title: project.title,
-                grade: project.grade,
-                duration: project.duration,
-                difficulty: project.difficulty,
-                description: project.description,
-                // Seria necessário parsear o markdown para steps, materials, etc
-                // Como o conteúdo é MD puro, melhor imprimir a view HTML
-            });
-            */
+            if (!currentProject) return;
 
             // Opção 2: Imprimir a view HTML atual (Mais fiel ao que se vê)
             // Vamos clonar o article, adicionar um header bonito e imprimir
@@ -263,16 +307,19 @@
             tempContainer.style.padding = '40px';
             tempContainer.style.width = '800px'; // Largura A4 aprox em pixels para html2canvas
 
+            // Handle tools safely
+            const tool = Array.isArray(currentProject.tools) ? currentProject.tools[0] : currentProject.tools;
+
             // Header do PDF
             tempContainer.innerHTML = `
                 <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0284c7; padding-bottom: 20px;">
-                    <h1 style="color: #0284c7; font-size: 28px; font-weight: bold; margin: 0;">${project.title}</h1>
+                    <h1 style="color: #0284c7; font-size: 28px; font-weight: bold; margin: 0;">${currentProject.title}</h1>
                     <div style="color: #64748b; font-size: 14px; margin-top: 10px;">
-                        <span>${project.tools[0]}</span> • <span>${project.grade}</span> • <span>${project.duration}</span>
+                        <span>${tool || 'Projeto'}</span> • <span>${currentProject.grade || 'Geral'}</span> • <span>${currentProject.duration}</span>
                     </div>
                 </div>
                 <div class="prose" style="font-family: sans-serif; color: #334155;">
-                    ${marked.parse(project.content)}
+                    ${marked.parse(currentProject.content)}
                 </div>
                 <div style="margin-top: 40px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px;">
                     Gerado por Izicode Edu Library • www.izicode.com.br
@@ -285,11 +332,14 @@
             document.body.appendChild(tempContainer);
 
             // Gerar
-            pdfGenerator.htmlToPDF('print-temp', `projeto-${project.id}.pdf`)
+            pdfGenerator.htmlToPDF('print-temp', `projeto-${currentProject.id || 'export'}.pdf`)
                 .finally(() => {
                     document.body.removeChild(tempContainer);
                 });
         };
+
+        // Initialize
+        init();
     </script>
 </body>
 

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Tinkercad - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' } } // Blue theme for Tinkercad
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="library.html" class="flex items-center gap-2 text-slate-600 hover:text-brand-600 transition-colors group">
+                    <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span class="font-medium">Voltar para Biblioteca</span>
+                </a>
+                <div class="flex items-center gap-2">
+                    <span class="bg-brand-100 text-brand-700 text-xs font-bold px-3 py-1 rounded-full uppercase">Tinkercad Circuits</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Header -->
+        <header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+                <h1 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+                    Simulador de Circuitos 3D
+                </h1>
+                <p class="text-slate-500">Projete, programe e simule eletrônica diretamente no navegador.</p>
+            </div>
+            
+             <!-- Project Loader -->
+             <div class="flex gap-2 w-full md:w-auto">
+                <input type="text" id="tinkerIdInput" placeholder="ID do Embed (ex: 8JkL9mN2pQr)" 
+                    class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-sm min-w-[250px]">
+                <button onclick="loadProjectFromInput()" 
+                    class="bg-brand-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-brand-700 transition-colors shadow-sm">
+                    Carregar
+                </button>
+            </div>
+        </header>
+
+        <!-- Viewer Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left Column: Simulator Iframe -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Iframe Container -->
+                <div class="bg-slate-900 rounded-2xl overflow-hidden shadow-2xl aspect-video relative group border border-slate-800">
+                    <!-- Note: Tinkercad embed URL format is usually https://www.tinkercad.com/embed/ID -->
+                    <iframe id="tinkerFrame" src="" width="100%" height="100%" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+                    
+                    <!-- Overlay Message when empty -->
+                    <div id="emptyState" class="absolute inset-0 flex items-center justify-center text-white bg-slate-800 z-10">
+                        <div class="text-center p-6">
+                            <span class="text-4xl mb-4 block">🧊</span>
+                            <p class="font-medium">Insira o ID do Embed Tinkercad</p>
+                            <p class="text-sm text-slate-400 mt-2">Exemplo Demo: Clicar em Carregar</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-bold text-slate-700">Status:</span>
+                        <span class="flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                            Online
+                        </span>
+                    </div>
+                    <a id="externalLink" href="#" target="_blank" class="flex items-center gap-2 text-sm font-medium text-brand-600 hover:text-brand-800 hover:underline">
+                        Abrir no Tinkercad.com
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Column: Info & Teacher Notes -->
+            <div class="space-y-6">
+                
+                <!-- Quick Instructions -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="font-display font-bold text-lg text-slate-900 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        Simulação em Aula
+                    </h3>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex gap-3">
+                            <span class="bg-brand-100 text-brand-700 font-bold rounded-full w-6 h-6 flex items-center justify-center shrink-0 text-xs">1</span>
+                            <span>Clique em <strong>"Iniciar Simulação"</strong> dentro do quadro para ligar o circuito.</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="bg-brand-100 text-brand-700 font-bold rounded-full w-6 h-6 flex items-center justify-center shrink-0 text-xs">2</span>
+                            <span>Componentes como botões e sensores são interativos. Clique neles!</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="bg-brand-100 text-brand-700 font-bold rounded-full w-6 h-6 flex items-center justify-center shrink-0 text-xs">3</span>
+                            <span>Use o botão <strong>"Código"</strong> na barra superior do simulador para ver a programação (Blocos ou C++).</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Info Card -->
+                <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                    <h4 class="font-bold text-blue-900 mb-2">Vantagens do Tinkercad</h4>
+                    <p class="text-sm text-blue-700 mb-4">
+                        Permite testar código Arduino e montagens complexas sem risco de queimar componentes reais. Ideal para pré-aula.
+                    </p>
+                    <div class="flex items-center gap-2 text-xs text-blue-600 font-medium">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        Ambiente Seguro
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Example ID for testing: "Inglês Piscando" or similar public circuit
+        // Embed format: https://www.tinkercad.com/embed/j4w56...
+        
+        function loadProject(id) {
+            if (!id) return;
+            
+            const frame = document.getElementById('tinkerFrame');
+            const emptyState = document.getElementById('emptyState');
+            const externalLink = document.getElementById('externalLink');
+            
+            // Tinkercad Embed URL
+            frame.src = `https://www.tinkercad.com/embed/${id}?editBtn=false`;
+            
+            // Update UI
+            emptyState.style.display = 'none';
+            externalLink.href = `https://www.tinkercad.com/things/${id}`;
+            
+            // Update Input
+            document.getElementById('tinkerIdInput').value = id;
+
+            // Update URL
+            const newUrl = new URL(window.location);
+            newUrl.searchParams.set('id', id);
+            window.history.pushState({}, '', newUrl);
+        }
+
+        function loadProjectFromInput() {
+            const id = document.getElementById('tinkerIdInput').value;
+            loadProject(id);
+        }
+
+        // Init
+        const params = new URLSearchParams(window.location.search);
+        const initialId = params.get('id');
+        
+        if (initialId) {
+            loadProject(initialId);
+        } else {
+            // Load a default demo circuit if none provided
+            // This is a generic "Blink" example ID (placeholder)
+            // Ideally, replace with a real known public ID like "im2X3s7K..."
+            loadProject('6y89kL45'); 
+        }
+    </script>
+</body>
+</html>

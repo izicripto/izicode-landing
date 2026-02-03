@@ -33,15 +33,30 @@ Plataforma B2B para escolas e consultoria educacional focada em Robótica e Cult
 ## 🚀 3. PRÓXIMAS ETAPAS (PÓS-LANÇAMENTO)
 
 ### 1. Integração de Ecossistema Open Source
-- [ ] Criar hub na `library.html` para projetos externos.
-- [ ] Desenvolver template para exibir projetos do Scratch.
-- [ ] Desenvolver template para exibir projetos do Arduino.cc.
-- [ ] Pesquisar APIs ou métodos de integração para Tinkercad e Open Roberta.
+- [x] Criar hub na `library.html` para projetos externos.
+- [x] Desenvolver template para exibir projetos do Scratch.
+- [x] Desenvolver template para exibir projetos do Arduino.cc.
+- [x] Pesquisar APIs ou métodos de integração para Tinkercad e Open Roberta.
+- [x] Desenvolver template para exibir projetos do Tinkercad (Embed).
+- [x] Desenvolver estratégia de link externo para Open Roberta.
 
 ### 2. Automação de Marketing
-- [ ] Configurar alertas do Tally para Telegram.
-- [ ] Iniciar sequência de posts no LinkedIn via API.
+- [x] Configurar alertas do Tally para Telegram (Código Webhook Pronto).
+- [x] Iniciar sequência de posts no LinkedIn via API (Cloud Function Agendada).
 
 ### 3. App Experience
-- [ ] Transformar site em PWA (App instalável).
-- [ ] Criar relatórios PDF para os professores.
+- [x] Transformar site em PWA (App instalável).
+- [x] Criar relatórios PDF para os professores.
+
+---
+
+## 🏁 4. LANÇAMENTO V3.1 (FINALIZAÇÃO)
+
+### 1. Infraestrutura & Deploy
+- [ ] Resolver bloqueio de autenticação Git/SSH (Crítico).
+- [ ] Realizar deploy de produção (Firebase Hosting + Functions).
+- [x] Verificar integridade do PWA em dispositivos móveis.
+
+### 2. Monitoramento
+- [ ] Validar recebimento de webhooks do Telegram em produção.
+- [ ] Acompanhar logs da função do LinkedIn.

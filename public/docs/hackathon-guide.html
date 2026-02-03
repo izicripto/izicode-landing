@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Hackathon Escolar - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Space Grotesk', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-slate-900 to-slate-800 text-white pt-24 pb-20 px-6 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/circuit-board.png')]"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="inline-block py-1 px-3 rounded-full bg-brand-500/20 text-brand-300 text-xs font-bold uppercase tracking-widest mb-6 border border-brand-500/30">Recurso Pedagógico</span>
+            <h1 class="font-display text-4xl md:text-6xl font-bold mb-6">Como Organizar um Hackathon Escolar</h1>
+            <p class="text-xl text-slate-300 max-w-2xl mx-auto">Um guia completo para transformar sua escola em um laboratório de inovação em 48 horas.</p>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <main class="max-w-5xl mx-auto px-6 -mt-12 pb-20">
+        
+        <!-- Intro Card -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-12 border border-slate-100">
+            <h2 class="font-display text-3xl font-bold text-slate-900 mb-6">O que é um Hackathon?</h2>
+            <p class="text-lg text-slate-600 leading-relaxed mb-8">
+                É uma maratona de criação onde equipes de alunos desenvolvem soluções inovadoras para desafios reais em tempo limitado. Mais do que competição, é uma experiência imersiva de colaboração, criatividade e resolução de problemas.
+            </p>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-brand-50 p-6 rounded-2xl border border-brand-100">
+                    <div class="font-bold text-brand-700 text-lg mb-2">Inovação</div>
+                    <p class="text-sm text-brand-600">Pensamento fora da caixa para problemas antigos.</p>
+                </div>
+                <div class="bg-purple-50 p-6 rounded-2xl border border-purple-100">
+                    <div class="font-bold text-purple-700 text-lg mb-2">Colaboração</div>
+                    <p class="text-sm text-purple-600">Trabalho em equipe interdisciplinar.</p>
+                </div>
+                <div class="bg-amber-50 p-6 rounded-2xl border border-amber-100">
+                    <div class="font-bold text-amber-700 text-lg mb-2">Mão na Massa</div>
+                    <p class="text-sm text-amber-600">Prototipagem rápida e validação.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Types Grid -->
+        <h3 class="font-display text-2xl font-bold text-slate-900 mb-8 pl-4 border-l-4 border-brand-500">Tipos de Hackathon</h3>
+        <div class="grid md:grid-cols-2 gap-6 mb-16">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:border-brand-300 transition-colors">
+                <h4 class="font-bold text-xl text-slate-900 mb-2">🌿 Hackathon ODS</h4>
+                <p class="text-slate-600 text-sm mb-4">Focado nos Objetivos de Desenvolvimento Sustentável da ONU.</p>
+                <ul class="text-sm text-slate-500 space-y-2">
+                    <li>• App contra desperdício de alimentos</li>
+                    <li>• Monitoramento de energia escolar</li>
+                </ul>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:border-purple-300 transition-colors">
+                <h4 class="font-bold text-xl text-slate-900 mb-2">🎮 Game Jam</h4>
+                <p class="text-slate-600 text-sm mb-4">Maratona de criação de jogos educativos em 48h.</p>
+                <ul class="text-sm text-slate-500 space-y-2">
+                    <li>• Jogos sobre ciclo da água</li>
+                    <li>• Quiz histórico interativo</li>
+                </ul>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:border-green-300 transition-colors">
+                <h4 class="font-bold text-xl text-slate-900 mb-2">🤖 IoT & Ecológico</h4>
+                <p class="text-slate-600 text-sm mb-4">Uso de sensores e automação para o meio ambiente.</p>
+                <ul class="text-sm text-slate-500 space-y-2">
+                    <li>• Estação meteorológica</li>
+                    <li>• Irrigação inteligente</li>
+                </ul>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:border-amber-300 transition-colors">
+                <h4 class="font-bold text-xl text-slate-900 mb-2">🏙️ Hackathon Social</h4>
+                <p class="text-slate-600 text-sm mb-4">Soluções para problemas da comunidade local.</p>
+                <ul class="text-sm text-slate-500 space-y-2">
+                    <li>• Carona solidária</li>
+                    <li>• Achados e perdidos digital</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Schedule -->
+        <h3 class="font-display text-2xl font-bold text-slate-900 mb-8 pl-4 border-l-4 border-brand-500">Cronograma Sugerido (2 Dias)</h3>
+        <div class="bg-slate-900 text-white rounded-3xl overflow-hidden shadow-xl mb-16">
+            <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-700">
+                <div class="p-8">
+                    <h4 class="font-bold text-brand-400 text-xl mb-6 uppercase tracking-wider">Dia 1: Ideação</h4>
+                    <ul class="space-y-4 text-slate-300">
+                        <li class="flex gap-4"><span class="font-mono text-slate-500">08:00</span> <span>Abertura e Desafio</span></li>
+                        <li class="flex gap-4"><span class="font-mono text-slate-500">09:00</span> <span>Formação de Equipes</span></li>
+                        <li class="flex gap-4"><span class="font-mono text-slate-500">10:00</span> <span>Mão na Massa (Dev)</span></li>
+                        <li class="flex gap-4"><span class="font-mono text-slate-500">13:00</span> <span>Mentorias Técnicas</span></li>
+                        <li class="flex gap-4"><span class="font-mono text-slate-500">18:00</span> <span>Encerramento Dia 1</span></li>
+                    </ul>
+                </div>
+                <div class="p-8">
+                    <h4 class="font-bold text-brand-400 text-xl mb-6 uppercase tracking-wider">Dia 2: Prototipagem</h4>
+                    <ul class="space-y-4 text-slate-300">
+                        <li class="flex gap-4"><span class="font-mono text-slate-500">08:00</span> <span>Retomada</span></li>
+                        <li class="flex gap-4"><span class="font-mono text-slate-500">10:00</span> <span>Checkpoint: Protótipo</span></li>
+                        <li class="flex gap-4"><span class="font-mono text-slate-500">13:00</span> <span>Preparação do Pitch</span></li>
+                        <li class="flex gap-4"><span class="font-mono text-slate-500">15:00</span> <span>Apresentações Finais</span></li>
+                        <li class="flex gap-4"><span class="font-mono text-slate-500">17:30</span> <span>Premiação 🏆</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="bg-brand-50 rounded-3xl p-8 border border-brand-100">
+            <h3 class="font-display text-2xl font-bold text-slate-900 mb-6">Checklist do Organizador</h3>
+            <div class="grid md:grid-cols-2 gap-x-12 gap-y-4">
+                <label class="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm cursor-pointer hover:bg-brand-50 transition-colors">
+                    <input type="checkbox" class="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-gray-300">
+                    <span class="text-slate-700 font-medium">Definir tema e desafio</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm cursor-pointer hover:bg-brand-50 transition-colors">
+                    <input type="checkbox" class="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-gray-300">
+                    <span class="text-slate-700 font-medium">Reservar espaço com Wi-Fi</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm cursor-pointer hover:bg-brand-50 transition-colors">
+                    <input type="checkbox" class="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-gray-300">
+                    <span class="text-slate-700 font-medium">Convidar mentores e júri</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm cursor-pointer hover:bg-brand-50 transition-colors">
+                    <input type="checkbox" class="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-gray-300">
+                    <span class="text-slate-700 font-medium">Preparar kits de material</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm cursor-pointer hover:bg-brand-50 transition-colors">
+                    <input type="checkbox" class="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-gray-300">
+                    <span class="text-slate-700 font-medium">Planejar alimentação</span>
+                </label>
+                <label class="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm cursor-pointer hover:bg-brand-50 transition-colors">
+                    <input type="checkbox" class="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-gray-300">
+                    <span class="text-slate-700 font-medium">Divulgar inscrições</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Footer Call -->
+        <div class="mt-16 text-center border-t border-slate-200 pt-12">
+            <p class="text-slate-500 mb-6">Precisa de ajuda para organizar seu primeiro Hackathon?</p>
+            <a href="https://tally.so/r/mYRNQB" target="_blank" class="inline-flex items-center gap-2 bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition-all hover:scale-105">
+                Falar com Consultor Izicode
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+        </div>
+
+    </main>
+
+</body>
+</html>

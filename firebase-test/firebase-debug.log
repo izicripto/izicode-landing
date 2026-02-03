@@ -1,0 +1,48 @@
+[debug] [2026-02-01T02:56:54.585Z] ----------------------------------------------------------------------
+[debug] [2026-02-01T02:56:54.588Z] Command:       /usr/bin/node /home/izicripto/.npm-global/bin/firebase deploy --token 1//0hvS3A... --non-interactive
+[debug] [2026-02-01T02:56:54.588Z] CLI Version:   15.5.1
+[debug] [2026-02-01T02:56:54.589Z] Platform:      linux
+[debug] [2026-02-01T02:56:54.589Z] Node Version:  v22.22.0
+[debug] [2026-02-01T02:56:54.589Z] Time:          Sun Feb 01 2026 02:56:54 GMT+0000 (Coordinated Universal Time)
+[debug] [2026-02-01T02:56:54.589Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-02-01T02:56:56.175Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-02-01T02:56:56.176Z] > authorizing via --token option
+[warn] ⚠  Authenticating with `--token` is deprecated and will be removed in a future major version of `firebase-tools`. Instead, use a service account key with `GOOGLE_APPLICATION_CREDENTIALS`: https://cloud.google.com/docs/authentication/getting-started 
+[debug] [2026-02-01T02:56:56.178Z] [iam] checking project izicodeedu-532ac for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-02-01T02:56:56.180Z] No OAuth tokens found
+[debug] [2026-02-01T02:56:56.180Z] No OAuth tokens found
+[debug] [2026-02-01T02:56:56.180Z] > refreshing access token with scopes: []
+[debug] [2026-02-01T02:56:56.183Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-02-01T02:56:56.183Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-02-01T02:56:56.250Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2026-02-01T02:56:56.250Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-02-01T02:56:56.251Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/izicodeedu-532ac:testIamPermissions [none]
+[debug] [2026-02-01T02:56:56.251Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/izicodeedu-532ac:testIamPermissions  x-goog-user-project=izicodeedu-532ac
+[debug] [2026-02-01T02:56:56.251Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/izicodeedu-532ac:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-02-01T02:56:56.278Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/izicodeedu-532ac:testIamPermissions 401
+[debug] [2026-02-01T02:56:56.278Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/izicodeedu-532ac:testIamPermissions {"error":{"code":401,"message":"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","status":"UNAUTHENTICATED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"ACCESS_TOKEN_TYPE_UNSUPPORTED","metadata":{"service":"cloudresourcemanager.googleapis.com","method":"google.cloudresourcemanager.v1.Projects.TestIamPermissions"}}]}}
+[debug] [2026-02-01T02:56:56.278Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2026-02-01T02:56:56.279Z] No OAuth tokens found
+[debug] [2026-02-01T02:56:56.279Z] No OAuth tokens found
+[debug] [2026-02-01T02:56:56.279Z] > refreshing access token with scopes: []
+[debug] [2026-02-01T02:56:56.280Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-02-01T02:56:56.280Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-02-01T02:56:56.297Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2026-02-01T02:56:56.298Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-02-01T02:56:56.299Z] [iam] error while checking permissions, command may fail: Request to https://cloudresourcemanager.googleapis.com/v1/projects/izicodeedu-532ac:testIamPermissions had HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[debug] [2026-02-01T02:56:56.300Z] No OAuth tokens found
+[debug] [2026-02-01T02:56:56.300Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/izicodeedu-532ac [none]
+[debug] [2026-02-01T02:56:56.344Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/izicodeedu-532ac 401
+[debug] [2026-02-01T02:56:56.344Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/izicodeedu-532ac {"error":{"code":401,"message":"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","status":"UNAUTHENTICATED"}}
+[debug] [2026-02-01T02:56:56.344Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2026-02-01T02:56:56.345Z] No OAuth tokens found
+[debug] [2026-02-01T02:56:56.345Z] No OAuth tokens found
+[debug] [2026-02-01T02:56:56.345Z] > refreshing access token with scopes: []
+[debug] [2026-02-01T02:56:56.345Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-02-01T02:56:56.346Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-02-01T02:56:56.367Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2026-02-01T02:56:56.368Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-02-01T02:56:56.368Z] Request to https://firebase.googleapis.com/v1beta1/projects/izicodeedu-532ac had HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[error] 
+[error] Error: Assertion failed: resolving hosting target of a site with no site name or target name. This should have caused an error earlier

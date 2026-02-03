@@ -1,124 +1,67 @@
-// Service Worker para Izicode Edu PWA
-// Versão 1.0.0
-
-const CACHE_NAME = 'izicode-edu-v1';
-const OFFLINE_URL = '/offline.html';
-
-// Recursos para cache inicial
-const STATIC_ASSETS = [
+const CACHE_NAME = 'izicode-v1';
+const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
-  '/dashboard.html',
-  '/login.html',
-  '/student-area.html',
-  '/create-project.html',
-  '/library.html',
   '/manifest.json',
-  '/logo.svg',
   '/images/logo.png',
-  '/js/firebase-config.js',
-  '/js/auth.js',
-  OFFLINE_URL
+  '/images/01.jpg',
+  '/images/children-making-robot-2.jpg',
+  '/images/close-up-making-robots.jpg',
+  '/images/arduino.png',
+  '/images/scratch.png',
+  '/images/tinkercad.jpg',
+  'https://cdn.tailwindcss.com',
+  'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap'
 ];
 
-// Instalação do Service Worker
+// Install Event: Cache core assets
 self.addEventListener('install', (event) => {
-  console.log('[Service Worker] Instalando...');
-  
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('[Service Worker] Cache aberto');
-        return cache.addAll(STATIC_ASSETS);
-      })
-      .then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('Opened cache');
+      return cache.addAll(ASSETS_TO_CACHE);
+    })
   );
 });
 
-// Ativação do Service Worker
+// Activate Event: Cleanup old caches
 self.addEventListener('activate', (event) => {
-  console.log('[Service Worker] Ativando...');
-  
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('[Service Worker] Removendo cache antigo:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
-    }).then(() => self.clients.claim())
+    })
   );
 });
 
-// Estratégia de cache: Network First com fallback para Cache
+// Fetch Event: Network First strategy for HTML, Cache First for assets
 self.addEventListener('fetch', (event) => {
-  // Ignorar requisições que não são GET
-  if (event.request.method !== 'GET') return;
-  
-  // Ignorar requisições para APIs externas (Firebase, etc)
-  if (event.request.url.includes('firebaseio.com') ||
-      event.request.url.includes('googleapis.com') ||
-      event.request.url.includes('gstatic.com')) {
+  const url = new URL(event.request.url);
+
+  // Strategy for HTML/Navigation: Network First (Fresh content > Cache)
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .catch(() => {
+          return caches.match(event.request);
+        })
+    );
     return;
   }
 
+  // Strategy for Static Assets: Cache First (Speed > Freshness)
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // Se a resposta for válida, clone e armazene no cache
-        if (response && response.status === 200) {
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseClone);
-          });
-        }
+    caches.match(event.request).then((response) => {
+      // Cache hit - return response
+      if (response) {
         return response;
-      })
-      .catch(() => {
-        // Se falhar, tente buscar do cache
-        return caches.match(event.request)
-          .then((cachedResponse) => {
-            if (cachedResponse) {
-              return cachedResponse;
-            }
-            
-            // Se for uma navegação e não houver cache, mostre página offline
-            if (event.request.mode === 'navigate') {
-              return caches.match(OFFLINE_URL);
-            }
-          });
-      })
-  );
-});
-
-// Sincronização em background (para futuras features)
-self.addEventListener('sync', (event) => {
-  console.log('[Service Worker] Sincronização em background:', event.tag);
-  
-  if (event.tag === 'sync-projects') {
-    event.waitUntil(syncProjects());
-  }
-});
-
-// Função auxiliar para sincronizar projetos
-async function syncProjects() {
-  // TODO: Implementar sincronização de projetos offline
-  console.log('[Service Worker] Sincronizando projetos...');
-}
-
-// Notificações Push (para futuras features)
-self.addEventListener('push', (event) => {
-  const options = {
-    body: event.data ? event.data.text() : 'Nova notificação da Izicode Edu',
-    icon: '/images/logo.png',
-    badge: '/images/logo.png',
-    vibrate: [200, 100, 200]
-  };
-
-  event.waitUntil(
-    self.registration.showNotification('Izicode Edu', options)
+      }
+      return fetch(event.request);
+    })
   );
 });
