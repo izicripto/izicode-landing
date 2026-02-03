@@ -76,7 +76,7 @@
         .prose code {
             background-color: #f1f5f9;
             padding: 0.2rem 0.4rem;
-            rounded: 0.25rem;
+            border-radius: 0.25rem;
             font-family: monospace;
             font-size: 0.9em;
             color: #0f172a;
@@ -85,7 +85,7 @@
         .prose pre {
             background-color: #1e293b;
             padding: 1rem;
-            rounded-lg;
+            border-radius: 0.5rem;
             overflow-x: auto;
             margin-bottom: 1.5rem;
         }
@@ -154,7 +154,11 @@
                 <span id="projectDiff"
                     class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-full uppercase tracking-wide">Dificuldade</span>
                 <span id="projectTime"
-                    class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-full uppercase tracking-wide flex items-center gap-1">⏱️
+                    class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-full uppercase tracking-wide flex items-center gap-1">
+                    <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                     Duração</span>
             </div>
 
@@ -214,7 +218,12 @@
         if (!project) {
             document.querySelector('main').innerHTML = `
                 <div class="text-center py-20">
-                    <h2 class="text-2xl font-bold text-slate-800">Projeto não encontrado 😢</h2>
+                    <div class="mb-4 flex justify-center text-slate-300">
+                        <svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Projeto não encontrado</h2>
                     <a href="library.html" class="text-brand-600 hover:underline mt-4 block">Voltar para Biblioteca</a>
                 </div>
             `;
@@ -225,7 +234,12 @@
             document.getElementById('projectDesc').textContent = project.description;
             document.getElementById('projectTool').textContent = project.tools[0];
             document.getElementById('projectDiff').textContent = project.difficulty;
-            document.getElementById('projectTime').innerHTML = `⏱️ ${project.duration}`;
+            document.getElementById('projectTime').innerHTML = `
+                <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                ${project.duration}
+            `;
 
             document.getElementById('projectBNCC').textContent = project.bncc ? project.bncc.join(', ') : 'Não especificado';
             document.getElementById('projectODS').textContent = project.ods || 'Geral';

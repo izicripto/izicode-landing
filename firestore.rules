@@ -41,6 +41,11 @@ service cloud.firestore {
       allow delete: if isAdmin();
       allow read: if isSchoolTeacher() && 
                      userId in get(/databases/$(database)/documents/users/$(request.auth.uid)).data.studentIds;
+      
+      // Projetos do usuário
+      match /projects/{projectId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
     }
     
     // Schools collection

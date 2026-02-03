@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso do Aluno - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7' } }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gradient-to-br from-brand-50 via-white to-purple-50 min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <div class="inline-block bg-white p-3 rounded-2xl shadow-sm border border-slate-100 mb-4">
+                <img src="/images/logo.png" alt="Izicode Logo" class="w-12 h-12">
+            </div>
+            <h1 class="font-display text-3xl font-bold text-slate-900">Acesso do Aluno</h1>
+            <p class="text-slate-500 mt-2">Peça o código para o seu professor ou use o QR Code</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-xl border border-white">
+            <div class="space-y-6">
+                <!-- Class Code Input -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">Código da
+                        Sala</label>
+                    <input type="text" id="classCode" maxlength="6"
+                        class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl p-5 text-center text-3xl font-display font-bold tracking-widest focus:border-brand-500 focus:ring-0 transition-all uppercase placeholder:text-slate-200"
+                        placeholder="000000">
+                </div>
+
+                <button onclick="handleCodeLogin()"
+                    class="w-full bg-brand-600 hover:bg-brand-700 text-white py-4 rounded-2xl font-bold text-lg shadow-lg shadow-brand-200 transition-all hover:scale-[1.02] active:scale-95">
+                    Entrar na Sala
+                </button>
+
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-slate-100"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm"><span class="px-2 bg-white text-slate-400">ou use
+                            o celular</span></div>
+                </div>
+
+                <!-- QR Scan Placeholder -->
+                <button
+                    class="w-full border-2 border-slate-200 hover:border-brand-300 p-4 rounded-2xl flex items-center justify-center gap-3 text-slate-600 font-medium transition-all group">
+                    <svg class="w-6 h-6 text-slate-400 group-hover:text-brand-500" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                    </svg>
+                    Escanear QR Code
+                </button>
+            </div>
+        </div>
+
+        <p class="text-center text-slate-400 text-sm mt-8">
+            &copy; 2024 Izicode Edu - Plataforma de Educação Tecnológica
+        </p>
+    </div>
+
+    <script>
+        function handleCodeLogin() {
+            const code = document.getElementById('classCode').value.trim();
+            if (code.length === 6) {
+                // Simulação de login para demo
+                localStorage.setItem('izicode_student_mode', 'true');
+                localStorage.setItem('izicode_class_code', code);
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Por favor, digite os 6 dígitos do código da sala.');
+            }
+        }
+    </script>
+</body>
+
+</html>

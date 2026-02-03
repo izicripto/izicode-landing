@@ -21,6 +21,7 @@
     </script>
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="/js/auth-guard.js"></script>
+    <script type="module" src="/js/dashboard-roles.js"></script>
 </head>
 
 <body class="bg-slate-50 min-h-screen flex text-slate-800">
@@ -63,7 +64,13 @@
     <!-- Main Content -->
     <main class="flex-1 md:ml-64 p-8">
         <header class="mb-10">
-            <h1 class="font-display text-3xl font-bold text-slate-900">📚 Biblioteca de Projetos</h1>
+            <h1 class="font-display text-3xl font-bold text-slate-900 flex items-center gap-3">
+                <svg class="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                Biblioteca de Projetos
+            </h1>
             <p class="text-slate-500 mt-1">Projetos curados de plataformas open-source: Scratch, Arduino, Micro:bit e
                 mais!</p>
         </header>
@@ -143,16 +150,16 @@
                     <article
                         class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full group">
                         <div class="h-48 bg-slate-100 relative overflow-hidden">
-                            <!-- Fundo colorido dinâmico -->
+                            <!-- Fundo colorido dinâmico (visível se não houver imagem) -->
                             <div
                                 class="absolute inset-0 bg-gradient-to-br ${getGradientForTool(project.tools[0])} opacity-90 transition-transform duration-700 group-hover:scale-105">
                             </div>
 
-                            <!-- Emoji Central -->
-                            <div
-                                class="absolute inset-0 flex items-center justify-center text-6xl transform group-hover:scale-110 transition-transform duration-500 drop-shadow-md">
-                                ${getEmojiForTool(project.tools[0])}
-                            </div>
+                            <!-- Imagem do Projeto ou Ferramenta -->
+                            <img src="images/tools/${project.image}.png" 
+                                 alt="${project.title}"
+                                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                 onerror="this.src='images/tools/${project.image}.jpg'; this.onerror=function(){this.src='images/tools/' + '${project.tools[0]}'.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.jpg'; this.onerror=function(){this.style.opacity='0'}}">
 
                             <!-- Duration Badge -->
                             <div
@@ -204,15 +211,6 @@
             });
         }
 
-        function getEmojiForTool(tool) {
-            const map = {
-                'Arduino': '⚡', 'Scratch': '🐱', 'Micro:bit': '🤖',
-                'Makey Makey': '🎹', 'Python': '🐍', 'Tinkercad': '🧊',
-                'C++': '⚙️', 'Blocos': '🧩'
-            };
-            return map[tool] || '🚀';
-        }
-
         function getGradientForTool(tool) {
             const map = {
                 'Arduino': 'from-teal-400 to-emerald-600',
@@ -232,7 +230,8 @@
                 'Básico': 'text-green-600 bg-green-50',
                 'Iniciante': 'text-green-600 bg-green-50',
                 'Intermediário': 'text-yellow-600 bg-yellow-50',
-                'Avançado': 'text-red-600 bg-red-50'
+                'Avançado': 'text-orange-600 bg-orange-50',
+                'Muito Difícil': 'text-red-700 bg-red-400 text-white'
             };
             return map[diff] || 'text-slate-600 bg-slate-50';
         }

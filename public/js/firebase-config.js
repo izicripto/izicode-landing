@@ -18,7 +18,9 @@ import {
     arrayRemove,
     serverTimestamp,
     writeBatch,
-    Timestamp
+    Timestamp,
+    orderBy,
+    limit
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
@@ -60,5 +62,7 @@ export {
     arrayRemove,
     serverTimestamp,
     writeBatch,
-    Timestamp
+    Timestamp,
+    orderBy,
+    limit
 };

@@ -9,8 +9,10 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
         rel="stylesheet">
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="/js/auth-guard.js"></script>
+    <script type="module" src="/js/dashboard-roles.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -28,14 +30,11 @@
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col">
-            <div class="p-6 border-b border-slate-100 flex items-center gap-3">
-                <a href="dashboard.html" class="flex items-center gap-3">
+            <div class="p-6 border-b border-slate-100">
+                <a href="dashboard.html" class="flex items-center gap-3 group">
                     <div
-                        class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand-200">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
-                        </svg>
+                        class="bg-brand-50 p-2 rounded-2xl border border-brand-100 group-hover:scale-110 transition-transform">
+                        <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
                     </div>
                     <span class="font-display font-bold text-xl text-slate-900">Izicode</span>
                 </a>

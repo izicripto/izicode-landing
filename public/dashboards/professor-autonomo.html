@@ -43,12 +43,12 @@
                     </button>
                     <div class="flex items-center gap-3">
                         <div class="text-right">
-                            <p class="text-sm font-medium text-slate-900">Prof. Carlos Mendes</p>
-                            <p class="text-xs text-slate-500">Professor Autônomo</p>
+                            <p class="text-sm font-medium text-slate-900" data-user-name>Carregando...</p>
+                            <p class="text-xs text-slate-500" data-user-role>Professor Autônomo</p>
                         </div>
-                        <div
-                            class="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold">
-                            CM
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold"
+                            data-user-avatar>
+                            ...
                         </div>
                     </div>
                 </div>
@@ -60,7 +60,8 @@
 
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="font-display text-3xl font-bold text-slate-900 mb-2">Bem-vindo, Prof. Carlos! 🚀</h1>
+            <h1 class="font-display text-3xl font-bold text-slate-900 mb-2">Bem-vindo, <span
+                    data-user-name-short>Professor</span>!</h1>
             <p class="text-slate-600">Continue sua jornada de aprendizado e desenvolvimento profissional</p>
         </div>
 
@@ -73,13 +74,34 @@
                 </div>
                 <div class="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2">
                     <p class="text-sm font-medium">Nível 5</p>
-                    <p class="text-2xl font-bold">⭐⭐⭐⭐⭐</p>
+                    <div class="flex gap-1 text-yellow-400">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                    </div>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-4 gap-4">
                 <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                    <p class="text-3xl font-display font-bold mb-1">12</p>
+                    <p class="text-3xl font-display font-bold mb-1" data-teacher-courses>0</p>
                     <p class="text-sm text-blue-100">Cursos Concluídos</p>
                 </div>
                 <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4">
@@ -105,86 +127,28 @@
                 <!-- Cursos em Andamento -->
                 <section>
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="font-display text-2xl font-bold text-slate-900">📚 Cursos em Andamento</h2>
+                        <h2 class="font-display text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Cursos em Andamento
+                        </h2>
                         <a href="#" class="text-sm text-brand-600 font-medium hover:text-brand-700">
                             Ver todos →
                         </a>
                     </div>
 
-                    <div class="space-y-4">
-                        <!-- Curso 1 -->
+                    <div class="space-y-4" data-ongoing-courses>
                         <div
-                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-brand-500 hover:shadow-lg transition-all">
-                            <div class="flex items-start gap-4">
-                                <div
-                                    class="w-20 h-20 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center text-3xl flex-shrink-0">
-                                    🤖
-                                </div>
-                                <div class="flex-1">
-                                    <div class="flex items-start justify-between mb-2">
-                                        <div>
-                                            <h3 class="font-display text-lg font-bold text-slate-900">Arduino Avançado
-                                            </h3>
-                                            <p class="text-sm text-slate-500">Sensores e Atuadores</p>
-                                        </div>
-                                        <span
-                                            class="px-3 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded-full">65%</span>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <div class="flex items-center justify-between text-sm text-slate-600 mb-1">
-                                            <span>Módulo 4 de 6</span>
-                                            <span>2h30 restantes</span>
-                                        </div>
-                                        <div class="w-full bg-slate-200 rounded-full h-2">
-                                            <div class="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full"
-                                                style="width: 65%"></div>
-                                        </div>
-                                    </div>
-
-                                    <button
-                                        class="w-full px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl text-sm font-medium hover:shadow-lg transition-all">
-                                        Continuar Aprendendo →
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Curso 2 -->
-                        <div
-                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-brand-500 hover:shadow-lg transition-all">
-                            <div class="flex items-start gap-4">
-                                <div
-                                    class="w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center text-3xl flex-shrink-0">
-                                    🐱
-                                </div>
-                                <div class="flex-1">
-                                    <div class="flex items-start justify-between mb-2">
-                                        <div>
-                                            <h3 class="font-display text-lg font-bold text-slate-900">Scratch para
-                                                Educadores</h3>
-                                            <p class="text-sm text-slate-500">Criando Jogos Educativos</p>
-                                        </div>
-                                        <span
-                                            class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">40%</span>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <div class="flex items-center justify-between text-sm text-slate-600 mb-1">
-                                            <span>Módulo 2 de 5</span>
-                                            <span>3h15 restantes</span>
-                                        </div>
-                                        <div class="w-full bg-slate-200 rounded-full h-2">
-                                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full"
-                                                style="width: 40%"></div>
-                                        </div>
-                                    </div>
-
-                                    <button
-                                        class="w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl text-sm font-medium hover:shadow-lg transition-all">
-                                        Continuar Aprendendo →
-                                    </button>
-                                </div>
+                            class="bg-white rounded-2xl p-6 border border-slate-100 flex items-center justify-center py-12">
+                            <div class="flex flex-col items-center text-slate-400">
+                                <svg class="w-12 h-12 mb-2 opacity-20" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                                <p class="text-sm font-medium">Carregando cursos...</p>
                             </div>
                         </div>
                     </div>
@@ -193,7 +157,13 @@
                 <!-- Biblioteca de Materiais -->
                 <section>
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="font-display text-2xl font-bold text-slate-900">📖 Biblioteca de Materiais</h2>
+                        <h2 class="font-display text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Biblioteca de Materiais
+                        </h2>
                         <a href="../library.html" class="text-sm text-brand-600 font-medium hover:text-brand-700">
                             Explorar biblioteca →
                         </a>
@@ -204,7 +174,10 @@
                             class="bg-white rounded-xl p-4 border border-slate-200 hover:shadow-lg transition-all cursor-pointer">
                             <div
                                 class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center text-2xl mb-3">
-                                📘
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
                             </div>
                             <h3 class="font-bold text-slate-900 mb-1">Guias</h3>
                             <p class="text-xs text-slate-500 mb-2">28 documentos</p>
@@ -223,7 +196,10 @@
                             class="bg-white rounded-xl p-4 border border-slate-200 hover:shadow-lg transition-all cursor-pointer">
                             <div
                                 class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center text-2xl mb-3">
-                                🎥
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
                             </div>
                             <h3 class="font-bold text-slate-900 mb-1">Vídeos</h3>
                             <p class="text-xs text-slate-500 mb-2">45 tutoriais</p>
@@ -240,7 +216,10 @@
                             class="bg-white rounded-xl p-4 border border-slate-200 hover:shadow-lg transition-all cursor-pointer">
                             <div
                                 class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-600 rounded-lg flex items-center justify-center text-2xl mb-3">
-                                📦
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                </svg>
                             </div>
                             <h3 class="font-bold text-slate-900 mb-1">Projetos</h3>
                             <p class="text-xs text-slate-500 mb-2">28 prontos</p>
@@ -259,7 +238,13 @@
                 <!-- Novos Cursos Recomendados -->
                 <section>
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="font-display text-2xl font-bold text-slate-900">✨ Recomendados para Você</h2>
+                        <h2 class="font-display text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                            Recomendados para Você
+                        </h2>
                     </div>
 
                     <div class="grid md:grid-cols-2 gap-4">
@@ -267,7 +252,11 @@
                             class="bg-white rounded-xl overflow-hidden border border-slate-200 hover:shadow-lg transition-all cursor-pointer">
                             <div
                                 class="h-32 bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-6xl">
-                                🎮
+                                <svg class="w-16 h-16 text-white/80" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                                </svg>
                             </div>
                             <div class="p-4">
                                 <div class="flex items-center gap-2 mb-2">
@@ -292,7 +281,11 @@
                             class="bg-white rounded-xl overflow-hidden border border-slate-200 hover:shadow-lg transition-all cursor-pointer">
                             <div
                                 class="h-32 bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-6xl">
-                                🌱
+                                <svg class="w-16 h-16 text-white/80" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
                             </div>
                             <div class="p-4">
                                 <div class="flex items-center gap-2 mb-2">
@@ -321,7 +314,13 @@
 
                 <!-- Próxima Aula -->
                 <div class="bg-white rounded-2xl p-6 border border-slate-200">
-                    <h3 class="font-display text-lg font-bold text-slate-900 mb-4">🎯 Próxima Aula</h3>
+                    <h3 class="font-display text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Próxima Aula
+                    </h3>
                     <div
                         class="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4 border border-orange-200 mb-4">
                         <p class="text-sm font-bold text-orange-900 mb-1">Módulo 4: Sensores Ultrassônicos</p>
@@ -344,7 +343,13 @@
 
                 <!-- Certificados -->
                 <div class="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl p-6 text-white">
-                    <h3 class="font-display text-lg font-bold mb-4">🏆 Seus Certificados</h3>
+                    <h3 class="font-display text-lg font-bold mb-4 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                        </svg>
+                        Seus Certificados
+                    </h3>
                     <div class="space-y-2 mb-4">
                         <div class="bg-white/20 backdrop-blur-sm rounded-lg p-3">
                             <p class="font-bold text-sm">Arduino Básico</p>
@@ -366,7 +371,13 @@
 
                 <!-- Comunidade -->
                 <div class="bg-white rounded-2xl p-6 border border-slate-200">
-                    <h3 class="font-display text-lg font-bold text-slate-900 mb-4">💬 Comunidade</h3>
+                    <h3 class="font-display text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002.293 1.293z" />
+                        </svg>
+                        Comunidade
+                    </h3>
                     <div class="space-y-3">
                         <button
                             class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left text-sm font-medium text-slate-700 transition-colors flex items-center gap-3">
@@ -401,6 +412,13 @@
         </div>
     </div>
 
+    <script type="module">
+        import DashboardManager from '../js/dashboard-manager.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const dashboardManager = new DashboardManager();
+        });
+    </script>
 </body>
 
 </html>

@@ -37,12 +37,12 @@
                 </div>
                 <div class="flex items-center gap-4">
                     <div class="text-right">
-                        <p class="text-sm font-medium text-slate-900" id="userName">João Silva</p>
-                        <p class="text-xs text-slate-500" id="userLevel">Nível 3 - Programador Júnior</p>
+                        <p class="text-sm font-medium text-slate-900" data-user-name>Carregando...</p>
+                        <p class="text-xs text-slate-500" data-user-role>...</p>
                     </div>
-                    <div
-                        class="w-10 h-10 bg-gradient-to-br from-brand-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                        JS
+                    <div class="w-10 h-10 bg-gradient-to-br from-brand-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold"
+                        data-user-avatar>
+                        ?
                     </div>
                 </div>
             </div>
@@ -57,7 +57,12 @@
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <div class="flex items-center gap-3 mb-4">
-                        <span class="text-6xl" id="levelIcon">💻</span>
+                        <span class="text-6xl text-white/90" id="levelIcon">
+                            <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </span>
                         <div>
                             <h1 class="font-display text-4xl font-bold" id="levelName">Programador Júnior</h1>
                             <p class="text-brand-100">Nível <span id="levelNumber">3</span></p>
@@ -82,15 +87,20 @@
                     <div class="flex gap-4">
                         <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
                             <p class="text-xs text-brand-100">Desafios Completos</p>
-                            <p class="text-2xl font-bold" id="challengesCount">8</p>
+                            <p class="text-2xl font-bold" data-student-challenges>0</p>
                         </div>
                         <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
                             <p class="text-xs text-brand-100">Badges Conquistados</p>
-                            <p class="text-2xl font-bold" id="badgesCount">3</p>
+                            <p class="text-2xl font-bold" data-student-badges-count>0</p>
                         </div>
                         <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
                             <p class="text-xs text-brand-100">Sequência de Dias</p>
-                            <p class="text-2xl font-bold" id="streakCount">5 🔥</p>
+                            <p class="text-2xl font-bold" id="streakCount">5 <svg class="w-6 h-6 inline text-orange-400"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1014 0c0-1.187-.433-2.328-1.221-3.193a.5.5 0 01.127-.805 4.911 4.911 0 001.25-3.233 1 1 0 00-1.066-1.011 4.962 4.962 0 01-1.488.013 10.32 10.32 0 01-2.207-1.218z"
+                                        clip-rule="evenodd" />
+                                </svg></p>
                         </div>
                     </div>
                 </div>
@@ -123,14 +133,18 @@
                         </select>
                     </div>
 
-                    <div class="grid md:grid-cols-2 gap-4" id="challengesGrid">
+                    <div class="grid md:grid-cols-2 gap-4" data-challenges-container>
                         <!-- Challenge Card 1 -->
                         <div
                             class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-brand-500 hover:shadow-xl transition-all cursor-pointer group">
                             <div class="flex items-start justify-between mb-4">
                                 <div
                                     class="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center text-2xl">
-                                    🐱
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
                                 </div>
                                 <span
                                     class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">FÁCIL</span>
@@ -158,7 +172,11 @@
                             <div class="flex items-start justify-between mb-4">
                                 <div
                                     class="w-12 h-12 bg-gradient-to-br from-teal-400 to-teal-600 rounded-xl flex items-center justify-center text-2xl">
-                                    ⚡
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
                                 </div>
                                 <span
                                     class="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded-full">MÉDIO</span>
@@ -186,7 +204,11 @@
                             <div class="flex items-start justify-between mb-4">
                                 <div
                                     class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center text-2xl">
-                                    🤖
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
                                 </div>
                                 <span
                                     class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">FÁCIL</span>
@@ -214,7 +236,11 @@
                             <div class="flex items-start justify-between mb-4">
                                 <div
                                     class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-2xl">
-                                    🧩
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                                    </svg>
                                 </div>
                                 <span
                                     class="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">DIFÍCIL</span>
@@ -248,7 +274,11 @@
                             <div class="flex items-center gap-4 mb-4">
                                 <div
                                     class="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-3xl">
-                                    🧩
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                                    </svg>
                                 </div>
                                 <div>
                                     <h3
@@ -265,7 +295,11 @@
                             <div class="flex items-center gap-4 mb-4">
                                 <div
                                     class="w-14 h-14 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center text-3xl">
-                                    🤖
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
                                 </div>
                                 <div>
                                     <h3
@@ -282,7 +316,11 @@
                             <div class="flex items-center gap-4 mb-4">
                                 <div
                                     class="w-14 h-14 bg-gradient-to-br from-orange-300 to-orange-500 rounded-xl flex items-center justify-center text-3xl">
-                                    🐱
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
                                 </div>
                                 <div>
                                     <h3
@@ -299,7 +337,11 @@
                             <div class="flex items-center gap-4 mb-4">
                                 <div
                                     class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-xl flex items-center justify-center text-3xl">
-                                    🔌
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
                                 </div>
                                 <div>
                                     <h3
@@ -321,10 +363,13 @@
                 <!-- Minhas Conquistas -->
                 <div class="bg-white rounded-2xl p-6 border-2 border-slate-200">
                     <h3 class="font-display text-lg font-bold text-slate-900 mb-4">🏆 Minhas Conquistas</h3>
-                    <div class="grid grid-cols-3 gap-3" id="badgesContainer">
+                    <div class="grid grid-cols-3 gap-3" data-badges-container>
                         <div
                             class="aspect-square bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-xl flex items-center justify-center text-3xl border-2 border-yellow-300 relative group cursor-pointer">
-                            🎯
+                            <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                             <div
                                 class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                                 Primeiros Passos
@@ -332,7 +377,10 @@
                         </div>
                         <div
                             class="aspect-square bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center text-3xl border-2 border-blue-300 relative group cursor-pointer">
-                            🌅
+                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
                             <div
                                 class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                                 Madrugador
@@ -340,7 +388,10 @@
                         </div>
                         <div
                             class="aspect-square bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl flex items-center justify-center text-3xl border-2 border-orange-300 relative group cursor-pointer">
-                            🐱
+                            <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                             <div
                                 class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                                 Aprendiz Scratch
@@ -348,7 +399,10 @@
                         </div>
                         <div
                             class="aspect-square bg-slate-100 rounded-xl flex items-center justify-center text-3xl opacity-40">
-                            🔒
+                            <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
                         </div>
                         <div
                             class="aspect-square bg-slate-100 rounded-xl flex items-center justify-center text-3xl opacity-40">
@@ -370,7 +424,7 @@
                     <div class="space-y-3">
                         <div
                             class="flex items-center gap-3 p-3 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl border border-yellow-200">
-                            <div class="text-2xl">🥇</div>
+                            <div class="text-2xl text-yellow-500 font-bold">1º</div>
                             <div class="flex-1">
                                 <p class="font-bold text-sm text-slate-900">Maria Santos</p>
                                 <p class="text-xs text-slate-500">485 XP</p>
@@ -378,7 +432,7 @@
                         </div>
                         <div
                             class="flex items-center gap-3 p-3 bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl border border-slate-200">
-                            <div class="text-2xl">🥈</div>
+                            <div class="text-2xl text-slate-400 font-bold">2º</div>
                             <div class="flex-1">
                                 <p class="font-bold text-sm text-slate-900">Pedro Lima</p>
                                 <p class="text-xs text-slate-500">420 XP</p>
@@ -386,7 +440,7 @@
                         </div>
                         <div
                             class="flex items-center gap-3 p-3 bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl border border-orange-200">
-                            <div class="text-2xl">🥉</div>
+                            <div class="text-2xl text-orange-400 font-bold">3º</div>
                             <div class="flex-1">
                                 <p class="font-bold text-sm text-slate-900">Ana Costa</p>
                                 <p class="text-xs text-slate-500">380 XP</p>
@@ -416,7 +470,12 @@
                 <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl p-6 text-white">
                     <h3 class="font-display text-lg font-bold mb-3">🎖️ Próxima Conquista</h3>
                     <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 mb-3">
-                        <div class="text-4xl mb-2 text-center">⚡</div>
+                        <div class="flex justify-center mb-2">
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
                         <p class="font-bold text-center mb-1">Mago do Arduino</p>
                         <p class="text-xs text-center text-purple-100">Complete 5 desafios de Arduino</p>
                     </div>
@@ -431,42 +490,18 @@
     </div>
 
     <script type="module">
-        import { gamificationSystem, mockUserData } from './js/gamification.js';
+        import DashboardManager from '../js/dashboard-manager.js';
 
-        // Atualizar UI com dados do usuário
-        function updateUI() {
-            const user = mockUserData;
-            const level = gamificationSystem.calculateLevel(user.xp);
-            const progress = gamificationSystem.calculateProgress(user.xp);
-            const currentLevelIndex = gamificationSystem.levels.findIndex(l => l.level === level.level);
-            const nextLevel = gamificationSystem.levels[currentLevelIndex + 1];
+        // Inicializar dashboard com dados reais do Firestore
+        const dashboardManager = new DashboardManager();
 
-            // Atualizar informações de nível
-            document.getElementById('levelIcon').textContent = level.icon;
-            document.getElementById('levelName').textContent = level.name;
-            document.getElementById('levelNumber').textContent = level.level;
-            document.getElementById('currentXP').textContent = user.xp;
-            document.getElementById('progressPercent').textContent = progress;
-            document.getElementById('progressBar').style.width = progress + '%';
-
-            if (nextLevel) {
-                const xpNeeded = nextLevel.minXP - user.xp;
-                document.getElementById('xpToNext').textContent = xpNeeded;
-                document.getElementById('nextLevelName').textContent = nextLevel.name;
-            }
-
-            // Atualizar estatísticas
-            document.getElementById('challengesCount').textContent = user.challengesCompleted;
-            document.getElementById('badgesCount').textContent = user.badges.length;
-            document.getElementById('streakCount').textContent = user.loginStreak + ' 🔥';
-
-            // Atualizar navbar
-            document.getElementById('userName').textContent = user.name;
-            document.getElementById('userLevel').textContent = `Nível ${level.level} - ${level.name}`;
-        }
-
-        // Inicializar
-        updateUI();
+        dashboardManager.init().then(user => {
+            console.log('Dashboard inicializado para:', user.displayName);
+        }).catch(error => {
+            console.error('Erro ao inicializar dashboard:', error);
+            // Redirecionar para login se houver erro
+            window.location.href = '/login.html';
+        });
     </script>
 
 </body>

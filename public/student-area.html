@@ -44,11 +44,17 @@
 
         <div class="flex items-center space-x-6">
             <div class="flex items-center space-x-2 bg-yellow-50 px-3 py-1.5 rounded-full border border-yellow-200">
-                <span class="text-xl">🔥</span>
+                <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                </svg>
                 <span class="font-bold text-yellow-700">12 Dias</span>
             </div>
             <div class="flex items-center space-x-2 bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-200">
-                <span class="text-xl">💎</span>
+                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
                 <span id="navXp" class="font-bold text-indigo-700">... XP</span>
             </div>
             <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-sm">
@@ -69,7 +75,13 @@
                     <span
                         class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider mb-4 inline-block">Missão
                         da Semana</span>
-                    <h1 class="font-display text-3xl font-bold mb-4">Construa um Semáforo Inteligente 🚦</h1>
+                    <h1 class="font-display text-3xl font-bold mb-4 flex items-center gap-3">
+                        Construa um Semáforo Inteligente
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </h1>
                     <p class="text-indigo-100 mb-6 max-w-md">Aprenda a controlar LEDs com Arduino e crie um sistema de
                         trânsito seguro para sua cidade maquete.</p>
                     <a href="project-view.html?id=arduino-semaforo"
@@ -82,7 +94,12 @@
             <!-- Learning Path -->
             <div>
                 <h2 class="font-display text-xl font-bold text-gray-900 mb-4 flex items-center">
-                    <span class="bg-indigo-100 p-2 rounded-lg mr-3">🗺️</span>
+                    <div class="bg-indigo-100 p-2 rounded-lg mr-3">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L16 4m0 13V4m0 13L9 7" />
+                        </svg>
+                    </div>
                     Sua Jornada
                 </h2>
                 <div class="space-y-4">
@@ -137,7 +154,8 @@
                     <h2 id="profileName" class="font-display text-xl font-bold text-gray-900">...</h2>
                     <p id="profileLevel" class="text-indigo-600 font-medium text-sm mb-6">Nível 1</p>
 
-                    <div class="grid grid-cols-2 gap-4 text-left">
+                    <!-- Hidden placeholders for future features -->
+                    <!-- <div class="grid grid-cols-2 gap-4 text-left">
                         <div class="bg-gray-50 p-3 rounded-xl">
                             <div class="text-xs text-gray-500">Rank Global</div>
                             <div class="font-bold text-gray-900">#42</div>
@@ -146,14 +164,20 @@
                             <div class="text-xs text-gray-500">Conquistas</div>
                             <div class="font-bold text-gray-900">5/20</div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
             <!-- Quick Quiz -->
             <div class="bg-indigo-600 rounded-3xl p-6 text-white relative overflow-hidden">
                 <div class="relative z-10">
-                    <h3 class="font-bold text-lg mb-2">Quiz Rápido ⚡</h3>
+                    <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
+                        Quiz Rápido
+                        <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </h3>
                     <p class="text-indigo-200 text-sm mb-4">Ganhe +50 XP respondendo corretamente!</p>
 
                     <div class="bg-white/10 rounded-xl p-4 mb-4 backdrop-blur-sm">
@@ -169,6 +193,36 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Ferramentas -->
+        <div class="bg-white rounded-3xl p-6 border border-indigo-100 shadow-sm">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 011-1h1a2 2 0 100-4H7a1 1 0 01-1-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                </svg>
+                Ferramentas
+            </h3>
+            <div class="grid grid-cols-2 gap-3">
+                <a href="https://scratch.mit.edu" target="_blank"
+                    class="p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors text-center">
+                    <span class="block text-xs font-bold text-slate-700">Scratch</span>
+                </a>
+                <a href="https://tinkercad.com" target="_blank"
+                    class="p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors text-center">
+                    <span class="block text-xs font-bold text-slate-700">Tinkercad</span>
+                </a>
+                <a href="https://lab.open-roberta.org" target="_blank"
+                    class="p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors text-center">
+                    <span class="block text-xs font-bold text-slate-700">Open Roberta</span>
+                </a>
+                <a href="https://makecode.microbit.org" target="_blank"
+                    class="p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors text-center">
+                    <span class="block text-xs font-bold text-slate-700">Micro:bit</span>
+                </a>
+            </div>
+        </div>
         </div>
 
     </main>
@@ -218,7 +272,7 @@
                             xp: increment(50)
                         });
                         // Optimistic update
-                        alert('Resposta Certa! +50 XP salvos no seu perfil! 🎉');
+                        alert('Resposta Certa! +50 XP salvos no seu perfil!');
                         location.reload(); // Reload to show new XP
                     } catch (e) {
                         console.error("Erro ao salvar XP:", e);
