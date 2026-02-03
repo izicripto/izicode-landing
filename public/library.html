@@ -64,7 +64,8 @@
     <main class="flex-1 md:ml-64 p-8">
         <header class="mb-10">
             <h1 class="font-display text-3xl font-bold text-slate-900">📚 Biblioteca de Projetos</h1>
-            <p class="text-slate-500 mt-1">Planos de aula prontos, criados por especialistas e pela comunidade.</p>
+            <p class="text-slate-500 mt-1">Projetos curados de plataformas open-source: Scratch, Arduino, Micro:bit e
+                mais!</p>
         </header>
 
         <!-- Filters -->
@@ -77,19 +78,12 @@
             <button
                 class="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 rounded-full text-sm font-medium transition-colors">Micro:bit</button>
             <button
-                class="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 rounded-full text-sm font-medium transition-colors">Sem
-                Computador</button>
+                class="px-4 py-2 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 rounded-full text-sm font-medium transition-colors">Python</button>
         </div>
 
         <!-- Projects Grid -->
         <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Loading -->
-            <div class="col-span-full text-center py-20 text-slate-500">
-                <div
-                    class="animate-spin w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full mx-auto mb-4">
-                </div>
-                Carregando projetos...
-            </div>
+            <!-- Projetos serão carregados aqui via JavaScript -->
         </div>
     </main>
 
@@ -122,18 +116,8 @@
                     if (filter === 'Todos') {
                         projects = getAllProjects();
                     } else {
-                        // Mapeamento simples para os filtros da UI
-                        const toolMap = {
-                            'Sem Computador': 'Makey Makey', // Adaptação para demo
-                            'Arduino': 'Arduino',
-                            'Scratch': 'Scratch',
-                            'Micro:bit': 'Micro:bit'
-                        };
-                        const searchTool = toolMap[filter] || filter;
-
-                        // Filtrar se a ferramenta está na lista de tools do projeto
                         projects = getAllProjects().filter(p =>
-                            p.tools.some(t => t.includes(searchTool) || (filter === 'Sem Computador' && p.tools.includes('Makey Makey')))
+                            p.tools.some(t => t.includes(filter))
                         );
                     }
                     renderProjects(projects);
@@ -156,19 +140,27 @@
 
             list.forEach(project => {
                 const card = `
-                    <article class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full group">
+                    <article
+                        class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full group">
                         <div class="h-48 bg-slate-100 relative overflow-hidden">
-                            <!-- Fundo colorido dinâmico baseado na primeira ferramenta -->
-                            <div class="absolute inset-0 bg-gradient-to-br ${getGradientForTool(project.tools[0])} opacity-90 transition-transform duration-700 group-hover:scale-105"></div>
-                            
+                            <!-- Fundo colorido dinâmico -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br ${getGradientForTool(project.tools[0])} opacity-90 transition-transform duration-700 group-hover:scale-105">
+                            </div>
+
                             <!-- Emoji Central -->
-                            <div class="absolute inset-0 flex items-center justify-center text-6xl transform group-hover:scale-110 transition-transform duration-500 drop-shadow-md">
+                            <div
+                                class="absolute inset-0 flex items-center justify-center text-6xl transform group-hover:scale-110 transition-transform duration-500 drop-shadow-md">
                                 ${getEmojiForTool(project.tools[0])}
                             </div>
 
                             <!-- Duration Badge -->
-                            <div class="absolute top-4 right-4 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-slate-700 shadow-sm flex items-center gap-1">
-                                <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <div
+                                class="absolute top-4 right-4 bg-white/95 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-slate-700 shadow-sm flex items-center gap-1">
+                                <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
                                 ${project.duration}
                             </div>
                         </div>
@@ -176,21 +168,33 @@
                         <div class="p-6 flex-1 flex flex-col relative">
                             <!-- Tags -->
                             <div class="flex flex-wrap gap-2 mb-3">
-                                <span class="px-2.5 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold rounded-full uppercase tracking-wider border border-slate-200">${project.tools[0]}</span>
-                                <span class="px-2.5 py-1 ${getDifficultyColor(project.difficulty)} text-[10px] font-bold rounded-full uppercase tracking-wider border border-current opacity-80">${project.difficulty}</span>
+                                <span
+                                    class="px-2.5 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold rounded-full uppercase tracking-wider border border-slate-200">${project.tools[0]}</span>
+                                <span
+                                    class="px-2.5 py-1 ${getDifficultyColor(project.difficulty)} text-[10px] font-bold rounded-full uppercase tracking-wider border border-current opacity-80">${project.difficulty}</span>
                             </div>
 
-                            <h3 class="font-display font-bold text-xl text-slate-900 mb-2 leading-tight group-hover:text-brand-600 transition-colors">${project.title}</h3>
+                            <h3
+                                class="font-display font-bold text-xl text-slate-900 mb-2 leading-tight group-hover:text-brand-600 transition-colors">
+                                ${project.title}</h3>
                             <p class="text-sm text-slate-500 line-clamp-3 mb-6 flex-1 leading-relaxed">${project.description}</p>
-                            
+
                             <div class="pt-5 border-t border-slate-100 flex items-center justify-between mt-auto">
                                 <span class="text-xs text-slate-400 font-medium flex items-center gap-1">
-                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
                                     ${project.grade.split('(')[0].trim()}
                                 </span>
-                                <a href="project-view.html?id=${project.id}" class="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-600 hover:bg-brand-700 px-4 py-2 rounded-lg transition-all shadow-md shadow-brand-200 group-hover:shadow-lg">
+                                <a href="project-view.html?id=${project.id}"
+                                    class="inline-flex items-center gap-2 text-sm font-bold text-white bg-brand-600 hover:bg-brand-700 px-4 py-2 rounded-lg transition-all shadow-md shadow-brand-200 group-hover:shadow-lg">
                                     Ver Detalhes
-                                    <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                                    <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
                                 </a>
                             </div>
                         </div>
@@ -203,7 +207,8 @@
         function getEmojiForTool(tool) {
             const map = {
                 'Arduino': '⚡', 'Scratch': '🐱', 'Micro:bit': '🤖',
-                'Makey Makey': '🎹', 'Python': '🐍', 'Tinkercad': '🧊'
+                'Makey Makey': '🎹', 'Python': '🐍', 'Tinkercad': '🧊',
+                'C++': '⚙️', 'Blocos': '🧩'
             };
             return map[tool] || '🚀';
         }
@@ -215,7 +220,9 @@
                 'Micro:bit': 'from-green-300 to-green-600',
                 'Python': 'from-blue-400 to-indigo-600',
                 'Tinkercad': 'from-sky-300 to-blue-500',
-                'Makey Makey': 'from-yellow-300 to-red-400'
+                'Makey Makey': 'from-yellow-300 to-red-400',
+                'C++': 'from-cyan-400 to-blue-600',
+                'Blocos': 'from-purple-300 to-pink-500'
             };
             return map[tool] || 'from-slate-300 to-slate-500';
         }

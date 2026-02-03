@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Scratch API</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #fff;
+        }
+
+        .success {
+            color: #4ade80;
+        }
+
+        .error {
+            color: #f87171;
+        }
+
+        pre {
+            background: #2d2d2d;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🧪 Teste de Integração Scratch API</h1>
+    <div id="results"></div>
+
+    <script type="module">
+        const results = document.getElementById('results');
+
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.innerHTML = `<p>${message}</p>`;
+            results.appendChild(div);
+        }
+
+        async function testScratchAPI() {
+            log('🔍 Testando acesso à API do Scratch...', 'info');
+
+            try {
+                // Teste 1: Buscar projetos
+                log('📡 Fazendo requisição para api.scratch.mit.edu...', 'info');
+                const url = 'https://api.scratch.mit.edu/explore/projects?q=robotics&mode=popular&limit=5';
+
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                log(`✅ SUCESSO! Recebidos ${data.length} projetos`, 'success');
+                log(`<pre>${JSON.stringify(data[0], null, 2)}</pre>`, 'success');
+
+                // Teste 2: Verificar estrutura
+                if (data.length > 0) {
+                    const project = data[0];
+                    log(`📊 Estrutura do projeto:`, 'info');
+                    log(`- ID: ${project.id}`, 'info');
+                    log(`- Título: ${project.title}`, 'info');
+                    log(`- Autor: ${project.author?.username || 'N/A'}`, 'info');
+                    log(`- Thumbnail: ${project.image || 'N/A'}`, 'info');
+                }
+
+            } catch (error) {
+                log(`❌ ERRO: ${error.message}`, 'error');
+
+                if (error.message.includes('CORS')) {
+                    log('🚨 Erro de CORS detectado!', 'error');
+                    log('A API do Scratch bloqueia requisições de localhost.', 'error');
+                    log('Solução: Usar proxy ou dados mockados.', 'error');
+                } else if (error.message.includes('Failed to fetch')) {
+                    log('🚨 Falha na requisição!', 'error');
+                    log('Possíveis causas:', 'error');
+                    log('1. CORS (Cross-Origin Resource Sharing)', 'error');
+                    log('2. Rede offline', 'error');
+                    log('3. API fora do ar', 'error');
+                }
+
+                log(`<pre>${error.stack}</pre>`, 'error');
+            }
+        }
+
+        // Executar teste
+        testScratchAPI();
+    </script>
+</body>
+
+</html>

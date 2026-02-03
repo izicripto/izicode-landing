@@ -282,6 +282,456 @@ while True:
         print("Não entendi. Tente de novo.")
 \`\`\`
 `
+    },
+    {
+        id: "semaforo-inteligente",
+        title: "Semáforo Inteligente",
+        description: "Construa um semáforo com LEDs que muda automaticamente de cor e aprenda sobre temporizadores e sequências lógicas.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Básico",
+        duration: "2 aulas",
+        grade: "Ensino Fundamental II (6º ano)",
+        image: "arduino-traffic",
+        ods: "ODS 11 - Cidades Sustentáveis",
+        bncc: ["EF06CI04"]
+    },
+    {
+        id: "jogo-pong-scratch",
+        title: "Jogo Pong Clássico",
+        description: "Recrie o clássico jogo Pong no Scratch, aprendendo sobre física de colisões e controle de personagens.",
+        tools: ["Scratch", "Blocos"],
+        difficulty: "Básico",
+        duration: "2 aulas",
+        grade: "Ensino Fundamental I (4º e 5º ano)",
+        image: "scratch-game",
+        ods: "ODS 4 - Educação de Qualidade",
+        bncc: ["EF04MA16"]
+    },
+    {
+        id: "bussola-digital-microbit",
+        title: "Bússola Digital",
+        description: "Use o magnetômetro do Micro:bit para criar uma bússola digital que aponta para o Norte.",
+        tools: ["Micro:bit", "Blocos"],
+        difficulty: "Básico",
+        duration: "1 aula",
+        grade: "Ensino Fundamental II (6º ano)",
+        image: "microbit-compass",
+        ods: "ODS 9 - Inovação",
+        bncc: ["EF06CI13"]
+    },
+    {
+        id: "braco-robotico-servo",
+        title: "Braço Robótico com Servos",
+        description: "Monte um braço robótico controlado por servomotores e aprenda sobre ângulos e movimento mecânico.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Avançado",
+        duration: "6 aulas",
+        grade: "Ensino Médio",
+        image: "arduino-robot",
+        ods: "ODS 9 - Indústria e Inovação",
+        bncc: ["EM13TEC03"]
+    },
+    {
+        id: "historia-interativa-scratch",
+        title: "História Interativa",
+        description: "Crie uma história onde o leitor pode escolher diferentes caminhos e finais usando Scratch.",
+        tools: ["Scratch", "Blocos"],
+        difficulty: "Intermediário",
+        duration: "3 aulas",
+        grade: "Ensino Fundamental I (3º ao 5º ano)",
+        image: "scratch-story",
+        ods: "ODS 4 - Educação de Qualidade",
+        bncc: ["EF15LP05", "EF15AR26"]
+    },
+    {
+        id: "sensor-umidade-solo",
+        title: "Sensor de Umidade do Solo",
+        description: "Construa um sensor para monitorar a umidade da terra e criar um sistema de irrigação automática.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Intermediário",
+        duration: "4 aulas",
+        grade: "Ensino Fundamental II (7º e 8º ano)",
+        image: "arduino-sensor",
+        ods: "ODS 2 - Fome Zero e Agricultura Sustentável",
+        bncc: ["EF07CI08"]
+    },
+    {
+        id: "pedometro-microbit",
+        title: "Pedômetro com Micro:bit",
+        description: "Use o acelerômetro do Micro:bit para contar passos e criar um desafio de caminhada na escola.",
+        tools: ["Micro:bit", "Python"],
+        difficulty: "Intermediário",
+        duration: "2 aulas",
+        grade: "Ensino Fundamental II (6º e 7º ano)",
+        image: "microbit-step",
+        ods: "ODS 3 - Saúde e Bem-Estar",
+        bncc: ["EF06CI06"]
+    },
+    {
+        id: "calculadora-scratch",
+        title: "Calculadora Interativa",
+        description: "Desenvolva uma calculadora funcional no Scratch com operações básicas e interface amigável.",
+        tools: ["Scratch", "Blocos"],
+        difficulty: "Básico",
+        duration: "2 aulas",
+        grade: "Ensino Fundamental II (6º ano)",
+        image: "scratch-calc",
+        ods: "ODS 4 - Educação de Qualidade",
+        bncc: ["EF06MA03"]
+    },
+    {
+        id: "alarme-distancia",
+        title: "Alarme de Proximidade",
+        description: "Crie um alarme que dispara quando algo se aproxima usando sensor ultrassônico e buzzer.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Básico",
+        duration: "2 aulas",
+        grade: "Ensino Fundamental II (7º ano)",
+        image: "arduino-alarm",
+        ods: "ODS 9 - Inovação",
+        bncc: ["EF07TEC01"]
+    },
+    {
+        id: "jogo-memoria-microbit",
+        title: "Jogo da Memória LED",
+        description: "Recrie o clássico jogo Genius/Simon usando os LEDs e botões do Micro:bit.",
+        tools: ["Micro:bit", "Blocos"],
+        difficulty: "Intermediário",
+        duration: "3 aulas",
+        grade: "Ensino Fundamental II (6º ao 8º ano)",
+        image: "microbit-game",
+        ods: "ODS 4 - Educação de Qualidade",
+        bncc: ["EF06MA16"]
+    },
+    {
+        id: "animacao-stop-motion",
+        title: "Animação Stop Motion",
+        description: "Crie uma animação quadro a quadro no Scratch, aprendendo sobre movimento e sequências.",
+        tools: ["Scratch", "Blocos"],
+        difficulty: "Intermediário",
+        duration: "4 aulas",
+        grade: "Ensino Fundamental I (4º e 5º ano)",
+        image: "scratch-animation",
+        ods: "ODS 4 - Educação de Qualidade",
+        bncc: ["EF15AR04", "EF15AR26"]
+    },
+    {
+        id: "termometro-digital",
+        title: "Termômetro Digital",
+        description: "Construa um termômetro usando sensor de temperatura e display LCD para mostrar os valores.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Básico",
+        duration: "2 aulas",
+        grade: "Ensino Fundamental II (6º e 7º ano)",
+        image: "arduino-temp",
+        ods: "ODS 13 - Ação Contra Mudança do Clima",
+        bncc: ["EF06CI13"]
+    },
+    {
+        id: "carro-autonomo-nepo",
+        title: "Carro Autônomo com NEPO",
+        description: "Programe um carro que desvia de obstáculos usando sensor ultrassônico e programação visual NEPO (Open Roberta).",
+        tools: ["Arduino", "NEPO", "Blocos"],
+        difficulty: "Avançado",
+        duration: "6 aulas",
+        grade: "Ensino Fundamental II (8º e 9º ano)",
+        image: "arduino-robot",
+        ods: "ODS 9 - Indústria e Inovação",
+        bncc: ["EF08TEC04", "EF09TEC01"],
+        content: `
+# Carro Autônomo com NEPO
+
+## 📋 Visão Geral
+Projeto inspirado no Open Roberta Lab. Use programação visual NEPO para criar um carro que detecta e desvia de obstáculos automaticamente.
+
+## 🎯 Objetivos
+- Entender lógica de decisão autônoma
+- Programar com blocos visuais (NEPO)
+- Aplicar conceitos de robótica móvel
+
+## 🔧 Materiais
+- 1x Arduino Uno
+- 1x Sensor Ultrassônico HC-SR04
+- 2x Motores DC + Ponte H
+- 1x Chassi de carro
+- Bateria 9V
+
+## 💻 Programação
+Use o Open Roberta Lab (lab.open-roberta.org) para programar visualmente e exportar código para Arduino.
+`
+    },
+    {
+        id: "piano-luz-microbit",
+        title: "Piano de Luz com Micro:bit",
+        description: "Crie um instrumento musical que toca notas diferentes baseado na quantidade de luz detectada.",
+        tools: ["Micro:bit", "NEPO", "Blocos"],
+        difficulty: "Intermediário",
+        duration: "3 aulas",
+        grade: "Ensino Fundamental II (6º e 7º ano)",
+        image: "microbit-music",
+        ods: "ODS 4 - Educação de Qualidade",
+        bncc: ["EF06CI04", "EF15AR13"],
+        content: `
+# Piano de Luz com Micro:bit
+
+## 📋 Visão Geral
+Inspirado no Open Roberta Lab. Use o sensor de luz do Micro:bit para criar um instrumento musical interativo.
+
+## 🎯 Objetivos
+- Mapear valores de sensor para notas musicais
+- Entender escalas e frequências
+- Programar com blocos NEPO
+
+## 💡 Como Funciona
+Quanto mais luz, mais aguda a nota. Cubra o sensor para tocar notas graves!
+`
+    },
+    {
+        id: "dado-digital-calliope",
+        title: "Dado Digital",
+        description: "Simule um dado de 6 faces que mostra números aleatórios ao ser sacudido.",
+        tools: ["Micro:bit", "Blocos"],
+        difficulty: "Básico",
+        duration: "1 aula",
+        grade: "Ensino Fundamental I (4º e 5º ano)",
+        image: "microbit-dice",
+        ods: "ODS 4 - Educação de Qualidade",
+        bncc: ["EF04MA27"],
+        content: `
+# Dado Digital
+
+## 📋 Visão Geral
+Projeto do Open Roberta adaptado. Crie um dado eletrônico usando o acelerômetro do Micro:bit.
+
+## 🎯 Objetivos
+- Usar números aleatórios
+- Detectar movimento (shake)
+- Exibir no display de LEDs
+
+## 🎲 Desafio
+Adicione animação de "rolagem" antes de mostrar o número final!
+`
+    },
+    {
+        id: "robo-desenhista",
+        title: "Robô Desenhista",
+        description: "Construa um robô que desenha formas geométricas controlando motores com precisão.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Avançado",
+        duration: "8 aulas",
+        grade: "Ensino Médio",
+        image: "arduino-plotter",
+        ods: "ODS 9 - Inovação",
+        bncc: ["EM13TEC03", "EM13MAT307"],
+        content: `
+# Robô Desenhista
+
+## 📋 Visão Geral
+Inspirado em projetos do Open Roberta. Crie um plotter XY que desenha usando servomotores.
+
+## 🎯 Objetivos
+- Controlar movimento em 2 eixos
+- Aplicar trigonometria
+- Programar trajetórias
+
+## 🚀 Desafios
+- Desenhar quadrado
+- Desenhar círculo
+- Desenhar seu nome
+`
+    },
+    {
+        id: "sistema-irrigacao-inteligente",
+        title: "Sistema de Irrigação Inteligente",
+        description: "Crie um sistema que rega plantas automaticamente baseado na umidade do solo.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Intermediário",
+        duration: "5 aulas",
+        grade: "Ensino Fundamental II (7º e 8º ano)",
+        image: "arduino-plant",
+        ods: "ODS 2 - Fome Zero",
+        bncc: ["EF07CI08", "EF08TEC04"],
+        content: `
+# Sistema de Irrigação Inteligente
+
+## 📋 Visão Geral
+Projeto do Open Roberta adaptado. Use sensor de umidade para automatizar irrigação.
+
+## 🎯 Objetivos
+- Ler sensores analógicos
+- Controlar relé/bomba
+- Implementar lógica de decisão
+
+## 🔧 Materiais
+- Arduino Uno
+- Sensor de Umidade do Solo
+- Relé 5V
+- Mini bomba d'água
+- Mangueira
+`
+    },
+    {
+        id: "contador-pessoas-sensor",
+        title: "Contador de Pessoas",
+        description: "Sistema que conta quantas pessoas entram e saem de um ambiente usando sensores infravermelhos.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Intermediário",
+        duration: "4 aulas",
+        grade: "Ensino Fundamental II (8º e 9º ano)",
+        image: "arduino-counter",
+        ods: "ODS 11 - Cidades Inteligentes",
+        bncc: ["EF08TEC04"],
+        content: `
+# Contador de Pessoas
+
+## 📋 Visão Geral
+Inspirado no Open Roberta Lab. Use dois sensores IR para detectar direção de movimento.
+
+## 🎯 Objetivos
+- Detectar sequência de eventos
+- Incrementar/decrementar contadores
+- Exibir em display LCD
+
+## 💡 Aplicação Real
+Usado em lojas, ônibus e controle de lotação.
+`
+    },
+    {
+        id: "jogo-reacao-leds",
+        title: "Jogo de Reação com LEDs",
+        description: "Teste seus reflexos! Aperte o botão quando o LED acender para marcar pontos.",
+        tools: ["Micro:bit", "Blocos"],
+        difficulty: "Básico",
+        duration: "2 aulas",
+        grade: "Ensino Fundamental II (6º ano)",
+        image: "microbit-game",
+        ods: "ODS 4 - Educação de Qualidade",
+        bncc: ["EF06MA16"],
+        content: `
+# Jogo de Reação com LEDs
+
+## 📋 Visão Geral
+Projeto do Open Roberta. Crie um jogo que testa tempo de reação.
+
+## 🎯 Objetivos
+- Usar temporizadores
+- Detectar entrada de botão
+- Calcular tempo de resposta
+
+## 🎮 Como Jogar
+1. LED acende em tempo aleatório
+2. Aperte o botão o mais rápido possível
+3. Veja seu tempo no display
+`
+    },
+    {
+        id: "estacao-qualidade-ar",
+        title: "Estação de Qualidade do Ar",
+        description: "Monitore CO2, temperatura e umidade para avaliar qualidade do ar em ambientes fechados.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Avançado",
+        duration: "6 aulas",
+        grade: "Ensino Médio",
+        image: "arduino-air",
+        ods: "ODS 13 - Ação Climática",
+        bncc: ["EM13TEC04", "EM13CNT301"],
+        content: `
+# Estação de Qualidade do Ar
+
+## 📋 Visão Geral
+Inspirado em projetos do Open Roberta. Monitore múltiplos sensores ambientais.
+
+## 🎯 Objetivos
+- Integrar múltiplos sensores
+- Processar dados em tempo real
+- Exibir em dashboard
+
+## 🔧 Sensores
+- MQ-135 (CO2)
+- DHT22 (Temperatura/Umidade)
+- Display OLED
+`
+    },
+    {
+        id: "robo-seguidor-som",
+        title: "Robô Seguidor de Som",
+        description: "Robô que se move em direção à fonte sonora mais alta usando microfones.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Avançado",
+        duration: "7 aulas",
+        grade: "Ensino Médio",
+        image: "arduino-sound",
+        ods: "ODS 9 - Inovação",
+        bncc: ["EM13TEC03"],
+        content: `
+# Robô Seguidor de Som
+
+## 📋 Visão Geral
+Projeto avançado do Open Roberta. Robô localiza fonte sonora por triangulação.
+
+## 🎯 Objetivos
+- Processar sinais de áudio
+- Comparar intensidades
+- Implementar navegação autônoma
+
+## 🔧 Materiais
+- 2x Módulos de Microfone
+- Arduino Uno
+- Chassi com motores
+- Ponte H L298N
+`
+    },
+    {
+        id: "sinalizador-morse",
+        title: "Sinalizador Morse",
+        description: "Envie mensagens em código Morse usando LEDs e botões do Micro:bit.",
+        tools: ["Micro:bit", "Blocos"],
+        difficulty: "Intermediário",
+        duration: "3 aulas",
+        grade: "Ensino Fundamental II (7º ano)",
+        image: "microbit-morse",
+        ods: "ODS 4 - Educação de Qualidade",
+        bncc: ["EF07LP01"],
+        content: `
+# Sinalizador Morse
+
+## 📋 Visão Geral
+Projeto do Open Roberta Lab. Aprenda código Morse e comunicação digital.
+
+## 🎯 Objetivos
+- Entender codificação de mensagens
+- Usar arrays e strings
+- Implementar comunicação via rádio
+
+## 📡 Desafio Extra
+Envie mensagens entre dois Micro:bits usando rádio!
+`
+    },
+    {
+        id: "medidor-velocidade-luz",
+        title: "Medidor de Velocidade com Luz",
+        description: "Calcule a velocidade de objetos usando dois sensores de luz e cronômetro.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Intermediário",
+        duration: "4 aulas",
+        grade: "Ensino Fundamental II (9º ano)",
+        image: "arduino-speed",
+        ods: "ODS 9 - Inovação",
+        bncc: ["EF09CI03"],
+        content: `
+# Medidor de Velocidade com Luz
+
+## 📋 Visão Geral
+Inspirado no Open Roberta. Calcule velocidade usando física e sensores.
+
+## 🎯 Objetivos
+- Aplicar fórmula v = d/t
+- Usar interrupções
+- Medir tempo com precisão
+
+## 🚗 Aplicação
+Crie um radar de velocidade para carrinhos de brinquedo!
+`
     }
 ];
 

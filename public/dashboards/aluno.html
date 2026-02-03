@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Dashboard - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' },
+                        gold: { 500: '#fbbf24', 600: '#f59e0b' }
+                    }
+                }
+            }
+        }
+    </script>
+    <script type="module" src="js/firebase-config.js"></script>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <img src="/images/logo.png" alt="Izicode" class="w-10 h-10">
+                    <span class="font-display font-bold text-xl text-slate-900">Izicode Edu</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-right">
+                        <p class="text-sm font-medium text-slate-900" id="userName">João Silva</p>
+                        <p class="text-xs text-slate-500" id="userLevel">Nível 3 - Programador Júnior</p>
+                    </div>
+                    <div
+                        class="w-10 h-10 bg-gradient-to-br from-brand-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                        JS
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Hero Section - Nível e XP -->
+        <div
+            class="bg-gradient-to-r from-brand-600 via-purple-600 to-pink-600 rounded-3xl p-8 mb-8 text-white shadow-2xl">
+            <div class="flex items-center justify-between">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-6xl" id="levelIcon">💻</span>
+                        <div>
+                            <h1 class="font-display text-4xl font-bold" id="levelName">Programador Júnior</h1>
+                            <p class="text-brand-100">Nível <span id="levelNumber">3</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Progresso -->
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm mb-2">
+                            <span><span id="currentXP">245</span> XP</span>
+                            <span><span id="progressPercent">63</span>% para próximo nível</span>
+                        </div>
+                        <div class="w-full bg-white/20 rounded-full h-4 overflow-hidden">
+                            <div id="progressBar"
+                                class="bg-gradient-to-r from-yellow-400 to-yellow-200 h-full rounded-full transition-all duration-500"
+                                style="width: 63%"></div>
+                        </div>
+                        <p class="text-sm text-brand-100 mt-2">Faltam <span id="xpToNext">55</span> XP para <span
+                                id="nextLevelName">Maker em Treinamento</span></p>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
+                            <p class="text-xs text-brand-100">Desafios Completos</p>
+                            <p class="text-2xl font-bold" id="challengesCount">8</p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
+                            <p class="text-xs text-brand-100">Badges Conquistados</p>
+                            <p class="text-2xl font-bold" id="badgesCount">3</p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
+                            <p class="text-xs text-brand-100">Sequência de Dias</p>
+                            <p class="text-2xl font-bold" id="streakCount">5 🔥</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ranking -->
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 ml-8">
+                    <div class="text-center">
+                        <p class="text-sm text-brand-100 mb-2">Seu Ranking</p>
+                        <div class="text-6xl font-display font-black">#12</div>
+                        <p class="text-xs text-brand-100 mt-2">de 156 alunos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+
+            <!-- Coluna Principal -->
+            <div class="lg:col-span-2 space-y-8">
+
+                <!-- Desafios Disponíveis -->
+                <section>
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="font-display text-2xl font-bold text-slate-900">🎯 Desafios Disponíveis</h2>
+                        <select class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-medium">
+                            <option>Todos</option>
+                            <option>Scratch</option>
+                            <option>Arduino</option>
+                            <option>Micro:bit</option>
+                        </select>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4" id="challengesGrid">
+                        <!-- Challenge Card 1 -->
+                        <div
+                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-brand-500 hover:shadow-xl transition-all cursor-pointer group">
+                            <div class="flex items-start justify-between mb-4">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center text-2xl">
+                                    🐱
+                                </div>
+                                <span
+                                    class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">FÁCIL</span>
+                            </div>
+                            <h3
+                                class="font-display text-lg font-bold text-slate-900 mb-2 group-hover:text-brand-600 transition-colors">
+                                Jogo Pong Clássico</h3>
+                            <p class="text-sm text-slate-600 mb-4">Recrie o clássico jogo Pong usando Scratch</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2 text-xs text-slate-500">
+                                    <span>⏱️ 30 min</span>
+                                    <span>•</span>
+                                    <span>Scratch</span>
+                                </div>
+                                <div class="flex items-center gap-1 text-yellow-500 font-bold">
+                                    <span>+10</span>
+                                    <span class="text-lg">⭐</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Challenge Card 2 -->
+                        <div
+                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-brand-500 hover:shadow-xl transition-all cursor-pointer group">
+                            <div class="flex items-start justify-between mb-4">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-br from-teal-400 to-teal-600 rounded-xl flex items-center justify-center text-2xl">
+                                    ⚡
+                                </div>
+                                <span
+                                    class="px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-bold rounded-full">MÉDIO</span>
+                            </div>
+                            <h3
+                                class="font-display text-lg font-bold text-slate-900 mb-2 group-hover:text-brand-600 transition-colors">
+                                Semáforo Inteligente</h3>
+                            <p class="text-sm text-slate-600 mb-4">Construa um semáforo com LEDs e Arduino</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2 text-xs text-slate-500">
+                                    <span>⏱️ 45 min</span>
+                                    <span>•</span>
+                                    <span>Arduino</span>
+                                </div>
+                                <div class="flex items-center gap-1 text-yellow-500 font-bold">
+                                    <span>+15</span>
+                                    <span class="text-lg">⭐</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Challenge Card 3 -->
+                        <div
+                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-brand-500 hover:shadow-xl transition-all cursor-pointer group">
+                            <div class="flex items-start justify-between mb-4">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center text-2xl">
+                                    🤖
+                                </div>
+                                <span
+                                    class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">FÁCIL</span>
+                            </div>
+                            <h3
+                                class="font-display text-lg font-bold text-slate-900 mb-2 group-hover:text-brand-600 transition-colors">
+                                Bússola Digital</h3>
+                            <p class="text-sm text-slate-600 mb-4">Use o magnetômetro do Micro:bit</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2 text-xs text-slate-500">
+                                    <span>⏱️ 20 min</span>
+                                    <span>•</span>
+                                    <span>Micro:bit</span>
+                                </div>
+                                <div class="flex items-center gap-1 text-yellow-500 font-bold">
+                                    <span>+10</span>
+                                    <span class="text-lg">⭐</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Challenge Card 4 -->
+                        <div
+                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-brand-500 hover:shadow-xl transition-all cursor-pointer group">
+                            <div class="flex items-start justify-between mb-4">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-2xl">
+                                    🧩
+                                </div>
+                                <span
+                                    class="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">DIFÍCIL</span>
+                            </div>
+                            <h3
+                                class="font-display text-lg font-bold text-slate-900 mb-2 group-hover:text-brand-600 transition-colors">
+                                Robô Seguidor de Linha</h3>
+                            <p class="text-sm text-slate-600 mb-4">Programe um robô autônomo com sensores</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2 text-xs text-slate-500">
+                                    <span>⏱️ 90 min</span>
+                                    <span>•</span>
+                                    <span>Arduino</span>
+                                </div>
+                                <div class="flex items-center gap-1 text-yellow-500 font-bold">
+                                    <span>+25</span>
+                                    <span class="text-lg">⭐</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ferramentas Integradas -->
+                <section>
+                    <h2 class="font-display text-2xl font-bold text-slate-900 mb-6">🛠️ Ferramentas de Prática</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+
+                        <a href="https://blockly.games" target="_blank"
+                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-purple-500 hover:shadow-xl transition-all group">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div
+                                    class="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-3xl">
+                                    🧩
+                                </div>
+                                <div>
+                                    <h3
+                                        class="font-display text-lg font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
+                                        Blockly Games</h3>
+                                    <p class="text-sm text-slate-500">Programação visual</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-slate-600">Aprenda lógica de programação com jogos interativos</p>
+                        </a>
+
+                        <a href="https://lab.open-roberta.org" target="_blank"
+                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-orange-500 hover:shadow-xl transition-all group">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div
+                                    class="w-14 h-14 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center text-3xl">
+                                    🤖
+                                </div>
+                                <div>
+                                    <h3
+                                        class="font-display text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">
+                                        Open Roberta Lab</h3>
+                                    <p class="text-sm text-slate-500">NEPO Visual</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-slate-600">Programe Arduino e Micro:bit com blocos NEPO</p>
+                        </a>
+
+                        <a href="https://scratch.mit.edu/projects/editor" target="_blank"
+                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-orange-500 hover:shadow-xl transition-all group">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div
+                                    class="w-14 h-14 bg-gradient-to-br from-orange-300 to-orange-500 rounded-xl flex items-center justify-center text-3xl">
+                                    🐱
+                                </div>
+                                <div>
+                                    <h3
+                                        class="font-display text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">
+                                        Scratch Editor</h3>
+                                    <p class="text-sm text-slate-500">MIT Scratch</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-slate-600">Crie jogos e animações com Scratch</p>
+                        </a>
+
+                        <a href="https://www.tinkercad.com/circuits" target="_blank"
+                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-cyan-500 hover:shadow-xl transition-all group">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div
+                                    class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-xl flex items-center justify-center text-3xl">
+                                    🔌
+                                </div>
+                                <div>
+                                    <h3
+                                        class="font-display text-lg font-bold text-slate-900 group-hover:text-cyan-600 transition-colors">
+                                        Tinkercad Circuits</h3>
+                                    <p class="text-sm text-slate-500">Simulador</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-slate-600">Simule circuitos Arduino online</p>
+                        </a>
+
+                    </div>
+                </section>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+
+                <!-- Minhas Conquistas -->
+                <div class="bg-white rounded-2xl p-6 border-2 border-slate-200">
+                    <h3 class="font-display text-lg font-bold text-slate-900 mb-4">🏆 Minhas Conquistas</h3>
+                    <div class="grid grid-cols-3 gap-3" id="badgesContainer">
+                        <div
+                            class="aspect-square bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-xl flex items-center justify-center text-3xl border-2 border-yellow-300 relative group cursor-pointer">
+                            🎯
+                            <div
+                                class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Primeiros Passos
+                            </div>
+                        </div>
+                        <div
+                            class="aspect-square bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center text-3xl border-2 border-blue-300 relative group cursor-pointer">
+                            🌅
+                            <div
+                                class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Madrugador
+                            </div>
+                        </div>
+                        <div
+                            class="aspect-square bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl flex items-center justify-center text-3xl border-2 border-orange-300 relative group cursor-pointer">
+                            🐱
+                            <div
+                                class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Aprendiz Scratch
+                            </div>
+                        </div>
+                        <div
+                            class="aspect-square bg-slate-100 rounded-xl flex items-center justify-center text-3xl opacity-40">
+                            🔒
+                        </div>
+                        <div
+                            class="aspect-square bg-slate-100 rounded-xl flex items-center justify-center text-3xl opacity-40">
+                            🔒
+                        </div>
+                        <div
+                            class="aspect-square bg-slate-100 rounded-xl flex items-center justify-center text-3xl opacity-40">
+                            🔒
+                        </div>
+                    </div>
+                    <button class="w-full mt-4 text-sm text-brand-600 font-medium hover:text-brand-700">
+                        Ver todas (15 disponíveis)
+                    </button>
+                </div>
+
+                <!-- Ranking Top 5 -->
+                <div class="bg-white rounded-2xl p-6 border-2 border-slate-200">
+                    <h3 class="font-display text-lg font-bold text-slate-900 mb-4">📊 Top 5 da Turma</h3>
+                    <div class="space-y-3">
+                        <div
+                            class="flex items-center gap-3 p-3 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl border border-yellow-200">
+                            <div class="text-2xl">🥇</div>
+                            <div class="flex-1">
+                                <p class="font-bold text-sm text-slate-900">Maria Santos</p>
+                                <p class="text-xs text-slate-500">485 XP</p>
+                            </div>
+                        </div>
+                        <div
+                            class="flex items-center gap-3 p-3 bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl border border-slate-200">
+                            <div class="text-2xl">🥈</div>
+                            <div class="flex-1">
+                                <p class="font-bold text-sm text-slate-900">Pedro Lima</p>
+                                <p class="text-xs text-slate-500">420 XP</p>
+                            </div>
+                        </div>
+                        <div
+                            class="flex items-center gap-3 p-3 bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl border border-orange-200">
+                            <div class="text-2xl">🥉</div>
+                            <div class="flex-1">
+                                <p class="font-bold text-sm text-slate-900">Ana Costa</p>
+                                <p class="text-xs text-slate-500">380 XP</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+                            <div class="text-lg font-bold text-slate-400">#4</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-sm text-slate-700">Carlos Souza</p>
+                                <p class="text-xs text-slate-500">310 XP</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+                            <div class="text-lg font-bold text-slate-400">#5</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-sm text-slate-700">Julia Alves</p>
+                                <p class="text-xs text-slate-500">290 XP</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-full mt-4 text-sm text-brand-600 font-medium hover:text-brand-700">
+                        Ver ranking completo
+                    </button>
+                </div>
+
+                <!-- Próxima Conquista -->
+                <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl p-6 text-white">
+                    <h3 class="font-display text-lg font-bold mb-3">🎖️ Próxima Conquista</h3>
+                    <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 mb-3">
+                        <div class="text-4xl mb-2 text-center">⚡</div>
+                        <p class="font-bold text-center mb-1">Mago do Arduino</p>
+                        <p class="text-xs text-center text-purple-100">Complete 5 desafios de Arduino</p>
+                    </div>
+                    <div class="bg-white/10 rounded-full h-2 overflow-hidden">
+                        <div class="bg-white h-full rounded-full" style="width: 40%"></div>
+                    </div>
+                    <p class="text-xs text-center mt-2 text-purple-100">2 de 5 desafios</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { gamificationSystem, mockUserData } from './js/gamification.js';
+
+        // Atualizar UI com dados do usuário
+        function updateUI() {
+            const user = mockUserData;
+            const level = gamificationSystem.calculateLevel(user.xp);
+            const progress = gamificationSystem.calculateProgress(user.xp);
+            const currentLevelIndex = gamificationSystem.levels.findIndex(l => l.level === level.level);
+            const nextLevel = gamificationSystem.levels[currentLevelIndex + 1];
+
+            // Atualizar informações de nível
+            document.getElementById('levelIcon').textContent = level.icon;
+            document.getElementById('levelName').textContent = level.name;
+            document.getElementById('levelNumber').textContent = level.level;
+            document.getElementById('currentXP').textContent = user.xp;
+            document.getElementById('progressPercent').textContent = progress;
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            if (nextLevel) {
+                const xpNeeded = nextLevel.minXP - user.xp;
+                document.getElementById('xpToNext').textContent = xpNeeded;
+                document.getElementById('nextLevelName').textContent = nextLevel.name;
+            }
+
+            // Atualizar estatísticas
+            document.getElementById('challengesCount').textContent = user.challengesCompleted;
+            document.getElementById('badgesCount').textContent = user.badges.length;
+            document.getElementById('streakCount').textContent = user.loginStreak + ' 🔥';
+
+            // Atualizar navbar
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userLevel').textContent = `Nível ${level.level} - ${level.name}`;
+        }
+
+        // Inicializar
+        updateUI();
+    </script>
+
+</body>
+
+</html>

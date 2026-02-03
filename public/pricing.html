@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma Gratuita - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 text-slate-900 antialiased">
+
+    <!-- Header -->
+    <nav class="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex items-center gap-2">
+                    <img src="images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
+                    <span class="font-display font-bold text-xl text-slate-900">Izicode Edu</span>
+                </a>
+                <a href="dashboard.html"
+                    class="text-sm font-medium text-brand-600 hover:text-brand-700 transition-colors">
+                    ← Voltar ao Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-20 bg-gradient-to-br from-brand-50 via-white to-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span
+                class="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-wider text-brand-700 uppercase bg-brand-100 rounded-full">
+                100% Gratuito
+            </span>
+            <h1 class="font-display text-5xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
+                Plataforma <span class="text-brand-600">Gratuita</span><br>
+                Treinamento <span class="text-brand-600">Premium</span>
+            </h1>
+            <p class="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                Acesse gratuitamente nossa biblioteca com <strong>centenas de projetos open-source</strong>.
+                Contrate treinamento e consultoria para implementar robótica na sua escola.
+            </p>
+        </div>
+    </section>
+
+    <!-- Free Platform Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl font-bold text-slate-900 mb-4">🎁 Plataforma Gratuita para Todos</h2>
+                <p class="text-xl text-slate-600">Sem mensalidade, sem cartão de crédito, sem pegadinhas.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-brand-50 to-brand-100 rounded-3xl p-8 border-2 border-brand-200">
+                    <div class="w-16 h-16 bg-brand-600 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-slate-900 mb-3">Biblioteca Completa</h3>
+                    <p class="text-slate-700 mb-4">Acesso a todos os projetos curados de Scratch, Arduino, Micro:bit e
+                        mais.</p>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li>✅ 18+ projetos prontos</li>
+                        <li>✅ Planos de aula detalhados</li>
+                        <li>✅ Códigos comentados</li>
+                        <li>✅ Alinhado à BNCC</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl p-8 border-2 border-purple-200">
+                    <div class="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-slate-900 mb-3">Ferramentas Completas</h3>
+                    <p class="text-slate-700 mb-4">Crie, gerencie e compartilhe seus próprios projetos educacionais.</p>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li>✅ Dashboard personalizado</li>
+                        <li>✅ Gerador de projetos com IA</li>
+                        <li>✅ Gestão de turmas</li>
+                        <li>✅ Acompanhamento de progresso</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8 border-2 border-green-200">
+                    <div class="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl font-bold text-slate-900 mb-3">Comunidade Ativa</h3>
+                    <p class="text-slate-700 mb-4">Conecte-se com outros educadores e compartilhe experiências.</p>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li>✅ Fórum de discussão</li>
+                        <li>✅ Grupo no WhatsApp</li>
+                        <li>✅ Webinars mensais</li>
+                        <li>✅ Materiais exclusivos</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="onboarding.html"
+                    class="inline-block bg-brand-600 text-white px-10 py-5 rounded-2xl font-black hover:bg-brand-700 transition-all text-xl shadow-2xl">
+                    COMEÇAR GRÁTIS AGORA
+                </a>
+                <p class="text-sm text-slate-500 mt-4">Sem cartão de crédito • Acesso imediato • 100% gratuito</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Training Services Section -->
+    <section class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-4xl font-bold text-slate-900 mb-4">💼 Serviços Profissionais (Opcional)
+                </h2>
+                <p class="text-xl text-slate-600">Quer implementar robótica na sua escola? Oferecemos treinamento e
+                    consultoria.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Treinamento -->
+                <div class="bg-white rounded-3xl p-8 shadow-lg border-2 border-slate-200">
+                    <div class="mb-6">
+                        <h3 class="font-display text-2xl font-bold text-slate-900 mb-2">🎓 Treinamento de Professores
+                        </h3>
+                        <p class="text-slate-600">Curso "Robótica sem Kit Caro"</p>
+                    </div>
+                    <div class="mb-8">
+                        <div class="flex items-baseline gap-2">
+                            <span class="font-display text-5xl font-bold text-slate-900">R$ 497</span>
+                            <span class="text-slate-500">/professor</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mt-2">8 horas (presencial ou online)</p>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-brand-600 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-slate-700">Como usar a plataforma Izicode Edu</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-brand-600 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-slate-700">Metodologias ativas (PBL, Design Thinking)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-brand-600 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-slate-700">Projetos práticos com materiais de baixo custo</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-brand-600 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-slate-700">Certificado de 8 horas</span>
+                        </li>
+                    </ul>
+                    <a href="https://wa.me/5511999999999?text=Quero%20contratar%20treinamento" target="_blank"
+                        class="block w-full bg-brand-600 text-white text-center px-6 py-3 rounded-xl font-bold hover:bg-brand-700 transition-colors">
+                        Solicitar Orçamento
+                    </a>
+                </div>
+
+                <!-- Consultoria -->
+                <div class="bg-white rounded-3xl p-8 shadow-lg border-2 border-purple-200">
+                    <div class="mb-6">
+                        <h3 class="font-display text-2xl font-bold text-slate-900 mb-2">🏫 Consultoria Escolar</h3>
+                        <p class="text-slate-600">Implementação completa de robótica</p>
+                    </div>
+                    <div class="mb-8">
+                        <div class="flex items-baseline gap-2">
+                            <span class="font-display text-5xl font-bold text-slate-900">R$ 1.997</span>
+                            <span class="text-slate-500">/mês</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mt-2">Contrato de 12 meses</p>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-purple-600 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-slate-700">Treinamento inicial para equipe (16h)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-purple-600 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-slate-700">Consultoria pedagógica mensal (4h)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-purple-600 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-slate-700">Curadoria de projetos para o currículo</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-purple-600 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-slate-700">Suporte via WhatsApp</span>
+                        </li>
+                    </ul>
+                    <a href="https://wa.me/5511999999999?text=Quero%20consultoria%20escolar" target="_blank"
+                        class="block w-full bg-purple-600 text-white text-center px-6 py-3 rounded-xl font-bold hover:bg-purple-700 transition-colors">
+                        Solicitar Orçamento
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="font-display text-4xl font-bold text-slate-900 text-center mb-12">Perguntas Frequentes</h2>
+            <div class="space-y-4">
+                <details class="bg-slate-50 rounded-xl p-6 hover:bg-slate-100 transition-colors">
+                    <summary class="font-bold text-slate-900 cursor-pointer">A plataforma é realmente gratuita?
+                    </summary>
+                    <p class="text-slate-600 mt-4">Sim! 100% gratuita para sempre. Você tem acesso completo à biblioteca
+                        de projetos, ferramentas de criação e comunidade sem pagar nada.</p>
+                </details>
+                <details class="bg-slate-50 rounded-xl p-6 hover:bg-slate-100 transition-colors">
+                    <summary class="font-bold text-slate-900 cursor-pointer">Preciso contratar treinamento ou
+                        consultoria?</summary>
+                    <p class="text-slate-600 mt-4">Não! Os serviços de treinamento e consultoria são totalmente
+                        opcionais. Você pode usar a plataforma de forma independente e gratuita.</p>
+                </details>
+                <details class="bg-slate-50 rounded-xl p-6 hover:bg-slate-100 transition-colors">
+                    <summary class="font-bold text-slate-900 cursor-pointer">De onde vêm os projetos?</summary>
+                    <p class="text-slate-600 mt-4">Curamos e adaptamos projetos de plataformas open-source como Scratch
+                        (MIT), Open Roberta Lab e Micro:bit Foundation, traduzindo e alinhando à BNCC brasileira.</p>
+                </details>
+                <details class="bg-slate-50 rounded-xl p-6 hover:bg-slate-100 transition-colors">
+                    <summary class="font-bold text-slate-900 cursor-pointer">Posso usar em escola pública?</summary>
+                    <p class="text-slate-600 mt-4">Sim! A plataforma é ideal para escolas públicas justamente por ser
+                        gratuita e focar em projetos de baixo custo.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="py-20 bg-brand-600 text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="font-display text-4xl font-bold mb-6">Comece Agora, Gratuitamente!</h2>
+            <p class="text-brand-100 text-xl mb-10">Junte-se a centenas de educadores transformando a educação com
+                robótica e STEAM.</p>
+            <a href="onboarding.html"
+                class="inline-block bg-white text-brand-600 px-10 py-5 rounded-2xl font-black hover:bg-brand-50 transition-all text-xl shadow-2xl">
+                CRIAR CONTA GRÁTIS
+            </a>
+        </div>
+    </section>
+
+</body>
+
+</html>
