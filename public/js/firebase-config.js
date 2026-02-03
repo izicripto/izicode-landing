@@ -4,16 +4,7 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyC8mUecORyilxkA7bNAZ7GA8q6BBg3klsI",
-    authDomain: "izicodeedu-532ac.firebaseapp.com",
-    projectId: "izicodeedu-532ac",
-    storageBucket: "izicodeedu-532ac.firebasestorage.app",
-    messagingSenderId: "1094181143605",
-    appId: "1:1094181143605:web:cba0f1e360af9342b21d7c",
-    measurementId: "G-7FZBXZXZ16"
-};
+import { firebaseConfig } from './firebase-env.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

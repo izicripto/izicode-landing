@@ -32,9 +32,11 @@ Plataforma B2B para escolas e consultoria educacional focada em Robótica e Cult
 
 ## 🚀 3. PRÓXIMAS ETAPAS (PÓS-LANÇAMENTO)
 
-### 1. Monetização Real
-- [ ] Ativar Checkout Hotmart no `shop-kit.html`.
-- [ ] Criar sistema de cupons de desconto.
+### 1. Integração de Ecossistema Open Source
+- [ ] Criar hub na `library.html` para projetos externos.
+- [ ] Desenvolver template para exibir projetos do Scratch.
+- [ ] Desenvolver template para exibir projetos do Arduino.cc.
+- [ ] Pesquisar APIs ou métodos de integração para Tinkercad e Open Roberta.
 
 ### 2. Automação de Marketing
 - [ ] Configurar alertas do Tally para Telegram.
