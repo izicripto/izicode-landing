@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Kids - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            /* Fonte mais lúdica */
+        }
+
+        .bubble-enter {
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Scrollbar fofa */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+
+<body class="bg-sky-50 h-screen flex flex-col">
+
+    <!-- Navbar Colorida -->
+    <nav
+        class="bg-white border-b-4 border-sky-100 px-4 py-3 flex justify-between items-center flex-shrink-0 relative z-20 shadow-sm">
+        <a href="student-area.html"
+            class="flex items-center gap-2 text-sky-500 hover:text-sky-600 font-bold transition-colors">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
+            </svg>
+            Voltar
+        </a>
+        <div class="flex items-center gap-3">
+            <div
+                class="w-12 h-12 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-full flex items-center justify-center text-white text-2xl shadow-lg transform hover:scale-110 transition-transform">
+                🤖
+            </div>
+            <div>
+                <h1 class="text-xl font-bold text-gray-800 leading-tight">Tutor IA</h1>
+                <p class="text-xs text-green-500 font-bold">Online e Pronto!</p>
+            </div>
+        </div>
+        <div class="w-20"></div> <!-- Spacer -->
+    </nav>
+
+    <!-- Chat Area -->
+    <main id="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-6 scroll-smooth pb-32">
+        <!-- Welcome Bubble -->
+        <div class="flex gap-4 max-w-2xl mx-auto bubble-enter">
+            <div
+                class="w-10 h-10 bg-indigo-500 rounded-full flex-shrink-0 flex items-center justify-center text-white text-lg">
+                🤖</div>
+            <div
+                class="bg-white p-5 rounded-3xl rounded-tl-none shadow-md border-2 border-indigo-50 text-gray-700 text-lg">
+                <p class="mb-2"><strong>Olá! Sou seu robô tutor!</strong> 👾</p>
+                <p>Eu sei tudo sobre códigos, robôs e criar jogos. O que você quer aprender hoje?</p>
+            </div>
+        </div>
+
+        <!-- Sugestões Rápidas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl mx-auto bubble-enter" style="animation-delay: 0.1s">
+            <button onclick="sendPreset('Me explique o que é uma Variável como se eu tivesse 10 anos?')"
+                class="bg-white p-4 rounded-2xl border-2 border-dashed border-purple-200 hover:border-purple-400 hover:bg-purple-50 text-left transition-all">
+                <span class="block text-2xl mb-1">📦</span>
+                <span class="font-bold text-purple-700">O que é Variável?</span>
+            </button>
+            <button onclick="sendPreset('Como faço um personagem pular no Scratch?')"
+                class="bg-white p-4 rounded-2xl border-2 border-dashed border-orange-200 hover:border-orange-400 hover:bg-orange-50 text-left transition-all">
+                <span class="block text-2xl mb-1">🐱</span>
+                <span class="font-bold text-orange-700">Pular no Scratch</span>
+            </button>
+            <button onclick="sendPreset('Escreva um código para piscar um LED no Arduino.')"
+                class="bg-white p-4 rounded-2xl border-2 border-dashed border-cyan-200 hover:border-cyan-400 hover:bg-cyan-50 text-left transition-all">
+                <span class="block text-2xl mb-1">💡</span>
+                <span class="font-bold text-cyan-700">Piscar LED (Arduino)</span>
+            </button>
+            <button onclick="sendPreset('Por que meu código não funciona?')"
+                class="bg-white p-4 rounded-2xl border-2 border-dashed border-red-200 hover:border-red-400 hover:bg-red-50 text-left transition-all">
+                <span class="block text-2xl mb-1">🐞</span>
+                <span class="font-bold text-red-700">Ajuda com Erro</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- Input Area -->
+    <div class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md p-4 border-t border-sky-100">
+        <form id="chatForm" class="max-w-3xl mx-auto flex gap-3">
+            <input type="text" id="promptInput"
+                class="flex-1 bg-sky-50 border-2 border-sky-100 rounded-full px-6 py-4 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-sky-400 focus:ring-4 focus:ring-sky-100 transition-all font-medium"
+                placeholder="Pergunte sobre código ou robôs..." required autocomplete="off">
+
+            <button type="submit" id="sendBtn"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg transform active:scale-95 transition-all">
+                <svg class="w-6 h-6 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+            </button>
+        </form>
+    </div>
+
+    <!-- Hidden Settings for API (reusing logic but auto-loading if present) -->
+    <div id="settingsAlert"
+        class="hidden fixed top-20 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl shadow-xl max-w-sm z-50">
+        <strong class="font-bold">Atenção!</strong>
+        <span class="block sm:inline">Peça para seu professor configurar a chave da IA no Painel Principal.</span>
+    </div>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+        import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+
+        const chatContainer = document.getElementById('chatContainer');
+        const promptInput = document.getElementById('promptInput');
+        const chatForm = document.getElementById('chatForm');
+        const sendBtn = document.getElementById('sendBtn');
+
+        let genAI, model, chat;
+
+        // Load Key from LocalStorage (Shared with Teacher Dashboard)
+        const savedKey = localStorage.getItem('gemini_api_key');
+
+        if (savedKey) {
+            initAI(savedKey);
+        } else {
+            console.warn("No API Key found");
+            // Show kid-friendly error or demo mode
+            document.getElementById('settingsAlert').classList.remove('hidden');
+            appendMessage('ai', "Olá! Eu preciso que seu professor me ative primeiro. Peça para ele configurar a 'Chave API' no painel dele, tá bom? 🔧");
+            promptInput.disabled = true;
+            sendBtn.disabled = true;
+        }
+
+        function initAI(key) {
+            try {
+                genAI = new GoogleGenerativeAI(key);
+                model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+                // --- CRITICAL: KIIDS SAFE SYSTEM PROMPT ---
+                chat = model.startChat({
+                    history: [
+                        {
+                            role: "user",
+                            parts: [{ text: "SYSTEM_INSTRUCTION: Você é o 'Tutor Izicode', um assistente amigável para crianças e adolescentes. SUAS REGRAS: 1) Você SÓ responde sobre Programação, Robótica, Lógica, Matemática e Ciências. 2) Se perguntarem sobre outros assuntos (fofoca, política, violência, etc), diga gentilmente: 'Eu sou um robô de programação, só sei falar de códigos! Que tal criarmos um jogo?'. 3) Use linguagem simples, emojis, e exemplos divertidos (Minecraft, Roblox, etc). 4) Nunca dê a resposta pronta do dever de casa, dê dicas. 5) Seja muito encorajador." }]
+                        },
+                        {
+                            role: "model",
+                            parts: [{ text: "Entendido! Sou o Tutor Izicode, amigo dos futuros programadores! 🚀 Vou ensinar lógica e código de jeito divertido e seguro. Estou pronto!" }]
+                        }
+                    ],
+                });
+            } catch (error) {
+                console.error("AI Init Error", error);
+            }
+        }
+
+        window.sendPreset = (text) => {
+            promptInput.value = text;
+            handleSend(new Event('submit'));
+        }
+
+        async function handleSend(e) {
+            e.preventDefault();
+            const text = promptInput.value.trim();
+            if (!text || !chat) return;
+
+            // User UI
+            appendMessage('user', text);
+            promptInput.value = '';
+
+            // Loading UI
+            const loadingId = appendLoading();
+
+            try {
+                const result = await chat.sendMessage(text);
+                const response = await result.response;
+                const markdown = response.text();
+
+                removeLoading(loadingId);
+                appendMessage('ai', markdown);
+            } catch (error) {
+                removeLoading(loadingId);
+                appendMessage('ai', "Ops, minha antena falhou! 📡 Tente perguntar de novo.");
+                console.error(error);
+            }
+        }
+
+        chatForm.addEventListener('submit', handleSend);
+
+        function appendMessage(role, text) {
+            const div = document.createElement('div');
+            div.className = `flex gap-4 max-w-2xl mx-auto bubble-enter ${role === 'user' ? 'flex-row-reverse' : ''}`;
+
+            if (role === 'ai') {
+                div.innerHTML = `
+                    <div class="w-10 h-10 bg-indigo-500 rounded-full flex-shrink-0 flex items-center justify-center text-white">🤖</div>
+                    <div class="bg-white p-5 rounded-3xl rounded-tl-none shadow-md border-2 border-indigo-50 text-gray-700 prose prose-p:my-2 prose-headings:text-indigo-600">
+                        ${marked.parse(text)}
+                    </div>
+                `;
+            } else {
+                div.innerHTML = `
+                    <div class="bg-indigo-600 p-4 rounded-3xl rounded-tr-none text-white shadow-md max-w-[80%]">
+                        ${text}
+                    </div>
+                `;
+            }
+            chatContainer.appendChild(div);
+            // Smooth scroll to bottom
+            setTimeout(() => {
+                chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+            }, 100);
+        }
+
+        function appendLoading() {
+            const id = 'load-' + Date.now();
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = "flex gap-4 max-w-2xl mx-auto bubble-enter";
+            div.innerHTML = `
+                <div class="w-10 h-10 bg-indigo-500 rounded-full flex-shrink-0 flex items-center justify-center text-white">🤖</div>
+                <div class="bg-white p-4 rounded-3xl rounded-tl-none shadow-sm border-2 border-indigo-50 flex gap-2 items-center">
+                    <span class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce"></span>
+                    <span class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></span>
+                    <span class="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+                </div>
+            `;
+            chatContainer.appendChild(div);
+            setTimeout(() => {
+                chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+            }, 100);
+            return id;
+        }
+
+        function removeLoading(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+    </script>
+</body>
+
+</html>

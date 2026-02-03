@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Arena - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="/js/auth-guard.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #4F46E5;
+            /* Indigo-600 base */
+            background-image: radial-gradient(#4338ca 1px, transparent 1px), radial-gradient(#4338ca 1px, transparent 1px);
+            background-position: 0 0, 25px 25px;
+            background-size: 50px 50px;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .card-enter {
+            animation: slideUp 0.5s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-white flex flex-col">
+
+    <!-- Navbar -->
+    <nav
+        class="bg-indigo-900/50 backdrop-blur-md border-b border-indigo-700/50 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <a href="student-area.html" class="flex items-center space-x-2 hover:text-indigo-200 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span class="font-bold">Voltar</span>
+        </a>
+        <div class="flex items-center space-x-4">
+            <div class="bg-indigo-800/80 px-4 py-1.5 rounded-full border border-indigo-600 flex items-center gap-2">
+                <span class="text-yellow-400">⚡</span>
+                <span id="userXP" class="font-bold">Carregando...</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-4xl mx-auto w-full p-6 flex flex-col justify-center items-center">
+
+        <!-- Category Selection -->
+        <div id="categoryScreen" class="w-full card-enter">
+            <h1 class="font-display text-4xl md:text-5xl font-bold text-center mb-4">Quiz Arena 🎮</h1>
+            <p class="text-indigo-200 text-center mb-10 text-lg">Escolha um desafio para ganhar XP!</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Logic -->
+                <button onclick="startQuiz('Lógica')"
+                    class="group bg-white/10 hover:bg-white/20 border border-white/10 hover:border-purple-400 p-6 rounded-3xl transition-all text-left relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                        </svg>
+                    </div>
+                    <span class="bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded-md">Lógica</span>
+                    <h3 class="font-display text-2xl font-bold mt-2 mb-1">Algoritmos</h3>
+                    <p class="text-indigo-200 text-sm">Desafios de pensamento computacional.</p>
+                </button>
+
+                <!-- Arduino -->
+                <button onclick="startQuiz('Arduino')"
+                    class="group bg-white/10 hover:bg-white/20 border border-white/10 hover:border-cyan-400 p-6 rounded-3xl transition-all text-left relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <span class="bg-cyan-600 text-white text-xs font-bold px-2 py-1 rounded-md">Maker</span>
+                    <h3 class="font-display text-2xl font-bold mt-2 mb-1">Arduino</h3>
+                    <p class="text-indigo-200 text-sm">Eletrônica e código C++.</p>
+                </button>
+
+                <!-- Scratch -->
+                <button onclick="startQuiz('Scratch')"
+                    class="group bg-white/10 hover:bg-white/20 border border-white/10 hover:border-orange-400 p-6 rounded-3xl transition-all text-left relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                        </svg>
+                    </div>
+                    <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-md">Jogos</span>
+                    <h3 class="font-display text-2xl font-bold mt-2 mb-1">Scratch</h3>
+                    <p class="text-indigo-200 text-sm">Criação de jogos e animações.</p>
+                </button>
+
+                <!-- Random -->
+                <button onclick="startQuiz('All')"
+                    class="group bg-gradient-to-br from-pink-500 to-rose-600 hover:from-pink-400 hover:to-rose-500 border border-white/10 p-6 rounded-3xl transition-all text-left relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-20 transition-opacity">
+                        <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <span class="bg-white/20 text-white text-xs font-bold px-2 py-1 rounded-md">Desafio</span>
+                    <h3 class="font-display text-2xl font-bold mt-2 mb-1">Mix Surpresa</h3>
+                    <p class="text-pink-100 text-sm">Perguntas aleatórias de todos os temas!</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Question Screen (Hidden by default) -->
+        <div id="quizScreen" class="w-full max-w-2xl hidden hidden-enter">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="exitQuiz()"
+                    class="text-indigo-300 hover:text-white text-sm font-bold flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Sair
+                </button>
+                <div
+                    class="bg-indigo-800/50 px-3 py-1 rounded-full text-xs font-bold text-indigo-200 border border-indigo-700">
+                    <span id="currentCategory">Lógica</span> - Valendo <span id="currentXP" class="text-yellow-400">10
+                        XP</span>
+                </div>
+            </div>
+
+            <div class="bg-white text-gray-900 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+                <!-- Progress Bar -->
+                <div class="absolute top-0 left-0 w-full h-2 bg-gray-100">
+                    <div id="timerBar" class="h-full bg-emerald-500 transition-all duration-1000 w-full"></div>
+                </div>
+
+                <div class="mt-4">
+                    <h2 id="questionText" class="font-display text-2xl font-bold mb-6">Carregando pergunta...</h2>
+
+                    <div id="optionsContainer" class="space-y-3">
+                        <!-- Options injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Feedback Area -->
+                <div id="feedbackArea" class="hidden mt-6 pt-6 border-t border-gray-100 animate-fade-in">
+                    <div id="feedbackMessage" class="font-bold text-lg mb-2"></div>
+                    <p id="feedbackExplanation" class="text-gray-600 text-sm mb-4"></p>
+                    <button onclick="nextQuestion()"
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition-colors">
+                        Próxima Pergunta
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script type="module">
+        import { auth, db, doc, getDoc, updateDoc, increment } from './js/firebase-config.js';
+        import { quizData, getQuestionsByCategory } from './js/quiz-data.js';
+
+        let currentQuestion = null;
+        let isAnswering = false;
+        let currentUser = null;
+
+        // Auth Check
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                // Load XP
+                const snap = await getDoc(doc(db, "users", user.uid));
+                if (snap.exists()) {
+                    document.getElementById('userXP').innerText = `${snap.data().xp || 0} XP`;
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        // Global functions
+        window.startQuiz = (category) => {
+            document.getElementById('categoryScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            document.getElementById('quizScreen').classList.add('card-enter');
+
+            loadNewQuestion(category);
+        }
+
+        window.exitQuiz = () => {
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('categoryScreen').classList.remove('hidden');
+        }
+
+        function loadNewQuestion(category) {
+            const questions = getQuestionsByCategory(category);
+            currentQuestion = questions[Math.floor(Math.random() * questions.length)];
+
+            // UI Update
+            document.getElementById('currentCategory').innerText = currentQuestion.category;
+            document.getElementById('currentXP').innerText = `+${currentQuestion.xp} XP`;
+            document.getElementById('questionText').innerText = currentQuestion.question;
+
+            // Reset state
+            document.getElementById('feedbackArea').classList.add('hidden');
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            isAnswering = true;
+
+            // Render Options
+            currentQuestion.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl border-2 border-gray-100 hover:border-indigo-200 hover:bg-indigo-50 transition-all font-medium text-gray-700";
+                btn.innerText = opt;
+                btn.onclick = () => handleAnswer(index, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        async function handleAnswer(selectedIndex, btnElement) {
+            if (!isAnswering) return;
+            isAnswering = false;
+
+            const isCorrect = selectedIndex === currentQuestion.correct;
+            const feedbackTitle = document.getElementById('feedbackMessage');
+            const feedbackText = document.getElementById('feedbackExplanation');
+
+            // Visual Feedback
+            if (isCorrect) {
+                btnElement.classList.remove('border-gray-100', 'hover:border-indigo-200');
+                btnElement.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                feedbackTitle.innerHTML = `<span class="text-green-600">Correto! 🎉</span>`;
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+
+                // Save XP
+                if (currentUser) {
+                    await updateDoc(doc(db, "users", currentUser.uid), {
+                        xp: increment(currentQuestion.xp),
+                        challengesCompleted: increment(1)
+                    });
+                    // Update UI XP locally
+                    const currentXP = parseInt(document.getElementById('userXP').innerText);
+                    document.getElementById('userXP').innerText = `${currentXP + currentQuestion.xp} XP`;
+                }
+
+            } else {
+                btnElement.classList.add('bg-red-100', 'border-red-500', 'text-red-800', 'shake');
+                feedbackTitle.innerHTML = `<span class="text-red-600">Ops! Não foi dessa vez.</span>`;
+
+                // Highlight correct one logic could go here
+            }
+
+            feedbackText.innerText = currentQuestion.explanation;
+            document.getElementById('feedbackArea').classList.remove('hidden');
+        }
+
+        window.nextQuestion = () => {
+            // For now, infinite mode: reuse category from UI text or passed var
+            // Simplified: picking random again from same category if possible, or just random
+            // To keep it simple, we just reload a random one from 'All' or keep strict category?
+            // Let's just restart the selection for now or pick random.
+            // Better user flow: Go back to menu or Next Random.
+            // Let's implement "Next Random" behavior
+            const text = document.getElementById('currentCategory').innerText;
+            loadNewQuestion(text);
+        }
+    </script>
+</body>
+
+</html>
