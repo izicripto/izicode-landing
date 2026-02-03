@@ -53,8 +53,8 @@ Plataforma B2B para escolas e consultoria educacional focada em Robótica e Cult
 ## 🏁 4. LANÇAMENTO V3.1 (FINALIZAÇÃO)
 
 ### 1. Infraestrutura & Deploy
-- [ ] Resolver bloqueio de autenticação Git/SSH (Crítico).
-- [ ] Realizar deploy de produção (Firebase Hosting + Functions).
+- [x] Resolver bloqueio de autenticação Git/SSH (Crítico).
+- [x] Realizar deploy de produção (Via GitHub Actions).
 - [x] Verificar integridade do PWA em dispositivos móveis.
 
 ### 2. Monitoramento

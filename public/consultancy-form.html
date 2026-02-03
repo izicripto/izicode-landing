@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Falar com Especialista - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <script type="module" src="js/firebase-config.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Space Grotesk', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <!-- Navbar Simples -->
+    <nav class="w-full bg-white border-b border-slate-200 py-4">
+        <div class="max-w-3xl mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <img src="images/logo.png" alt="Izicode" class="w-8 h-8 group-hover:-rotate-6 transition-transform">
+                <span class="font-display font-bold text-xl text-slate-900">Izicode Edu</span>
+            </a>
+            <a href="index.html" class="text-sm font-medium text-slate-500 hover:text-brand-600">Voltar</a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-6 py-12">
+        
+        <!-- Header do Form -->
+        <div class="text-center mb-10">
+            <span class="inline-block py-1 px-3 rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase tracking-widest mb-4">Consultoria Especializada</span>
+            <h1 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-4">Transforme sua Escola</h1>
+            <p class="text-slate-600 text-lg">Preencha o formulário abaixo para receber um diagnóstico gratuito e um plano de implementação personalizado.</p>
+        </div>
+
+        <!-- Formulário -->
+        <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+            <form id="consultancyForm" class="p-8 md:p-10 space-y-6">
+                
+                <!-- Feedback Message -->
+                <div id="formMessage" class="hidden p-4 rounded-xl mb-6 text-center font-medium"></div>
+
+                <!-- Seção 1: Contato -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-2 mb-4">1. Seus Dados</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Nome Completo *</label>
+                            <input type="text" name="name" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="Ex: Maria Silva">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Cargo/Função *</label>
+                            <input type="text" name="role" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="Ex: Coordenadora Pedagógica">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Email Corporativo *</label>
+                            <input type="email" name="email" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="maria@escola.com.br">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">WhatsApp *</label>
+                            <input type="tel" name="phone" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="(11) 99999-9999">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção 2: Escola -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-2 mb-4">2. Sobre a Instituição</h3>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1">Nome da Escola *</label>
+                        <input type="text" name="schoolName" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="Ex: Colégio Futuro">
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Número de Alunos (Aprox.)</label>
+                            <select name="studentsCount" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all bg-white">
+                                <option value="<100">Menos de 100</option>
+                                <option value="100-500">100 a 500</option>
+                                <option value="500-1000">500 a 1000</option>
+                                <option value="1000+">Mais de 1000</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Infraestrutura Atual</label>
+                            <select name="infrastructure" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all bg-white">
+                                <option value="none">Nenhuma (Vamos começar do zero)</option>
+                                <option value="basic">Básica (Alguns computadores)</option>
+                                <option value="lab">Laboratório de Informática</option>
+                                <option value="maker">Espaço Maker Equipado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção 3: Objetivos -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-2 mb-4">3. Objetivo Principal</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="goal" value="robotica_curricular" class="w-5 h-5 text-brand-600 focus:ring-brand-500" checked>
+                            <span class="text-sm font-medium">Robótica na Grade Curricular</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="goal" value="extracurricular" class="w-5 h-5 text-brand-600 focus:ring-brand-500">
+                            <span class="text-sm font-medium">Curso Extracurricular</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="goal" value="formacao_professores" class="w-5 h-5 text-brand-600 focus:ring-brand-500">
+                            <span class="text-sm font-medium">Formação de Professores</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
+                            <input type="radio" name="goal" value="laboratorio" class="w-5 h-5 text-brand-600 focus:ring-brand-500">
+                            <span class="text-sm font-medium">Montagem de Laboratório</span>
+                        </label>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1">Mensagem ou Dúvida Específica</label>
+                        <textarea name="message" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all" placeholder="Conte um pouco mais sobre seus desafios..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="pt-6">
+                    <button type="submit" id="submitBtn" class="w-full bg-brand-600 text-white font-display font-bold text-xl py-4 rounded-2xl hover:bg-brand-700 hover:scale-[1.01] transition-all shadow-xl shadow-brand-500/20 flex items-center justify-center gap-2">
+                        <span>Enviar Solicitação</span>
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </button>
+                    <p class="text-xs text-slate-400 text-center mt-4">Ao enviar, você concorda com nossa política de privacidade. Seus dados estão seguros.</p>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <script type="module">
+        import { db, collection } from './js/firebase-config.js';
+        import { addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const form = document.getElementById('consultancyForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const msgDiv = document.getElementById('formMessage');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Loading State
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<svg class="animate-spin h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Enviando...';
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                // Save to Firestore
+                await addDoc(collection(db, "leads"), {
+                    ...data,
+                    status: "new",
+                    source: "internal_form",
+                    createdAt: serverTimestamp()
+                });
+
+                // Success Message
+                msgDiv.classList.remove('hidden', 'bg-red-50', 'text-red-700');
+                msgDiv.classList.add('bg-green-50', 'text-green-700', 'flex', 'flex-col', 'items-center');
+                msgDiv.innerHTML = `
+                    <svg class="w-12 h-12 text-green-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="text-lg font-bold">Recebemos sua mensagem!</span>
+                    <span>Nosso time entrará em contato em até 24 horas.</span>
+                `;
+                form.reset();
+                
+                // Hide form content partially or scroll up
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            } catch (error) {
+                console.error("Erro ao enviar:", error);
+                msgDiv.classList.remove('hidden');
+                msgDiv.classList.add('bg-red-50', 'text-red-700');
+                msgDiv.textContent = "Houve um erro ao enviar. Por favor, tente novamente ou contate contato@izicode.com.br";
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Tentar Novamente';
+            }
+        });
+    </script>
+
+</body>
+</html>
