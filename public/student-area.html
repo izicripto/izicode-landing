@@ -7,341 +7,503 @@
     <title>Área do Aluno - Izicode Edu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&family=Fredoka:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script type="module" src="js/firebase-config.js"></script>
-    <script type="module" src="/js/auth-guard.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0066FF',
+                            600: '#0052CC',
+                            700: '#003D99',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                        bubble: ['Fredoka', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'bubble': '0 10px 0 0 rgba(0,0,0,0.1)',
+                        'bubble-hover': '0 15px 0 0 rgba(0,0,0,0.1)',
+                        'bubble-active': '0 5px 0 0 rgba(0,0,0,0.1)',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+        .bubble-card {
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .font-display {
-            font-family: 'Space Grotesk', sans-serif;
+        .bubble-card:hover {
+            transform: translateY(-5px);
         }
 
-        .level-badge {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+        .bubble-card:active {
+            transform: translateY(2px);
         }
     </style>
 </head>
 
-<body class="bg-indigo-50 min-h-screen flex flex-col">
+<body class="bg-[#F0F7FF] min-h-screen font-sans selection:bg-brand-200">
 
-    <!-- Navbar -->
-    <nav class="bg-white border-b border-indigo-100 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div class="flex items-center space-x-3">
-            <a href="dashboard.html" class="flex items-center space-x-3">
-                <div
-                    class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                    Iz</div>
-                <span class="font-display font-bold text-xl text-gray-900">Izicode <span
-                        class="text-indigo-600">Alunos</span></span>
+    <!-- Top Navigation Bubbles -->
+    <nav
+        class="max-w-5xl mx-auto px-4 py-3 md:py-4 flex flex-col md:flex-row justify-between items-center gap-2 z-50 relative">
+        <div class="flex items-center gap-2 w-full md:w-auto">
+            <a href="index.html"
+                class="bg-white p-2 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-3 pr-5 w-full md:w-auto hover:bg-slate-50 transition-colors">
+                <img src="images/logo.png" alt="Izicode Logo" class="w-10 h-10 object-contain">
+                <div class="flex flex-col">
+                    <h1 class="font-bubble text-lg md:text-xl text-slate-800 leading-none">Izicode</h1>
+                    <span
+                        class="text-[10px] font-bold text-brand-500 uppercase tracking-widest leading-none">Educação</span>
+                </div>
             </a>
         </div>
 
-        <div class="flex items-center space-x-6">
-            <div class="flex items-center space-x-2 bg-yellow-50 px-3 py-1.5 rounded-full border border-yellow-200">
-                <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-                </svg>
-                <span class="font-bold text-yellow-700">12 Dias</span>
-            </div>
-            <div class="flex items-center space-x-2 bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-200">
-                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
-                <span id="navXp" class="font-bold text-indigo-700">... XP</span>
-            </div>
-            <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-sm">
-                <img id="navAvatar" src="" alt="Avatar">
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="flex-1 max-w-6xl mx-auto w-full p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-        <!-- Left Column: Challenges -->
-        <div class="lg:col-span-2 space-y-8">
-            <!-- Hero Banner -->
-            <div
-                class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-8 text-white relative overflow-hidden shadow-xl shadow-indigo-500/20">
-                <div class="relative z-10">
-                    <span
-                        class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider mb-4 inline-block">Missão
-                        da Semana</span>
-                    <h1 class="font-display text-3xl font-bold mb-4 flex items-center gap-3">
-                        Construa um Semáforo Inteligente
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                    </h1>
-                    <p class="text-indigo-100 mb-6 max-w-md">Aprenda a controlar LEDs com Arduino e crie um sistema de
-                        trânsito seguro para sua cidade maquete.</p>
-                    <a href="project-view.html?id=arduino-semaforo"
-                        class="inline-block bg-white text-indigo-600 px-6 py-3 rounded-xl font-bold hover:bg-indigo-50 transition-colors shadow-lg">
-                        Começar Missão
-                    </a>
+        <div
+            class="flex items-center gap-2 w-full md:w-auto bg-white/80 backdrop-blur-xl p-1.5 rounded-2xl border border-white shadow-sm">
+            <!-- XP Bar -->
+            <div class="flex-1 md:w-32 px-2">
+                <div class="flex justify-between text-[10px] font-bold text-slate-500 mb-0.5">
+                    <span id="currentLevel">Nv. 1</span>
+                    <span id="nextLevelXP">Prox: 100</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-100">
+                    <div id="xpProgress"
+                        class="bg-gradient-to-r from-yellow-400 to-orange-500 h-full rounded-full transition-all duration-1000"
+                        style="width: 0%"></div>
                 </div>
             </div>
 
-            <!-- Learning Path -->
-            <div>
-                <h2 class="font-display text-xl font-bold text-gray-900 mb-4 flex items-center">
-                    <div class="bg-indigo-100 p-2 rounded-lg mr-3">
-                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- XP Badge -->
+            <div
+                class="bg-yellow-50 text-yellow-700 px-2.5 py-1 rounded-lg font-bubble font-bold border border-yellow-100 flex items-center gap-1.5 shadow-sm text-xs whitespace-nowrap">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <span id="currentXP">0</span>
+            </div>
+
+            <!-- Avatar -->
+            <img id="studentAvatar" src="" alt="Avatar"
+                class="w-8 h-8 rounded-lg border border-white shadow-sm bg-slate-100 object-cover">
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 pb-20 space-y-8 md:space-y-10">
+
+        <!-- Welcome Section -->
+        <header class="text-center md:text-left py-4 md:py-6">
+            <h2 id="greeting" class="font-bubble text-2xl md:text-3xl text-slate-800 mb-1">Olá, Explorador!</h2>
+            <p class="text-slate-500 text-sm font-medium">Sua jornada de aprendizado continua.</p>
+        </header>
+
+        <!-- Big Navigation Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <!-- Card 1: Arcade (Quiz) -->
+            <a href="quiz-arena.html"
+                class="bubble-card group relative bg-gradient-to-b from-purple-500 to-purple-600 rounded-[2.5rem] p-8 text-white shadow-bubble hover:shadow-bubble-hover active:shadow-bubble-active border-b-8 border-purple-800 overflow-hidden">
+                <div
+                    class="absolute top-0 right-0 p-8 opacity-10 transform group-hover:scale-125 transition-transform duration-500">
+                    <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="relative z-10 flex flex-col h-full justify-between min-h-[220px]">
+                    <div
+                        class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm shadow-inner border border-white/10 text-white">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L16 4m0 13V4m0 13L9 7" />
+                                d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
                         </svg>
                     </div>
-                    Sua Jornada
-                </h2>
-                <div class="space-y-4">
-                    <!-- Step 1: Done -->
+                    <div>
+                        <h3 class="font-bubble text-3xl mb-2">Quiz Arena</h3>
+                        <p class="text-purple-100 font-medium leading-relaxed">Desafie seus conhecimentos e ganhe
+                            medalhas raras!</p>
+                        <div
+                            class="mt-6 inline-flex items-center gap-2 bg-white text-purple-600 px-4 py-2 rounded-xl font-bold text-sm shadow-md">
+                            <span>JOGAR AGORA</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 2: Adventure (Projects) -->
+            <a href="library.html"
+                class="bubble-card group relative bg-gradient-to-b from-blue-500 to-blue-600 rounded-[2.5rem] p-8 text-white shadow-bubble hover:shadow-bubble-hover active:shadow-bubble-active border-b-8 border-blue-800 overflow-hidden">
+                <div
+                    class="absolute top-0 right-0 p-8 opacity-10 transform group-hover:scale-125 transition-transform duration-500">
+                    <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+                <div class="relative z-10 flex flex-col h-full justify-between min-h-[220px]">
                     <div
-                        class="bg-white p-4 rounded-2xl border border-indigo-100 flex items-center space-x-4 opacity-70">
-                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm shadow-inner border border-white/10 text-white">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bubble text-3xl mb-2">Biblioteca</h3>
+                        <p class="text-blue-100 font-medium leading-relaxed">Explore novos projetos de Robótica e
+                            Programação.</p>
+                        <div
+                            class="mt-6 inline-flex items-center gap-2 bg-white text-blue-600 px-4 py-2 rounded-xl font-bold text-sm shadow-md">
+                            <span>EXPLORAR</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 3: AI Tutor -->
+            <a href="student-ai.html"
+                class="bubble-card group relative bg-gradient-to-b from-teal-400 to-teal-500 rounded-[2.5rem] p-8 text-white shadow-bubble hover:shadow-bubble-hover active:shadow-bubble-active border-b-8 border-teal-700 overflow-hidden">
+                <div
+                    class="absolute top-0 right-0 p-8 opacity-10 transform group-hover:scale-125 transition-transform duration-500">
+                    <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <div class="relative z-10 flex flex-col h-full justify-between min-h-[220px]">
+                    <div
+                        class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm shadow-inner border border-white/10 text-white">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bubble text-3xl mb-2">Tutor IA</h3>
+                        <p class="text-teal-50 font-medium leading-relaxed">Seu ajudante robô pessoal para tirar
+                            dúvidas.</p>
+                        <div
+                            class="mt-6 inline-flex items-center gap-2 bg-white text-teal-600 px-4 py-2 rounded-xl font-bold text-sm shadow-md">
+                            <span>CONVERSAR</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+        </section>
+
+        <!-- Active Projects Section -->
+        <section>
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="font-bubble text-3xl text-slate-800 flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 bg-amber-100/50 rounded-xl flex items-center justify-center text-amber-600 shadow-sm border border-amber-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    Em Andamento
+                </h2>
+                <a href="my-projects.html" class="text-slate-500 font-bold hover:text-blue-500 transition-colors">Ver
+                    todos</a>
+            </div>
+
+            <div id="activeProjectsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamic Content Loading... -->
+            </div>
+        </section>
+
+        <!-- Learning Journey (Roadmap) Section -->
+        <section class="relative overflow-hidden">
+            <div class="flex items-center gap-3 mb-8">
+                <div
+                    class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 shadow-sm border border-indigo-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.227A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                    </svg>
+                </div>
+                <h2 class="font-bubble text-3xl text-slate-800">Sua Trilha</h2>
+            </div>
+
+            <div
+                class="bg-white rounded-[2.5rem] p-8 border-2 border-slate-100 shadow-xl relative overflow-x-auto no-scrollbar">
+                <div class="flex items-center justify-between min-w-[800px] relative">
+                    <!-- Roadmap Line Background -->
+                    <div class="absolute top-1/2 left-0 w-full h-1.5 bg-slate-100 -translate-y-1/2 z-0"></div>
+                    <div id="roadmapProgressLine"
+                        class="absolute top-1/2 left-0 h-1.5 bg-brand-500 -translate-y-1/2 z-0 transition-all duration-1000"
+                        style="width: 20%"></div>
+
+                    <!-- Milestone 1: Start -->
+                    <div class="relative z-10 flex flex-col items-center gap-3 group">
+                        <div
+                            class="w-16 h-16 rounded-full bg-brand-500 text-white flex items-center justify-center shadow-lg border-4 border-white transform group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
-                        <div class="flex-1">
-                            <h3 class="font-bold text-gray-900 line-through">Introdução ao Arduino</h3>
-                            <p class="text-xs text-gray-500">Concluído</p>
+                        <div class="text-center">
+                            <span class="block font-bold text-slate-800 text-sm">Basendo</span>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Completo</span>
                         </div>
-                        <span class="text-green-600 font-bold">+50 XP</span>
                     </div>
 
-                    <!-- Step 2: Active -->
-                    <div
-                        class="bg-white p-6 rounded-2xl border-2 border-indigo-500 shadow-lg shadow-indigo-500/10 flex items-center space-x-4 transform scale-105 transition-transform">
+                    <!-- Milestone 2: Logic -->
+                    <div class="relative z-10 flex flex-col items-center gap-3 group text-slate-400">
                         <div
-                            class="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white animate-pulse">
-                            <span class="font-bold">2</span>
+                            class="w-16 h-16 rounded-full bg-white text-slate-300 flex items-center justify-center shadow-md border-4 border-slate-50 transform group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
                         </div>
-                        <div class="flex-1">
-                            <span class="text-xs font-bold text-indigo-600 uppercase tracking-wide">Em Progresso</span>
-                            <h3 class="font-bold text-lg text-gray-900">Lógica de Programação (Blink)</h3>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                                <div class="bg-indigo-600 h-2 rounded-full" style="width: 60%"></div>
-                            </div>
+                        <div class="text-center">
+                            <span class="block font-bold text-sm">Lógica</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider">Próximo</span>
                         </div>
-                        <button
-                            class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg font-bold hover:bg-indigo-200">
-                            Continuar
-                        </button>
+                    </div>
+
+                    <!-- Milestone 3: Scratch -->
+                    <div class="relative z-10 flex flex-col items-center gap-3 group text-slate-300">
+                        <div
+                            class="w-16 h-16 rounded-full bg-white text-slate-200 flex items-center justify-center shadow-sm border-4 border-slate-50 transform group-hover:scale-110 transition-transform opacity-50">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="text-center">
+                            <span class="block font-bold text-sm">Games</span>
+                        </div>
+                    </div>
+
+                    <!-- Milestone 4: Robotics -->
+                    <div class="relative z-10 flex flex-col items-center gap-3 group text-slate-300">
+                        <div
+                            class="w-16 h-16 rounded-full bg-white text-slate-200 flex items-center justify-center shadow-sm border-4 border-slate-50 transform group-hover:scale-110 transition-transform opacity-50">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <div class="text-center">
+                            <span class="block font-bold text-sm">Hardware</span>
+                        </div>
+                    </div>
+
+                    <!-- Milestone 5: Master -->
+                    <div class="relative z-10 flex flex-col items-center gap-3 group text-slate-300">
+                        <div
+                            class="w-16 h-16 rounded-full bg-white text-slate-200 flex items-center justify-center shadow-sm border-4 border-slate-50 transform group-hover:scale-110 transition-transform opacity-50">
+                            <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                        </div>
+                        <div class="text-center">
+                            <span class="block font-bold text-sm">Mestre</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Right Column: Profile & Badges -->
-        <div class="space-y-8">
-            <!-- Profile Card -->
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 text-center relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-20 bg-indigo-50"></div>
-                <div class="relative z-10">
-                    <div class="w-24 h-24 mx-auto bg-white rounded-full p-1 shadow-md mb-4">
-                        <img id="profileAvatar" src="" alt="Avatar" class="w-full h-full rounded-full object-cover">
+        <!-- Ranking & Missions Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+            <!-- Ranking da Galáxia -->
+            <div class="bg-white rounded-[2.5rem] p-8 border-2 border-slate-100 shadow-xl">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center text-yellow-600 shadow-sm border border-yellow-200">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <h2 class="font-bubble text-3xl text-slate-800">Ranking</h2>
                     </div>
-                    <h2 id="profileName" class="font-display text-xl font-bold text-gray-900">...</h2>
-                    <p id="profileLevel" class="text-indigo-600 font-medium text-sm mb-6">Nível 1</p>
-
-                    <!-- Hidden placeholders for future features -->
-                    <!-- <div class="grid grid-cols-2 gap-4 text-left">
-                        <div class="bg-gray-50 p-3 rounded-xl">
-                            <div class="text-xs text-gray-500">Rank Global</div>
-                            <div class="font-bold text-gray-900">#42</div>
-                        </div>
-                        <div class="bg-gray-50 p-3 rounded-xl">
-                            <div class="text-xs text-gray-500">Conquistas</div>
-                            <div class="font-bold text-gray-900">5/20</div>
-                        </div>
-                    </div> -->
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Global</span>
                 </div>
-            </div>
 
-            <!-- Quick Quiz -->
-            <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-6 text-white relative overflow-hidden shadow-lg group hover:shadow-xl transition-all cursor-pointer"
-                onclick="window.location.href='quiz-arena.html'">
-                <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div class="relative z-10 text-center">
+                <div id="leaderboardList" class="space-y-4">
+                    <!-- Rank 1 -->
                     <div
-                        class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 backdrop-blur-sm">
-                        <span class="text-3xl">🎮</span>
+                        class="flex items-center justify-between p-4 rounded-2xl bg-yellow-50 border border-yellow-100 shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <span
+                                class="w-8 h-8 flex items-center justify-center font-bold text-yellow-700 text-lg">1º</span>
+                            <div class="w-10 h-10 rounded-xl bg-white border border-yellow-200 overflow-hidden">
+                                <img src="https://ui-avatars.com/api/?name=Leo+Silva" alt="User">
+                            </div>
+                            <span class="font-bold text-slate-700">Leo Silva</span>
+                        </div>
+                        <span class="font-bubble font-bold text-yellow-700">2,450 XP</span>
                     </div>
-                    <h3 class="font-bold text-xl mb-1">Quiz Arena</h3>
-                    <p class="text-indigo-200 text-sm mb-4">Teste seus conhecimentos e ganhe XP!</p>
-                    <button
-                        class="bg-white text-indigo-600 px-6 py-2 rounded-full font-bold text-sm hover:bg-indigo-50 transition-colors w-full">
-                        Jogar Agora
-                    </button>
+
+                    <!-- Rank 2 -->
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                        <div class="flex items-center gap-4">
+                            <span
+                                class="w-8 h-8 flex items-center justify-center font-bold text-slate-400 text-lg">2º</span>
+                            <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 overflow-hidden">
+                                <img src="https://ui-avatars.com/api/?name=Bia+S" alt="User">
+                            </div>
+                            <span class="font-bold text-slate-700">Bia Oliveira</span>
+                        </div>
+                        <span class="font-bubble font-bold text-slate-500">1,820 XP</span>
+                    </div>
+
+                    <!-- Rank 3 -->
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                        <div class="flex items-center gap-4">
+                            <span
+                                class="w-8 h-8 flex items-center justify-center font-bold text-slate-400 text-lg">3º</span>
+                            <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 overflow-hidden">
+                                <img src="https://ui-avatars.com/api/?name=Gui+L" alt="User">
+                            </div>
+                            <span class="font-bold text-slate-700">Gui Lima</span>
+                        </div>
+                        <span class="font-bubble font-bold text-slate-500">1,540 XP</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- IA Tutor Widget -->
-            <div class="bg-gradient-to-br from-sky-400 to-blue-500 rounded-3xl p-6 text-white relative overflow-hidden shadow-lg group hover:shadow-xl transition-all cursor-pointer"
-                onclick="window.location.href='student-ai.html'">
-                <div class="absolute top-0 right-0 p-4 opacity-20">
-                    <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7V5.73C7.4 5.39 7 4.74 7 4a2 2 0 012-2h3z" />
+            <!-- Missões Diárias -->
+            <div class="bg-white rounded-[2.5rem] p-8 border-2 border-slate-100 shadow-xl">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 bg-brand-100 rounded-xl flex items-center justify-center text-brand-600 shadow-sm border border-brand-200">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h2 class="font-bubble text-3xl text-slate-800">Missões</h2>
+                    </div>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Reseta em 6h</span>
+                </div>
+
+                <div id="dailyMissionsList" class="space-y-4">
+                    <!-- Mission 1 -->
+                    <div
+                        class="group p-4 rounded-2xl border-2 border-slate-100 bg-slate-50 flex items-center gap-4 hover:border-brand-200 transition-colors">
+                        <div
+                            class="w-10 h-10 rounded-full bg-white border-2 border-brand-500 flex items-center justify-center text-brand-600 group-hover:bg-brand-500 group-hover:text-white transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="block font-bold text-slate-700">Explorador Diário</span>
+                            <span class="text-xs font-medium text-slate-400">Entre na plataforma (+5 XP)</span>
+                        </div>
+                        <div class="ml-auto flex items-center gap-2">
+                            <div class="w-12 h-2 bg-slate-200 rounded-full">
+                                <div class="w-full bg-green-500 h-2 rounded-full"></div>
+                            </div>
+                            <span class="text-[10px] font-bold text-green-500">OK</span>
+                        </div>
+                    </div>
+
+                    <!-- Mission 2 -->
+                    <div
+                        class="p-4 rounded-2xl border-2 border-slate-100 bg-white flex items-center gap-4 hover:border-brand-200 transition-colors">
+                        <div
+                            class="w-10 h-10 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center text-slate-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="block font-bold text-slate-700">Mestre dos Quizzes</span>
+                            <span class="text-xs font-medium text-slate-400">Acerte 3 perguntas (+20 XP)</span>
+                        </div>
+                        <div class="ml-auto flex items-center gap-2">
+                            <div class="w-12 h-2 bg-slate-200 rounded-full">
+                                <div class="w-1/3 bg-brand-500 h-2 rounded-full"></div>
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-400">1/3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tools & Resources (The Lab) -->
+        <section class="bg-white rounded-[2.5rem] p-8 border-2 border-slate-100 shadow-xl">
+            <div class="flex items-center gap-4 mb-8">
+                <div
+                    class="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-600 border border-slate-200">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                     </svg>
                 </div>
-                <div class="relative z-10">
-                    <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
-                        Tutor IA
-                        <span
-                            class="bg-blue-600 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">Novo</span>
-                    </h3>
-                    <p class="text-blue-100 text-sm mb-4 max-w-[80%]">Dúvidas sobre código? Pergunte ao robô!</p>
-                    <button
-                        class="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                        </svg>
-                        Conversar
-                    </button>
-                </div>
+                <h2 class="font-bubble text-3xl text-slate-800">Laboratório</h2>
             </div>
-        </div>
 
-        <!-- Ferramentas -->
-        <div class="bg-white rounded-3xl p-6 border border-indigo-100 shadow-sm">
-            <h3 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 011-1h1a2 2 0 100-4H7a1 1 0 01-1-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
-                </svg>
-                Ferramentas
-            </h3>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <a href="https://scratch.mit.edu" target="_blank"
-                    class="p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors text-center">
-                    <span class="block text-xs font-bold text-slate-700">Scratch</span>
+                    class="group flex flex-col items-center gap-3 p-6 rounded-3xl hover:bg-orange-50 transition-colors border border-transparent hover:border-orange-100">
+                    <img src="images/scratch.png" class="h-12 w-auto group-hover:scale-110 transition-transform">
+                    <span class="font-bold text-slate-600 group-hover:text-orange-600">Scratch</span>
                 </a>
                 <a href="https://tinkercad.com" target="_blank"
-                    class="p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors text-center">
-                    <span class="block text-xs font-bold text-slate-700">Tinkercad</span>
-                </a>
-                <a href="https://lab.open-roberta.org" target="_blank"
-                    class="p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors text-center">
-                    <span class="block text-xs font-bold text-slate-700">Open Roberta</span>
+                    class="group flex flex-col items-center gap-3 p-6 rounded-3xl hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100">
+                    <img src="images/tinkercad.jpg"
+                        class="h-12 w-auto rounded-lg group-hover:scale-110 transition-transform">
+                    <span class="font-bold text-slate-600 group-hover:text-blue-600">Tinkercad</span>
                 </a>
                 <a href="https://makecode.microbit.org" target="_blank"
-                    class="p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors text-center">
-                    <span class="block text-xs font-bold text-slate-700">Micro:bit</span>
+                    class="group flex flex-col items-center gap-3 p-6 rounded-3xl hover:bg-green-50 transition-colors border border-transparent hover:border-green-100">
+                    <img src="images/microbit.png"
+                        class="h-12 w-auto rounded-lg group-hover:scale-110 transition-transform">
+                    <span class="font-bold text-slate-600 group-hover:text-green-600">Micro:bit</span>
+                </a>
+                <a href="https://www.arduino.cc" target="_blank"
+                    class="group flex flex-col items-center gap-3 p-6 rounded-3xl hover:bg-teal-50 transition-colors border border-transparent hover:border-teal-100">
+                    <img src="images/arduino.png" class="h-12 w-auto group-hover:scale-110 transition-transform">
+                    <span class="font-bold text-slate-600 group-hover:text-teal-600">Arduino</span>
                 </a>
             </div>
-        </div>
-        </div>
+        </section>
 
     </main>
 
-    <script type="module">
-        import { auth, db, onAuthStateChanged, doc, getDoc, setDoc } from './js/firebase-config.js';
-        import { updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <!-- Student Dashboard Logic -->
+    <script type="module" src="js/student-dashboard.js"></script>
 
-        let currentUser = null;
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUser = user;
-                // Update UI with Auth Data
-                document.getElementById('navAvatar').src = user.photoURL;
-                document.getElementById('profileAvatar').src = user.photoURL;
-                document.getElementById('profileName').innerText = user.displayName;
-
-                // Fetch Real DB Data
-                try {
-                    const userRef = doc(db, "users", user.uid);
-                    const userSnap = await getDoc(userRef);
-
-                    if (userSnap.exists()) {
-                        const data = userSnap.data();
-                        updateXPUI(data.xp || 0, data.level || 1);
-                    }
-                } catch (e) {
-                    console.error("Erro ao buscar dados do usuário:", e);
-                }
-            } else {
-                window.location.href = "index.html";
-            }
-        });
-
-        window.checkAnswer = async function (btn, isCorrect) {
-            if (isCorrect) {
-                btn.classList.remove('bg-white/10');
-                btn.classList.add('bg-green-500', 'border-green-400');
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-
-                // Add XP if logged in
-                if (currentUser) {
-                    try {
-                        const userRef = doc(db, "users", currentUser.uid);
-                        await updateDoc(userRef, {
-                            xp: increment(50)
-                        });
-                        // Optimistic update
-                        alert('Resposta Certa! +50 XP salvos no seu perfil!');
-                        location.reload(); // Reload to show new XP
-                    } catch (e) {
-                        console.error("Erro ao salvar XP:", e);
-                        alert("Certo! Mas houve erro ao salvar XP: " + e.message);
-                    }
-                }
-            } else {
-                btn.classList.remove('bg-white/10');
-                btn.classList.add('bg-red-500', 'border-red-400', 'shake');
-                setTimeout(() => {
-                    btn.classList.remove('bg-red-500', 'border-red-400', 'shake');
-                    btn.classList.add('bg-white/10');
-                }, 1000);
-            }
-        };
-
-        function updateXPUI(xp, level) {
-            document.getElementById('navXp').innerText = `${xp} XP`;
-            document.getElementById('profileLevel').innerText = `Nível ${level}`;
-        }
-    </script>
-    <style>
-        .shake {
-            animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
-        }
-
-        @keyframes shake {
-
-            10%,
-            90% {
-                transform: translate3d(-1px, 0, 0);
-            }
-
-            20%,
-            80% {
-                transform: translate3d(2px, 0, 0);
-            }
-
-            30%,
-            50%,
-            70% {
-                transform: translate3d(-4px, 0, 0);
-            }
-
-            40%,
-            60% {
-                transform: translate3d(4px, 0, 0);
-            }
-        }
-    </style>
 </body>
 
 </html>

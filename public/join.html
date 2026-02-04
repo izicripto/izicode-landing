@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar na Turma | Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Space Grotesk', 'sans-serif'],
+                        body: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+
+    <!-- Card Principal -->
+    <div
+        class="bg-white max-w-md w-full rounded-[2.5rem] shadow-2xl p-8 md:p-12 text-center relative overflow-hidden border border-slate-100">
+
+        <!-- Decorativo -->
+        <div class="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-brand-400 to-purple-500"></div>
+
+        <div class="mb-10">
+            <a href="index.html" class="inline-block hover:scale-105 transition-transform">
+                <img src="images/logo.png" alt="Izicode" class="h-20 mx-auto drop-shadow-lg">
+            </a>
+        </div>
+
+        <h1 class="font-display font-bold text-3xl text-slate-900 mb-4">Entrar na Turma</h1>
+        <p class="text-slate-500 text-lg mb-10">Digite o código de 6 letras que seu professor passou.</p>
+
+        <form onsubmit="handleJoin(event)" class="space-y-6">
+            <div class="relative">
+                <input type="text" id="classCode" maxlength="6" placeholder="ABCDEF"
+                    class="w-full text-center text-4xl md:text-5xl font-mono font-bold tracking-[0.5em] uppercase px-4 py-8 rounded-2xl bg-slate-50 border-4 border-slate-200 focus:border-brand-500 focus:bg-white focus:outline-none transition-all placeholder:text-slate-200 placeholder:tracking-normal"
+                    oninput="this.value = this.value.toUpperCase()">
+            </div>
+
+            <button type="submit"
+                class="w-full bg-brand-600 text-white font-display font-bold text-xl py-5 rounded-2xl hover:bg-brand-700 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-brand-500/20">
+                Ir para minha turma 🚀
+            </button>
+        </form>
+
+        <div class="mt-8 pt-8 border-t border-slate-100">
+            <p class="text-slate-400">Não tem um código? <a href="login.html"
+                    class="text-brand-600 font-bold hover:underline">Entrar com senha</a></p>
+        </div>
+    </div>
+
+    <!-- Script Simples -->
+    <script>
+        function handleJoin(e) {
+            e.preventDefault();
+            const code = document.getElementById('classCode').value.trim().toUpperCase();
+
+            if (code.length !== 6) {
+                alert('O código deve ter 6 letras!');
+                return;
+            }
+
+            // Redireciona para a tela de login da turma com o código na URL
+            window.location.href = `section-login.html?code=${code}`;
+        }
+    </script>
+</body>
+
+</html>

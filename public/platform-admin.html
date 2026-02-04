@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Super Admin - Izicode</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/auth-guard.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' } }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 min-h-screen">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900 text-white flex flex-col">
+            <div class="p-6">
+                <h1 class="font-display font-bold text-2xl">Admin 🛠️</h1>
+                <p class="text-xs text-slate-400">Izicode Platform Master</p>
+            </div>
+            <nav class="flex-1 px-4 space-y-2">
+                <button onclick="switchTab('schools')"
+                    class="w-full flex items-center gap-3 px-4 py-3 bg-white/10 rounded-xl font-medium text-left">
+                    🏫 Escolas
+                </button>
+                <button onclick="switchTab('freelancers')"
+                    class="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium text-left text-slate-400 hover:text-white transition-colors">
+                    🚀 Autônomos
+                </button>
+                <button onclick="switchTab('families')"
+                    class="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium text-left text-slate-400 hover:text-white transition-colors">
+                    🏠 Famílias/Maker
+                </button>
+                <button onclick="switchTab('consultants')"
+                    class="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl font-medium text-left text-slate-400 hover:text-white transition-colors">
+                    👔 Consultores
+                </button>
+            </nav>
+            <div class="p-4 border-t border-slate-800">
+                <a href="dashboard.html" class="flex items-center gap-2 text-slate-400 hover:text-white text-sm">
+                    ← Voltar ao App
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="flex-1 overflow-y-auto p-10">
+            <header class="mb-8 flex justify-between items-center">
+                <h2 id="pageTitle" class="text-3xl font-bold font-display text-slate-900">Gestão de Escolas</h2>
+                <div id="actionArea"></div>
+            </header>
+
+            <!-- Table Container -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 border-b border-slate-100">
+                            <tr id="tableHeader">
+                                <!-- Dynamic Headers -->
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="divide-y divide-slate-100">
+                            <!-- Dynamic Content -->
+                            <tr>
+                                <td class="p-8 text-center text-slate-500">Carregando dados...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Novo Consultor -->
+    <div id="consultantModal"
+        class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl transform transition-all scale-100">
+            <h3 class="text-2xl font-bold font-display text-slate-900 mb-2">Novo Consultor</h3>
+            <p class="text-slate-500 mb-6">Gere um link de convite exclusivo para um novo consultor.</p>
+
+            <div class="space-y-4">
+                <div class="p-4 bg-purple-50 rounded-xl border border-purple-100 mb-4">
+                    <p class="text-xs font-bold text-purple-700 uppercase mb-1">Link de Acesso</p>
+                    <code id="inviteLinkDisplay" class="block text-sm break-all text-purple-900 font-mono">...</code>
+                </div>
+                <button onclick="copyLink()"
+                    class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-colors">
+                    Copiar Link
+                </button>
+            </div>
+
+            <button onclick="closeModal()"
+                class="mt-6 w-full text-slate-400 hover:text-slate-600 font-medium">Fechar</button>
+        </div>
+    </div>
+
+    <script type="module" src="js/platform-admin.js"></script>
+</body>
+
+</html>

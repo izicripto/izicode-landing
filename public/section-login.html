@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Turma | Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Heroicons -->
+    <script src="https://unpkg.com/heroicons@2.0.18/24/outline/index.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Space Grotesk', 'sans-serif'],
+                        body: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 min-h-screen">
+
+    <!-- Navbar Simplificada -->
+    <nav class="bg-white border-b border-slate-100 py-4 px-6 fixed top-0 w-full z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <a href="join.html"
+                    class="flex items-center gap-2 text-slate-500 hover:text-brand-600 font-bold transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Sair
+                </a>
+                <div class="h-6 w-px bg-slate-200"></div>
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-lg">
+                        <span id="classAbbr">...</span>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Turma</p>
+                        <h1 class="text-slate-800 font-display font-bold text-lg leading-none" id="className">
+                            Carregando...</h1>
+                    </div>
+                </div>
+            </div>
+            <img src="images/logo.png" alt="Izicode" class="h-10">
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="pt-28 pb-12 px-4 max-w-7xl mx-auto">
+        <div class="text-center mb-12">
+            <h2 class="font-display text-4xl font-bold text-slate-900 mb-4">Quem é você?</h2>
+            <p class="text-slate-500 text-xl">Encontre seu nome e clique para entrar.</p>
+        </div>
+
+        <!-- Grade de Alunos -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6" id="studentsGrid">
+            <!-- Loading State -->
+            <div class="col-span-full flex justify-center py-20">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Senha -->
+    <div id="loginModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-4">
+            <div
+                class="bg-white rounded-[2rem] shadow-2xl p-8 text-center relative overflow-hidden transform transition-all scale-100">
+
+                <button onclick="closeModal()"
+                    class="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+                <!-- Avatar do Aluno -->
+                <div
+                    class="w-24 h-24 rounded-full bg-brand-100 mx-auto mb-6 flex items-center justify-center text-4xl border-4 border-white shadow-lg overflow-hidden relative">
+                    <img id="modalAvatar" src="" class="w-full h-full object-cover hidden">
+                    <span id="modalInitial" class="font-display font-bold text-brand-600">A</span>
+                </div>
+
+                <h3 class="font-display font-bold text-2xl text-slate-900 mb-2">Olá, <span id="modalName">Aluno</span>!
+                </h3>
+                <p class="text-slate-500 mb-8">Digite suas palavras mágicas para entrar.</p>
+
+                <form onsubmit="handleLogin(event)" class="space-y-6">
+                    <input type="password" id="secretInput" placeholder="Palavra Secreta"
+                        class="w-full text-center text-2xl font-bold px-4 py-4 rounded-xl bg-slate-50 border-2 border-slate-200 focus:border-brand-500 focus:bg-white focus:outline-none transition-all placeholder:text-slate-300 placeholder:font-normal"
+                        autofocus>
+
+                    <button type="submit"
+                        class="w-full bg-brand-600 text-white font-display font-bold text-xl py-4 rounded-xl hover:bg-brand-700 hover:scale-[1.02] active:scale-[0.95] transition-all shadow-lg shadow-brand-500/20">
+                        Entrar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logic Script (Mock for now) -->
+    <script>
+        // Simulação de Dados (Depois conectaremos ao Firebase)
+        const mockClass = {
+            name: "Robótica 1º Ano A",
+            students: [
+                { id: 1, name: "Ana Julia", avatar: "👩‍🚀" },
+                { id: 2, name: "Bernardo", avatar: "🦸‍♂️" },
+                { id: 3, name: "Carlos", avatar: "🕵️‍♂️" },
+                { id: 4, name: "Daniela", avatar: "👩‍🔬" },
+                { id: 5, name: "Eduardo", avatar: "👨‍💻" },
+                { id: 6, name: "Fernanda", avatar: "🧝‍♀️" },
+            ]
+        };
+
+        // Carregar Dados ao Iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+
+            if (!code) {
+                alert('Código da turma inválido!');
+                window.location.href = 'join.html';
+                return;
+            }
+
+            // Simular delay de rede
+            setTimeout(() => {
+                renderClass(mockClass);
+            }, 1000); // 1s loading
+        });
+
+        function renderClass(classData) {
+            document.getElementById('className').textContent = classData.name;
+            document.getElementById('classAbbr').textContent = classData.name.substring(0, 2).toUpperCase();
+
+            const grid = document.getElementById('studentsGrid');
+            grid.innerHTML = ''; // Limpar loading
+
+            classData.students.forEach(student => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:border-brand-300 hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer group text-center";
+                card.onclick = () => openModal(student);
+
+                card.innerHTML = `
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-slate-50 group-hover:bg-brand-50 transition-colors flex items-center justify-center text-4xl shadow-inner">
+                        ${student.avatar}
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-slate-700 group-hover:text-brand-700 truncate">${student.name}</h3>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        let selectedStudent = null;
+
+        function openModal(student) {
+            selectedStudent = student;
+            document.getElementById('modalName').textContent = student.name.split(' ')[0];
+            document.getElementById('modalInitial').textContent = student.avatar; // Usando o emoji como avatar por enquanto
+
+            const modal = document.getElementById('loginModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('secretInput').focus();
+            }, 100);
+        }
+
+        function closeModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('secretInput').value = '';
+            selectedStudent = null;
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const secret = document.getElementById('secretInput').value;
+
+            if (secret.length < 3) {
+                alert('A palavra secreta é muito curta!');
+                return;
+            }
+
+            // Simulação de Sucesso
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Entrando... 🔄';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                // Redirecionar para a Área do Aluno (simulado)
+                // Na implementação real, faríamos o signInWithEmailAndPassword
+                window.location.href = 'student-area.html';
+            }, 1500);
+        }
+    </script>
+</body>
+
+</html>

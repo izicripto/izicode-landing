@@ -17,15 +17,19 @@ service cloud.firestore {
     }
     
     function isTeacher() {
-      return hasRole('professor-autonomo') || hasRole('professor-escola');
+      return hasRole('teacher');
     }
     
     function isSchoolTeacher() {
-      return hasRole('professor-escola');
+      return hasRole('school_admin') || hasRole('teacher');
     }
     
     function isStudent() {
-      return hasRole('aluno');
+      return hasRole('student');
+    }
+    
+    function isSchoolAdmin() {
+      return hasRole('school_admin');
     }
     
     function isAdmin() {
@@ -34,13 +38,9 @@ service cloud.firestore {
     
     // Users collection
     match /users/{userId} {
-      allow read: if isOwner(userId) || isAdmin();
-      allow update: if isOwner(userId) && 
-                       !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'subscription']);
-      allow create: if isAdmin();
+      allow read: if isAuthenticated();
+      allow write: if request.auth != null && request.auth.uid == userId;
       allow delete: if isAdmin();
-      allow read: if isSchoolTeacher() && 
-                     userId in get(/databases/$(database)/documents/users/$(request.auth.uid)).data.studentIds;
       
       // Projetos do usuário
       match /projects/{projectId} {
@@ -50,21 +50,17 @@ service cloud.firestore {
     
     // Schools collection
     match /schools/{schoolId} {
-      allow read: if isAuthenticated() && 
-                     request.auth.uid in resource.data.teacherIds;
-      allow create, update, delete: if isAdmin();
+      allow read: if isAuthenticated();
+      allow create: if isSchoolAdmin() || isAdmin();
+      allow update: if (isSchoolAdmin() && request.auth.uid == resource.data.adminId) || isAdmin();
     }
     
     // Classes collection
+    // Classes collection
     match /classes/{classId} {
-      allow read, update: if isAuthenticated() && 
-                             resource.data.teacherId == request.auth.uid;
-      allow read: if isStudent() && 
-                     request.auth.uid in resource.data.studentIds;
-      allow create: if isSchoolTeacher() && 
-                       request.resource.data.teacherId == request.auth.uid;
-      allow delete: if isAuthenticated() && 
-                       resource.data.teacherId == request.auth.uid;
+      allow read: if isAuthenticated();
+      allow create: if isSchoolTeacher() || isSchoolAdmin() || isAdmin();
+      allow update, delete: if isSchoolAdmin() || isAdmin() || (isTeacher() && resource.data.teacherId == request.auth.uid);
     }
     
     // Challenges collection
@@ -113,6 +109,14 @@ service cloud.firestore {
       allow read, update: if isAuthenticated() && 
                              resource.data.userId == request.auth.uid;
       allow create: if isAuthenticated();
+    }
+
+    // Leads (Contact Form)
+    match /leads/{leadId} {
+      // Allow anyone (public) to submit a contact form
+      allow create: if true;
+      // Only admins can read leads
+      allow read: if isAdmin();
     }
   }
 }

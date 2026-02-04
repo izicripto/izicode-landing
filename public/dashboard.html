@@ -18,7 +18,7 @@
     <script src="/js/pwa-install.js"></script>
 
     <script type="module">
-        import { auth, db, doc, getDoc, collection, query, where, getDocs } from './js/firebase-config.js';
+        import { auth, db, doc, getDoc, collection, query, where, getDocs, signOut } from './js/firebase-config.js';
 
         // O Auth Guard já cuida da verificação de login e preenchimento de nome/foto
         // Aqui focamos apenas na lógica específica do Dashboard (carregar projetos, etc)

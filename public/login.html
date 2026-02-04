@@ -130,7 +130,21 @@
                 btnText.textContent = 'Indo para configuração...';
 
                 setTimeout(() => {
-                    window.location.href = "onboarding.html";
+                    // Check for invite params in current URL (if they were preserved on redirect to login)
+                    // Or more likely: The user came from a link like login.html?schoolId=... 
+                    // We need to pass them to onboarding
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const schoolId = urlParams.get('schoolId');
+                    const role = urlParams.get('role');
+
+                    let target = "onboarding.html";
+                    const params = [];
+                    if (schoolId) params.push(`schoolId=${schoolId}`);
+                    if (role) params.push(`role=${role}`);
+
+                    if (params.length > 0) target += "?" + params.join("&");
+
+                    window.location.href = target;
                 }, 500);
 
             } catch (error) {

@@ -132,8 +132,7 @@
                         <!-- Card Aluno -->
                         <label
                             class="cursor-pointer relative profile-card border-2 border-slate-100 rounded-2xl p-6 text-center transition-all group">
-                            <input type="radio" name="profile" value="student" class="peer sr-only"
-                                onchange="selectProfile(this)">
+                            <input type="radio" name="profile" value="student" class="peer sr-only">
                             <div
                                 class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-200 transition-colors">
                                 <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor"
@@ -152,7 +151,7 @@
                     </div>
 
                     <div class="text-center">
-                        <button onclick="nextStep(2)" id="btnStep1"
+                        <button onclick="nextStep(2)" id="nextBtn"
                             class="bg-slate-200 text-slate-400 font-bold py-4 px-10 rounded-xl cursor-not-allowed transition-all"
                             disabled>
                             Continuar
@@ -196,24 +195,101 @@
     </main>
 
     <script type="module">
-        import { auth, db, doc, setDoc, onAuthStateChanged } from './js/firebase-config.js';
+        import { auth, db, doc, setDoc, getDoc, onAuthStateChanged, signInAnonymously } from './js/firebase-config.js';
 
         let selectedProfile = null;
-        let userData = {};
+        let userData = null;
+        let inviteSchoolId = null;
+        let inviteRole = null;
 
-        // Verificar auth
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
+        // Verificar parâmetros de convite
+        const urlParams = new URLSearchParams(window.location.search);
+        inviteRole = urlParams.get('role');
+        inviteSchoolId = urlParams.get('schoolId');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (inviteRole === 'teacher' && inviteSchoolId) {
+                handleInviteFlow();
             } else {
-                userData = {
-                    uid: user.uid,
-                    email: user.email,
-                    name: user.displayName,
-                    photoURL: user.photoURL
-                };
+                checkAuthStandard();
             }
         });
+
+        function handleInviteFlow() {
+            // Hide standard selection, show Quick Start
+            document.getElementById('profileSelection').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden'); // Hide specific next/permissions logic for now
+            document.getElementById('onboardingSubtitle').textContent = "Finalize seu cadastro em segundos.";
+            document.getElementById('quickStartSection').classList.remove('hidden');
+
+            // Quick Start Button Logic
+            document.getElementById('quickStartBtn').addEventListener('click', async () => {
+                const name = document.getElementById('quickName').value;
+                if (!name || name.trim().length < 3) return alert("Por favor, digite seu nome.");
+
+                document.getElementById('quickStartBtn').textContent = "Configurando...";
+                document.getElementById('quickStartBtn').disabled = true;
+
+                await completeQuickStart(name);
+            });
+        }
+
+        async function completeQuickStart(name) {
+            try {
+                // Check if user is logged in
+                if (!auth.currentUser) {
+                    // Anonymous Login!
+                    await signInAnonymously(auth);
+                } else {
+                    // Safety: If logged in as non-anonymous (e.g. Admin), DO NOT overwrite role!
+                    if (!auth.currentUser.isAnonymous) {
+                        alert("Você já está logado com uma conta padrão. Saia da conta atual para entrar como Novo Professor.");
+                        return; // Abort
+                    }
+                }
+
+                const user = auth.currentUser;
+                const userRef = doc(db, "users", user.uid);
+
+                // Save Profile directly
+                await setDoc(userRef, {
+                    uid: user.uid,
+                    displayName: name,
+                    email: user.email || null,
+                    photoURL: user.photoURL || null,
+                    role: 'teacher',
+                    schoolId: inviteSchoolId,
+                    createdAt: new Date(),
+                    status: 'approved',
+                    isAnonymous: user.isAnonymous
+                }, { merge: true });
+
+                // Redirect
+                window.location.href = 'school-management.html';
+
+            } catch (error) {
+                console.error("Erro no Quick Start:", error);
+                alert("Erro ao criar perfil: " + error.message);
+                document.getElementById('quickStartBtn').disabled = false;
+                document.getElementById('quickStartBtn').textContent = "Tentar Novamente";
+            }
+        }
+
+        function checkAuthStandard() {
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    window.location.href = 'login.html';
+                } else {
+                    userData = {
+                        uid: user.uid,
+                        displayName: user.displayName,
+                        email: user.email,
+                        photoURL: user.photoURL
+                    };
+                    console.log("Usuário autenticado:", userData);
+                }
+            });
+        }
 
         window.selectProfile = (radio) => {
             selectedProfile = radio.value;
@@ -340,6 +416,7 @@
                     ...userData,
                     role: selectedProfile,
                     ...extraData,
+                    schoolId: inviteSchoolId || null, // Link to school if invited
                     status: 'approved', // Auto-aprovar no onboarding por enquanto
                     onboardingCompleted: true,
                     createdAt: new Date()

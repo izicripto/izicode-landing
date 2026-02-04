@@ -26,14 +26,28 @@ export class DashboardRoleManager {
 
     async loadUserData() {
         try {
+            // 1. Load DB Data
             const userDoc = await getDoc(doc(db, 'users', this.currentUser.uid));
+            let dbRole = 'student';
             if (userDoc.exists()) {
                 this.userData = userDoc.data();
-                this.userRole = this.userData.role || 'student';
-            } else {
-                // Fallback: se não tem role, assume student
-                this.userRole = 'student';
+                dbRole = this.userData.role || 'student';
             }
+
+            // 2. APPLY BUSINESS RULES (Hardcoded Overrides)
+            const email = this.currentUser.email;
+            if (email === 'izicripto@gmail.com') {
+                this.userRole = 'dev';
+            } else if (email === 'izicodeedu@gmail.com') {
+                this.userRole = 'school_admin';
+            } else if (email === 'r.berlanda04@gmail.com') {
+                this.userRole = 'freelance_teacher';
+            } else {
+                this.userRole = dbRole;
+            }
+
+            console.log(`Role Resolved: ${this.userRole} (Email: ${email})`);
+
         } catch (error) {
             console.error('Erro ao carregar dados do usuário:', error);
             this.userRole = 'student';
@@ -62,8 +76,11 @@ export class DashboardRoleManager {
         }
 
         // Atualizar saudação baseada no role
+        // Atualizar saudação baseada no role
         const greetingMap = {
+            'dev': 'Modo Desenvolvedor Ativo 👨‍💻',
             'school_admin': 'Vamos gerenciar sua escola hoje?',
+            'freelance_teacher': 'Suas aulas, suas regras! 🚀',
             'teacher': 'Vamos transformar a educação hoje?',
             'student': 'Pronto para aprender algo novo?',
             'parent': 'Vamos acompanhar o progresso?',
@@ -81,7 +98,9 @@ export class DashboardRoleManager {
         if (!container) return;
 
         const actionsMap = {
+            'dev': this.getDevActions(),
             'school_admin': this.getSchoolAdminActions(),
+            'freelance_teacher': this.getFreelanceActions(), // New Role
             'teacher': this.getTeacherActions(),
             'student': this.getStudentActions(),
             'parent': this.getParentActions(),
@@ -132,12 +151,20 @@ export class DashboardRoleManager {
                 textColor: 'white'
             },
             {
-                title: 'Meus Projetos',
-                description: 'Acesse seus roteiros salvos e editados',
-                icon: 'book',
-                href: 'my-projects.html',
+                title: 'Gestão de Turmas',
+                description: 'Gerencie suas salas e adicione alunos',
+                icon: 'users',
+                href: 'school-management.html',
                 bgColor: 'bg-white/80',
-                borderColor: 'border-brand-300'
+                borderColor: 'border-purple-300'
+            },
+            {
+                title: 'Arena de Desafios',
+                description: 'Experimente os quizzes e desafios dos alunos',
+                icon: 'quiz',
+                href: 'quiz-arena.html',
+                bgColor: 'bg-white/80',
+                borderColor: 'border-purple-300'
             },
             {
                 title: 'Biblioteca',
@@ -185,7 +212,7 @@ export class DashboardRoleManager {
                 title: 'Izicode em Casa',
                 description: 'Plataforma de lógica e desafios maker',
                 icon: 'home',
-                href: '#',
+                href: 'student-area.html',
                 gradient: 'from-emerald-500 to-emerald-600',
                 textColor: 'white'
             },
@@ -193,7 +220,7 @@ export class DashboardRoleManager {
                 title: 'Quizzes e Desafios',
                 description: 'Testar conhecimentos com toda a família',
                 icon: 'quiz',
-                href: '#',
+                href: 'quiz-arena.html',
                 bgColor: 'bg-white/80',
                 borderColor: 'border-brand-300'
             },
@@ -201,7 +228,7 @@ export class DashboardRoleManager {
                 title: 'Progresso',
                 description: 'Acompanhar o desenvolvimento do aluno',
                 icon: 'chart',
-                href: '#',
+                href: 'student-area.html',
                 bgColor: 'bg-white/80',
                 borderColor: 'border-purple-300'
             }
@@ -225,6 +252,58 @@ export class DashboardRoleManager {
                 href: 'create-project.html',
                 bgColor: 'bg-white/80',
                 borderColor: 'border-brand-300'
+            }
+        ];
+    }
+
+    getDevActions() {
+        // Dev sees ONLY Admin Panel + Data
+        return [
+            {
+                title: 'Painel Administrativo',
+                description: 'Gerenciar escolas, acessos e usuários',
+                icon: 'tool',
+                href: 'platform-admin.html',
+                gradient: 'from-slate-900 to-red-900',
+                textColor: 'white'
+            }
+        ];
+    }
+
+    getFreelanceActions() {
+        // Freelance = Content & Tools ONLY (No Classes)
+        return [
+            {
+                title: 'Criar Projeto (IA)',
+                description: 'Gere planos de aula e roteiros',
+                icon: 'plus',
+                href: 'create-project.html',
+                gradient: 'from-brand-500 to-brand-600',
+                textColor: 'white'
+            },
+            {
+                title: 'Biblioteca',
+                description: 'Acesse materiais oficiais',
+                icon: 'library',
+                href: 'library.html',
+                bgColor: 'bg-white/80',
+                borderColor: 'border-brand-200'
+            },
+            {
+                title: 'Arena de Quizzes',
+                description: 'Teste seus conhecimentos',
+                icon: 'quiz',
+                href: 'quiz-arena.html',
+                bgColor: 'bg-white/80',
+                borderColor: 'border-purple-300'
+            },
+            {
+                title: 'IA Pedagógica',
+                description: 'Tire dúvidas sobre aulas',
+                icon: 'tool', // using tool icon for now or generic
+                href: 'ia-assistant.html',
+                bgColor: 'bg-white/80',
+                borderColor: 'border-emerald-300'
             }
         ];
     }
@@ -287,8 +366,18 @@ export class DashboardRoleManager {
         let widgetsHtml = '';
 
         switch (this.userRole) {
+            case 'dev':
+                const stats = await this.fetchPlatformStats();
+                widgetsHtml = this.getDevWidgets(stats);
+                break;
             case 'school_admin':
                 widgetsHtml = this.getSchoolAdminWidgets();
+                break;
+            case 'freelance_teacher':
+                // Content focus -> Same widgets as Teacher (Projects + Tips)
+                const fProjectsCount = await this.fetchProjectsCount();
+                const fRecentProjects = await this.fetchRecentProjects();
+                widgetsHtml = this.getTeacherWidgets(fProjectsCount, fRecentProjects);
                 break;
             case 'teacher':
                 const projectsCount = await this.fetchProjectsCount();
@@ -510,6 +599,115 @@ export class DashboardRoleManager {
         `;
     }
 
+    async fetchPlatformStats() {
+        try {
+            // Parallel Fetch for speed
+            const [usersSnap, schoolsSnap] = await Promise.all([
+                getDocs(collection(db, "users")),
+                getDocs(collection(db, "schools"))
+            ]);
+
+            const users = usersSnap.docs.map(d => d.data());
+            const schools = schoolsSnap.docs.map(d => d.data());
+
+            // Aggregation
+            return {
+                totalSchools: schools.length,
+                fullSchools: schools.filter(s => s.plan === 'full').length,
+                totalUsers: users.length,
+                teachers: users.filter(u => u.role === 'teacher').length,
+                students: users.filter(u => u.role === 'student').length,
+                freelancers: users.filter(u => u.role === 'freelance_teacher').length,
+                consultants: users.filter(u => u.role === 'consultant').length
+            };
+        } catch (e) {
+            console.error("Stats Error:", e);
+            return null;
+        }
+    }
+
+    getDevWidgets(stats) {
+        if (!stats) return '<div class="text-center">Erro ao carregar dados.</div>';
+
+        // Calc Percentages for Bar Chart
+        const total = stats.totalUsers || 1; // avoid zero div
+        const tPct = (stats.teachers / total) * 100;
+        const sPct = (stats.students / total) * 100;
+        const fPct = (stats.freelancers / total) * 100;
+
+        return `
+            <div class="space-y-6">
+                <!-- KPI Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-white/80 backdrop-blur-xl p-6 rounded-3xl shadow-sm border border-slate-200">
+                        <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Total Escolas</p>
+                        <div class="flex items-end gap-3">
+                            <span class="text-4xl font-display font-bold text-slate-900">${stats.totalSchools}</span>
+                            <span class="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded-full mb-1">
+                                ${stats.fullSchools} PRO
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/80 backdrop-blur-xl p-6 rounded-3xl shadow-sm border border-slate-200">
+                        <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Total Usuários</p>
+                        <span class="text-4xl font-display font-bold text-slate-900">${stats.totalUsers}</span>
+                    </div>
+
+                    <div class="bg-white/80 backdrop-blur-xl p-6 rounded-3xl shadow-sm border border-slate-200">
+                        <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Consultores</p>
+                        <span class="text-4xl font-display font-bold text-purple-600">${stats.consultants}</span>
+                    </div>
+                    
+                    <div class="bg-white/80 backdrop-blur-xl p-6 rounded-3xl shadow-sm border border-slate-200">
+                        <p class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Autônomos</p>
+                        <span class="text-4xl font-display font-bold text-brand-600">${stats.freelancers}</span>
+                    </div>
+                </div>
+
+                <!-- Distribution Chart -->
+                <div class="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-lg border border-slate-200">
+                    <h3 class="font-display text-xl font-bold text-slate-900 mb-6">Distribuição de Usuários</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Teachers -->
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-bold text-slate-600">Professores (Inst.)</span>
+                                <span class="text-slate-500">${stats.teachers} (${tPct.toFixed(1)}%)</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                                <div class="bg-brand-500 h-3 rounded-full transition-all duration-1000" style="width: ${tPct}%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Students -->
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-bold text-slate-600">Alunos</span>
+                                <span class="text-slate-500">${stats.students} (${sPct.toFixed(1)}%)</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                                <div class="bg-green-500 h-3 rounded-full transition-all duration-1000" style="width: ${sPct}%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Freelancers -->
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-bold text-slate-600">Autônomos</span>
+                                <span class="text-slate-500">${stats.freelancers} (${fPct.toFixed(1)}%)</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                                <div class="bg-purple-500 h-3 rounded-full transition-all duration-1000" style="width: ${fPct}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
     getConsultantWidgets() {
         return `
             <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg border border-slate-200">
@@ -604,10 +802,12 @@ export class DashboardRoleManager {
 
         // Ocultar/mostrar itens de navegação baseado no role
         const navItemsMap = {
+            'dev': ['dashboard', 'library', 'school-management', 'create-project', 'my-projects', 'quiz-arena', 'student-area'],
             'school_admin': ['dashboard', 'library', 'school-management'],
-            'teacher': ['dashboard', 'my-projects', 'library', 'create-project'],
-            'student': ['dashboard', 'my-projects', 'library', 'student-area'],
-            'parent': ['dashboard', 'library'],
+            'freelance_teacher': ['dashboard', 'library', 'create-project', 'my-projects', 'quiz-arena', 'ia-assistant'],
+            'teacher': ['dashboard', 'my-projects', 'library', 'create-project', 'quiz-arena', 'school-management'],
+            'student': ['dashboard', 'my-projects', 'library', 'student-area', 'quiz-arena'],
+            'parent': ['dashboard', 'library', 'quiz-arena', 'student-area'],
             'consultant': ['dashboard', 'my-projects', 'library', 'create-project']
         };
 

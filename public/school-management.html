@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão Escolar - Izicode Edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <script type="module" src="js/firebase-config.js"></script>
+    <!-- Auth Guard checks permissions -->
+    <script type="module" src="/js/auth-guard.js"></script>
+    <script type="module" src="/js/dashboard-roles.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e' } }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-brand-50/30 to-slate-100 min-h-screen">
+
+    <!-- Sidebar Desktop (via dashboard-roles.js matches structure) -->
+    <aside
+        class="w-72 bg-white/80 backdrop-blur-xl border-r border-slate-200/50 hidden lg:flex flex-col fixed h-full z-20 shadow-xl">
+        <div class="p-6 border-b border-slate-100">
+            <a href="dashboard.html" class="flex items-center gap-3 group">
+                <div
+                    class="bg-brand-50 p-2 rounded-2xl border border-brand-100 group-hover:scale-110 transition-transform">
+                    <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
+                </div>
+                <span class="font-display font-bold text-2xl text-slate-900">Izicode</span>
+            </a>
+        </div>
+
+        <div class="p-6 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <img id="userAvatar" src="https://ui-avatars.com/api/?name=Admin&background=0ea5e9&color=fff"
+                    class="w-12 h-12 rounded-full border-2 border-brand-200">
+                <div class="flex-1 min-w-0">
+                    <p class="font-semibold text-slate-900 truncate" id="userName">Carregando...</p>
+                    <span class="text-xs bg-slate-900 text-white px-2 py-0.5 rounded-full font-medium">Gestor
+                        Escolar</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+            <!-- Nav items handled by dashboard-roles.js but we keep core structure -->
+            <a href="dashboard.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Dashboard
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 bg-slate-900 text-white rounded-xl font-medium shadow-lg">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Gestão Escolar
+            </a>
+        </nav>
+
+        <div class="p-6 border-t border-slate-100 mt-auto">
+            <button onclick="logout()"
+                class="flex items-center gap-3 text-slate-500 hover:text-red-500 transition-colors font-medium w-full">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Sair
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-72 p-6 md:p-10">
+        <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h1 class="font-display text-3xl font-bold text-slate-900">Gestão Escolar</h1>
+                <p class="text-slate-600">Gerencie professores, turmas e alunos.</p>
+            </div>
+            <div id="schoolInfoDisplay"
+                class="bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-100 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                <span class="font-bold text-sm text-slate-700" id="schoolName">Carregando escola...</span>
+            </div>
+        </header>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-500 font-medium">Professores</span>
+                    <span class="bg-brand-50 text-brand-700 p-2 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </span>
+                </div>
+                <p class="text-3xl font-display font-bold text-slate-900" id="statTeachers">0</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-500 font-medium">Turmas Ativas</span>
+                    <span class="bg-purple-50 text-purple-700 p-2 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                    </span>
+                </div>
+                <p class="text-3xl font-display font-bold text-slate-900" id="statClasses">0</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-500 font-medium">Alunos Totais</span>
+                    <span class="bg-emerald-50 text-emerald-700 p-2 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </span>
+                </div>
+                <p class="text-3xl font-display font-bold text-slate-900" id="statStudents">0</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="border-b border-slate-200 mb-6">
+            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                <button onclick="switchTab('teachers')" id="tab-teachers"
+                    class="tab-btn border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm active-tab">
+                    Professores
+                </button>
+                <button onclick="switchTab('classes')" id="tab-classes"
+                    class="tab-btn border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Turmas
+                </button>
+                <button onclick="switchTab('students')" id="tab-students"
+                    class="tab-btn border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Alunos
+                </button>
+            </nav>
+        </div>
+
+        <!-- Teachers Section -->
+        <div id="content-teachers" class="tab-content transition-all duration-300">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-slate-800">Corpo Docente</h2>
+                <button onclick="openInviteModal()"
+                    class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl font-medium text-sm flex items-center gap-2 shadow-lg shadow-brand-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Convidar Professor
+                </button>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm" id="teachersList">
+                <!-- Loaded dynamically -->
+                <div class="p-8 text-center text-slate-500">Carregando professores...</div>
+            </div>
+        </div>
+
+        <!-- Classes Section -->
+        <div id="content-classes" class="tab-content hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-slate-800">Turmas</h2>
+                <button onclick="openClassModal()"
+                    class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl font-medium text-sm flex items-center gap-2 shadow-lg shadow-purple-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Nova Turma
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="classesList">
+                <!-- Loaded dynamically -->
+            </div>
+        </div>
+
+        <!-- Students Section -->
+        <div id="content-students" class="tab-content hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <h2 class="text-xl font-bold text-slate-800">Base de Alunos</h2>
+                <div class="flex gap-2">
+                    <input type="text" placeholder="Buscar aluno..."
+                        class="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:border-brand-500 outline-none">
+                    <select
+                        class="px-4 py-2 border border-slate-200 rounded-xl text-sm focus:border-brand-500 outline-none">
+                        <option value="all">Todas as turmas</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Students Tab -->
+            <div id="tabContent-students" class="tab-content space-y-6">
+                <div
+                    class="flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-700">Alunos Matriculados</h3>
+                    <button onclick="openStudentModal()"
+                        class="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl font-bold transition-transform hover:scale-105 shadow-lg shadow-brand-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg>
+                        Adicionar Aluno
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                        Nome</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                        Turma</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                        XP</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                        Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-slate-200" id="studentsList">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+    </main>
+
+    <!-- Modals -->
+    <!-- Invite Modal (Teacher) -->
+    <div id="inviteModal"
+        class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <h3 class="font-display text-2xl font-bold text-slate-900 mb-4">Convidar Professor</h3>
+            <p class="text-slate-600 mb-6 text-sm">Gere um link de convite ou adicione por e-mail.</p>
+
+            <label class="block text-sm font-medium text-slate-700 mb-1">E-mail do Professor (Opcional)</label>
+            <input type="email" id="inviteEmail"
+                class="w-full px-4 py-3 rounded-xl border border-slate-200 mb-4 outline-none focus:border-brand-500"
+                placeholder="professor@escola.com">
+
+            <div id="inviteQrContainer"
+                class="hidden text-center p-4 bg-slate-50 rounded-2xl border border-slate-200 mb-4">
+                <p class="text-xs text-slate-500 mb-2">Peça para o professor escanear:</p>
+                <img id="inviteQrCode" src="" class="w-40 h-40 mx-auto rounded-lg shadow-sm border border-white mb-3"
+                    alt="QR Link">
+                <p class="text-xs text-slate-400 break-all select-all font-mono bg-slate-100 p-2 rounded"
+                    id="inviteLinkText"></p>
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <button onclick="closeModal('inviteModal')"
+                    class="px-4 py-2 text-slate-500 hover:bg-slate-50 rounded-lg font-medium">Cancelar</button>
+                <button onclick="sendInvite()"
+                    class="bg-brand-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-brand-700 transition-colors">Copiar
+                    Link & Concluir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Class Modal -->
+    <div id="classModal"
+        class="fixed inset-0 bg-slate-900/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <h3 class="font-display text-2xl font-bold text-slate-900 mb-4">Nova Turma</h3>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Nome da Turma</label>
+                    <input type="text" id="className"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-brand-500"
+                        placeholder="Ex: 7º Ano A - Matutino">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Série / Ano</label>
+                    <select id="classGrade"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-brand-500">
+                        <option value="6ano">6º Ano</option>
+                        <option value="7ano">7º Ano</option>
+                        <option value="8ano">8º Ano</option>
+                        <option value="9ano">9º Ano</option>
+                        <option value="medio">Ensino Médio</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Tipo de Login</label>
+                    <select id="classLoginType"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-brand-500">
+                        <option value="picture">Imagem (Recomendado para pequenos)</option>
+                        <option value="word">Palavra Secreta</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Professor Responsável</label>
+                    <select id="classTeacher"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 outline-none focus:border-brand-500">
+                        <option value="">Selecione um professor...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 mt-8">
+                <button onclick="closeModal('classModal')"
+                    class="px-4 py-2 text-slate-500 hover:bg-slate-50 rounded-lg font-medium">Cancelar</button>
+                <button onclick="createClass()"
+                    class="bg-purple-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-purple-700 transition-colors">Criar
+                    Turma</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Student Modal (RE-ADDED) -->
+    <div id="studentModal"
+        class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-3xl p-8 max-w-lg w-full m-4 shadow-2xl scale-95 transition-transform duration-300">
+            <h3 class="font-display text-2xl font-bold text-slate-900 mb-4">Adicionar Aluno</h3>
+
+            <!-- Tabs -->
+            <div class="flex border-b border-slate-200 mb-6">
+                <button onclick="switchStudentTab('manual')" id="tabBtn-manual"
+                    class="px-4 py-2 text-brand-600 border-b-2 border-brand-600 font-bold text-sm">Manual</button>
+                <button onclick="switchStudentTab('csv')" id="tabBtn-csv"
+                    class="px-4 py-2 text-slate-500 font-medium text-sm hover:text-brand-500">Importar CSV</button>
+            </div>
+
+            <!-- Manual Form -->
+            <div id="studentForm-manual">
+                <label class="block text-sm font-medium text-slate-700 mb-1">Nome Completo</label>
+                <input type="text" id="studentName"
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 mb-4 outline-none focus:border-brand-500"
+                    placeholder="Ex: João da Silva">
+
+                <label class="block text-sm font-medium text-slate-700 mb-1">Turma (Opcional)</label>
+                <select id="studentClassSelect"
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 mb-4 outline-none focus:border-brand-500">
+                    <option value="">Selecione...</option>
+                </select>
+
+                <button onclick="registerStudentManual()"
+                    class="w-full bg-brand-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-200">Cadastrar</button>
+            </div>
+
+            <!-- CSV Form -->
+            <div id="studentForm-csv" class="hidden text-center">
+                <div
+                    class="border-2 border-dashed border-slate-300 rounded-xl p-8 mb-4 hover:bg-slate-50 transition-colors cursor-pointer relative">
+                    <input type="file" id="csvFile" accept=".csv" class="absolute inset-0 opacity-0 cursor-pointer"
+                        onchange="handleFileSelect(this)">
+                    <svg class="w-10 h-10 text-slate-400 mx-auto mb-2" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <p class="text-slate-600 font-medium" id="fileName">Clique para enviar ou arraste o arquivo</p>
+                    <p class="text-xs text-slate-400 mt-1">Formato: Nome, Turma (Opcional)</p>
+                </div>
+                <button onclick="processCSV()"
+                    class="w-full bg-green-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-700 transition-colors shadow-lg shadow-green-200">Processar
+                    Arquivo</button>
+            </div>
+
+            <button onclick="closeModal('studentModal')"
+                class="mt-4 w-full text-slate-400 hover:text-slate-600 font-medium text-sm">Cancelar</button>
+        </div>
+    </div>
+
+    <script type="module" src="js/school-management.js"></script>
+    <script>
+        // Tab Switching Logic
+        window.switchTab = (tabName) => {
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Show active content
+            document.getElementById(`content-${tabName}`).classList.remove('hidden');
+
+            // Update tabs state
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-brand-500', 'text-brand-600', 'active-tab');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+            activeBtn.classList.remove('border-transparent', 'text-slate-500');
+            activeBtn.classList.add('border-brand-500', 'text-brand-600', 'active-tab');
+        };
+
+        // Modal Logic
+        // window.openInviteModal IS NOW IN JS FILE
+        window.openClassModal = () => document.getElementById('classModal').classList.remove('hidden');
+        window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
+
+        // Initialize first tab style
+        switchTab('teachers');
+    </script>
+</body>
+
+</html>

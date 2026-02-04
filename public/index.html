@@ -104,6 +104,61 @@
             background-size: 24px 24px;
         }
 
+        /* Typewriter Effect */
+        .typewriter {
+            display: inline-block;
+            overflow: hidden;
+            border-right: .1em solid #0ea5e9;
+            white-space: nowrap;
+            margin: 0;
+            padding-right: 2px;
+            animation:
+                typing 8s steps(6, end) infinite,
+                blink-caret .75s step-end infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes typing {
+            0% {
+                width: 0
+            }
+
+            20% {
+                width: 0
+            }
+
+            50% {
+                width: 100%
+            }
+
+            /* Type - Slower */
+            80% {
+                width: 100%
+            }
+
+            /* Wait */
+            95% {
+                width: 0
+            }
+
+            /* Delete */
+            100% {
+                width: 0
+            }
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: #0ea5e9;
+            }
+        }
+
         /* Fade visual suave para o fundo */
         .tech-bg {
             position: relative;
@@ -130,565 +185,773 @@
         gtag('js', new Date());
         gtag('config', 'AW-17924419542');
     </script>
+</head>
 
 <body class="bg-white text-slate-800 antialiased">
+    <!-- Rest of the file... -->
+    <!-- Skipping directly to the section due to replace tool constraints if I were editing the whole file, but here I target the specific block -->
+    <!-- Ideally I should edit the CSS block first, then the HTML logic separately or in one go if contiguous. They are far apart. -->
+    <!-- Usage: Multi-Replace is better if they are far apart. -->
 
-    <!-- Navbar -->
-    <nav class="sticky top-0 w-full z-50 bg-white/90 backdrop-blur-xl border-b border-slate-100 transition-all">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-28">
-                <a href="#" class="flex items-center gap-4 group">
-                    <div
-                        class="bg-white p-2 rounded-2xl shadow-sm border border-slate-100 group-hover:border-brand-200 group-hover:shadow-brand-200/50 group-hover:scale-105 transition-all duration-300">
-                        <img src="images/logo.png" alt="Izicode Logo"
-                            class="w-16 h-16 object-contain group-hover:rotate-6 transition-transform duration-300">
-                    </div>
-                    <span class="font-display font-black text-5xl text-slate-900 tracking-tight">Izicode Edu</span>
-                </a>
-                <div class="hidden md:flex items-center gap-10">
-                    <a href="#solucoes"
-                        class="text-2xl font-semibold text-slate-600 hover:text-brand-600 transition-colors">Soluções</a>
-                    <a href="#metodologia"
-                        class="text-2xl font-semibold text-slate-600 hover:text-brand-600 transition-colors">Metodologia</a>
-                    <a href="#ferramentas"
-                        class="text-2xl font-semibold text-slate-600 hover:text-brand-600 transition-colors">Ferramentas</a>
-                    <a href="#faq"
-                        class="text-2xl font-semibold text-slate-600 hover:text-brand-600 transition-colors">FAQ</a>
-                    <a href="login.html"
-                        class="bg-brand-600 text-white px-10 py-5 rounded-2xl font-bold hover:bg-brand-700 hover:scale-105 transition-all shadow-lg shadow-brand-500/20 text-xl">
-                        Acessar Plataforma
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!-- Wait, I need to check where the CSS is relative to the Usage. -->
+    <!-- CSS is at line 101. Usage is at line 493. -->
+    <!-- I must use multi_replace_file_content. -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17924419542"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'AW-17924419542');
+    </script>
 
-    <!-- Hero Section -->
-    <main class="tech-bg">
-        <section class="relative pt-24 pb-20 lg:pt-32 lg:pb-32 overflow-hidden text-center lg:text-left z-10">
-            <!-- Background removido daqui pois está global na classe tech-bg imitando "main" -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="grid lg:grid-cols-2 gap-16 items-center">
-                    <div class="z-10">
-                        <span
-                            class="inline-flex items-center gap-2 px-6 py-3 mb-8 text-lg font-bold tracking-wide text-brand-700 uppercase bg-brand-50 rounded-full border border-brand-100">
-                            <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-                            Consultoria em Tecnologia Educacional
-                        </span>
-                        <h1
-                            class="font-display text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-8 tracking-tight animate-sway">
-                            Robótica e Inovação para Você ou sua Escola
-                        </h1>
-                        <p
-                            class="text-2xl lg:text-3xl text-slate-600 mb-12 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
-                            Implementamos <strong>Cultura Maker, STEAM e Robótica</strong> integrados à BNCC.
-                            Transformamos alunos em criadores de tecnologia.
-                        </p>
+    <body class="bg-white text-slate-800 antialiased">
 
-                        <div class="flex flex-col sm:flex-row gap-8 justify-center lg:justify-start">
-                            <a href="https://tally.so/r/mYRNQB" target="_blank"
-                                class="inline-flex items-center justify-center bg-brand-600 text-white px-12 py-7 rounded-3xl font-display font-bold hover:bg-brand-700 hover:-translate-y-1 transition-all shadow-xl shadow-brand-500/30 text-2xl tracking-wide whitespace-nowrap">
-                                Contratar Consultoria
-                            </a>
-                        </div>
-                    </div>
-                    <div class="relative hidden lg:block group">
-                        <div
-                            class="absolute -inset-4 bg-brand-200 rounded-[2.5rem] rotate-3 group-hover:rotate-1 transition-all opacity-40 blur-lg">
-                        </div>
-                        <img src="images/01.jpg" alt="Alunos trabalhando"
-                            class="relative rounded-[2rem] shadow-2xl w-full h-auto object-cover transform transition-transform group-hover:scale-[1.01]">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Nossas Soluções -->
-        <section id="solucoes" class="py-32 bg-slate-50/50">
+        <!-- Navbar -->
+        <nav class="sticky top-0 w-full z-50 bg-white/90 backdrop-blur-xl border-b border-slate-100 transition-all">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <style>
-                    @keyframes pulse-scale {
-
-                        0%,
-                        100% {
-                            transform: scale(1);
-                        }
-
-                        50% {
-                            transform: scale(1.05);
-                        }
-                    }
-
-                    .animate-pulse-scale {
-                        animation: pulse-scale 2s ease-in-out infinite;
-                        display: inline-block;
-                    }
-                </style>
-                <div class="max-w-4xl mx-auto mb-20 text-center">
-                    <h2 class="font-display text-5xl lg:text-6xl font-bold text-slate-900 mb-8 tracking-tight">Soluções
-                        Completas
-                    </h2>
-                    <p class="text-slate-600 text-2xl leading-relaxed">Tudo que sua escola precisa para se tornar
-                        referência em ensino de tecnologia.</p>
-                </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-                    <div
-                        class="bg-white p-12 rounded-[2.5rem] border border-slate-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/20 transition-all group">
+                <div class="flex justify-between items-center h-28">
+                    <a href="#" class="flex items-center gap-4 group">
                         <div
-                            class="w-20 h-20 bg-brand-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-brand-100 transition-colors">
-                            <svg class="w-10 h-10 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                            class="bg-white p-2 rounded-2xl shadow-sm border border-slate-100 group-hover:border-brand-200 group-hover:shadow-brand-200/50 group-hover:scale-105 transition-all duration-300">
+                            <img src="images/logo.png" alt="Izicode Logo"
+                                class="w-14 h-14 object-contain group-hover:rotate-6 transition-transform duration-300">
                         </div>
-                        <h3 class="font-display font-bold text-slate-900 mb-6 text-3xl">Consultoria Estratégica</h3>
-                        <p class="text-slate-600 text-2xl leading-relaxed">Diagnóstico completo e plano de implementação
-                            de laboratórios maker personalizados.</p>
-                    </div>
-                    <div
-                        class="bg-white p-12 rounded-[2.5rem] border border-slate-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/20 transition-all group">
-                        <div
-                            class="w-20 h-20 bg-purple-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-purple-100 transition-colors">
-                            <svg class="w-10 h-10 text-purple-600" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                            </svg>
-                        </div>
-                        <h3 class="font-display font-bold text-slate-900 mb-6 text-3xl">Formação Docente</h3>
-                        <p class="text-slate-600 text-2xl leading-relaxed">Capacitação prática para professores
-                            dominarem
-                            as tecnologias e metodologias ativas.</p>
-                    </div>
-                    <div
-                        class="bg-white p-12 rounded-[2.5rem] border border-slate-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/20 transition-all group">
-                        <div
-                            class="w-20 h-20 bg-amber-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-amber-100 transition-colors">
-                            <svg class="w-10 h-10 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                            </svg>
-                        </div>
-                        <h3 class="font-display font-bold text-slate-900 mb-6 text-3xl">Projetos Maker</h3>
-                        <p class="text-slate-600 text-2xl leading-relaxed">Implementação de robótica com Arduino,
-                            Micro:bit e materiais acessíveis.</p>
+                        <span class="font-display font-black text-4xl text-slate-900 tracking-tight">Izicode Edu</span>
+                    </a>
+                    <div class="hidden md:flex items-center gap-8">
+                        <a href="#solucoes"
+                            class="text-lg font-bold text-slate-600 hover:text-brand-600 transition-colors">Soluções</a>
+                        <a href="#metodologia"
+                            class="text-lg font-bold text-slate-600 hover:text-brand-600 transition-colors">Metodologia</a>
+                        <a href="#ferramentas"
+                            class="text-lg font-bold text-slate-600 hover:text-brand-600 transition-colors">Ferramentas</a>
+                        <a href="#faq"
+                            class="text-lg font-bold text-slate-600 hover:text-brand-600 transition-colors">FAQ</a>
+                        <a href="login.html"
+                            class="bg-brand-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-brand-700 hover:scale-105 transition-all shadow-lg shadow-brand-500/20 text-base">
+                            Acessar Plataforma
+                        </a>
                     </div>
                 </div>
             </div>
-        </section>
+        </nav>
 
-        <!-- Ferramentas Open Source -->
-        <section id="ferramentas" class="py-24 bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="font-display text-5xl font-bold text-slate-900 mb-16 tracking-tight">Ferramentas de
-                    Programação</h2>
-                <!-- Mantendo grid de imagens pois são logos essenciais -->
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-                    <a href="https://scratch.mit.edu" target="_blank"
-                        class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                        <img src="images/scratch.png" alt="Scratch"
-                            class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
-                        <span class="font-bold text-slate-700 text-base">Scratch</span>
-                    </a>
-                    <a href="https://www.arduino.cc" target="_blank"
-                        class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                        <img src="images/arduino.png" alt="Arduino"
-                            class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
-                        <span class="font-bold text-slate-700 text-base">Arduino</span>
-                    </a>
-                    <a href="https://makecode.microbit.org/" target="_blank"
-                        class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                        <img src="images/microbit.png" alt="Micro:bit"
-                            class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
-                        <span class="font-bold text-slate-700 text-base">Micro:bit</span>
-                    </a>
-                    <a href="https://code.org" target="_blank"
-                        class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                        <img src="images/code.png" alt="Code.org"
-                            class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
-                        <span class="font-bold text-slate-700 text-base">Code.org</span>
-                    </a>
-                    <a href="https://www.tinkercad.com" target="_blank"
-                        class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                        <img src="images/tinkercad.jpg" alt="Tinkercad"
-                            class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
-                        <span class="font-bold text-slate-700 text-base">Tinkercad</span>
-                    </a>
-                    <a href="https://lab.open-roberta.org/" target="_blank"
-                        class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                        <img src="images/openroberta.png" alt="Open Roberta"
-                            class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
-                        <span class="font-bold text-slate-700 text-base">Open Roberta</span>
-                    </a>
-                </div>
-            </div>
-        </section>
+        <!-- Hero Section -->
+        <main class="tech-bg">
+            <section class="relative pt-24 pb-20 lg:pt-32 lg:pb-32 overflow-hidden text-center lg:text-left z-10">
+                <!-- Background removido daqui pois está global na classe tech-bg imitando "main" -->
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid lg:grid-cols-2 gap-16 items-center">
+                        <div class="z-10">
+                            <span
+                                class="inline-flex items-center gap-2 px-6 py-3 mb-8 text-lg font-bold tracking-wide text-brand-700 uppercase bg-brand-50 rounded-full border border-brand-100">
+                                <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                                Consultoria em Tecnologia Educacional
+                            </span>
+                            <h1
+                                class="font-display text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-8 tracking-tight animate-sway">
+                                Robótica e Inovação para Você ou sua Escola
+                            </h1>
+                            <p
+                                class="text-2xl lg:text-3xl text-slate-600 mb-12 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+                                Implementamos <strong>Cultura Maker, STEAM e Robótica</strong> integrados à BNCC.
+                                Transformamos alunos em criadores de tecnologia.
+                            </p>
 
-        <!-- Galeria Inovadora (Mãos na Massa) -->
-        <section class="py-32 overflow-hidden relative">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="grid lg:grid-cols-2 gap-20 items-center">
-                    <div class="relative group">
-                        <!-- Elementos decorativos de fundo -->
-                        <div
-                            class="absolute -inset-4 bg-gradient-to-tr from-brand-200 to-purple-200 rounded-[3rem] rotate-2 opacity-30 group-hover:rotate-1 transition-all duration-700 blur-xl">
+                            <div class="flex flex-col sm:flex-row gap-8 justify-center lg:justify-start">
+                                <a href="contact.html"
+                                    class="inline-flex items-center justify-center bg-brand-600 text-white px-12 py-7 rounded-3xl font-display font-bold hover:bg-brand-700 hover:-translate-y-1 transition-all shadow-xl shadow-brand-500/30 text-2xl tracking-wide whitespace-nowrap">
+                                    Contratar Consultoria
+                                </a>
+                            </div>
                         </div>
+                        <div class="relative hidden lg:block group">
+                            <div
+                                class="absolute -inset-4 bg-brand-200 rounded-[2.5rem] rotate-3 group-hover:rotate-1 transition-all opacity-40 blur-lg">
+                            </div>
+                            <img src="images/01.jpg" alt="Alunos trabalhando"
+                                class="relative rounded-[2rem] shadow-2xl w-full h-auto object-cover transform transition-transform group-hover:scale-[1.01]">
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                        <!-- Colagem de imagens -->
-                        <div class="relative">
-                            <img src="images/children-making-robot-2.jpg" alt="Crianças construindo robôs"
-                                class="rounded-[2.5rem] shadow-2xl w-full object-cover h-[500px] relative border-4 border-white transform transition-transform duration-700 group-hover:scale-[1.01]">
+            <!-- Nossas Soluções -->
+            <section id="solucoes" class="py-32 bg-slate-50/50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <style>
+                        @keyframes pulse-scale {
 
-                            <!-- Segunda imagem flutuante (Parallax effect visual) -->
-                            <div class="absolute -bottom-16 -right-16 w-2/3 hidden md:block z-20">
-                                <img src="images/close-up-making-robots.jpg" alt="Detalhe robótica"
-                                    class="rounded-[2rem] shadow-2xl border-8 border-white transform rotate-3 transition-transform duration-700 group-hover:rotate-1 hover:scale-105">
+                            0%,
+                            100% {
+                                transform: scale(1);
+                            }
+
+                            50% {
+                                transform: scale(1.05);
+                            }
+                        }
+
+                        .animate-pulse-scale {
+                            animation: pulse-scale 2s ease-in-out infinite;
+                            display: inline-block;
+                        }
+                    </style>
+                    <div class="max-w-4xl mx-auto mb-20 text-center">
+                        <h2 class="font-display text-5xl lg:text-6xl font-bold text-slate-900 mb-8 tracking-tight">
+                            Soluções
+                            Completas
+                        </h2>
+                        <p class="text-slate-600 text-2xl leading-relaxed">Tudo que sua escola precisa para se tornar
+                            referência em ensino de tecnologia.</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+                        <div
+                            class="bg-white p-12 rounded-[2.5rem] border border-slate-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/20 transition-all group">
+                            <div
+                                class="w-20 h-20 bg-brand-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-brand-100 transition-colors">
+                                <svg class="w-10 h-10 text-brand-600" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h3 class="font-display font-bold text-slate-900 mb-6 text-3xl">Consultoria Estratégica</h3>
+                            <p class="text-slate-600 text-2xl leading-relaxed">Diagnóstico completo e plano de
+                                implementação
+                                de laboratórios maker personalizados.</p>
+                        </div>
+                        <div
+                            class="bg-white p-12 rounded-[2.5rem] border border-slate-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/20 transition-all group">
+                            <div
+                                class="w-20 h-20 bg-purple-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-purple-100 transition-colors">
+                                <svg class="w-10 h-10 text-purple-600" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                            <h3 class="font-display font-bold text-slate-900 mb-6 text-3xl">Formação Docente</h3>
+                            <p class="text-slate-600 text-2xl leading-relaxed">Capacitação prática para professores
+                                dominarem
+                                as tecnologias e metodologias ativas.</p>
+                        </div>
+                        <div
+                            class="bg-white p-12 rounded-[2.5rem] border border-slate-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/20 transition-all group">
+                            <div
+                                class="w-20 h-20 bg-amber-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-amber-100 transition-colors">
+                                <svg class="w-10 h-10 text-amber-600" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                </svg>
+                            </div>
+                            <h3 class="font-display font-bold text-slate-900 mb-6 text-3xl">Projetos Maker</h3>
+                            <p class="text-slate-600 text-2xl leading-relaxed">Implementação de robótica com Arduino,
+                                Micro:bit e materiais acessíveis.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ferramentas Open Source -->
+            <section id="ferramentas" class="py-24 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 class="font-display text-5xl font-bold text-slate-900 mb-16 tracking-tight">Ferramentas de
+                        Programação</h2>
+                    <!-- Mantendo grid de imagens pois são logos essenciais -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                        <a href="https://scratch.mit.edu" target="_blank"
+                            class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
+                            <img src="images/scratch.png" alt="Scratch"
+                                class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
+                            <span class="font-bold text-slate-700 text-base">Scratch</span>
+                        </a>
+                        <a href="https://www.arduino.cc" target="_blank"
+                            class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
+                            <img src="images/arduino.png" alt="Arduino"
+                                class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
+                            <span class="font-bold text-slate-700 text-base">Arduino</span>
+                        </a>
+                        <a href="https://makecode.microbit.org/" target="_blank"
+                            class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
+                            <img src="images/microbit.png" alt="Micro:bit"
+                                class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
+                            <span class="font-bold text-slate-700 text-base">Micro:bit</span>
+                        </a>
+                        <a href="https://code.org" target="_blank"
+                            class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
+                            <img src="images/code.png" alt="Code.org"
+                                class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
+                            <span class="font-bold text-slate-700 text-base">Code.org</span>
+                        </a>
+                        <a href="https://www.tinkercad.com" target="_blank"
+                            class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
+                            <img src="images/tinkercad.jpg" alt="Tinkercad"
+                                class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
+                            <span class="font-bold text-slate-700 text-base">Tinkercad</span>
+                        </a>
+                        <a href="https://lab.open-roberta.org/" target="_blank"
+                            class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
+                            <img src="images/openroberta.png" alt="Open Roberta"
+                                class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
+                            <span class="font-bold text-slate-700 text-base">Open Roberta</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Galeria Inovadora (Mãos na Massa) -->
+            <section class="py-32 overflow-hidden relative">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid lg:grid-cols-2 gap-20 items-center">
+                        <div class="relative group">
+                            <!-- Elementos decorativos de fundo -->
+                            <div
+                                class="absolute -inset-4 bg-gradient-to-tr from-brand-200 to-purple-200 rounded-[3rem] rotate-2 opacity-30 group-hover:rotate-1 transition-all duration-700 blur-xl">
                             </div>
 
-                            <!-- Badge Flutuante -->
-                            <div
-                                class="absolute top-10 -left-10 bg-white/90 backdrop-blur-xl p-6 rounded-3xl shadow-xl border border-white/20 hidden lg:block animate-bounce [animation-duration:3s] z-30">
-                                <div class="flex items-center gap-4">
+                            <!-- Colagem de imagens -->
+                            <div class="relative">
+                                <img src="images/children-making-robot-2.jpg" alt="Crianças construindo robôs"
+                                    class="rounded-[2.5rem] shadow-2xl w-full object-cover h-[500px] relative border-4 border-white transform transition-transform duration-700 group-hover:scale-[1.01]">
+
+                                <!-- Segunda imagem flutuante (Parallax effect visual) -->
+                                <div class="absolute -bottom-16 -right-16 w-2/3 hidden md:block z-20">
+                                    <img src="images/close-up-making-robots.jpg" alt="Detalhe robótica"
+                                        class="rounded-[2rem] shadow-2xl border-8 border-white transform rotate-3 transition-transform duration-700 group-hover:rotate-1 hover:scale-105">
+                                </div>
+
+                                <!-- Badge Flutuante -->
+                                <div
+                                    class="absolute top-10 -left-10 bg-white/90 backdrop-blur-xl p-6 rounded-3xl shadow-xl border border-white/20 hidden lg:block animate-bounce [animation-duration:3s] z-30">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center text-3xl font-bold text-brand-600">
+                                            100%
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-slate-900 text-xl leading-none">Prático</p>
+                                            <p class="text-slate-500 text-lg">Mãos na massa</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:pl-10 mt-20 lg:mt-0">
+                            <h2 class="font-display text-6xl font-bold text-slate-900 mb-10 tracking-tight leading-[1]">
+                                O Futuro se Constrói <span class="text-brand-600 animate-pulse-scale">Agora!</span>
+                            </h2>
+                            <p class="text-slate-600 text-3xl leading-relaxed font-light mb-12">
+                                Não é só sobre aprender robótica. É sobre desenvolver <strong>protagonismo, criatividade
+                                    e
+                                    colaboração</strong>. Nossos alunos não apenas assistem ao futuro, eles o criam.
+                            </p>
+
+                            <div class="grid grid-cols-2 gap-8">
+                                <div class="pl-6 border-l-4 border-brand-300">
+                                    <span class="block text-5xl font-bold text-slate-900 mb-2">+50</span>
+                                    <span class="text-xl text-slate-500 font-medium uppercase tracking-wider">Escolas
+                                        Parceiras</span>
+                                </div>
+                                <div class="pl-6 border-l-4 border-purple-300">
+                                    <span class="block text-5xl font-bold text-slate-900 mb-2">+10k</span>
+                                    <span class="text-xl text-slate-500 font-medium uppercase tracking-wider">Alunos
+                                        Impactados</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Metodologia -->
+            <section id="metodologia" class="py-32 bg-slate-50 relative overflow-hidden">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid lg:grid-cols-2 gap-16 items-center">
+                        <div class="space-y-10">
+                            <h2
+                                class="font-display text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight leading-tight">
+                                Ensinamos a Pensar, não apenas a usar
+                            </h2>
+
+                            <div class="space-y-6">
+                                <div class="flex items-start gap-5">
                                     <div
-                                        class="w-16 h-16 bg-brand-100 rounded-2xl flex items-center justify-center text-3xl font-bold text-brand-600">
-                                        100%
+                                        class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                        <svg class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7" />
+                                        </svg>
                                     </div>
                                     <div>
-                                        <p class="font-bold text-slate-900 text-xl leading-none">Prático</p>
-                                        <p class="text-slate-500 text-lg">Mãos na massa</p>
+                                        <h4 class="text-3xl font-bold text-slate-900">STEAM & PBL</h4>
+                                        <p class="text-slate-600 text-2xl">Aprendizagem prática baseada em desafios
+                                            reais e
+                                            interdisciplinaridade.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-5">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                        <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-3xl font-bold text-slate-900">Gamificação e Narrativa</h4>
+                                        <p class="text-slate-600 text-2xl">Engajamento total com missões, RPG e
+                                            storytelling.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-5">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                        <svg class="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-3xl font-bold text-slate-900">Startup Thinking</h4>
+                                        <p class="text-slate-600 text-2xl">Foco em resolução de problemas, ideação e
+                                            projetos
+                                            autorais.</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="lg:pl-10 mt-20 lg:mt-0">
-                        <h2 class="font-display text-6xl font-bold text-slate-900 mb-10 tracking-tight leading-[1]">
-                            O Futuro se Constrói <span class="text-brand-600 animate-pulse-scale">Agora!</span>
-                        </h2>
-                        <p class="text-slate-600 text-3xl leading-relaxed font-light mb-12">
-                            Não é só sobre aprender robótica. É sobre desenvolver <strong>protagonismo, criatividade e
-                                colaboração</strong>. Nossos alunos não apenas assistem ao futuro, eles o criam.
-                        </p>
-
-                        <div class="grid grid-cols-2 gap-8">
-                            <div class="pl-6 border-l-4 border-brand-300">
-                                <span class="block text-5xl font-bold text-slate-900 mb-2">+50</span>
-                                <span class="text-xl text-slate-500 font-medium uppercase tracking-wider">Escolas
-                                    Parceiras</span>
-                            </div>
-                            <div class="pl-6 border-l-4 border-purple-300">
-                                <span class="block text-5xl font-bold text-slate-900 mb-2">+10k</span>
-                                <span class="text-xl text-slate-500 font-medium uppercase tracking-wider">Alunos
-                                    Impactados</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Metodologia -->
-        <section id="metodologia" class="py-32 bg-slate-50 relative overflow-hidden">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="grid lg:grid-cols-2 gap-16 items-center">
-                    <div class="space-y-10">
-                        <h2
-                            class="font-display text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight leading-tight">
-                            Ensinamos a Pensar, não apenas a usar
-                        </h2>
-
-                        <div class="space-y-6">
-                            <div class="flex items-start gap-5">
-                                <div
-                                    class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-1">
-                                    <svg class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </div>
+                        <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl border border-slate-100">
+                            <div class="flex flex-col gap-8">
                                 <div>
-                                    <h4 class="text-3xl font-bold text-slate-900">STEAM & PBL</h4>
-                                    <p class="text-slate-600 text-2xl">Aprendizagem prática baseada em desafios reais e
-                                        interdisciplinaridade.</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-5">
-                                <div
-                                    class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                                    <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h4 class="text-3xl font-bold text-slate-900">Gamificação e Narrativa</h4>
-                                    <p class="text-slate-600 text-2xl">Engajamento total com missões, RPG e
-                                        storytelling.
+                                    <h4 class="font-display text-2xl font-bold text-slate-900 mb-4">Compromisso com a
+                                        Educação</h4>
+                                    <p class="text-slate-600 text-lg leading-relaxed">
+                                        Nossa curadoria garante o cumprimento rigoroso das 10 competências da
+                                        <strong>BNCC</strong>, contribui para os <strong>ODS</strong> da ONU e segue as
+                                        diretrizes de segurança do <strong>CERT.br</strong>.
                                     </p>
                                 </div>
-                            </div>
-
-                            <div class="flex items-start gap-5">
-                                <div
-                                    class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-1">
-                                    <svg class="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                    </svg>
+                                <div class="flex gap-8 items-center pt-6 border-t border-slate-100">
+                                    <a href="https://brasil.un.org/pt-br/sdgs" target="_blank"
+                                        class="hover:opacity-100 transition-opacity opacity-80">
+                                        <img src="images/ods.jpg" alt="Logo ODS" class="h-16 w-auto mix-blend-multiply">
+                                    </a>
+                                    <a href="https://basenacionalcomum.mec.gov.br/" target="_blank"
+                                        class="hover:opacity-100 transition-opacity opacity-80">
+                                        <img src="images/bncc.jpg" alt="Logo BNCC"
+                                            class="h-12 w-auto mix-blend-multiply">
+                                    </a>
+                                    <a href="https://www.cert.br/" target="_blank"
+                                        class="hover:opacity-100 transition-opacity opacity-80">
+                                        <img src="images/cert-logo.svg" alt="Logo CERT.br"
+                                            class="h-12 w-auto mix-blend-multiply">
+                                    </a>
                                 </div>
-                                <div>
-                                    <h4 class="text-3xl font-bold text-slate-900">Startup Thinking</h4>
-                                    <p class="text-slate-600 text-2xl">Foco em resolução de problemas, ideação e
-                                        projetos
-                                        autorais.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pensamento Computacional (Novo) -->
+            <section class="py-32 overflow-hidden relative bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid lg:grid-cols-2 gap-20 items-center">
+
+                        <!-- Texto (Esquerda) -->
+                        <div class="order-2 lg:order-1">
+                            <h2 class="font-display text-6xl font-bold text-slate-900 mb-10 tracking-tight leading-[1]">
+                                Muito além do <span class="text-brand-600 typewriter"
+                                    style="padding-bottom: 10px;">Código</span>
+                            </h2>
+                            <p class="text-slate-600 text-3xl leading-relaxed font-light mb-12">
+                                O <strong>Pensamento Computacional</strong> desenvolve a capacidade de quebrar problemas
+                                complexos em etapas gerenciáveis. Nossos alunos aprendem a:
+                            </p>
+
+                            <div class="space-y-8">
+                                <div class="flex items-start gap-6">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center text-brand-600 flex-shrink-0">
+                                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-2xl font-bold text-slate-900 mb-2">Lógica de Programação</h4>
+                                        <p class="text-slate-600 text-xl">Estruturação de raciocínio sequencial e
+                                            algorítmico.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-6">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-600 flex-shrink-0">
+                                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-2xl font-bold text-slate-900 mb-2">Resolução de Problemas</h4>
+                                        <p class="text-slate-600 text-xl">Foco, persistência e criatividade para superar
+                                            desafios.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl border border-slate-100">
-                        <div class="flex flex-col gap-8">
-                            <div>
-                                <h4 class="font-display text-2xl font-bold text-slate-900 mb-4">Compromisso com a
-                                    Educação</h4>
-                                <p class="text-slate-600 text-lg leading-relaxed">
-                                    Nossa curadoria garante o cumprimento rigoroso das 10 competências da
-                                    <strong>BNCC</strong> e contribui diretamente para os <strong>ODS</strong> da ONU.
-                                </p>
+
+                        <!-- Imagens (Direita) -->
+                        <div class="relative group order-1 lg:order-2">
+                            <!-- BG Decorativo -->
+                            <div
+                                class="absolute -inset-4 bg-gradient-to-bl from-brand-200 to-blue-200 rounded-[3rem] -rotate-2 opacity-30 group-hover:rotate-1 transition-all duration-700 blur-xl">
                             </div>
-                            <div class="flex gap-8 items-center pt-6 border-t border-slate-100">
-                                <img src="images/ods.jpg" alt="Logo ODS"
-                                    class="h-16 w-auto mix-blend-multiply opacity-80 hover:opacity-100 transition-opacity">
-                                <img src="images/bncc.jpg" alt="Logo BNCC"
-                                    class="h-12 w-auto mix-blend-multiply opacity-80 hover:opacity-100 transition-opacity">
-                                <img src="images/cert-logo.svg" alt="Logo CERT.br"
-                                    class="h-12 w-auto mix-blend-multiply opacity-80 hover:opacity-100 transition-opacity">
+
+                            <div class="relative">
+                                <!-- Imagem Principal -->
+                                <img src="images/mixed-race-boy-glasses-rising-hand-answer-lesson.jpg"
+                                    alt="Aluno participando"
+                                    class="rounded-[2.5rem] shadow-2xl w-full object-cover h-[500px] relative border-4 border-white transform transition-transform duration-700 group-hover:scale-[1.01]">
                             </div>
                         </div>
+
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- FAQ -->
-        <section id="faq" class="py-32 bg-white">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-20">
-                    <h2 class="font-display text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight">Dúvidas
-                        Frequentes</h2>
+            <!-- Nossa Plataforma (Novo Produto) -->
+            <section class="py-32 bg-slate-900 relative overflow-hidden text-white">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,#0f172a,transparent_50%)]"></div>
+                <!-- Grid Background -->
+                <div
+                    class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]">
                 </div>
-                <div x-data="{ open: 1 }" class="space-y-6">
-                    <!-- Perguntas com visual clean e fonte aumentada -->
-                    <div
-                        class="bg-white border text-xl border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
-                        <h3 @click="open = 1"
-                            class="cursor-pointer flex justify-between items-center p-8 font-bold text-slate-800 hover:bg-slate-50 transition-colors text-2xl">
-                            1. Quais são os serviços específicos da Izicode?
-                            <svg :class="{'rotate-180': open === 1}"
-                                class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </h3>
-                        <div x-show="open === 1" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Consultoria
-                            completa para implementação de laboratórios maker, treinamento de professores, fornecimento
-                            de material didático (apostilas e kits) e plataforma de gestão de aprendizado.</div>
-                    </div>
-                    <!-- Repetindo padrão para outros itens... -->
-                    <!-- Item 2 -->
-                    <div
-                        class="bg-white border text-lg border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
-                        <h3 @click="open = 2"
-                            class="cursor-pointer flex justify-between items-center p-6 font-bold text-slate-800 hover:bg-slate-50 transition-colors">
-                            2. A Izicode ajuda na adequação à BNCC?
-                            <svg :class="{'rotate-180': open === 2}"
-                                class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </h3>
-                        <div x-show="open === 2" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Sim! Todo
-                            nosso material é alinhado à Base Nacional Comum Curricular, focando especificamente nas
-                            competências de Cultura Digital, Pensamento Científico e Argumentação.</div>
-                    </div>
-                    <!-- Item 3 -->
-                    <div
-                        class="bg-white border text-lg border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
-                        <h3 @click="open = 3"
-                            class="cursor-pointer flex justify-between items-center p-6 font-bold text-slate-800 hover:bg-slate-50 transition-colors">
-                            3. Preciso de um laboratório caro para começar?
-                            <svg :class="{'rotate-180': open === 3}"
-                                class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </h3>
-                        <div x-show="open === 3" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Não! Nossa
-                            metodologia é flexível. Começamos com "Robótica Desplugada" e materiais acessíveis (sucata,
-                            papelão) e evoluímos para kits eletrônicos conforme o orçamento da escola permite.</div>
-                    </div>
-                    <!-- Item 4 -->
-                    <div
-                        class="bg-white border text-lg border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
-                        <h3 @click="open = 4"
-                            class="cursor-pointer flex justify-between items-center p-6 font-bold text-slate-800 hover:bg-slate-50 transition-colors">
-                            4. Vocês oferecem suporte aos professores?
-                            <svg :class="{'rotate-180': open === 4}"
-                                class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </h3>
-                        <div x-show="open === 4" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Totalmente.
-                            O grande diferencial da Izicode é a Formação Docente continuada. Não apenas entregamos o
-                            kit, nós ensinamos o professor a ser um mentor maker confiante.</div>
-                    </div>
-                    <!-- Item 5 -->
-                    <div
-                        class="bg-white border text-lg border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
-                        <h3 @click="open = 5"
-                            class="cursor-pointer flex justify-between items-center p-6 font-bold text-slate-800 hover:bg-slate-50 transition-colors">
-                            5. A robótica atrapalha as aulas tradicionais?
-                            <svg :class="{'rotate-180': open === 5}"
-                                class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </h3>
-                        <div x-show="open === 5" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Pelo
-                            contrário! Ela potencializa. Alunos que aprendem lógica e programação melhoram
-                            significativamente o desempenho em Matemática e Ciências.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-
-        <section class="py-24 bg-slate-900/95 relative overflow-hidden">
-            <!-- Background mais limpo e sutil -->
-            <div
-                class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.03]">
-            </div>
-
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-                <span
-                    class="inline-flex items-center gap-2 px-5 py-2 mb-8 text-sm font-bold tracking-widest text-brand-200 uppercase bg-white/5 rounded-full border border-white/5">
-                    Nossos alunos vão além
-                </span>
-                <h2 class="font-display text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
-                    Apoio a <span class="text-brand-400">Campeões</span>
-                </h2>
-                <p class="text-slate-200 text-2xl max-w-4xl mx-auto mb-16 leading-relaxed font-light">
-                    Apoiamos ativamente a participação de nossos alunos e escolas parceiras nos maiores eventos de
-                    tecnologia do Brasil e do mundo.
-                </p>
-
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Card 1 -->
-                    <div
-                        class="bg-white/[0.02] p-8 rounded-[2rem] border border-white/5 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 hover:-translate-y-1 group/card text-left">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="text-center max-w-4xl mx-auto mb-20">
                         <div
-                            class="bg-brand-500/10 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover/card:bg-brand-500/20 transition-colors">
-                            <svg class="w-7 h-7 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                            </svg>
+                            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-sm font-bold tracking-widest uppercase mb-8 shadow-[0_0_20px_rgba(14,165,233,0.15)]">
+                            <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+                            Novo Produto
                         </div>
-                        <h3 class="font-display font-bold text-white text-2xl mb-3 tracking-tight">Olimpíadas
-                            Científicas</h3>
-                        <p class="text-slate-300 text-lg leading-relaxed font-normal">Preparação intensiva para OBR, OBI
-                            e torneios acadêmicos.</p>
+                        <h2 class="font-display text-5xl lg:text-7xl font-bold mb-8 tracking-tight">
+                            Izicode <span
+                                class="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-cyan-300">Plataforma</span>
+                        </h2>
+                        <p class="text-slate-400 text-2xl leading-relaxed font-light">
+                            A gestão pedagógica completa para escolas do futuro. <br class="hidden md:block">Ensino de
+                            robótica com dados, gamificação e IA.
+                        </p>
                     </div>
 
-                    <!-- Card 2 -->
-                    <div
-                        class="bg-white/[0.02] p-8 rounded-[2rem] border border-white/5 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 hover:-translate-y-1 group/card text-left">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Feature 1 -->
                         <div
-                            class="bg-purple-500/10 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover/card:bg-purple-500/20 transition-colors">
-                            <svg class="w-7 h-7 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                            </svg>
+                            class="bg-white/[0.03] backdrop-blur-sm p-10 rounded-[2.5rem] border border-white/10 hover:bg-white/[0.06] hover:border-brand-500/30 transition-all duration-300 group hover:-translate-y-1 shadow-2xl shadow-black/20">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-brand-500/10 flex items-center justify-center text-brand-400 mb-8 group-hover:scale-110 transition-transform duration-300 border border-brand-500/10 group-hover:border-brand-500/30">
+                                <!-- Heroicon: Trophy/Game -->
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                                </svg>
+                            </div>
+                            <h3 class="font-display font-bold text-2xl mb-4 text-white">Gamificação Nível Pro</h3>
+                            <p
+                                class="text-slate-400 text-lg leading-relaxed group-hover:text-slate-300 transition-colors">
+                                Sistema avançado de XP, rankings e badges que transforma cada aula em uma conquista
+                                desbloqueável.</p>
                         </div>
-                        <h3 class="font-display font-bold text-white text-2xl mb-3 tracking-tight">Hackathons</h3>
-                        <p class="text-slate-300 text-lg leading-relaxed font-normal">Maratonas de programação para
-                            resolver problemas reais.</p>
+
+                        <!-- Feature 2 -->
+                        <div
+                            class="bg-white/[0.03] backdrop-blur-sm p-10 rounded-[2.5rem] border border-white/10 hover:bg-white/[0.06] hover:border-purple-500/30 transition-all duration-300 group hover:-translate-y-1 shadow-2xl shadow-black/20">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400 mb-8 group-hover:scale-110 transition-transform duration-300 border border-purple-500/10 group-hover:border-purple-500/30">
+                                <!-- Heroicon: Chart Bar -->
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                                </svg>
+                            </div>
+                            <h3 class="font-display font-bold text-2xl mb-4 text-white">Dashboard Analítico</h3>
+                            <p
+                                class="text-slate-400 text-lg leading-relaxed group-hover:text-slate-300 transition-colors">
+                                Relatórios detalhados de desempenho por competência da BNCC, permitindo intervenções
+                                pedagógicas precisas.</p>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div
+                            class="bg-white/[0.03] backdrop-blur-sm p-10 rounded-[2.5rem] border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300 group hover:-translate-y-1 shadow-2xl shadow-black/20">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-400 mb-8 group-hover:scale-110 transition-transform duration-300 border border-amber-500/10 group-hover:border-amber-500/30">
+                                <!-- Heroicon: Cpu/Sparkles -->
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25z" />
+                                </svg>
+                            </div>
+                            <h3 class="font-display font-bold text-2xl mb-4 text-white">IA Tutor Integrada</h3>
+                            <p
+                                class="text-slate-400 text-lg leading-relaxed group-hover:text-slate-300 transition-colors">
+                                Um mentor virtual disponível 24/7 que guia o aluno na correção de código sem dar a
+                                resposta
+                                pronta.</p>
+                        </div>
                     </div>
 
-                    <!-- Card 3 -->
-                    <div
-                        class="bg-white/[0.02] p-8 rounded-[2rem] border border-white/5 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 hover:-translate-y-1 group/card text-left">
-                        <div
-                            class="bg-amber-500/10 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover/card:bg-amber-500/20 transition-colors">
-                            <svg class="w-7 h-7 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                            </svg>
-                        </div>
-                        <h3 class="font-display font-bold text-white text-2xl mb-3 tracking-tight">Robótica</h3>
-                        <p class="text-slate-300 text-lg leading-relaxed font-normal">Mentoria técnica para equipes de
-                            FLL, FRC e competições locais.</p>
+                    <div class="mt-20 text-center">
+                        <a href="login.html"
+                            class="inline-flex items-center justify-center bg-brand-600 text-white px-12 py-6 rounded-3xl font-display font-bold hover:bg-brand-500 hover:scale-105 transition-all shadow-xl shadow-brand-500/20 text-2xl">
+                            Acessar Plataforma
+                        </a>
                     </div>
                 </div>
+            </section>
 
-                <div class="mt-16">
-                    <p class="text-slate-400 text-lg font-medium tracking-wide uppercase opacity-80">
-                        Apoiamos para ver nossos alunos vencerem
+            <!-- FAQ -->
+            <section id="faq" class="py-32 bg-white">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-20">
+                        <h2 class="font-display text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight">Dúvidas
+                            Frequentes</h2>
+                    </div>
+                    <div x-data="{ open: 1 }" class="space-y-6">
+                        <!-- Perguntas com visual clean e fonte aumentada -->
+                        <div
+                            class="bg-white border text-xl border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                            <h3 @click="open = 1"
+                                class="cursor-pointer flex justify-between items-center p-8 font-bold text-slate-800 hover:bg-slate-50 transition-colors text-2xl">
+                                1. Quais são os serviços específicos da Izicode?
+                                <svg :class="{'rotate-180': open === 1}"
+                                    class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </h3>
+                            <div x-show="open === 1" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">
+                                Consultoria
+                                completa para implementação de laboratórios maker, treinamento de professores,
+                                fornecimento
+                                de material didático (apostilas e kits) e plataforma de gestão de aprendizado.</div>
+                        </div>
+                        <!-- Repetindo padrão para outros itens... -->
+                        <!-- Item 2 -->
+                        <div
+                            class="bg-white border text-lg border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                            <h3 @click="open = 2"
+                                class="cursor-pointer flex justify-between items-center p-6 font-bold text-slate-800 hover:bg-slate-50 transition-colors">
+                                2. A Izicode ajuda na adequação à BNCC?
+                                <svg :class="{'rotate-180': open === 2}"
+                                    class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </h3>
+                            <div x-show="open === 2" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Sim!
+                                Todo
+                                nosso material é alinhado à Base Nacional Comum Curricular, focando especificamente nas
+                                competências de Cultura Digital, Pensamento Científico e Argumentação.</div>
+                        </div>
+                        <!-- Item 3 -->
+                        <div
+                            class="bg-white border text-lg border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                            <h3 @click="open = 3"
+                                class="cursor-pointer flex justify-between items-center p-6 font-bold text-slate-800 hover:bg-slate-50 transition-colors">
+                                3. Preciso de um laboratório caro para começar?
+                                <svg :class="{'rotate-180': open === 3}"
+                                    class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </h3>
+                            <div x-show="open === 3" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Não!
+                                Nossa
+                                metodologia é flexível. Começamos com "Robótica Desplugada" e materiais acessíveis
+                                (sucata,
+                                papelão) e evoluímos para kits eletrônicos conforme o orçamento da escola permite.</div>
+                        </div>
+                        <!-- Item 4 -->
+                        <div
+                            class="bg-white border text-lg border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                            <h3 @click="open = 4"
+                                class="cursor-pointer flex justify-between items-center p-6 font-bold text-slate-800 hover:bg-slate-50 transition-colors">
+                                4. Vocês oferecem suporte aos professores?
+                                <svg :class="{'rotate-180': open === 4}"
+                                    class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </h3>
+                            <div x-show="open === 4" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">
+                                Totalmente.
+                                O grande diferencial da Izicode é a Formação Docente continuada. Não apenas entregamos o
+                                kit, nós ensinamos o professor a ser um mentor maker confiante.</div>
+                        </div>
+                        <!-- Item 5 -->
+                        <div
+                            class="bg-white border text-lg border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                            <h3 @click="open = 5"
+                                class="cursor-pointer flex justify-between items-center p-6 font-bold text-slate-800 hover:bg-slate-50 transition-colors">
+                                5. A robótica atrapalha as aulas tradicionais?
+                                <svg :class="{'rotate-180': open === 5}"
+                                    class="w-6 h-6 text-brand-600 transition-transform flex-shrink-0" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </h3>
+                            <div x-show="open === 5" x-collapse class="p-6 pt-0 text-slate-600 leading-relaxed">Pelo
+                                contrário! Ela potencializa. Alunos que aprendem lógica e programação melhoram
+                                significativamente o desempenho em Matemática e Ciências.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="py-24 bg-slate-900/95 relative overflow-hidden">
+                <!-- Background mais limpo e sutil -->
+                <div
+                    class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.03]">
+                </div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                    <span
+                        class="inline-flex items-center gap-2 px-5 py-2 mb-8 text-sm font-bold tracking-widest text-brand-200 uppercase bg-white/5 rounded-full border border-white/5">
+                        Nossos alunos vão além
+                    </span>
+                    <h2 class="font-display text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
+                        Apoio a <span class="text-brand-400">Campeões</span>
+                    </h2>
+                    <p class="text-slate-200 text-2xl max-w-4xl mx-auto mb-16 leading-relaxed font-light">
+                        Apoiamos ativamente a participação de nossos alunos e escolas parceiras nos maiores eventos de
+                        tecnologia do Brasil e do mundo.
                     </p>
-                </div>
-            </div>
-        </section>
 
-        <!-- Contato -->
-        <section id="contato" class="py-24 bg-brand-600 text-white relative overflow-hidden">
-            <div
-                class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] animate-[gradient_15s_ease_infinite]">
-            </div>
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-6">
-                <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight leading-tight">
-                    Transforme sua Escola<br>em um Polo de
-                </h2>
-                <div class="font-display text-6xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tight leading-none">
-                    <span class="text-blue-950 animate-pulse-scale inline-block drop-shadow-2xl">Inovação!</span>
-                </div>
-                <h3 class="text-xl md:text-2xl font-semibold text-brand-100 mb-12 tracking-wide max-w-3xl mx-auto">
-                    Invista no futuro da sua instituição
-                </h3>
-                <a href="https://tally.so/r/mYRNQB" target="_blank"
-                    class="inline-block bg-white text-brand-700 px-12 py-6 rounded-[2.5rem] font-display font-black hover:bg-slate-50 hover:scale-105 hover:shadow-2xl transition-all text-2xl tracking-wide">
-                    Falar com Especialista
-                </a>
-            </div>
-        </section>
-    </main>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Card 1 -->
+                        <div
+                            class="bg-white/[0.02] p-8 rounded-[2rem] border border-white/5 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 hover:-translate-y-1 group/card text-left">
+                            <div
+                                class="bg-brand-500/10 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover/card:bg-brand-500/20 transition-colors">
+                                <svg class="w-7 h-7 text-brand-400" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                </svg>
+                            </div>
+                            <h3 class="font-display font-bold text-white text-2xl mb-3 tracking-tight">Olimpíadas
+                                Científicas</h3>
+                            <p class="text-slate-300 text-lg leading-relaxed font-normal">Preparação intensiva para OBR,
+                                OBI
+                                e torneios acadêmicos.</p>
+                        </div>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-white py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="flex justify-center gap-8 mb-10 mt-4">
-                <a href="https://www.linkedin.com/company/izicodepf" target="_blank"
-                    class="text-slate-400 hover:text-white transition-all hover-shake scale-125">
-                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                    </svg>
-                </a>
-                <a href="https://www.instagram.com/izicodepf" target="_blank"
-                    class="text-slate-400 hover:text-white transition-all hover-shake scale-125">
-                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.44-.645 1.44-1.44s-.645-1.44-1.44-1.44z" />
-                    </svg>
-                </a>
+                        <!-- Card 2 -->
+                        <div
+                            class="bg-white/[0.02] p-8 rounded-[2rem] border border-white/5 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 hover:-translate-y-1 group/card text-left">
+                            <div
+                                class="bg-purple-500/10 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover/card:bg-purple-500/20 transition-colors">
+                                <svg class="w-7 h-7 text-purple-400" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                </svg>
+                            </div>
+                            <h3 class="font-display font-bold text-white text-2xl mb-3 tracking-tight">Hackathons</h3>
+                            <p class="text-slate-300 text-lg leading-relaxed font-normal">Maratonas de programação para
+                                resolver problemas reais.</p>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div
+                            class="bg-white/[0.02] p-8 rounded-[2rem] border border-white/5 hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300 hover:-translate-y-1 group/card text-left">
+                            <div
+                                class="bg-amber-500/10 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover/card:bg-amber-500/20 transition-colors">
+                                <svg class="w-7 h-7 text-amber-400" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                </svg>
+                            </div>
+                            <h3 class="font-display font-bold text-white text-2xl mb-3 tracking-tight">Robótica</h3>
+                            <p class="text-slate-300 text-lg leading-relaxed font-normal">Mentoria técnica para equipes
+                                de
+                                FLL, FRC e competições locais.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-16">
+                        <p class="text-slate-400 text-lg font-medium tracking-wide uppercase opacity-80">
+                            Apoiamos para ver nossos alunos vencerem
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contato -->
+            <section id="contato" class="py-24 bg-brand-600 text-white relative overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] animate-[gradient_15s_ease_infinite]">
+                </div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 py-6">
+                    <h2
+                        class="font-display text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight leading-tight">
+                        Transforme sua Escola<br>em um Polo de
+                    </h2>
+                    <div
+                        class="font-display text-6xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tight leading-none">
+                        <span class="text-blue-950 animate-pulse-scale inline-block drop-shadow-2xl">Inovação!</span>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-semibold text-brand-100 mb-12 tracking-wide max-w-3xl mx-auto">
+                        Invista no futuro da sua instituição
+                    </h3>
+                    <a href="contact.html"
+                        class="inline-block bg-white text-brand-700 px-12 py-6 rounded-[2.5rem] font-display font-black hover:bg-slate-50 hover:scale-105 hover:shadow-2xl transition-all text-2xl tracking-wide">
+                        Falar com Especialista
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-slate-900 text-white py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="flex justify-center gap-8 mb-10 mt-4">
+                    <a href="https://www.linkedin.com/company/izicodepf" target="_blank"
+                        class="text-slate-400 hover:text-white transition-all hover-shake scale-125">
+                        <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.instagram.com/izicodepf" target="_blank"
+                        class="text-slate-400 hover:text-white transition-all hover-shake scale-125">
+                        <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.44-.645 1.44-1.44s-.645-1.44-1.44-1.44z" />
+                        </svg>
+                    </a>
+                </div>
+                <p class="text-slate-500 text-sm font-medium tracking-wide">&copy; 2026 Izicode Edu - Excelência em
+                    Tecnologia Educacional.</p>
             </div>
-            <p class="text-slate-500 text-sm font-medium tracking-wide">&copy; 2026 Izicode Edu - Excelência em
-                Tecnologia Educacional.</p>
-        </div>
-    </footer>
-</body>
+        </footer>
+    </body>
 
 </html>

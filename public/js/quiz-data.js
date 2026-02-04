@@ -1,10 +1,4 @@
-/**
- * Banco de Questões do Quiz Izicode
- * Categorias: Lógica, Arduino, Scratch, Micro:bit, Cultura Maker
- */
-
 export const quizData = [
-    // --- LÓGICA DE PROGRAMAÇÃO ---
     {
         id: "log-001",
         category: "Lógica",
@@ -13,10 +7,10 @@ export const quizData = [
         options: [
             "Um tipo de vírus de computador",
             "Uma sequência de passos para resolver um problema",
-            "Uma peça do computador",
+            "Um peça do computador",
             "Um jogo famoso"
         ],
-        correct: 1, // Index da resposta certa (0-3)
+        correct: 1,
         explanation: "Algoritmo é como uma receita de bolo: um passo a passo lógico para chegar a um resultado.",
         xp: 10
     },
@@ -24,180 +18,165 @@ export const quizData = [
         id: "log-002",
         category: "Lógica",
         difficulty: "easy",
-        question: "Qual destes é um exemplo de 'Loop' (Repetição)?",
+        question: "Qual forma geométrica representa uma DECISÃO (se/senão) no fluxograma?",
         options: [
-            "Dar um passo para frente",
-            "Pular 10 vezes",
-            "Virar a direita",
-            "Parar"
+            "Retângulo",
+            "Círculo",
+            "Losango",
+            "Triângulo"
         ],
-        correct: 1,
-        explanation: "Pular 10 vezes é uma ação que se repete várias vezes, ou seja, um Loop.",
-        xp: 10
+        correct: 2,
+        explanation: "O Losango é usado para decisões onde o caminho se divide em 'Sim' ou 'Não'.",
+        xp: 15
     },
     {
         id: "log-003",
         category: "Lógica",
         difficulty: "medium",
-        question: "Em programação, o que é uma 'Variável'?",
+        question: "Em um loop 'Enquanto' (While), o código roda...",
         options: [
-            "Algo que nunca muda",
-            "Uma caixa para guardar informações (dados)",
-            "Um erro no código",
-            "A tela do computador"
-        ],
-        correct: 1,
-        explanation: "Variáveis são espaços na memória para guardar dados, como pontos de um jogo ou nome de um usuário.",
-        xp: 15
-    },
-    {
-        id: "log-004",
-        category: "Lógica",
-        difficulty: "hard",
-        question: "O que significa 'Debugging'?",
-        options: [
-            "Colocar insetos no computador",
-            "Criar um jogo novo",
-            "Encontrar e corrigir erros no código",
-            "Desligar o computador"
+            "Apenas uma vez",
+            "Para sempre, sem parar",
+            "Enquanto a condição for verdadeira",
+            "Até alguém desligar o computador"
         ],
         correct: 2,
-        explanation: "Debugging (ou depuração) é o processo de caçar e arrumar bugs (erros) no seu programa.",
-        xp: 25
+        explanation: "O loop 'Enquanto' verifica a condição antes de cada repetição e só para quando ela for falsa.",
+        xp: 20
     },
-
-    // --- ARDUINO ---
     {
         id: "ard-001",
         category: "Arduino",
         difficulty: "easy",
-        question: "Qual função do Arduino roda apenas UMA vez quando ligamos a placa?",
+        question: "Qual função do Arduino roda apenas UMA vez ao ligar?",
         options: [
             "void loop()",
-            "void setup()",
             "void start()",
-            "void play()"
+            "void setup()",
+            "void begin()"
         ],
-        correct: 1,
-        explanation: "O 'void setup()' serve para configurar a placa e roda só no início.",
+        correct: 2,
+        explanation: "O void setup() serve para configurar os pinos e iniciar bibliotecas, rodando só no início.",
         xp: 10
     },
     {
         id: "ard-002",
         category: "Arduino",
         difficulty: "medium",
-        question: "Para que serve o comando 'digitalWrite(13, HIGH);'?",
+        question: "Para que serve o pino GND?",
         options: [
-            "Lê um valor da porta 13",
-            "Desliga a porta 13",
-            "Liga (envia energia) para a porta 13",
-            "Muda a cor da porta 13"
+            "Fornecer 5 Volts",
+            "Enviar dados para o computador",
+            "É o Terra (Negativo/0V) do circuito",
+            "Ligar o LED sozinho"
         ],
         correct: 2,
-        explanation: "HIGH significa 'Alto' ou 'Ligado' (5V). Então ele liga o componente na porta 13.",
+        explanation: "GND significa Ground (Terra), e é o polo negativo comum necessário para fechar o circuito.",
         xp: 15
     },
     {
         id: "ard-003",
         category: "Arduino",
-        difficulty: "medium",
-        question: "Qual componente usamos para limitar a corrente e proteger um LED?",
+        difficulty: "hard",
+        question: "O que é um sinal PWM?",
         options: [
-            "Botão",
-            "Resistor",
-            "Bateria",
-            "Motor"
+            "Uma forma de simular voltagem analógica ligando/desligando rápido",
+            "Um tipo de sensor de temperatura",
+            "Uma biblioteca de WiFi",
+            "Um erro de compilação"
         ],
-        correct: 1,
-        explanation: "O Resistor 'resiste' à passagem de energia, evitando que o LED queime por excesso de corrente.",
-        xp: 15
+        correct: 0,
+        explanation: "PWM (Pulse Width Modulation) controla a potência (brilho do LED, velocidade do motor) pulsando o sinal digital.",
+        xp: 30
     },
-
-    // --- SCRATCH ---
     {
         id: "scr-001",
         category: "Scratch",
         difficulty: "easy",
-        question: "Qual bloco usamos para iniciar um programa no Scratch?",
+        question: "Qual bloco usamos para iniciar um código ao clicar na bandeira verde?",
         options: [
-            "Quando a bandeira verde for clicada",
-            "Espere 1 segundo",
+            "Quando a tecla espaço for pressionada",
+            "Quando bandeira verde for clicada",
             "Mova 10 passos",
-            "Diga Olá"
+            "Espere 1 segundo"
         ],
-        correct: 0,
-        explanation: "A bandeira verde é o sinal universal de 'Start' no Scratch.",
+        correct: 1,
+        explanation: "É o bloco de evento principal para iniciar a maioria dos jogos no Scratch.",
         xp: 10
     },
     {
         id: "scr-002",
         category: "Scratch",
-        difficulty: "easy",
-        question: "No Scratch, os personagens são chamados de:",
+        difficulty: "medium",
+        question: "O que é uma 'Variável' no Scratch?",
         options: [
-            "Bonecos",
-            "Sprites (Atores)",
-            "Figurinhas",
-            "Avatares"
+            "Um personagem do jogo",
+            "Um cenário que muda de cor",
+            "Um espaço na memória para guardar números ou textos (como pontuação)",
+            "Um bloco que faz som"
         ],
-        correct: 1,
-        explanation: "O termo técnico no Scratch é Sprite ou Ator.",
-        xp: 10
+        correct: 2,
+        explanation: "Variáveis são como caixas com etiquetas onde guardamos informações que podem mudar, como 'Vidas' ou 'Pontos'.",
+        xp: 20
     },
     {
         id: "scr-003",
         category: "Scratch",
         difficulty: "medium",
-        question: "Se quisermos que o gato 'mie' quando encostar no cachorro, qual bloco usamos?",
+        question: "Para fazer um personagem andar para sempre, qual estrutura usamos?",
         options: [
-            "Mova 10 passos",
-            "Sensores (Tocando em...)",
-            "Caneta",
-            "Vá para x:0 y:0"
+            "Repita 10 vezes",
+            "Se... então",
+            "Sempre",
+            "Espere até que"
         ],
-        correct: 1,
-        explanation: "Usamos blocos de Sensores para detectar colisões (tocando em).",
+        correct: 2,
+        explanation: "O bloco 'Sempre' (Loop infinito) faz com que as ações dentro dele se repitam continuadamente.",
         xp: 15
     },
-
-    // --- CULTURA MAKER ---
     {
-        id: "mkr-001",
+        id: "maker-001",
         category: "Maker",
         difficulty: "easy",
         question: "O que significa DIY?",
         options: [
+            "Do It Yesterday (Faça Ontem)",
             "Do It Yourself (Faça Você Mesmo)",
-            "Dia Incrível Yate",
-            "Dance In Yard",
-            "Domingo Iogurte Yoga"
+            "Digital Is Young (O Digital é Jovem)",
+            "Dance In Yard (Dance no Quintal)"
         ],
-        correct: 0,
-        explanation: "DIY é a alma da cultura maker: criar, consertar e modificar coisas com as próprias mãos.",
+        correct: 1,
+        explanation: "DIY é a essência da cultura Maker: colocar a mão na massa e construir suas próprias coisas!",
         xp: 10
     },
     {
-        id: "mkr-002",
+        id: "maker-002",
         category: "Maker",
         difficulty: "medium",
-        question: "Qual destas ferramentas derrete plástico para criar objetos 3D?",
+        question: "Qual ferramenta usamos para colar componentes com calor?",
         options: [
-            "Cortadora a Laser",
-            "Impressora 3D",
-            "Parafusadeira",
-            "Alicate"
+            "Cola Branca",
+            "Fita Adesiva",
+            "Pistola de Cola Quente",
+            "Grampeador"
+        ],
+        correct: 2,
+        explanation: "A cola quente é a melhor amiga do Maker para prototipagem rápida com papelão e materiais recicláveis.",
+        xp: 15
+    },
+    {
+        id: "tech-001",
+        category: "Lógica",
+        difficulty: "hard",
+        question: "O que é um 'Bug'?",
+        options: [
+            "Um inseto de verdade dentro do computador",
+            "Uma falha ou erro no código",
+            "Um tipo de robô espião",
+            "Um super computador"
         ],
         correct: 1,
-        explanation: "A Impressora 3D deposita camadas de plástico derretido (filamento) para criar formas.",
-        xp: 15
+        explanation: "Bug é o nome dado a falhas de software. O termo surgiu quando um inseto real causou curto num computador antigo!",
+        xp: 20
     }
 ];
-
-export function getQuestionsByCategory(category) {
-    if (category === 'All') return quizData;
-    return quizData.filter(q => q.category === category);
-}
-
-export function getRandomQuestion() {
-    return quizData[Math.floor(Math.random() * quizData.length)];
-}

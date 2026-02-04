@@ -206,7 +206,7 @@ Exporte os modelos em formato \`.STL\`. Se a escola possuir uma impressora 3D, i
         difficulty: "Iniciante",
         duration: "2 aulas",
         grade: "Ensino Médio",
-        image: "python-code",
+        image: "python",
         ods: "ODS 9 - Inovação",
         bncc: ["EM13TEC04", "EM13MAT403"],
         content: `

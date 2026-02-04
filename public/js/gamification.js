@@ -193,6 +193,36 @@ export const gamificationSystem = {
         };
     },
 
+    // Sistema de missões diárias
+    dailyMissions: [
+        {
+            id: 'daily-login',
+            name: 'Explorador Diário',
+            description: 'Entre na plataforma hoje',
+            xp: 5,
+            icon: 'check',
+            type: 'login'
+        },
+        {
+            id: 'quiz-master',
+            name: 'Mestre dos Quizzes',
+            description: 'Acerte 3 perguntas no Quiz',
+            xp: 20,
+            icon: 'quiz',
+            type: 'quiz',
+            target: 3
+        },
+        {
+            id: 'project-builder',
+            name: 'Construtor',
+            description: 'Avance 10% em qualquer projeto',
+            xp: 30,
+            icon: 'build',
+            type: 'project',
+            target: 10
+        }
+    ],
+
     // Cores de raridade
     rarityColors: {
         common: "text-slate-600 bg-slate-100",

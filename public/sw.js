@@ -24,7 +24,7 @@ const STATIC_ASSETS = [
 // Instalação do Service Worker
 self.addEventListener('install', (event) => {
   console.log('[Service Worker] Instalando...');
-  
+
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
@@ -38,7 +38,7 @@ self.addEventListener('install', (event) => {
 // Ativação do Service Worker
 self.addEventListener('activate', (event) => {
   console.log('[Service Worker] Ativando...');
-  
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -57,11 +57,14 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   // Ignorar requisições que não são GET
   if (event.request.method !== 'GET') return;
-  
+
+  // Ignorar requisições com esquemas não suportados (ex: chrome-extension)
+  if (!event.request.url.startsWith('http')) return;
+
   // Ignorar requisições para APIs externas (Firebase, etc)
   if (event.request.url.includes('firebaseio.com') ||
-      event.request.url.includes('googleapis.com') ||
-      event.request.url.includes('gstatic.com')) {
+    event.request.url.includes('googleapis.com') ||
+    event.request.url.includes('gstatic.com')) {
     return;
   }
 
@@ -84,7 +87,7 @@ self.addEventListener('fetch', (event) => {
             if (cachedResponse) {
               return cachedResponse;
             }
-            
+
             // Se for uma navegação e não houver cache, mostre página offline
             if (event.request.mode === 'navigate') {
               return caches.match(OFFLINE_URL);
@@ -97,7 +100,7 @@ self.addEventListener('fetch', (event) => {
 // Sincronização em background (para futuras features)
 self.addEventListener('sync', (event) => {
   console.log('[Service Worker] Sincronização em background:', event.tag);
-  
+
   if (event.tag === 'sync-projects') {
     event.waitUntil(syncProjects());
   }
