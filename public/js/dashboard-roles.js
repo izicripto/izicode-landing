@@ -428,13 +428,14 @@ export class DashboardRoleManager {
                     // Content focus -> Same widgets as Teacher (Projects + Tips)
                     const fProjectsCount = await this.fetchProjectsCount();
                     const fRecentProjects = await this.fetchRecentProjects();
-                    const fLeaderboard = await this.fetchLeaderboard('freelance_teacher');
+                    // Fetch ranking including both teacher types for a fuller list
+                    const fLeaderboard = await this.fetchLeaderboard(['freelance_teacher', 'teacher']);
                     widgetsHtml = this.getTeacherWidgets(fProjectsCount, fRecentProjects, fLeaderboard, this.userData);
                     break;
                 case 'teacher':
                     const projectsCount = await this.fetchProjectsCount();
                     const recentProjects = await this.fetchRecentProjects();
-                    const tLeaderboard = await this.fetchLeaderboard('teacher');
+                    const tLeaderboard = await this.fetchLeaderboard(['teacher', 'freelance_teacher']);
                     widgetsHtml = this.getTeacherWidgets(projectsCount, recentProjects, tLeaderboard, this.userData);
                     break;
                 case 'student':
@@ -472,13 +473,15 @@ export class DashboardRoleManager {
         }
     }
 
-    async fetchLeaderboard(targetRole) {
+    async fetchLeaderboard(targetRoles) {
         try {
+            const roles = Array.isArray(targetRoles) ? targetRoles : [targetRoles];
             const usersRef = collection(db, "users");
-            // Create a query against the collection.
+
+            // Using "in" operator for roles
             const q = query(
                 usersRef,
-                where("role", "==", targetRole),
+                where("role", "in", roles),
                 orderBy("xp", "desc"),
                 limit(10)
             );
@@ -486,14 +489,15 @@ export class DashboardRoleManager {
             const snapshot = await getDocs(q);
             return snapshot.docs.map(d => d.data());
         } catch (e) {
-            console.warn("Leaderboard index missing or query failed, falling back to client-side filter:", e);
+            console.warn("Leaderboard index missing or 'in' query failed, falling back to client-side filter:", e);
             try {
+                const roles = Array.isArray(targetRoles) ? targetRoles : [targetRoles];
                 const usersRef = collection(db, "users");
-                const qFallback = query(usersRef, orderBy("xp", "desc"), limit(100));
+                const qFallback = query(usersRef, orderBy("xp", "desc"), limit(500)); // Increase fallback limit
                 const snapshot = await getDocs(qFallback);
                 return snapshot.docs
                     .map(d => d.data())
-                    .filter(u => u.role === targetRole)
+                    .filter(u => roles.includes(u.role))
                     .slice(0, 10);
             } catch (err) {
                 console.error("Deep Leaderboard Failure:", err);
