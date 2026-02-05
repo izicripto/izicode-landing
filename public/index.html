@@ -210,7 +210,8 @@
     <body class="bg-white text-slate-800 antialiased">
 
         <!-- Navbar -->
-        <nav class="sticky top-0 w-full z-50 bg-white/90 backdrop-blur-xl border-b border-slate-100 transition-all">
+        <nav x-data="{ mobileMenuOpen: false }"
+            class="sticky top-0 w-full z-50 bg-white/90 backdrop-blur-xl border-b border-slate-100 transition-all">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-28">
                     <a href="#" class="flex items-center gap-4 group">
@@ -221,6 +222,8 @@
                         </div>
                         <span class="font-display font-black text-4xl text-slate-900 tracking-tight">Izicode Edu</span>
                     </a>
+
+                    <!-- Desktop Menu -->
                     <div class="hidden md:flex items-center gap-8">
                         <a href="#solucoes"
                             class="text-lg font-bold text-slate-600 hover:text-brand-600 transition-colors">Soluções</a>
@@ -232,6 +235,43 @@
                             class="text-lg font-bold text-slate-600 hover:text-brand-600 transition-colors">FAQ</a>
                         <a href="login.html"
                             class="bg-brand-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-brand-700 hover:scale-105 transition-all shadow-lg shadow-brand-500/20 text-base">
+                            Acessar Plataforma
+                        </a>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <div class="flex md:hidden">
+                        <button @click="mobileMenuOpen = !mobileMenuOpen"
+                            class="text-slate-600 hover:text-brand-600 p-2 transition-colors">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+                                <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Overlay -->
+            <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-4"
+                class="md:hidden bg-white border-b border-slate-100 shadow-xl" @click.away="mobileMenuOpen = false">
+                <div class="px-4 pt-4 pb-8 space-y-4">
+                    <a href="#solucoes" @click="mobileMenuOpen = false"
+                        class="block text-2xl font-bold text-slate-700 hover:text-brand-600 p-4 rounded-2xl hover:bg-slate-50 transition-all">Soluções</a>
+                    <a href="#metodologia" @click="mobileMenuOpen = false"
+                        class="block text-2xl font-bold text-slate-700 hover:text-brand-600 p-4 rounded-2xl hover:bg-slate-50 transition-all">Metodologia</a>
+                    <a href="#ferramentas" @click="mobileMenuOpen = false"
+                        class="block text-2xl font-bold text-slate-700 hover:text-brand-600 p-4 rounded-2xl hover:bg-slate-50 transition-all">Ferramentas</a>
+                    <a href="#faq" @click="mobileMenuOpen = false"
+                        class="block text-2xl font-bold text-slate-700 hover:text-brand-600 p-4 rounded-2xl hover:bg-slate-50 transition-all">FAQ</a>
+                    <div class="pt-4 px-4">
+                        <a href="login.html"
+                            class="block w-full text-center bg-brand-600 text-white py-6 rounded-3xl font-display font-bold text-2xl shadow-xl shadow-brand-500/30">
                             Acessar Plataforma
                         </a>
                     </div>
