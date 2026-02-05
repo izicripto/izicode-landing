@@ -31,44 +31,6 @@ async function loadStudentProfile(user) {
         let needsUpdate = false;
         let updates = {};
 
-        if (userData.keys === undefined) {
-            currentKeys = 10;
-            updates.keys = 10;
-            needsUpdate = true;
-        }
-
-        if (currentKeys < 10) {
-            const timeDiff = now - lastRefill;
-            const hoursPassed = Math.floor(timeDiff / (1000 * 60 * 60));
-
-            if (hoursPassed >= 1) {
-                const keysToAdd = Math.min(hoursPassed, 10 - currentKeys);
-                if (keysToAdd > 0) {
-                    currentKeys += keysToAdd;
-                    updates.keys = currentKeys;
-                    updates.lastKeyRefill = now;
-                    needsUpdate = true;
-                    console.log(`Recharged ${keysToAdd} keys!`);
-                }
-            }
-        }
-
-        if (needsUpdate) {
-            await updateDoc(userRef, updates);
-            userData = { ...userData, ...updates };
-        }
-
-        const keysEl = document.getElementById('keysCountDashboard');
-        if (keysEl) keysEl.innerText = currentKeys;
-        // --------------------------
-
-        // --- KEY RECHARGE LOGIC ---
-        let currentKeys = userData.keys !== undefined ? userData.keys : 10;
-        let lastRefill = userData.lastKeyRefill ? userData.lastKeyRefill.toDate() : new Date();
-        const now = new Date();
-        let needsUpdate = false;
-        let updates = {};
-
         // Initializes keys if missing
         if (userData.keys === undefined) {
             currentKeys = 10;
@@ -86,17 +48,11 @@ async function loadStudentProfile(user) {
                 if (keysToAdd > 0) {
                     currentKeys += keysToAdd;
                     updates.keys = currentKeys;
-                    updates.lastKeyRefill = now; // Reset timer to now (simple simplified logic)
+                    updates.lastKeyRefill = now;
                     needsUpdate = true;
                     console.log(`Recharged ${keysToAdd} keys! New balance: ${currentKeys}`);
                 }
             }
-        } else {
-            // Ensure timer updates if we are full, so we don't accumulate hours while full?
-            // Actually, usually you just leave it. If I use a key, the timer starts from "now" implies I lose progress?
-            // Better: If I was full, and I use a key, I set the timer then. 
-            // For now, simpler: If I am < 10, the timer counts. If I am >= 10, the timer is irrelevant.
-            // If checking refill and I am full, do nothing.
         }
 
         if (needsUpdate) {
@@ -215,6 +171,7 @@ async function initDailyMissions(user) {
             progress: 1,
             target: 1,
             xp: 50,
+            keys: 1,
             icon: "🚀",
             done: true
         },
@@ -224,13 +181,14 @@ async function initDailyMissions(user) {
             progress: quizCount,
             target: 2,
             xp: 100,
+            keys: 2,
             icon: "🧠",
             done: quizCount >= 2
         },
         {
             title: "Mão na Massa",
             desc: "Inicie ou continue um projeto",
-            progress: data.projectsStartedToday || 0, // Placeholder field
+            progress: data.projectsStartedToday || 0,
             target: 1,
             xp: 150,
             icon: "🛠️",
@@ -241,7 +199,7 @@ async function initDailyMissions(user) {
     missions.forEach(m => {
         const width = Math.min((m.progress / m.target) * 100, 100);
         const color = m.done ? 'green' : 'blue';
-        const btnState = m.done ? 'Opções' : 'Ir';
+        const keyReward = m.keys ? `<span class="block text-xs font-bold text-amber-600">🗝️ +${m.keys} Chaves</span>` : '';
 
         missionsContainer.innerHTML += `
             <div class="bg-white p-4 rounded-2xl border border-slate-100 flex items-center justify-between shadow-sm hover:shadow-md transition-all">
@@ -262,6 +220,7 @@ async function initDailyMissions(user) {
                 </div>
                 <div class="text-right">
                     <span class="block font-display font-bold text-${color}-600 text-lg">+${m.xp} XP</span>
+                    ${keyReward}
                     ${m.done ? '<span class="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">Completo</span>' : ''}
                 </div>
             </div>

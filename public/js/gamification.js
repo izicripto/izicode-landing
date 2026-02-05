@@ -193,13 +193,13 @@ export const gamificationSystem = {
         };
     },
 
-    // Sistema de missões diárias
     dailyMissions: [
         {
             id: 'daily-login',
             name: 'Explorador Diário',
             description: 'Entre na plataforma hoje',
             xp: 5,
+            keys: 1, // Reward 1 key
             icon: 'check',
             type: 'login'
         },
@@ -208,6 +208,7 @@ export const gamificationSystem = {
             name: 'Mestre dos Quizzes',
             description: 'Acerte 3 perguntas no Quiz',
             xp: 20,
+            keys: 2, // Reward 2 keys
             icon: 'quiz',
             type: 'quiz',
             target: 3
