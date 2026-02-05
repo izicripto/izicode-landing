@@ -1,7 +1,7 @@
 // Service Worker para Izicode Edu PWA
-// Versão 1.0.0
+// Versão 1.2.0
 
-const CACHE_NAME = 'izicode-edu-v1';
+const CACHE_NAME = 'izicode-edu-v1.2';
 const OFFLINE_URL = '/offline.html';
 
 // Recursos para cache inicial

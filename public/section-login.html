@@ -128,23 +128,12 @@
         </div>
     </div>
 
-    <!-- Logic Script (Mock for now) -->
-    <script>
-        // Simulação de Dados (Depois conectaremos ao Firebase)
-        const mockClass = {
-            name: "Robótica 1º Ano A",
-            students: [
-                { id: 1, name: "Ana Julia", avatar: "👩‍🚀" },
-                { id: 2, name: "Bernardo", avatar: "🦸‍♂️" },
-                { id: 3, name: "Carlos", avatar: "🕵️‍♂️" },
-                { id: 4, name: "Daniela", avatar: "👩‍🔬" },
-                { id: 5, name: "Eduardo", avatar: "👨‍💻" },
-                { id: 6, name: "Fernanda", avatar: "🧝‍♀️" },
-            ]
-        };
+    <!-- Logic Script -->
+    <script type="module">
+        import { studentLoginService } from './js/student-login-service.js';
 
         // Carregar Dados ao Iniciar
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const params = new URLSearchParams(window.location.search);
             const code = params.get('code');
 
@@ -154,11 +143,36 @@
                 return;
             }
 
-            // Simular delay de rede
-            setTimeout(() => {
-                renderClass(mockClass);
-            }, 1000); // 1s loading
+            try {
+                // Fetch real data
+                const classData = await studentLoginService.findClassByCode(code);
+
+                if (!classData) {
+                    // Fallback for demo/testing if DB is empty
+                    console.warn("Class not found in DB, using mock for demo");
+                    renderClass(getMockClass(code));
+                } else {
+                    renderClass(classData);
+                }
+            } catch (error) {
+                console.error("Error loading class:", error);
+                alert("Erro ao carregar a turma. Tente novamente.");
+            }
         });
+
+        function getMockClass(code) {
+            return {
+                id: "mock_123",
+                name: "Turma Exemplo (" + code + ")",
+                students: [
+                    { id: '1', name: "Ana Julia", avatar: "👩‍🚀", secret: "gato" },
+                    { id: '2', name: "Bernardo", avatar: "🦸‍♂️", secret: "robo" },
+                    { id: '3', name: "Carlos", avatar: "🕵️‍♂️", secret: "lua" },
+                    { id: '4', name: "Daniela", avatar: "👩‍🔬", secret: "flor" },
+                    { id: '5', name: "Eduardo", avatar: "👨‍💻", secret: "code" }
+                ]
+            };
+        }
 
         function renderClass(classData) {
             document.getElementById('className').textContent = classData.name;
@@ -167,14 +181,24 @@
             const grid = document.getElementById('studentsGrid');
             grid.innerHTML = ''; // Limpar loading
 
-            classData.students.forEach(student => {
+            // Check if students array exists
+            const students = classData.students || [];
+
+            if (students.length === 0) {
+                grid.innerHTML = '<p class="col-span-full text-center text-slate-400">Nenhum aluno encontrado nesta turma.</p>';
+                return;
+            }
+
+            students.forEach(student => {
                 const card = document.createElement('div');
                 card.className = "bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:border-brand-300 hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer group text-center";
-                card.onclick = () => openModal(student);
+
+                // Store class data reference for login
+                card.onclick = () => openModal(student, classData);
 
                 card.innerHTML = `
                     <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-slate-50 group-hover:bg-brand-50 transition-colors flex items-center justify-center text-4xl shadow-inner">
-                        ${student.avatar}
+                        ${student.avatar || '🎓'}
                     </div>
                     <h3 class="font-display font-bold text-lg text-slate-700 group-hover:text-brand-700 truncate">${student.name}</h3>
                 `;
@@ -183,11 +207,22 @@
         }
 
         let selectedStudent = null;
+        let currentClassData = null;
 
-        function openModal(student) {
+        window.openModal = (student, classData) => {
             selectedStudent = student;
+            currentClassData = classData;
             document.getElementById('modalName').textContent = student.name.split(' ')[0];
-            document.getElementById('modalInitial').textContent = student.avatar; // Usando o emoji como avatar por enquanto
+            document.getElementById('modalAvatar').src = student.avatarUrl || ''; // If image
+            // Toggle Text Avatar vs Image
+            if (student.avatar && !student.avatar.startsWith('http')) {
+                document.getElementById('modalInitial').textContent = student.avatar;
+                document.getElementById('modalInitial').classList.remove('hidden');
+                document.getElementById('modalAvatar').classList.add('hidden');
+            } else {
+                document.getElementById('modalInitial').classList.add('hidden');
+                document.getElementById('modalAvatar').classList.remove('hidden');
+            }
 
             const modal = document.getElementById('loginModal');
             modal.classList.remove('hidden');
@@ -196,32 +231,55 @@
             }, 100);
         }
 
-        function closeModal() {
+        window.closeModal = () => {
             document.getElementById('loginModal').classList.add('hidden');
             document.getElementById('secretInput').value = '';
             selectedStudent = null;
         }
 
-        function handleLogin(e) {
+        window.handleLogin = async (e) => {
             e.preventDefault();
             const secret = document.getElementById('secretInput').value;
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerHTML;
 
-            if (secret.length < 3) {
+            if (secret.length < 2) {
                 alert('A palavra secreta é muito curta!');
                 return;
             }
 
-            // Simulação de Sucesso
-            const btn = e.target.querySelector('button');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = 'Entrando... 🔄';
+            btn.innerHTML = 'Verificando... 🔄';
             btn.disabled = true;
 
-            setTimeout(() => {
-                // Redirecionar para a Área do Aluno (simulado)
-                // Na implementação real, faríamos o signInWithEmailAndPassword
-                window.location.href = 'student-area.html';
-            }, 1500);
+            try {
+                // In real app, the secret should be hashed or stored securely.
+                // Here we compare with the 'secret' field in the student object.
+                // For a real implementation, we might call 'studentLoginService.validateSecret'
+                // which would check against a hash.
+
+                // For now, let's assume 'secret' is in the student object loaded in memory (Not secure for prod, but OK for prototype)
+                const isValid = await studentLoginService.validateSecret(selectedStudent.id, secret, selectedStudent.secret);
+
+                if (isValid) {
+                    btn.innerHTML = 'Sucesso! 🚀';
+                    studentLoginService.login(selectedStudent, currentClassData);
+                    setTimeout(() => {
+                        window.location.href = 'student-area.html';
+                    }, 500);
+                } else {
+                    alert("Palavra secreta incorreta!");
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    document.getElementById('secretInput').value = '';
+                    document.getElementById('secretInput').focus();
+                }
+
+            } catch (err) {
+                console.error(err);
+                alert("Erro no login");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         }
     </script>
 </body>

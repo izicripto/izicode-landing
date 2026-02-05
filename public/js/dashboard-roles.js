@@ -1,5 +1,5 @@
 // Dashboard Role-Based Rendering System
-import { auth, db, doc, getDoc, collection, query, getDocs, orderBy, limit } from './firebase-config.js';
+import { auth, db, doc, getDoc, updateDoc, collection, query, where, getDocs, orderBy, limit, getCountFromServer } from './firebase-config.js';
 import { getDailyTip } from './pedagogical-tips.js';
 
 export class DashboardRoleManager {
@@ -27,11 +27,48 @@ export class DashboardRoleManager {
     async loadUserData() {
         try {
             // 1. Load DB Data
-            const userDoc = await getDoc(doc(db, 'users', this.currentUser.uid));
+            const userRef = doc(db, 'users', this.currentUser.uid);
+            const userDoc = await getDoc(userRef);
             let dbRole = 'student';
+
             if (userDoc.exists()) {
                 this.userData = userDoc.data();
                 dbRole = this.userData.role || 'student';
+
+                // --- KEY RECHARGE LOGIC ---
+                let currentKeys = this.userData.keys !== undefined ? this.userData.keys : 10;
+                let lastRefill = this.userData.lastKeyRefill ? this.userData.lastKeyRefill.toDate() : new Date();
+                const now = new Date();
+                let needsUpdate = false;
+                let updates = {};
+
+                if (this.userData.keys === undefined) {
+                    currentKeys = 10;
+                    updates.keys = 10;
+                    needsUpdate = true;
+                }
+
+                if (currentKeys < 10) {
+                    const timeDiff = now - lastRefill;
+                    const hoursPassed = Math.floor(timeDiff / (1000 * 60 * 60));
+
+                    if (hoursPassed >= 1) {
+                        const keysToAdd = Math.min(hoursPassed, 10 - currentKeys);
+                        if (keysToAdd > 0) {
+                            currentKeys += keysToAdd;
+                            updates.keys = currentKeys;
+                            updates.lastKeyRefill = now;
+                            needsUpdate = true;
+                            console.log(`Recharged ${keysToAdd} keys!`);
+                        }
+                    }
+                }
+
+                if (needsUpdate) {
+                    await updateDoc(userRef, updates);
+                    this.userData = { ...this.userData, ...updates };
+                }
+                // --------------------------
             }
 
             // 2. APPLY BUSINESS RULES (Hardcoded Overrides)
@@ -91,7 +128,48 @@ export class DashboardRoleManager {
         if (greetingElement) {
             greetingElement.textContent = greetingMap[this.userRole] || greetingMap.student;
         }
+
+        // Update Sidebar/Header Stats (XP, Level, Keys)
+        if (this.userData) {
+            const levelEl = document.getElementById('userLevel');
+            const xpEl = document.getElementById('userXP');
+            const keysEl = document.getElementById('userKeys');
+
+            if (levelEl) levelEl.textContent = this.userData.level || 1;
+            if (xpEl) xpEl.textContent = this.userData.xp || 0;
+            if (keysEl) keysEl.textContent = this.userData.keys !== undefined ? this.userData.keys : 10;
+        }
     }
+
+    getFreelanceActions() {
+        return [
+            {
+                title: 'Aulas Particulares',
+                description: 'Crie roteiros personalizados com IA',
+                icon: 'plus',
+                href: 'create-project.html',
+                gradient: 'from-purple-500 to-purple-600',
+                textColor: 'white'
+            },
+            {
+                title: 'Meus Materiais',
+                description: 'Biblioteca de aulas salvas',
+                icon: 'book',
+                href: 'my-projects.html',
+                bgColor: 'bg-white/80',
+                borderColor: 'border-purple-300'
+            },
+            {
+                title: 'Assistente IA',
+                description: 'Suporte para suas aulas',
+                icon: 'tool',
+                href: 'ia-assistant.html',
+                bgColor: 'bg-white/80',
+                borderColor: 'border-brand-300'
+            }
+        ];
+    }
+
 
     renderQuickActions() {
         const container = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
@@ -143,36 +221,28 @@ export class DashboardRoleManager {
     getTeacherActions() {
         return [
             {
-                title: 'Criar Projeto (IA)',
-                description: 'Gere planos de aula e roteiros em segundos',
+                title: 'Novo Planejamento',
+                description: 'Crie aulas completas e roteiros com IA',
                 icon: 'plus',
                 href: 'create-project.html',
                 gradient: 'from-brand-500 to-brand-600',
                 textColor: 'white'
             },
             {
-                title: 'Gestão de Turmas',
-                description: 'Gerencie suas salas e adicione alunos',
-                icon: 'users',
-                href: 'school-management.html',
+                title: 'Meus Materiais',
+                description: 'Acesse seus projetos e recursos salvos',
+                icon: 'book',
+                href: 'my-projects.html',
                 bgColor: 'bg-white/80',
-                borderColor: 'border-purple-300'
+                borderColor: 'border-brand-300'
             },
             {
-                title: 'Arena de Desafios',
-                description: 'Experimente os quizzes e desafios dos alunos',
-                icon: 'quiz',
-                href: 'quiz-arena.html',
+                title: 'Assistente IA',
+                description: 'Tire dúvidas e peça sugestões pedagógicas',
+                icon: 'tool', // Using tool/chat icon
+                href: 'ia-assistant.html',
                 bgColor: 'bg-white/80',
                 borderColor: 'border-purple-300'
-            },
-            {
-                title: 'Biblioteca',
-                description: 'Explore projetos prontos para suas aulas',
-                icon: 'library',
-                href: 'library.html',
-                bgColor: 'bg-white/80',
-                borderColor: 'border-brand-200'
             }
         ];
     }
@@ -282,20 +352,12 @@ export class DashboardRoleManager {
                 textColor: 'white'
             },
             {
-                title: 'Biblioteca',
-                description: 'Acesse materiais oficiais',
-                icon: 'library',
-                href: 'library.html',
+                title: 'Meus Planejamentos',
+                description: 'Acesse e edite suas aulas salvas',
+                icon: 'book',
+                href: 'my-projects.html',
                 bgColor: 'bg-white/80',
-                borderColor: 'border-brand-200'
-            },
-            {
-                title: 'Arena de Quizzes',
-                description: 'Teste seus conhecimentos',
-                icon: 'quiz',
-                href: 'quiz-arena.html',
-                bgColor: 'bg-white/80',
-                borderColor: 'border-purple-300'
+                borderColor: 'border-brand-300'
             },
             {
                 title: 'IA Pedagógica',
@@ -322,9 +384,6 @@ export class DashboardRoleManager {
             <a href="${action.href}" class="${baseClasses}">
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div class="relative z-10">
-                    <div class="w-14 h-14 ${iconBg} backdrop-blur rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        ${iconSvg}
-                    </div>
                     <h3 class="font-display text-2xl font-bold mb-2 ${isGradient ? '' : 'text-slate-900'}">${action.title}</h3>
                     <p class="${isGradient ? 'text-brand-100' : 'text-slate-600'}">${action.description}</p>
                 </div>
@@ -348,53 +407,99 @@ export class DashboardRoleManager {
     }
 
     async renderRoleWidgets() {
-        const main = document.querySelector('main');
-        const quickActions = main.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
-        if (!quickActions) return;
-
-        let widgetsContainer = document.getElementById('role-widgets');
+        const widgetsContainer = document.getElementById('role-widgets');
         if (!widgetsContainer) {
-            widgetsContainer = document.createElement('div');
-            widgetsContainer.id = 'role-widgets';
-            widgetsContainer.className = 'space-y-6';
-            quickActions.parentNode.insertBefore(widgetsContainer, quickActions.nextSibling);
+            console.warn("Dashboard container #role-widgets not found");
+            return;
         }
-
-        // Mostrar loading spinner enquanto carrega dados reais
-        widgetsContainer.innerHTML = '<div class="flex justify-center p-12"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div></div>';
 
         let widgetsHtml = '';
 
-        switch (this.userRole) {
-            case 'dev':
-                const stats = await this.fetchPlatformStats();
-                widgetsHtml = this.getDevWidgets(stats);
-                break;
-            case 'school_admin':
-                widgetsHtml = this.getSchoolAdminWidgets();
-                break;
-            case 'freelance_teacher':
-                // Content focus -> Same widgets as Teacher (Projects + Tips)
-                const fProjectsCount = await this.fetchProjectsCount();
-                const fRecentProjects = await this.fetchRecentProjects();
-                widgetsHtml = this.getTeacherWidgets(fProjectsCount, fRecentProjects);
-                break;
-            case 'teacher':
-                const projectsCount = await this.fetchProjectsCount();
-                const recentProjects = await this.fetchRecentProjects();
-                widgetsHtml = this.getTeacherWidgets(projectsCount, recentProjects);
-                break;
-            case 'student':
-                widgetsHtml = this.getStudentWidgets();
-                break;
-            case 'parent':
-                widgetsHtml = this.getParentWidgets();
-                break;
-            default:
-                widgetsHtml = this.getStudentWidgets();
+        try {
+            switch (this.userRole) {
+                case 'dev':
+                    const stats = await this.fetchPlatformStats();
+                    widgetsHtml = this.getDevWidgets(stats);
+                    break;
+                case 'school_admin':
+                    widgetsHtml = this.getSchoolAdminWidgets();
+                    break;
+                case 'freelance_teacher':
+                    // Content focus -> Same widgets as Teacher (Projects + Tips)
+                    const fProjectsCount = await this.fetchProjectsCount();
+                    const fRecentProjects = await this.fetchRecentProjects();
+                    const fLeaderboard = await this.fetchLeaderboard('freelance_teacher');
+                    widgetsHtml = this.getTeacherWidgets(fProjectsCount, fRecentProjects, fLeaderboard, this.userData);
+                    break;
+                case 'teacher':
+                    const projectsCount = await this.fetchProjectsCount();
+                    const recentProjects = await this.fetchRecentProjects();
+                    const tLeaderboard = await this.fetchLeaderboard('teacher');
+                    widgetsHtml = this.getTeacherWidgets(projectsCount, recentProjects, tLeaderboard, this.userData);
+                    break;
+                case 'student':
+                    widgetsHtml = this.getStudentWidgets();
+                    break;
+                case 'parent':
+                    widgetsHtml = this.getParentWidgets();
+                    break;
+                default:
+                    widgetsHtml = this.getStudentWidgets();
+            }
+        } catch (e) {
+            console.error("Error rendering dashboard:", e);
+            widgetsHtml = `<div class="p-4 text-red-500 bg-red-50 rounded-lg">Erro ao carregar dashboard: ${e.message}</div>`;
         }
 
         widgetsContainer.innerHTML = widgetsHtml;
+    }
+
+    async fetchProjectsCount() {
+        try {
+            const projectsRef = collection(db, "users", this.currentUser.uid, "projects");
+            const snapshot = await getCountFromServer(projectsRef);
+            return snapshot.data().count;
+        } catch (e) {
+            console.error("Erro ao contar projetos:", e);
+            // Fallback if getCountFromServer (aggregation) fails or is not available in this SDK version, 
+            // though it should be. If not, we can just get docs.
+            try {
+                const snapshot = await getDocs(query(projectsRef));
+                return snapshot.size;
+            } catch (err) {
+                return 0;
+            }
+        }
+    }
+
+    async fetchLeaderboard(targetRole) {
+        try {
+            const usersRef = collection(db, "users");
+            // Create a query against the collection.
+            const q = query(
+                usersRef,
+                where("role", "==", targetRole),
+                orderBy("xp", "desc"),
+                limit(10)
+            );
+
+            const snapshot = await getDocs(q);
+            return snapshot.docs.map(d => d.data());
+        } catch (e) {
+            console.warn("Leaderboard index missing or query failed, falling back to client-side filter:", e);
+            try {
+                const usersRef = collection(db, "users");
+                const qFallback = query(usersRef, orderBy("xp", "desc"), limit(100));
+                const snapshot = await getDocs(qFallback);
+                return snapshot.docs
+                    .map(d => d.data())
+                    .filter(u => u.role === targetRole)
+                    .slice(0, 10);
+            } catch (err) {
+                console.error("Deep Leaderboard Failure:", err);
+                return [];
+            }
+        }
     }
 
     async fetchRecentProjects() {
@@ -409,122 +514,155 @@ export class DashboardRoleManager {
         }
     }
 
-    getSchoolAdminWidgets() {
-        return `
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Gestão de Turmas -->
-                <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg border border-slate-200">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="flex items-center gap-2">
-                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                            <h2 class="font-display text-2xl font-bold text-slate-900">Gestão de Turmas</h2>
-                        </div>
-                        <button class="text-brand-600 font-bold text-sm">+ Nova Turma</button>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="p-4 bg-slate-50 rounded-2xl flex items-center justify-between">
-                            <div>
-                                <p class="font-bold text-slate-900">7º Ano A</p>
-                                <p class="text-xs text-slate-500">Código: IZ7A23 • 28 Alunos</p>
+    // ... (SchoolAdmin reused)
+
+    getTeacherWidgets(projectsCount = 0, recentProjects = [], leaderboard = [], userData = {}) {
+        const safeData = userData || {};
+        const xp = safeData.xp || 0;
+        const level = Math.floor(xp / 1000) + 1;
+        const nextLevelXp = level * 1000;
+        const progressPct = ((xp % 1000) / 1000) * 100;
+
+        // Dynamic Quick Actions
+        const actionsData = this.userRole === 'freelance_teacher' ? this.getFreelanceActions() : this.getTeacherActions();
+        const actionsHtml = actionsData.map(action => this.createActionCard(action)).join('');
+
+        const recentHtml = recentProjects.length > 0
+            ? recentProjects.map(p => `
+                <div class="group relative bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition-all duration-300 cursor-pointer overflow-hidden" onclick="window.location.href='project-view.html?userProject=${p.id}'">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-400 to-brand-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="flex flex-col">
+                                <span class="font-display font-bold text-slate-800 text-lg group-hover:text-brand-600 transition-colors">${p.title}</span>
+                                <div class="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
+                                    <span class="bg-slate-100 px-2 py-0.5 rounded-full font-medium text-slate-600">${p.grade || 'Geral'}</span>
+                                    <span>•</span>
+                                    <span>${p.createdAt ? new Date(p.createdAt.toDate()).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) : 'Recente'}</span>
+                                </div>
                             </div>
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=IZ7A23" class="w-10 h-10 rounded shadow-sm" alt="QR Login">
                         </div>
-                        <div class="p-4 bg-slate-50 rounded-2xl flex items-center justify-between">
-                            <div>
-                                <p class="font-bold text-slate-900">8º Ano B</p>
-                                <p class="text-xs text-slate-500">Código: IZ8B44 • 25 Alunos</p>
-                            </div>
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=IZ8B44" class="w-10 h-10 rounded shadow-sm" alt="QR Login">
+                        <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-brand-50 group-hover:text-brand-600 transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                         </div>
                     </div>
                 </div>
+            `).join('')
+            : `
+            <div class="text-center py-12 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
+                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-3xl shadow-sm mx-auto mb-4">✨</div>
+                <h3 class="font-bold text-slate-700">Comece sua jornada</h3>
+                <p class="text-sm text-slate-400 mb-6 max-w-xs mx-auto">Crie seu primeiro planejamento com IA e transforme suas aulas.</p>
+                <a href="create-project.html" class="inline-flex items-center gap-2 text-brand-600 font-bold hover:underline">
+                    Criar Novo Projeto <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            </div>`;
 
-                <!-- Consultoria e Materiais -->
-                <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 shadow-xl text-white">
-                    <h2 class="font-display text-2xl font-bold mb-4">Consultoria Izicode</h2>
-                    <p class="text-slate-300 text-sm mb-6">Acesso exclusivo a cronogramas, planejamento anual e suporte especializado para sua escola.</p>
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors cursor-pointer">
-                            <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center">📄</div>
-                            <div>
-                                <p class="font-bold text-sm">Cronograma Anual 2024</p>
-                                <p class="text-xs text-slate-400">PDF • 2.4 MB</p>
+        // Leaderboard HTML - Cleaner
+        const leaderboardHtml = leaderboard.length > 0 ? leaderboard.map((u, i) => {
+            const medal = i === 0 ? '👑' : i === 1 ? '🥈' : i === 2 ? '🥉' : null;
+            const rankClass = i === 0 ? 'bg-gradient-to-r from-yellow-50 to-amber-50 border-amber-100 ring-1 ring-amber-100' : 'hover:bg-slate-50 border-transparent';
+            const textClass = i === 0 ? 'text-amber-700' : 'text-slate-600';
+
+            return `
+                <div class="flex items-center justify-between p-3 rounded-xl border ${rankClass} transition-all mb-2 last:mb-0">
+                    <div class="flex items-center gap-3">
+                        <span class="font-bold text-sm w-6 text-center text-slate-400">${medal || `${i + 1}º`}</span>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center overflow-hidden border border-slate-100">
+                                 ${u.photoURL ? `<img src="${u.photoURL}" class="w-full h-full object-cover">` : `<span class="text-xs font-bold text-slate-500">${(u.displayName || 'U').charAt(0)}</span>`}
+                            </div>
+                            <span class="font-bold text-sm ${textClass} truncate max-w-[100px]">${(u.displayName || 'User').split(' ')[0]}</span>
+                        </div>
+                    </div>
+                    <span class="font-bold text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-lg">${u.xp || 0} XP</span>
+                </div>
+            `;
+        }).join('') : '<div class="text-center py-8 text-slate-400 text-sm">Ranking ainda vazio.</div>';
+
+        return `
+            <!-- XP Overview Hero -->
+            <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-[2rem] p-8 text-white shadow-xl relative overflow-hidden mb-8">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-brand-500 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20"></div>
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="flex items-center gap-6">
+                        <div class="relative">
+                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-3xl font-bold shadow-lg shadow-brand-500/30">
+                                <span>${level}</span>
+                            </div>
+                            <div class="absolute -bottom-2 -right-2 bg-slate-900 text-xs font-bold px-2 py-1 rounded-lg border border-slate-700">NÍVEL</div>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-display font-bold mb-1">Mestre da Educação</h2>
+                            <div class="flex items-center gap-2 text-slate-400 text-sm">
+                                <span>${xp} XP Total</span>
+                                <span class="w-1 h-1 bg-slate-600 rounded-full"></span>
+                                <span>Próximo: ${nextLevelXp} XP</span>
                             </div>
                         </div>
-                        <div class="flex items-center gap-3 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors cursor-pointer">
-                            <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">🛠️</div>
-                            <div>
-                                <p class="font-bold text-sm">Guia de Implementação Maker</p>
-                                <p class="text-xs text-slate-400">PDF • 5.1 MB</p>
-                            </div>
+                    </div>
+                    <div class="w-full md:w-1/3">
+                        <div class="flex justify-between text-xs font-bold text-brand-300 mb-2">
+                            <span>PROGRESSO</span>
+                            <span>${Math.round(progressPct)}%</span>
+                        </div>
+                        <div class="w-full bg-slate-700/50 rounded-full h-3 backdrop-blur">
+                            <div class="bg-gradient-to-r from-brand-400 to-brand-600 h-3 rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(56,189,248,0.5)]" style="width: ${progressPct}%"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        `;
-    }
 
-    getTeacherWidgets(projectsCount = 0, recentProjects = []) {
-        const recentHtml = recentProjects.length > 0
-            ? recentProjects.map(p => `
-                <div class="p-3 bg-slate-50 rounded-xl flex items-center justify-between group hover:bg-white hover:shadow-sm transition-all border border-transparent hover:border-slate-100 cursor-pointer" onclick="window.location.href='my-projects.html'">
-                    <div class="flex flex-col">
-                        <span class="text-sm font-bold text-slate-900 group-hover:text-brand-600 transition-colors">${p.title}</span>
-                        <span class="text-[10px] text-slate-500 uppercase font-medium">${p.grade || 'Geral'} • ${p.createdAt ? new Date(p.createdAt.toDate()).toLocaleDateString() : 'Recent'}</span>
-                    </div>
-                    <svg class="w-4 h-4 text-slate-300 group-hover:text-brand-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                </div>
-            `).join('')
-            : '<p class="text-center text-slate-400 text-sm py-4">Nenhum planejamento recente.</p>';
+            <!-- Dynamic Quick Actions Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                ${actionsHtml}
+            </div>
 
-        return `
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Coluna 1: Status e Dica -->
-                <div class="space-y-6">
-                    <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg border border-slate-200">
-                        <div class="flex items-center gap-2 mb-6">
-                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                            </svg>
-                            <h2 class="font-display text-2xl font-bold text-slate-900">Resumo</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Main Column -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- Recent Projects -->
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-display text-xl font-bold text-slate-800 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                Recentes
+                            </h3>
+                            <a href="my-projects.html" class="text-sm font-bold text-brand-600 hover:text-brand-700 hover:tracking-wide transition-all">Ver todos</a>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="p-6 bg-brand-50 rounded-2xl border border-brand-100 cursor-pointer" onclick="window.location.href='my-projects.html'">
-                                <p class="text-brand-700 font-bold mb-1">Roteiros Totais</p>
-                                <p class="text-4xl font-display font-black text-brand-900">${projectsCount}</p>
-                                <p class="text-[10px] text-brand-600 mt-2 uppercase font-bold tracking-wider">Ver todos →</p>
-                            </div>
-                            <div id="pedagogical-tip-card" class="p-6 bg-purple-50 rounded-2xl border border-purple-100 flex flex-col">
-                                <p class="text-purple-700 font-bold mb-1">Dica Pedagógica</p>
-                                <div id="tip-content-container">
-                                    <p class="text-slate-600 text-sm italic line-clamp-2">"${getDailyTip().content}"</p>
-                                    <p class="text-[10px] font-bold text-purple-400 mt-2 uppercase tracking-widest">${getDailyTip().category}</p>
-                                </div>
-                                <button onclick="window.location.href='ia-assistant.html'" class="text-purple-600 font-bold text-xs mt-auto pt-3 uppercase tracking-wider text-left">Saber mais →</button>
+                        <div class="space-y-3">
+                            ${recentHtml}
+                        </div>
+                    </div>
+
+                    <!-- Library Banner (Redesigned) -->
+                    <div class="group relative overflow-hidden rounded-[2rem] bg-indigo-600 text-white p-8 cursor-pointer shadow-lg shadow-indigo-200 transition-transform hover:scale-[1.01]" onclick="window.location.href='library.html'">
+                        <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600"></div>
+                        <div class="absolute right-0 top-0 opacity-10 transform translate-x-10 -translate-y-10">
+                            <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                        </div>
+                        <div class="relative z-10 flex gap-6 items-center">
+                            <div>
+                                <h3 class="text-2xl font-display font-bold mb-1">Biblioteca Izicode</h3>
+                                <p class="text-indigo-100 text-sm max-w-md">Acesse centenas de projetos alinhados à BNCC prontos para aplicar.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Coluna 2: Planejamentos Recentes (Lista Simplificada) -->
-                <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg border border-slate-200">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="flex items-center gap-2">
-                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                            </svg>
-                            <h2 class="font-display text-2xl font-bold text-slate-900">Planejamentos Recentes</h2>
+                <!-- Sidebar -->
+                <div class="space-y-8">
+                    <!-- Ranking -->
+                    <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-bold text-slate-800">Ranking Top 10</h3>
+                            <span class="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">Semanal</span>
                         </div>
-                        <a href="create-project.html" class="bg-brand-600 hover:bg-brand-700 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                        </a>
-                    </div>
-                    <div class="space-y-3">
-                        ${recentHtml}
-                        <div class="pt-2">
-                            <a href="my-projects.html" class="block text-center py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-colors">Acessar Pasta de Projetos</a>
+                        <div class="space-y-1">
+                             ${leaderboardHtml}
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-50 text-center">
+                            <a href="#" class="text-xs font-bold text-slate-400 hover:text-brand-600 transition-colors">Ver ranking completo</a>
                         </div>
                     </div>
                 </div>

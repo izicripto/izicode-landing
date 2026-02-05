@@ -1,60 +1,122 @@
-/**
- * Base de dados de dicas pedagógicas para o Izicode Edu
- * Foco em STEAM, Cultura Maker e Robótica
- */
-
 export const pedagogicalTips = [
+    // --- Motivação & Filosofia ---
     {
-        id: "loops-dance",
-        title: "Loops com Movimento",
-        content: "O conceito de 'Loops' é melhor ensinado com dança! Crie uma sequência de passos (ex: pular, girar, bater palma) e peça para repetirem 3 vezes. Isso introduz a lógica de iteração de forma física.",
-        category: "Programação",
-        grade: "Fund I e II"
+        type: 'motivation',
+        text: "A educação não é o preenchimento de um balde, mas o acendimento de um fogo.",
+        source: "W.B. Yeats"
     },
     {
-        id: "debug-detective",
-        title: "Detetive de Bugs",
-        content: "Em vez de corrigir o erro para o aluno, pergunte: 'O que você esperava que acontecesse?' e 'O que está acontecendo agora?'. Deixe que ele identifique a discrepância.",
-        category: "Metodologia",
-        grade: "Todas"
+        type: 'motivation',
+        text: "O que ouvimos, esquecemos; o que vemos, lembramos; o que fazemos, entendemos.",
+        source: "Confúcio"
     },
     {
-        id: "unplugged-binary",
-        title: "Binário Desplugado",
-        content: "Use cartões com 1, 2, 4, 8 e 16 pontos para ensinar números binários. Virar ou desvirar o cartão representa 0 ou 1. É uma maneira visual e tátil de entender a base da computação.",
-        category: "Computação",
-        grade: "Fund II"
+        type: 'motivation',
+        text: "Não prepare o caminho para a criança. Prepare a criança para o caminho.",
+        source: "Provérbio"
+    },
+
+    // --- RPG & Gamificação (Solicitado) ---
+    {
+        type: 'rpg',
+        title: "RPG na Sala de Aula: A Jornada do Herói",
+        text: "Transforme sua aula em uma missão! Divida o conteúdo em 'fases'. Ao completar uma lista de exercícios, o aluno ganha XP ou 'itens' (como um adesivo ou vantagem na prova).",
+        tag: "Gamificação"
     },
     {
-        id: "storytelling-scratch",
-        title: "Primeiro o Roteiro",
-        content: "Antes de abrir o Scratch, peça para os alunos desenharem um storyboard em papel. Isso reduz a ansiedade de 'não saber por onde começar' e foca na lógica narrativa.",
-        category: "Scratch",
-        grade: "Fund I"
+        type: 'rpg',
+        title: "Dados da Narrativa",
+        text: "Use dados de RPG (D20, D6) para decisões aleatórias na aula. Ex: Role um D20 para definir a dificuldade do próximo exercício ou quem apresentará o trabalho. Isso gera engajamento imediato!",
+        tag: "Dinâmica"
     },
     {
-        id: "maker-trash",
-        title: "Lixo Eletrônico Criativo",
-        content: "Componentes velhos (como mouses quebrados) são ótimos para desmontar e entender o que tem dentro. Estimula a curiosidade sobre o funcionamento das coisas.",
-        category: "Cultura Maker",
-        grade: "Ensino Médio"
+        type: 'rpg',
+        title: "Classes de Personagens",
+        text: "Em trabalhos em grupo, atribua 'Classes': O 'Escriba' (anota), o 'Orador' (apresenta), o 'Líder' (organiza) e o 'Sabio' (pesquisa). Todos têm um papel vital na missão.",
+        tag: "Gestão de Sala"
     },
     {
-        id: "restorative-circles",
-        title: "Círculos de Diálogo",
-        content: "Use círculos de 5 minutos no final da aula para compartilhar 'A maior dificuldade que venci hoje'. Isso fortalece a resiliência e o senso de comunidade.",
-        category: "Socioemocional",
-        grade: "Todas"
+        type: 'rpg',
+        title: "O Mestre da Aula",
+        text: "Assuma o papel de Mestre de RPG. Crie um 'cenário' problemático (o vilão) que só pode ser derrotado com o conhecimento da matéria (a espada mágica).",
+        tag: "Storytelling"
+    },
+    {
+        type: 'tip',
+        title: "Sorteio com Dados",
+        text: "Tem 30 alunos? Use '2d20' (jogar dois dados de 20 lados e somar/adaptar) ou um app de dados para chamar alunos para a lousa. A aleatoriedade é vista como mais justa e divertida pelos alunos.",
+        tag: "Dica Rápida"
+    },
+
+    // --- Dicas Técnicas ---
+    {
+        type: 'tip',
+        title: "Pair Programming",
+        text: "Coloque alunos em duplas: um 'Piloto' (digita) e um 'Copiloto' (revisa). Troque os papéis a cada 15 min. Isso melhora a comunicação e reduz a frustração com o código.",
+        tag: "Metodologia"
+    },
+    {
+        type: 'tip',
+        title: "Rubber Duck Debugging",
+        text: "Ensine seus alunos a explicarem o código linha por linha para um 'pato de borracha' (ou colega) antes de chamar o professor. 90% dos erros são achados assim!",
+        tag: "Debug"
+    },
+    {
+        type: 'tip',
+        title: "Pensamento Computacional",
+        text: "Antes de codar, peça para desenharem a solução no papel (Flowchart). Entender a lógica antes da sintaxe é a chave para o aprendizado real.",
+        tag: "Planejamento"
     }
 ];
 
+export const techCuriosities = [
+    {
+        type: 'curiosity',
+        text: "Você sabia? O primeiro 'bug' de computador foi, na verdade, uma mariposa real presa dentro de uma máquina em 1947!",
+        source: "História da Computação"
+    },
+    {
+        type: 'curiosity',
+        text: "Ada Lovelace é considerada a primeira programadora da história, e ela escreveu código para uma máquina que nem existia ainda!",
+        source: "Mulheres na Tech"
+    },
+    {
+        type: 'curiosity',
+        text: "O jogo Minecraft foi criado por uma única pessoa, Markus Persson (Notch), antes de se tornar um sucesso mundial.",
+        source: "Game Dev"
+    },
+    {
+        type: 'curiosity',
+        text: "Os computadores da Apollo 11 que levaram o homem à Lua tinham menos poder de processamento que o seu celular hoje!",
+        source: "Espaço"
+    },
+    {
+        type: 'curiosity',
+        text: "A linguagem Python tem esse nome por causa do grupo de comédia 'Monty Python', e não por causa da cobra!",
+        source: "Python"
+    }
+];
+
+export function getTechCuriosity() {
+    return techCuriosities[Math.floor(Math.random() * techCuriosities.length)];
+}
+
 export function getDailyTip() {
-    // Rotação baseada no dia do ano
-    const now = new Date();
-    const start = new Date(now.getFullYear(), 0, 0);
-    const diff = now - start;
+    // Escolhe baseado no dia do ano para ser consistente para todos os users naquele dia
+    // Ou aleatório para dinamismo. Vamos de aleatório com "seed" do dia para mudar a cada 24h.
+
+    const today = new Date();
+    const start = new Date(today.getFullYear(), 0, 0);
+    const diff = today - start;
     const oneDay = 1000 * 60 * 60 * 24;
     const dayOfYear = Math.floor(diff / oneDay);
 
-    return pedagogicalTips[dayOfYear % pedagogicalTips.length];
+    // Simples hash do dia para escolher o index
+    const index = dayOfYear % pedagogicalTips.length;
+
+    return pedagogicalTips[index];
+}
+
+export function getRandomTip() {
+    return pedagogicalTips[Math.floor(Math.random() * pedagogicalTips.length)];
 }

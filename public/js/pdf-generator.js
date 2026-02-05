@@ -6,7 +6,7 @@
 
 class IzicodePDFGenerator {
     constructor() {
-        this.loadLibraries();
+        this.readyPromise = this.loadLibraries();
     }
 
     // Carregar bibliotecas necessárias
@@ -35,6 +35,7 @@ class IzicodePDFGenerator {
      * @param {Object} options - Opções de customização
      */
     async generateProjectPDF(project, options = {}) {
+        await this.readyPromise;
         const {
             schoolName = 'Escola',
             schoolLogo = null,
@@ -253,6 +254,7 @@ class IzicodePDFGenerator {
      * Gerar relatório de progresso do aluno
      */
     async generateStudentProgressPDF(studentData, options = {}) {
+        await this.readyPromise;
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
@@ -333,33 +335,64 @@ class IzicodePDFGenerator {
     }
 
     /**
-     * Converter elemento HTML para PDF
+     * Converter elemento HTML para PDF com Suporte a Múltiplas Páginas
      */
     async htmlToPDF(elementId, filename = 'documento.pdf') {
+        await this.readyPromise;
+
         const element = document.getElementById(elementId);
         if (!element) {
             console.error('Elemento não encontrado:', elementId);
             return;
         }
 
+        // Wait for images to load if any
+        await new Promise(resolve => setTimeout(resolve, 500));
+
         const canvas = await html2canvas(element, {
             scale: 2,
             useCORS: true,
-            logging: false
+            logging: false,
+            allowTaint: true,
+            scrollY: -window.scrollY
         });
 
-        const imgData = canvas.toDataURL('image/png');
+        const imgData = canvas.toDataURL('image/jpeg', 0.95); // JPEG slightly smaller
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4'
-        });
 
-        const imgWidth = 210; // A4 width in mm
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        const pdfWidth = 210; // A4 width mm
+        const pdfHeight = 297; // A4 height mm
 
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        const pdf = new jsPDF('p', 'mm', 'a4');
+
+        const imgProps = pdf.getImageProperties(imgData);
+        const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        // First page
+        pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
+        heightLeft -= pdfHeight;
+
+        // Add extra pages if needed
+        while (heightLeft > 0) {
+            position = heightLeft - imgHeight; // This calculation ensures continuity
+
+            pdf.addPage();
+            // Important: jsPDF addImage position is relative to top of page.
+            // If we have 1000mm image. Page 1 takes 0-297.
+            // Page 2 should show 297-594.
+            // So we place the image at -297.
+
+            // The formula: position = -pageHeight * pageIndex
+            const pageIndex = pdf.getNumberOfPages() - 1;
+            position = -pdfHeight * pageIndex;
+
+            pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeight);
+            heightLeft -= pdfHeight;
+        }
+
         pdf.save(filename);
     }
 }

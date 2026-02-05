@@ -1,16 +1,13 @@
 /**
- * AI Service for Izicode Edu
+ * AI Service for Izicode Edu - V3
  * Integration with Gemini API for dynamic quiz generation
  */
 
-// Replace with your API Key or handle via Firebase Config/Functions
 // Retrieve API Key from LocalStorage (set by Assistant Settings)
 const getApiKey = () => localStorage.getItem('gemini_api_key');
 
-// Base URL handled dynamically in function
-
 export async function generateProjectQuiz(projectTitle, projectContent, userRole = 'student') {
-    console.log(`Generating AI Quiz for: ${projectTitle} (Role: ${userRole})`);
+    console.log(`Generating AI Quiz (V3) for: ${projectTitle} (Role: ${userRole})`);
 
     const isTeacher = ['teacher', 'freelance_teacher', 'school_admin'].includes(userRole);
 
@@ -53,14 +50,18 @@ export async function generateProjectQuiz(projectTitle, projectContent, userRole
         }
     `;
 
+    // Validation
+    const apiKey = getApiKey();
+    console.log("AI Service V3 - Key Loaded:", apiKey ? `${apiKey.substring(0, 4)}...` : "NONE");
+
+    if (!apiKey || apiKey.includes('PLACEHOLDER')) {
+        if (apiKey) localStorage.removeItem('gemini_api_key'); 
+        throw new Error("Chave API Inválida (PLACEHOLDER detectado). Configure novamente no Assistente IA.");
+    }
+
+    // Models - Priority to 2.5
     const models = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-pro"];
     let errors = [];
-
-    const apiKey = getApiKey();
-    if (!apiKey || apiKey.includes('PLACEHOLDER')) {
-        if (apiKey) localStorage.removeItem('gemini_api_key'); // Clear bad key
-        throw new Error("Chave API Inválida ou não configurada. A chave provisória foi removida. Configure novamente no Assistente IA.");
-    }
 
     for (const model of models) {
         try {

@@ -75,18 +75,49 @@
     </div>
 
     <!-- Script Simples -->
-    <script>
-        function handleJoin(e) {
+    <script type="module">
+        import { studentLoginService } from './js/student-login-service.js';
+
+        window.handleJoin = async (e) => {
             e.preventDefault();
-            const code = document.getElementById('classCode').value.trim().toUpperCase();
+            const input = document.getElementById('classCode');
+            const code = input.value.trim().toUpperCase();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerHTML;
 
             if (code.length !== 6) {
                 alert('O código deve ter 6 letras!');
                 return;
             }
 
-            // Redireciona para a tela de login da turma com o código na URL
-            window.location.href = `section-login.html?code=${code}`;
+            btn.innerHTML = 'Buscando Turma... 🔎';
+            btn.disabled = true;
+
+            try {
+                // Validate code existence
+                const classData = await studentLoginService.findClassByCode(code);
+
+                if (classData) {
+                    // Success
+                    window.location.href = `section-login.html?code=${code}`;
+                } else {
+                    // Not found (but check if we should allow demo codes)
+                    if (code === 'ABCDEF') { // Demo Override
+                        window.location.href = `section-login.html?code=${code}`;
+                        return;
+                    }
+
+                    alert('Turma não encontrada! Verifique o código.');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    input.focus();
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao buscar turma. Tente novamente.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         }
     </script>
 </body>

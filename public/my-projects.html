@@ -55,8 +55,8 @@
         <main class="flex-1 p-8">
             <header class="mb-10 flex justify-between items-center">
                 <div>
-                    <h1 class="font-display text-3xl font-bold text-slate-900">Meus Projetos Salvos</h1>
-                    <p class="text-slate-500 mt-1">Aqui estão todos os roteiros que você gerou com a ajuda da IA.</p>
+                    <h1 class="font-display text-3xl font-bold text-slate-900">Meus Planejamentos Salvos</h1>
+                    <p class="text-slate-500 mt-1">Suas aulas, suas regras! 🚀</p>
                 </div>
                 <a href="create-project.html"
                     class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-brand-200 flex items-center gap-2">
@@ -100,7 +100,7 @@
 
     <script type="module">
         import { auth, db, onAuthStateChanged } from './js/firebase-config.js';
-        import { collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { collection, query, where, getDocs, orderBy, doc, updateDoc, addDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const projectsContainer = document.getElementById('projectsContainer');
         const projectsList = document.getElementById('projectsList');
@@ -129,13 +129,26 @@
                     projectsList.innerHTML = ''; // Clear list
                     querySnapshot.forEach((doc) => {
                         const project = doc.data();
+                        const isPublished = project.published === true;
+
                         const projectCard = `
-                            <div class="border border-slate-200 p-4 rounded-xl flex justify-between items-center hover:bg-slate-50 cursor-pointer" onclick="viewProject('${doc.id}')">
-                                <div>
-                                    <h3 class="font-bold text-brand-700">${project.title}</h3>
+                            <div class="border border-slate-200 p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-slate-50 transition-colors">
+                                <div class="cursor-pointer flex-1" onclick="viewProject('${doc.id}')">
+                                    <h3 class="font-bold text-brand-700 flex items-center gap-2">
+                                        ${project.title}
+                                        ${isPublished ? '<span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs border border-green-200">Publicado</span>' : ''}
+                                    </h3>
                                     <p class="text-sm text-slate-500">Criado em: ${new Date(project.createdAt.seconds * 1000).toLocaleDateString()}</p>
                                 </div>
-                                <span class="bg-brand-100 text-brand-700 px-4 py-2 rounded-lg font-medium text-sm hover:bg-brand-200">Ver Projeto</span>
+                                <div class="flex gap-2">
+                                     ${!isPublished ? `
+                                        <button onclick="publishProject('${doc.id}')" class="bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg font-medium text-sm hover:bg-brand-50 hover:text-brand-600 hover:border-brand-200 transition-colors flex items-center gap-1">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                            Publicar
+                                        </button>
+                                     ` : ''}
+                                    <button onclick="viewProject('${doc.id}')" class="bg-brand-100 text-brand-700 px-4 py-2 rounded-lg font-medium text-sm hover:bg-brand-200">Ver</button>
+                                </div>
                             </div>
                         `;
                         projectsList.innerHTML += projectCard;
@@ -147,6 +160,56 @@
                 projectsContainer.innerHTML = '<p class="text-red-500 text-center">Não foi possível carregar os projetos. Verifique as regras do Firestore.</p>';
             }
         }
+
+        import { showModal, showToast } from './js/ui-components.js';
+
+        window.publishProject = async (projectId) => {
+            const confirmed = await showModal(
+                "Publicar na Comunidade? 📚",
+                "Seu planejamento ficará visível para outros professores. Você poderá removê-lo a qualquer momento.",
+                "Sim, Publicar",
+                "Cancelar"
+            );
+
+            if (!confirmed) return;
+
+            try {
+                const currentUser = auth.currentUser;
+                if (!currentUser) return;
+
+                // 1. Get Project Data
+                const projectRef = doc(db, `users/${currentUser.uid}/projects`, projectId);
+                const projectSnap = await getDoc(projectRef);
+
+                if (!projectSnap.exists()) return;
+                const projectData = projectSnap.data();
+
+                // 2. Add to Library Collection
+                await addDoc(collection(db, "library"), {
+                    ...projectData,
+                    authorId: currentUser.uid,
+                    authorName: currentUser.displayName || 'Professor Izicode',
+                    publishedAt: serverTimestamp(),
+                    isCommunity: true,
+                    sourceProjectId: projectId
+                });
+
+                // 3. Mark locally as published
+                await updateDoc(projectRef, { published: true });
+
+                showToast("Planejamento publicado com sucesso! 🚀", 'success');
+                fetchProjects(currentUser.uid); // Refresh
+
+            } catch (error) {
+                console.error("Erro ao publicar:", error);
+
+                if (error.code === 'permission-denied') {
+                    showToast("Permissão negada. Verifique se você é um professor verificado.", 'error');
+                } else {
+                    showToast("Erro ao publicar: " + error.message, 'error');
+                }
+            }
+        };
 
         window.viewProject = (projectId) => {
             window.location.href = `project-view.html?userProject=${projectId}`;

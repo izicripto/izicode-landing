@@ -4,42 +4,42 @@ const axios = require("axios");
 
 admin.initializeApp();
 
-exports.onLeadCreated = functions.firestore
-    .document("leads/{leadId}")
-    .onCreate(async (snap, context) => {
-        const lead = snap.data();
-        const telegramConfig = functions.config().telegram;
+exports.newLeadNotification = functions.firestore.document('leads/{leadId}').onCreate(async (snap, context) => {
+    const lead = snap.data();
+    const config = functions.config().telegram;
 
-        if (!telegramConfig || !telegramConfig.token || !telegramConfig.chat_id) {
-            console.error("Telegram config missing");
-            return null;
-        }
-
-        const token = telegramConfig.token;
-        const chatId = telegramConfig.chat_id;
-
-        const message = `
-🚀 *Novo Lead Capturado!*
-
-👤 *Nome:* ${lead.name}
-📧 *Email:* ${lead.email}
-🎒 *Cargo:* ${lead.role || "Não informado"}
-🎯 *Interesse:* ${lead.interest || "Geral"}
-💬 *Mensagem:* ${lead.message || "Sem mensagem"}
-
-📅 *Data:* ${new Date().toLocaleString("pt-BR")}
-        `;
-
-        try {
-            await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
-                chat_id: chatId,
-                text: message,
-                parse_mode: "Markdown",
-            });
-            console.log("Telegram notification sent successfully");
-        } catch (error) {
-            console.error("Error sending Telegram notification", error);
-        }
-
+    if (!config || !config.token || !config.chat_id) {
+        console.error("Telegram config missing");
         return null;
-    });
+    }
+
+    const TELEGRAM_TOKEN = config.token;
+    const TELEGRAM_CHAT_ID = config.chat_id;
+
+    const message = `🟢 *Novo Lead via Formulário Interno*
+📅 ${new Date().toLocaleString('pt-BR')}
+
+*Nome:* ${lead.name}
+*Email:* ${lead.email}
+*Escola:* ${lead.schoolName || 'Não informada'}
+*Cargo:* ${lead.role || 'Não informado'}
+
+*Mensagem:* ${lead.message || 'Sem mensagem adicional'}`;
+
+    try {
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message,
+                parse_mode: "Markdown"
+            })
+        });
+        console.log("Telegram notification sent successfully");
+    } catch (error) {
+        console.error("Error sending Telegram notification", error);
+    }
+
+    return null;
+});

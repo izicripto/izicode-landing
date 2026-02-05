@@ -38,6 +38,47 @@
             document.getElementById('mobileMenu').classList.toggle('hidden');
         };
     </script>
+    <script type="module">
+        import { getDailyTip } from './js/pedagogical-tips.js';
+
+        // Load Daily Tip
+        const tip = getDailyTip();
+        if (tip) {
+            const widget = document.getElementById('dailyTipWidget');
+            const iconContainer = document.getElementById('tipIcon');
+
+            // Set SVG Icon based on type
+            let iconSvg = '';
+            if (tip.type === 'motivation') {
+                // Star/Sparkle
+                iconSvg = '<svg class="w-8 h-8 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>';
+            } else if (tip.type === 'rpg') {
+                // D20 / Dice
+                iconSvg = '<svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>';
+            } else {
+                // Lightbulb
+                iconSvg = '<svg class="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>';
+            }
+            iconContainer.innerHTML = iconSvg;
+
+            document.getElementById('tipTitle').innerText = tip.title || 'Pensamento do Dia';
+            document.getElementById('tipText').innerText = `"${tip.text}"`;
+
+            if (tip.type === 'motivation') {
+                document.getElementById('tipTag').innerText = "MOTIVAÇÃO";
+                document.getElementById('tipTag').className = "text-xs font-bold text-sky-600 uppercase tracking-wider bg-sky-100 px-2 py-0.5 rounded-full";
+                widget.className = "mb-10 bg-gradient-to-r from-sky-50 to-blue-50 border border-sky-100 rounded-3xl p-6 relative overflow-hidden";
+            } else if (tip.type === 'rpg') {
+                document.getElementById('tipTag').innerText = tip.tag || "GAMIFICAÇÃO";
+                document.getElementById('tipTag').className = "text-xs font-bold text-purple-600 uppercase tracking-wider bg-purple-100 px-2 py-0.5 rounded-full";
+                widget.className = "mb-10 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-100 rounded-3xl p-6 relative overflow-hidden";
+            } else {
+                document.getElementById('tipTag').innerText = tip.tag || "DICA PEDAGÓGICA";
+            }
+
+            widget.classList.remove('hidden');
+        }
+    </script>
     <script>
         tailwind.config = {
             theme: {
@@ -85,11 +126,16 @@
                     class="w-12 h-12 rounded-full border-2 border-brand-200 user-avatar-display">
                 <div class="flex-1 min-w-0">
                     <p class="font-semibold text-slate-900 truncate user-name-display" id="userName">Carregando...</p>
-                    <div class="flex gap-2 mt-1">
+                    <div class="flex gap-2 mt-1 flex-wrap">
                         <span class="text-xs bg-brand-100 text-brand-700 px-2 py-0.5 rounded-full font-medium">Nível
                             <span id="userLevel">1</span></span>
-                        <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium"><span
+                        <span class="text-xs bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full font-medium"><span
                                 id="userXP">0</span> XP</span>
+                        <span
+                            class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium flex items-center gap-1"
+                            title="Chaves Disponíveis">
+                            🗝️ <span id="userKeys">--</span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -111,7 +157,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
                 </svg>
-                Meus Projetos
+                Meus Planejamentos
             </a>
             <a href="library.html"
                 class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
@@ -129,14 +175,24 @@
                 </svg>
                 Gerador IA
             </a>
-            <a href="student-area.html"
+            <a href="quiz-arena.html"
                 class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
-                Área do Aluno
+                Arena de Quiz
             </a>
+            <button onclick="openSettings()"
+                class="w-full flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1 text-left">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Configurações
+            </button>
 
         </nav>
 
@@ -177,7 +233,7 @@
                 <a href="dashboard.html"
                     class="block px-4 py-2 bg-brand-50 text-brand-700 rounded-lg font-medium">Dashboard</a>
                 <a href="my-projects.html" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg">Meus
-                    Projetos</a>
+                    Planejamentos</a>
                 <a href="library.html"
                     class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg">Biblioteca</a>
                 <a href="create-project.html"
@@ -200,66 +256,83 @@
             <p class="text-slate-600 text-lg">Vamos transformar a educação hoje?</p>
         </header>
 
-        <!-- Quick Actions -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            <!-- Card 1: Novo Projeto -->
-            <a href="create-project.html"
-                class="group bg-gradient-to-br from-brand-500 to-brand-600 p-8 rounded-3xl shadow-xl shadow-brand-200 hover:shadow-2xl hover:scale-105 transition-all text-white relative overflow-hidden">
-                <div
-                    class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.2),transparent)] opacity-0 group-hover:opacity-100 transition-opacity">
+        <!-- Daily Tip Widget -->
+        <div id="dailyTipWidget"
+            class="hidden mb-10 bg-white border border-slate-100 rounded-3xl p-6 relative overflow-hidden shadow-sm">
+            <div class="relative z-10 flex items-start gap-4">
+                <div id="tipIcon" class="p-3 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm">
+                    <!-- Icon Injected Here -->
                 </div>
-                <div class="relative z-10">
-                    <div class="w-14 h-14 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center mb-4">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span id="tipTag"
+                            class="text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded-full">Dica</span>
+                        <h3 id="tipTitle" class="font-display font-bold text-slate-900">Pensamento do Dia</h3>
                     </div>
-                    <h3 class="font-display text-2xl font-bold mb-2">Criar Projeto</h3>
-                    <p class="text-brand-100">Use IA para gerar projetos completos em minutos</p>
+                    <p id="tipText" class="text-slate-600 italic">"Carregando..."</p>
                 </div>
-            </a>
+            </div>
+        </div>
 
-            <!-- Card 2: Biblioteca -->
-            <a href="library.html"
-                class="group bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-lg border border-slate-200 hover:border-brand-300 hover:shadow-xl hover:scale-105 transition-all relative overflow-hidden">
-                <div
-                    class="absolute inset-0 bg-gradient-to-br from-brand-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                </div>
-                <div class="relative z-10">
-                    <div
-                        class="w-14 h-14 bg-brand-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                    </div>
-                    <h3 class="font-display text-2xl font-bold text-slate-900 mb-2">Biblioteca</h3>
-                    <p class="text-slate-600">Explore projetos prontos e inspiradores</p>
-                </div>
-            </a>
-
-            <!-- Card 3: Área do Aluno -->
-            <a href="student-area.html"
-                class="group bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-lg border border-slate-200 hover:border-purple-300 hover:shadow-xl hover:scale-105 transition-all relative overflow-hidden">
-                <div
-                    class="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                </div>
-                <div class="relative z-10">
-                    <div
-                        class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                    </div>
-                    <h3 class="font-display text-2xl font-bold text-slate-900 mb-2">Área do Aluno</h3>
-                    <p class="text-slate-600">Gamificação e acompanhamento de progresso</p>
-                </div>
-            </a>
+        <!-- Dynamic Dashboard Content -->
+        <div id="role-widgets" class="space-y-8 min-h-[50vh]">
+            <!-- Content will be injected by dashboard-roles.js -->
+            <div class="flex justify-center p-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-brand-600"></div>
+            </div>
         </div>
 
 
+
     </main>
+
+    <!-- API Key Modal -->
+    <div id="settingsModal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <h2 class="font-display text-xl font-bold text-slate-900 mb-4">Configurações</h2>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-slate-700 mb-1">Chave API do Google Gemini</label>
+                <p class="text-xs text-slate-500 mb-2">Necessária para o Assistente IA e Gerador de Quizzes.</p>
+                <input type="password" id="apiKeyInput"
+                    class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                    placeholder="Cole sua chave API aqui...">
+            </div>
+
+            <div class="flex justify-end space-x-3 mt-6">
+                <button onclick="document.getElementById('settingsModal').classList.add('hidden')"
+                    class="px-4 py-2 text-slate-500 hover:text-slate-700 font-medium">Cancelar</button>
+                <button onclick="saveApiKey()"
+                    class="px-6 py-2 bg-brand-600 text-white rounded-xl font-medium hover:bg-brand-700 shadow-lg shadow-brand-500/20">Salvar
+                    Configuração</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Key Logic
+        function openSettings() {
+            const key = localStorage.getItem('gemini_api_key');
+            if (key) document.getElementById('apiKeyInput').value = key;
+            document.getElementById('settingsModal').classList.remove('hidden');
+        }
+
+        window.saveApiKey = function () {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (key) {
+                if (key.includes('PLACEHOLDER')) {
+                    alert("Por favor, insira uma chave válida, não o texto de exemplo.");
+                    return;
+                }
+                localStorage.setItem('gemini_api_key', key);
+                alert("Chave API salva com sucesso!");
+                document.getElementById('settingsModal').classList.add('hidden');
+            }
+        }
+    </script>
+
+
 
 </body>
 

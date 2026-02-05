@@ -1,5 +1,6 @@
-import { auth, db, doc, getDoc, collection, query, where, getDocs, orderBy, limit } from './firebase-config.js';
+import { auth, db, doc, getDoc, updateDoc, collection, query, where, getDocs, orderBy, limit } from './firebase-config.js';
 import { gamificationSystem } from './gamification.js';
+import { getTechCuriosity } from './pedagogical-tips.js';
 
 export async function initStudentDashboard() {
     auth.onAuthStateChanged(async (user) => {
@@ -21,7 +22,92 @@ async function loadStudentProfile(user) {
         const userRef = doc(db, "users", user.uid);
         const userSnap = await getDoc(userRef);
 
-        const userData = userSnap.exists() ? userSnap.data() : { xp: 0, level: 1, name: user.displayName };
+        let userData = userSnap.exists() ? userSnap.data() : { xp: 0, level: 1, name: user.displayName };
+
+        // --- KEY RECHARGE LOGIC ---
+        let currentKeys = userData.keys !== undefined ? userData.keys : 10;
+        let lastRefill = userData.lastKeyRefill ? userData.lastKeyRefill.toDate() : new Date();
+        const now = new Date();
+        let needsUpdate = false;
+        let updates = {};
+
+        if (userData.keys === undefined) {
+            currentKeys = 10;
+            updates.keys = 10;
+            needsUpdate = true;
+        }
+
+        if (currentKeys < 10) {
+            const timeDiff = now - lastRefill;
+            const hoursPassed = Math.floor(timeDiff / (1000 * 60 * 60));
+
+            if (hoursPassed >= 1) {
+                const keysToAdd = Math.min(hoursPassed, 10 - currentKeys);
+                if (keysToAdd > 0) {
+                    currentKeys += keysToAdd;
+                    updates.keys = currentKeys;
+                    updates.lastKeyRefill = now;
+                    needsUpdate = true;
+                    console.log(`Recharged ${keysToAdd} keys!`);
+                }
+            }
+        }
+
+        if (needsUpdate) {
+            await updateDoc(userRef, updates);
+            userData = { ...userData, ...updates };
+        }
+
+        const keysEl = document.getElementById('keysCountDashboard');
+        if (keysEl) keysEl.innerText = currentKeys;
+        // --------------------------
+
+        // --- KEY RECHARGE LOGIC ---
+        let currentKeys = userData.keys !== undefined ? userData.keys : 10;
+        let lastRefill = userData.lastKeyRefill ? userData.lastKeyRefill.toDate() : new Date();
+        const now = new Date();
+        let needsUpdate = false;
+        let updates = {};
+
+        // Initializes keys if missing
+        if (userData.keys === undefined) {
+            currentKeys = 10;
+            updates.keys = 10;
+            needsUpdate = true;
+        }
+
+        // Refill check (only if < 10)
+        if (currentKeys < 10) {
+            const timeDiff = now - lastRefill;
+            const hoursPassed = Math.floor(timeDiff / (1000 * 60 * 60)); // Milliseconds to Hours
+
+            if (hoursPassed >= 1) {
+                const keysToAdd = Math.min(hoursPassed, 10 - currentKeys);
+                if (keysToAdd > 0) {
+                    currentKeys += keysToAdd;
+                    updates.keys = currentKeys;
+                    updates.lastKeyRefill = now; // Reset timer to now (simple simplified logic)
+                    needsUpdate = true;
+                    console.log(`Recharged ${keysToAdd} keys! New balance: ${currentKeys}`);
+                }
+            }
+        } else {
+            // Ensure timer updates if we are full, so we don't accumulate hours while full?
+            // Actually, usually you just leave it. If I use a key, the timer starts from "now" implies I lose progress?
+            // Better: If I was full, and I use a key, I set the timer then. 
+            // For now, simpler: If I am < 10, the timer counts. If I am >= 10, the timer is irrelevant.
+            // If checking refill and I am full, do nothing.
+        }
+
+        if (needsUpdate) {
+            await updateDoc(userRef, updates);
+            userData = { ...userData, ...updates }; // Update local state
+        }
+
+        // Update Keys UI
+        const keysEl = document.getElementById('keysCountDashboard');
+        if (keysEl) keysEl.innerText = currentKeys;
+        // --------------------------
 
         // Update Header Elements
         const nameEl = document.getElementById('studentName');
@@ -34,13 +120,19 @@ async function loadStudentProfile(user) {
         updateXPBar(userData.xp || 0);
 
         // Greet based on time and name
-        const hour = new Date().getHours();
-        const greeting = hour < 12 ? "Bom dia" : hour < 18 ? "Boa tarde" : "Boa noite";
+        const greetingGet = new Date().getHours() < 12 ? "Bom dia" : new Date().getHours() < 18 ? "Boa tarde" : "Boa noite";
         const firstName = (userData.displayName || user.displayName || "Explorador").split(' ')[0];
 
         const greetingEl = document.getElementById('greeting');
         if (greetingEl) {
-            greetingEl.innerText = `${greeting}, ${firstName}!`;
+            greetingEl.innerText = `${greetingGet}, ${firstName}!`;
+        }
+
+        // Show Tech Curiosity
+        const curiosity = getTechCuriosity();
+        const subtitleEl = document.querySelector('header p');
+        if (subtitleEl && curiosity) {
+            subtitleEl.innerHTML = `Running Quiz <b>Curiosidade:</b> <span class="italic text-slate-600">"${curiosity.text}"</span>`;
         }
 
     } catch (error) {
@@ -96,54 +188,143 @@ function updateRoadmap(xp) {
 
 async function initDailyMissions(user) {
     const missionsContainer = document.querySelector('#dailyMissionsList');
-    // Note: I'll need to ensure student-area.html has this ID or uses a selector
+    if (!missionsContainer) return;
 
-    // For now, let's just update the static missions in student-area.html if we can
-    // but a better way is to dynamically render them.
-    console.log("Daily missions logic synchronized with user XP and activity.");
+    // Defined missions
+    const today = new Date().toDateString();
+
+    // Check/Reset Daily Progress
+    const userRef = doc(db, "users", user.uid);
+    // Ideally we fetch this with the profile, but for safety:
+    const snap = await getDoc(userRef);
+    const data = snap.data();
+
+    // Logic: If lastLogin != today, reset daily counters (handled by backend usually, but here client-side lazy reset)
+    // For simplicity, we just check data.
+
+    const loginDone = true; // They are here
+    const quizCount = data.dailyQuizCount || 0;
+
+    // Render
+    missionsContainer.innerHTML = '';
+
+    const missions = [
+        {
+            title: "Explorador Diário",
+            desc: "Faça login na plataforma",
+            progress: 1,
+            target: 1,
+            xp: 50,
+            icon: "🚀",
+            done: true
+        },
+        {
+            title: "Mestre dos Quizzes",
+            desc: "Complete 2 quizzes hoje",
+            progress: quizCount,
+            target: 2,
+            xp: 100,
+            icon: "🧠",
+            done: quizCount >= 2
+        },
+        {
+            title: "Mão na Massa",
+            desc: "Inicie ou continue um projeto",
+            progress: data.projectsStartedToday || 0, // Placeholder field
+            target: 1,
+            xp: 150,
+            icon: "🛠️",
+            done: (data.projectsStartedToday || 0) >= 1
+        }
+    ];
+
+    missions.forEach(m => {
+        const width = Math.min((m.progress / m.target) * 100, 100);
+        const color = m.done ? 'green' : 'blue';
+        const btnState = m.done ? 'Opções' : 'Ir';
+
+        missionsContainer.innerHTML += `
+            <div class="bg-white p-4 rounded-2xl border border-slate-100 flex items-center justify-between shadow-sm hover:shadow-md transition-all">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-${color}-100 rounded-xl flex items-center justify-center text-2xl">
+                        ${m.icon}
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-700">${m.title}</h4>
+                        <div class="flex items-center gap-2 text-xs text-slate-500 mb-1">
+                            <span>${m.desc}</span>
+                            <span class="font-bold text-${color}-600">${m.progress}/${m.target}</span>
+                        </div>
+                        <div class="w-32 h-2 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-${color}-500 rounded-full transition-all" style="width: ${width}%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="block font-display font-bold text-${color}-600 text-lg">+${m.xp} XP</span>
+                    ${m.done ? '<span class="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">Completo</span>' : ''}
+                </div>
+            </div>
+        `;
+    });
 }
 
 async function loadLeaderboard() {
-    const leaderboardContainer = document.getElementById('leaderboardList');
-    if (!leaderboardContainer) return;
+    const list = document.querySelector('#leaderboardList');
+    if (!list) return;
 
     try {
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, orderBy("xp", "desc"), limit(5));
-        const querySnapshot = await getDocs(q);
+        // Query users sorted by XP
+        // In a real app, ideally filter by role in the query like: where("role", "in", ["student", "maker"])
+        // But for now we might fetch top 20 and filter client side if the filtered set is small, 
+        // or just add the where clause if the index exists.
+        // Let's try client-side filtering for simplicity on small datasets, 
+        // OR add a basic where clause if we assume all students are 'student'.
 
-        leaderboardContainer.innerHTML = '';
+        const q = query(
+            collection(db, "users"),
+            orderBy("xp", "desc"),
+            limit(100) // Fetch more to allow filtering
+        );
 
-        let rank = 1;
-        querySnapshot.forEach((doc) => {
-            const userData = doc.data();
-            const bgClass = rank === 1 ? 'bg-yellow-50 border-yellow-100 shadow-sm' : 'bg-slate-50 border-slate-100';
-            const textClass = rank === 1 ? 'text-yellow-700' : 'text-slate-500';
-            const icon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+        const snapshot = await getDocs(q);
 
-            leaderboardContainer.innerHTML += `
-                <div class="flex items-center justify-between p-4 rounded-2xl ${bgClass} border transition-all hover:scale-[1.02]">
-                    <div class="flex items-center gap-4">
-                        <span class="w-8 h-8 flex items-center justify-center font-bold ${textClass} text-lg">${icon || rank + 'º'}</span>
-                        <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 overflow-hidden shadow-inner">
-                            <img src="${userData.photoURL || `https://ui-avatars.com/api/?name=${userData.displayName || 'User'}`}" alt="User" class="w-full h-full object-cover">
-                        </div>
-                        <span class="font-bold text-slate-700">${userData.displayName || 'Explorador'}</span>
-                    </div>
-                    <span class="font-bubble font-bold ${textClass}">${userData.xp || 0} XP</span>
-                </div>
+        // Filter: Exclude teachers/admins
+        const users = snapshot.docs
+            .map(d => d.data())
+            .filter(u => !u.role || ['student', 'maker', 'teacher', 'freelance_teacher', 'dev'].includes(u.role))
+            .slice(0, 5); // Take top 5 after filter
+
+        list.innerHTML = '';
+        users.forEach((u, index) => {
+            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}º`;
+            const name = u.displayName || "Sem Nome"; // Changed from u.name to u.displayName
+            const shortName = name.split(' ')[0]; // First name only
+
+            list.innerHTML += `
+               <div class="flex items-center justify-between p-3 ${index === 0 ? 'bg-yellow-50 border border-yellow-100 rounded-xl' : ''}">
+                   <div class="flex items-center gap-3">
+                       <span class="font-bold text-slate-400 w-6">${medal}</span>
+                       <div class="flex items-center gap-2">
+                           <div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold text-xs">
+                               ${name.charAt(0)}
+                           </div>
+                           <span class="font-bold text-slate-700 text-sm">${shortName}</span>
+                       </div>
+                   </div>
+                   <span class="font-bold text-brand-600 text-sm">${u.xp || 0} XP</span>
+               </div>
             `;
-            rank++;
         });
 
-        if (querySnapshot.empty) {
-            leaderboardContainer.innerHTML = '<div class="text-center py-6 text-slate-400">Nenhum explorador no ranking ainda!</div>';
+        if (users.length === 0) { // Check if any users were found after filtering
+            list.innerHTML = '<div class="text-center py-6 text-slate-400">Nenhum explorador no ranking ainda!</div>';
         }
 
-    } catch (error) {
-        console.error("Error loading leaderboard:", error);
-        if (error.code === 'permission-denied') {
-            leaderboardContainer.innerHTML = `
+    } catch (e) {
+        console.error("Leaderboard error:", e);
+        if (e.code === 'permission-denied') {
+            list.innerHTML = `
                 <div class="text-center py-1 px-4">
                     <div class="w-10 h-10 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-1 border border-amber-100 scale-75">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
@@ -235,10 +416,41 @@ function createProjectCard(project, id) {
 }
 
 async function loadAchievements(user) {
-    // Simplified for now - can be expanded to fetch actual earned badges
     const badgesContainer = document.getElementById('recentBadges');
-    // For now, static or fetched from user data if available
-    // Implementation would go here
+    if (!badgesContainer) return;
+
+    // Calculate simple badges based on XP or Levels
+    // In a real app, we would query a 'badges' subcollection
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+    const data = snap.data();
+    const xp = data.xp || 0;
+
+    const allBadges = [
+        { id: 'newbie', name: 'Novato', icon: '🌱', minXp: 0, desc: 'Começou a jornada' },
+        { id: 'explorer', name: 'Explorador', icon: '🔭', minXp: 100, desc: 'Alcançou 100 XP' },
+        { id: 'maker', name: 'Maker', icon: '🛠️', minXp: 500, desc: 'Alcançou 500 XP' },
+        { id: 'pro', name: 'Pro', icon: '⚡', minXp: 1000, desc: 'Alcançou 1000 XP' },
+        { id: 'master', name: 'Mestre', icon: '👑', minXp: 2500, desc: 'Alcançou 2500 XP' }
+    ];
+
+    // Filter earned (reversed to show highest first or just recent)
+    const earned = allBadges.filter(b => xp >= b.minXp).reverse().slice(0, 3);
+
+    badgesContainer.innerHTML = '';
+
+    if (earned.length === 0) {
+        badgesContainer.innerHTML = '<span class="text-sm text-slate-400">Jogue para ganhar medalhas!</span>';
+        return;
+    }
+
+    earned.forEach(badge => {
+        badgesContainer.innerHTML += `
+            <div title="${badge.desc}" class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center text-xl border-2 border-yellow-200 cursor-help hover:scale-110 transition-transform">
+                ${badge.icon}
+            </div>
+        `;
+    });
 }
 
 function setupQuickActions() {

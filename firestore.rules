@@ -98,11 +98,14 @@ service cloud.firestore {
       allow read, write: if isAdmin();
     }
     
-    // Learning Materials collection
-    match /learningMaterials/{materialId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdmin();
+    // Library collection (Community Projects)
+    match /library/{projectId} {
+      allow read: if true; // Public read
+      allow create: if isAuthenticated(); // Allow any logged-in user to publish
+      allow update, delete: if isOwner(resource.data.authorId) || isAdmin();
     }
+    
+    // Learning Materials collection
     
     // Material Progress
     match /materialProgress/{progressId} {

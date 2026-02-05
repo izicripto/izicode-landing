@@ -78,9 +78,17 @@
                 <div class="absolute inset-0 bg-white/20 w-full h-full animate-pulse"></div>
             </div>
         </div>
-        <div class="flex items-center gap-1 text-red-500 font-bold font-display">
-            <span>❤️</span>
-            <span id="lives">5</span>
+        <div class="flex items-center gap-4">
+            <!-- Keys Indicator -->
+            <div class="flex items-center gap-1 text-amber-500 font-bold font-display" title="Chaves Disponíveis">
+                <span>🗝️</span>
+                <span id="keysCount">--</span>
+            </div>
+            <!-- Hearts Indicator -->
+            <div class="flex items-center gap-1 text-red-500 font-bold font-display" title="Vidas">
+                <span>❤️</span>
+                <span id="lives">3</span>
+            </div>
         </div>
     </header>
 
@@ -89,9 +97,10 @@
 
         <!-- Question & Mascot -->
         <div class="flex gap-4 mb-12 items-start animate-fade-in-up">
-            <img src="images/robot-mascot.png"
-                onerror="this.src='https://ui-avatars.com/api/?name=Iz&background=0D8ABC&color=fff'"
-                class="w-24 h-24 hidden md:block">
+            <div
+                class="w-24 h-24 hidden md:flex items-center justify-center bg-blue-100 rounded-full text-5xl border-4 border-blue-200 shadow-sm">
+                🤖
+            </div>
             <div class="flex-1">
                 <h1 id="questionText"
                     class="text-2xl md:text-3xl font-display font-bold text-slate-700 leading-tight mb-4">
@@ -148,11 +157,11 @@
         </div>
     </div>
 
-    <!-- Audio Effects -->
-    <audio id="sndCorrect" src="assets/sounds/correct.mp3"></audio>
-    <audio id="sndWrong" src="assets/sounds/wrong.mp3"></audio>
+    <!-- Audio Effects (Files missing, tags removed to stop 404s) -->
+    <!-- <audio id="sndCorrect" src="assets/sounds/correct.mp3"></audio> -->
+    <!-- <audio id="sndWrong" src="assets/sounds/wrong.mp3"></audio> -->
 
-    <script type="module" src="js/quiz-arena.js"></script>
+    <script type="module" src="js/quiz-arena.js?v=2"></script>
 
 </body>
 
