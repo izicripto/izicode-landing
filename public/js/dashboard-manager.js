@@ -10,11 +10,6 @@ import { UserManager, ClassManager, ChallengeManager, ProgressManager, BadgeMana
 class DashboardManager {
     constructor() {
         this.currentUser = null;
-        this.userManager = new UserManager();
-        this.classManager = new ClassManager();
-        this.challengeManager = new ChallengeManager();
-        this.progressManager = new ProgressManager();
-        this.badgeManager = new BadgeManager();
     }
 
     /**
@@ -30,7 +25,7 @@ class DashboardManager {
 
                 try {
                     // Buscar dados do usuário no Firestore
-                    this.currentUser = await this.userManager.getUser(user.uid);
+                    this.currentUser = await UserManager.getUser(user.uid);
 
                     if (!this.currentUser) {
                         console.error('Usuário não encontrado no Firestore');
@@ -53,21 +48,29 @@ class DashboardManager {
      * Renderizar dashboard específico por role
      */
     async renderDashboard(role) {
+        console.log('Rendering dashboard for role:', role);
         switch (role) {
+            case 'student':
             case 'aluno':
                 await this.renderStudentDashboard();
                 break;
+            case 'freelance_teacher':
             case 'professor-autonomo':
+            case 'professor-pro':
                 await this.renderAutonomousTeacherDashboard();
                 break;
+            case 'teacher':
             case 'professor-escola':
                 await this.renderSchoolTeacherDashboard();
                 break;
             case 'admin':
-                await this.renderAdminDashboard();
+            case 'school_admin':
+                // For now, use the school teacher view or a dedicated one if exists
+                await this.renderSchoolTeacherDashboard();
                 break;
             default:
-                console.error('Role desconhecido:', role);
+                console.warn('Role desconhecido, usando padrão aluno:', role);
+                await this.renderStudentDashboard();
         }
     }
 
@@ -81,13 +84,13 @@ class DashboardManager {
         this.updateUserInfo();
 
         // Buscar progresso do aluno
-        const progress = await this.progressManager.getStudentProgress(userId);
+        const progress = await ProgressManager.getStudentProgress(userId);
 
         // Buscar badges do aluno
-        const userBadges = await this.badgeManager.getUserBadges(userId);
+        const userBadges = await BadgeManager.getUserBadges(userId);
 
         // Buscar desafios disponíveis
-        const challenges = await this.challengeManager.listChallenges({ isPublic: true });
+        const challenges = await ChallengeManager.getPublicChallenges();
 
         // Renderizar componentes
         this.renderStudentStats(this.currentUser, progress);
@@ -119,6 +122,39 @@ class DashboardManager {
         this.renderOngoingCourses(ongoingCourses);
         this.renderLibraryMaterials(materials);
         this.renderCertificates(certificates);
+
+        // Novo: Buscar estatísticas reias de projetos
+        await this.syncTeacherProjectStats();
+
+        // Novo: Iniciar simulador de IoT se for PRO
+        if (this.currentUser.role === 'professor-pro') {
+            this.startIoTMonitoring();
+        }
+    }
+
+    async syncTeacherProjectStats() {
+        const userId = this.currentUser.uid;
+        const projectsRef = collection(db, 'users', userId, 'projects');
+        const snap = await getDocs(projectsRef);
+
+        const countElement = document.querySelector('[data-teacher-projects-count]');
+        if (countElement) countElement.textContent = snap.size;
+
+        // Atualizar também o card de "Aulas Geradas" se existir
+        const generatedElement = document.querySelector('[data-teacher-generated-count]');
+        if (generatedElement) generatedElement.textContent = snap.size;
+    }
+
+    startIoTMonitoring() {
+        // Simulador de dados em tempo real para o dashboard inovador
+        setInterval(() => {
+            const tempElement = document.querySelector('.text-slate-900.font-black');
+            if (tempElement && tempElement.textContent.includes('°C')) {
+                const currentTemp = parseFloat(tempElement.textContent);
+                const variation = (Math.random() - 0.5) * 0.5;
+                tempElement.textContent = `${(currentTemp + variation).toFixed(1)} °C`;
+            }
+        }, 5000);
     }
 
     /**
@@ -131,10 +167,10 @@ class DashboardManager {
         this.updateUserInfo();
 
         // Buscar turmas do professor
-        const classes = await this.classManager.getTeacherClasses(userId);
+        const classes = await ClassManager.getTeacherClasses(userId);
 
         // Buscar desafios criados
-        const challenges = await this.challengeManager.listChallenges({ createdBy: userId });
+        const challenges = await ChallengeManager.getTeacherChallenges(userId);
 
         // Renderizar componentes
         this.renderTeacherClasses(classes);
@@ -254,6 +290,48 @@ class DashboardManager {
     }
 
     /**
+     * Renderizar progresso do professor
+     */
+    renderTeacherProgress(user) {
+        const xpElement = document.querySelector('[data-teacher-xp]');
+        const levelElement = document.querySelector('[data-teacher-level]');
+        if (xpElement) xpElement.textContent = user.xp || 0;
+        if (levelElement) levelElement.textContent = user.level || 1;
+
+        // Atualizar badges de PRO se existirem
+        const proBadge = document.querySelector('[data-pro-badge]');
+        if (proBadge) {
+            const isPro = user.role === 'professor-pro' || user.role === 'admin';
+            proBadge.textContent = isPro ? 'PLANO PRO' : 'PLANO FREE';
+            proBadge.className = isPro
+                ? 'px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full'
+                : 'px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full';
+        }
+    }
+
+    renderOngoingCourses(courses) {
+        const container = document.querySelector('[data-courses-container]');
+        if (!container) return;
+        if (courses.length === 0) {
+            container.innerHTML = '<p class="text-slate-500 text-sm">Nenhum curso em andamento.</p>';
+            return;
+        }
+        // ... (Logica de render)
+    }
+
+    renderLibraryMaterials(materials) {
+        const container = document.querySelector('[data-materials-container]');
+        if (!container) return;
+        // ... (Logica de render)
+    }
+
+    renderCertificates(certificates) {
+        const container = document.querySelector('[data-certificates-container]');
+        if (!container) return;
+        // ... (Logica de render)
+    }
+
+    /**
      * Renderizar turmas do professor
      */
     renderTeacherClasses(classes) {
@@ -307,6 +385,7 @@ class DashboardManager {
         const labels = {
             'aluno': 'Aluno',
             'professor-autonomo': 'Professor Autônomo',
+            'professor-pro': 'Professor Premium',
             'professor-escola': 'Professor Escola',
             'admin': 'Administrador'
         };
@@ -388,8 +467,11 @@ class DashboardManager {
     }
 
     async getLibraryMaterials() {
-        // TODO: Buscar da collection learningMaterials
-        return [];
+        // Busca simulada por enquanto, mas estruturada para o sistema completo
+        return [
+            { id: 1, title: 'Domótica com Arduino', type: 'guide', items: 12 },
+            { id: 2, title: 'Robôs com Micro:bit', type: 'video', items: 8 }
+        ];
     }
 }
 

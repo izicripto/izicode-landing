@@ -113,15 +113,34 @@
 
                 if (userSnap.exists()) {
                     const userData = userSnap.data();
-                    // Se já tem role/perfil definido, vai para o dashboard apropriado
-                    if (userData.role) {
-                        console.log("Usuário já configurado:", userData.role);
-                        if (userData.role === 'student') {
+                    let detectedRole = userData.role || 'student';
+                    const email = user.email;
+
+                    // --- REDIRECTION OVERRIDES (Sync with dashboard-roles.js) ---
+                    if (email === 'izicripto@gmail.com') detectedRole = 'dev';
+                    else if (email === 'izicodeedu@gmail.com') detectedRole = 'school_admin';
+                    else if (email === 'r.berlanda04@gmail.com') detectedRole = 'freelance_teacher';
+                    // -----------------------------------------------------------
+
+                    console.log(`[Login] Role resolvida para ${email}: ${detectedRole}`);
+
+                    // Só redirecionar se o onboarding estiver completo OU se for um dos overrides
+                    const isHardcoded = ['izicripto@gmail.com', 'izicodeedu@gmail.com', 'r.berlanda04@gmail.com'].includes(email);
+
+                    if (userData.onboardingCompleted || isHardcoded) {
+                        console.log("[Login] Perfil completo ou override detectado.");
+                        if (detectedRole === 'student') {
                             window.location.href = "student-area.html";
+                        } else if (detectedRole === 'freelance_teacher') {
+                            window.location.href = "dashboards/professor-autonomo.html";
+                        } else if (detectedRole === 'teacher') {
+                            window.location.href = "dashboards/professor-escola.html";
                         } else {
                             window.location.href = "dashboard.html";
                         }
                         return;
+                    } else {
+                        console.log("[Login] Onboarding pendente.");
                     }
                 }
 

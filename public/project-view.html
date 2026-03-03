@@ -305,6 +305,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
     <script src="/js/pdf-generator.js"></script>
 
     <script type="module">
@@ -435,8 +436,9 @@
             document.getElementById('projectBNCC').textContent = Array.isArray(data.bncc) ? data.bncc.join(', ') : (data.bncc || 'Geral');
             document.getElementById('projectODS').textContent = data.ods || 'Geral';
 
-            // Render Markdown Content
-            document.getElementById('projectContent').innerHTML = marked.parse(data.content);
+            // Render Markdown Content (Sanitized)
+            const cleanContent = DOMPurify.sanitize(data.content);
+            document.getElementById('projectContent').innerHTML = marked.parse(cleanContent);
         }
 
         function renderNotFound() {
@@ -602,7 +604,7 @@
                     </div>
                 </div>
                 <div class="prose" style="font-family: sans-serif; color: #334155;">
-                    ${marked.parse(project.content)}
+                    ${marked.parse(DOMPurify.sanitize(project.content))}
                 </div>
                 <div style="margin-top: 40px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px;">
                     Gerado por Izicode Edu Library • www.izicode.com.br

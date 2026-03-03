@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --brand-primary: #0ea5e9;
+    --brand-secondary: #6366f1;
+    --brand-accent: #f59e0b;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #f0f9ff;
+    background-image:
+        radial-gradient(at 0% 0%, hsla(203, 100%, 94%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(199, 100%, 92%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(190, 100%, 93%, 1) 0, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+.font-display {
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Premium Glassmorphism */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    box-shadow: var(--card-shadow);
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.glass-card:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+}
+
+/* Vibrant Gradients */
+.gradient-brand {
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Modern Inputs */
+input,
+textarea,
+select {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid #e2e8f0;
+    backdrop-filter: blur(2px);
+    transition: all 0.2s ease;
+}
+
+input:focus,
+textarea:focus {
+    background: #ffffff;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Level Up Pulse */
+@keyframes levelPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4);
+    }
+
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 20px rgba(14, 165, 233, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(14, 165, 233, 0);
+    }
+}
+
+.level-badge-premium {
+    animation: levelPulse 3s infinite;
+}

@@ -50,8 +50,74 @@
         }
     </script>
     <style>
-        .option-card:active {
-            transform: translateY(4px);
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-8px);
+            }
+
+            75% {
+                transform: translateX(8px);
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            70% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        .pop-in {
+            animation: popIn 0.5s cubic-bezier(0.26, 0.53, 0.74, 1.48) forwards;
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .option-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .option-card:hover:not(:disabled) {
+            transform: translateY(-2px);
+            border-color: #94a3b8;
+            background-color: #f8fafc;
+        }
+
+        .option-card:active:not(:disabled) {
+            transform: translateY(2px);
             box-shadow: 0 0 0 0 #e5e7eb !important;
         }
 
@@ -59,6 +125,36 @@
             border-color: #3b82f6;
             background-color: #eff6ff;
             box-shadow: 0 4px 0 0 #3b82f6 !important;
+        }
+
+        .option-card.correct {
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+            box-shadow: 0 4px 0 0 #22c55e !important;
+            color: #15803d !important;
+        }
+
+        .option-card.wrong {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            box-shadow: 0 4px 0 0 #ef4444 !important;
+            color: #b91c1c !important;
+        }
+
+        .progress-glow {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        .mascot-container {
+            perspective: 1000px;
+        }
+
+        .mascot-content {
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .mascot-container:hover .mascot-content {
+            transform: rotateY(10deg) rotateX(10deg);
         }
     </style>
 </head>
@@ -96,20 +192,24 @@
     <main class="flex-1 flex flex-col max-w-2xl mx-auto w-full px-6 pb-40">
 
         <!-- Question & Mascot -->
-        <div class="flex gap-4 mb-12 items-start animate-fade-in-up">
-            <div
-                class="w-24 h-24 hidden md:flex items-center justify-center bg-blue-100 rounded-full text-5xl border-4 border-blue-200 shadow-sm">
-                🤖
+        <div class="flex gap-4 mb-12 items-start opacity-0" id="questionContainer"
+            style="transition: all 0.5s ease-out">
+            <div class="mascot-container shrink-0">
+                <div id="mascot"
+                    class="mascot-content w-20 h-20 md:w-28 md:h-28 flex items-center justify-center bg-blue-100 rounded-[2rem] text-4xl md:text-6xl border-4 border-blue-200 shadow-xl float">
+                    🤖
+                </div>
             </div>
-            <div class="flex-1">
-                <h1 id="questionText"
-                    class="text-2xl md:text-3xl font-display font-bold text-slate-700 leading-tight mb-4">
-                    Carregando pergunta...
-                </h1>
-
-                <!-- Speech Bubble Arrow (only on desktop) -->
-                <div
-                    class="hidden md:block w-4 h-4 bg-white border-l border-b border-slate-200 absolute -left-2 top-8 transform rotate-45">
+            <div class="flex-1 pt-2 md:pt-4 relative">
+                <!-- Speech Bubble Shape -->
+                <div class="bg-white border-2 border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm relative">
+                    <div
+                        class="absolute -left-2 top-8 w-4 h-4 bg-white border-l-2 border-b-2 border-slate-100 transform rotate-45 hidden md:block">
+                    </div>
+                    <h1 id="questionText"
+                        class="text-xl md:text-2xl font-display font-bold text-slate-700 leading-tight">
+                        🚀 Carregando seu próximo desafio...
+                    </h1>
                 </div>
             </div>
         </div>
@@ -161,7 +261,7 @@
     <!-- <audio id="sndCorrect" src="assets/sounds/correct.mp3"></audio> -->
     <!-- <audio id="sndWrong" src="assets/sounds/wrong.mp3"></audio> -->
 
-    <script type="module" src="js/quiz-arena.js?v=2"></script>
+    <script type="module" src="js/quiz-arena.js?v=4"></script>
 
 </body>
 

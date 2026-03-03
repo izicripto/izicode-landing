@@ -1,6 +1,7 @@
 // Dashboard Role-Based Rendering System
 import { auth, db, doc, getDoc, updateDoc, collection, query, where, getDocs, orderBy, limit, getCountFromServer } from './firebase-config.js';
 import { getDailyTip } from './pedagogical-tips.js';
+import { gamificationSystem } from './gamification.js';
 
 export class DashboardRoleManager {
     constructor() {
@@ -78,16 +79,91 @@ export class DashboardRoleManager {
             } else if (email === 'izicodeedu@gmail.com') {
                 this.userRole = 'school_admin';
             } else if (email === 'r.berlanda04@gmail.com') {
-                this.userRole = 'freelance_teacher';
+                this.userRole = 'professor-pro';
             } else {
                 this.userRole = dbRole;
             }
 
             console.log(`Role Resolved: ${this.userRole} (Email: ${email})`);
 
+            // 3. DAILY MISSIONS LOGIC
+            await this.handleDailyMissions();
+
         } catch (error) {
             console.error('Erro ao carregar dados do usuário:', error);
             this.userRole = 'student';
+        }
+    }
+
+    async handleDailyMissions() {
+        if (!this.userData) return;
+
+        const now = new Date();
+        const todayStr = now.toISOString().split('T')[0];
+        const lastReset = this.userData.lastMissionReset || '';
+
+        // Reset if it's a new day
+        if (lastReset !== todayStr) {
+            console.log("Resetting daily missions for a new day...");
+            const initialMissions = {};
+            gamificationSystem.dailyMissions.forEach(m => {
+                initialMissions[m.id] = {
+                    progress: 0,
+                    completed: false,
+                    lastUpdated: todayStr
+                };
+            });
+
+            const updates = {
+                lastMissionReset: todayStr,
+                missionsProgress: initialMissions
+            };
+
+            await updateDoc(doc(db, 'users', this.currentUser.uid), updates);
+            this.userData = { ...this.userData, ...updates };
+        }
+
+        // Auto-complete 'login' mission
+        await this.recordMissionProgress('daily-login', 1);
+    }
+
+    async recordMissionProgress(missionId, amount = 1) {
+        if (!this.userData || !this.userData.missionsProgress) return;
+
+        const progress = this.userData.missionsProgress[missionId];
+        if (!progress || progress.completed) return;
+
+        const missionDef = gamificationSystem.dailyMissions.find(m => m.id === missionId);
+        if (!missionDef) return;
+
+        const target = missionDef.target || 1;
+        const newProgressValue = Math.min(progress.progress + amount, target);
+        const isNowCompleted = newProgressValue >= target;
+
+        const updates = {};
+        updates[`missionsProgress.${missionId}.progress`] = newProgressValue;
+
+        if (isNowCompleted) {
+            updates[`missionsProgress.${missionId}.completed`] = true;
+            updates[`missionsProgress.${missionId}.completedAt`] = new Date();
+
+            // Award Rewards
+            updates.xp = (this.userData.xp || 0) + missionDef.xp;
+            if (missionDef.keys) {
+                updates.keys = (this.userData.keys || 0) + missionDef.keys;
+            }
+
+            console.log(`Mission Completed: ${missionDef.name}! +${missionDef.xp} XP awarded.`);
+        }
+
+        await updateDoc(doc(db, 'users', this.currentUser.uid), updates);
+
+        // Update local state
+        this.userData.missionsProgress[missionId].progress = newProgressValue;
+        if (isNowCompleted) {
+            this.userData.missionsProgress[missionId].completed = true;
+            this.userData.xp = (this.userData.xp || 0) + missionDef.xp;
+            if (missionDef.keys) this.userData.keys = (this.userData.keys || 0) + missionDef.keys;
         }
     }
 
@@ -131,43 +207,17 @@ export class DashboardRoleManager {
 
         // Update Sidebar/Header Stats (XP, Level, Keys)
         if (this.userData) {
+            const xp = this.userData.xp || 0;
+            const levelInfo = gamificationSystem.calculateLevel(xp);
+
             const levelEl = document.getElementById('userLevel');
             const xpEl = document.getElementById('userXP');
             const keysEl = document.getElementById('userKeys');
 
-            if (levelEl) levelEl.textContent = this.userData.level || 1;
-            if (xpEl) xpEl.textContent = this.userData.xp || 0;
+            if (levelEl) levelEl.textContent = levelInfo.level;
+            if (xpEl) xpEl.textContent = xp;
             if (keysEl) keysEl.textContent = this.userData.keys !== undefined ? this.userData.keys : 10;
         }
-    }
-
-    getFreelanceActions() {
-        return [
-            {
-                title: 'Aulas Particulares',
-                description: 'Crie roteiros personalizados com IA',
-                icon: 'plus',
-                href: 'create-project.html',
-                gradient: 'from-purple-500 to-purple-600',
-                textColor: 'white'
-            },
-            {
-                title: 'Meus Materiais',
-                description: 'Biblioteca de aulas salvas',
-                icon: 'book',
-                href: 'my-projects.html',
-                bgColor: 'bg-white/80',
-                borderColor: 'border-purple-300'
-            },
-            {
-                title: 'Assistente IA',
-                description: 'Suporte para suas aulas',
-                icon: 'tool',
-                href: 'ia-assistant.html',
-                bgColor: 'bg-white/80',
-                borderColor: 'border-brand-300'
-            }
-        ];
     }
 
 
@@ -221,28 +271,57 @@ export class DashboardRoleManager {
     getTeacherActions() {
         return [
             {
-                title: 'Novo Planejamento',
-                description: 'Crie aulas completas e roteiros com IA',
+                title: 'Estúdio de Criação IA',
+                description: 'Gere planos de aula e roteiros Arduino com Gemini 2.0 Pro.',
                 icon: 'plus',
                 href: 'create-project.html',
-                gradient: 'from-brand-500 to-brand-600',
+                gradient: 'from-brand-600 to-brand-700',
                 textColor: 'white'
             },
             {
-                title: 'Meus Materiais',
-                description: 'Acesse seus projetos e recursos salvos',
+                title: 'Meu Arsenal Maker',
+                description: 'Acesse e gerencie seus projetos, códigos e materiais salvos.',
                 icon: 'book',
                 href: 'my-projects.html',
-                bgColor: 'bg-white/80',
-                borderColor: 'border-brand-300'
+                bgColor: 'bg-white',
+                borderColor: 'border-brand-200'
             },
             {
-                title: 'Assistente IA',
-                description: 'Tire dúvidas e peça sugestões pedagógicas',
-                icon: 'tool', // Using tool/chat icon
+                title: 'Assistente Pedagógico',
+                description: 'Consultoria instantânea para metodologias STEAM e BNCC.',
+                icon: 'tool',
                 href: 'ia-assistant.html',
-                bgColor: 'bg-white/80',
-                borderColor: 'border-purple-300'
+                bgColor: 'bg-white',
+                borderColor: 'border-purple-200'
+            }
+        ];
+    }
+
+    getFreelanceActions() {
+        return [
+            {
+                title: 'Estúdio de Projetos IA',
+                description: 'Crie roteiros de elite para suas aulas particulares.',
+                icon: 'plus',
+                href: 'create-project.html',
+                gradient: 'from-brand-600 to-brand-700',
+                textColor: 'white'
+            },
+            {
+                title: 'Hub de Projetos Arduino',
+                description: 'Explore a biblioteca oficial de roteiros prontos Izicode.',
+                icon: 'library',
+                href: 'arduino-projects.html',
+                bgColor: 'bg-white',
+                borderColor: 'border-amber-200'
+            },
+            {
+                title: 'Consultoria IA',
+                description: 'Tire dúvidas técnicas e pedagógicas em tempo real.',
+                icon: 'tool',
+                href: 'ia-assistant.html',
+                bgColor: 'bg-white',
+                borderColor: 'border-emerald-200'
             }
         ];
     }
@@ -250,28 +329,28 @@ export class DashboardRoleManager {
     getStudentActions() {
         return [
             {
+                title: 'Arena de Quiz',
+                description: 'Desafie seus conhecimentos e suba no ranking.',
+                icon: 'quiz',
+                href: 'quiz-arena.html',
+                gradient: 'from-brand-600 to-indigo-600',
+                textColor: 'white'
+            },
+            {
                 title: 'Meus Projetos',
                 description: 'Continue seus projetos em andamento',
                 icon: 'book',
                 href: 'my-projects.html',
-                gradient: 'from-brand-500 to-brand-600',
-                textColor: 'white'
-            },
-            {
-                title: 'Área do Aluno',
-                description: 'Ver meu nível, XP e conquistas',
-                icon: 'award',
-                href: 'student-area.html',
-                bgColor: 'bg-white/80',
-                borderColor: 'border-purple-300'
+                bgColor: 'bg-white',
+                borderColor: 'border-brand-200'
             },
             {
                 title: 'Biblioteca',
                 description: 'Conhecer novos projetos e tutoriais',
                 icon: 'library',
                 href: 'library.html',
-                bgColor: 'bg-white/80',
-                borderColor: 'border-brand-300'
+                bgColor: 'bg-white',
+                borderColor: 'border-brand-100'
             }
         ];
     }
@@ -340,36 +419,6 @@ export class DashboardRoleManager {
         ];
     }
 
-    getFreelanceActions() {
-        // Freelance = Content & Tools ONLY (No Classes)
-        return [
-            {
-                title: 'Criar Projeto (IA)',
-                description: 'Gere planos de aula e roteiros',
-                icon: 'plus',
-                href: 'create-project.html',
-                gradient: 'from-brand-500 to-brand-600',
-                textColor: 'white'
-            },
-            {
-                title: 'Meus Planejamentos',
-                description: 'Acesse e edite suas aulas salvas',
-                icon: 'book',
-                href: 'my-projects.html',
-                bgColor: 'bg-white/80',
-                borderColor: 'border-brand-300'
-            },
-            {
-                title: 'IA Pedagógica',
-                description: 'Tire dúvidas sobre aulas',
-                icon: 'tool', // using tool icon for now or generic
-                href: 'ia-assistant.html',
-                bgColor: 'bg-white/80',
-                borderColor: 'border-emerald-300'
-            }
-        ];
-    }
-
     createActionCard(action) {
         const isGradient = action.gradient;
         const baseClasses = isGradient
@@ -393,15 +442,48 @@ export class DashboardRoleManager {
 
     getIconSvg(iconName) {
         const icons = {
-            'plus': '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>',
-            'library': '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>',
-            'book': '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>',
-            'users': '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>',
-            'chart': '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>',
-            'award': '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>',
-            'home': '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>',
-            'quiz': '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
-            'tool': '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 011-1h1a2 2 0 100-4H7a1 1 0 01-1-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>'
+            'plus': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>',
+            'library': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>',
+            'book': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>',
+            'users': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>',
+            'chart': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>',
+            'award': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>',
+            'home': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>',
+            'quiz': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+            'tool': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 011-1h1a2 2 0 100-4H7a1 1 0 01-1-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>',
+            'file': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>',
+            'sparkle': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>',
+            'target': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>',
+            'sun': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>',
+            'code': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>',
+            'star': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.54 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.784.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>',
+            'bolt': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>',
+            'bot': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" /></svg>',
+            'check-circle': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+            'clock': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+            'gamepad': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m-7-4h2m-6 4h12a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2z" /></svg>',
+            'moon': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>',
+            'crown': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>',
+            'file-text': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>',
+            'brain': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>',
+            'medal': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z" /></svg>',
+            'zap': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>',
+            'level-1': '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>',
+            'level-2': '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>',
+            'level-3': '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>',
+            'level-4': '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 011-1h1a2 2 0 100-4H7a1 1 0 01-1-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" /></svg>',
+            'level-5': '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" /></svg>',
+            'level-6': '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z" /></svg>',
+            'level-7': '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>',
+            'level-8': '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>',
+            'level-9': '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>',
+            'level-10': '<svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>',
+            'check': '<svg class="w-6 h-6 font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>',
+            'ai': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>',
+            'build': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>',
+            'folder': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>',
+            'book-open': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>',
+            'key': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m-2 4a2 2 0 012 2m-2-4a2 2 0 012-2m-2 4h.01M17 7h.01M13 5H7a2 2 0 00-2 2v10a2 2 0 002 2h6a2 2 0 002-2v-3.586A1 1 0 0113.293 11l-1.293-1.293a1 1 0 00-.707-.293H11V8a1 1 0 00-1-1H9a1 1 0 00-1 1v1h1V8h1v1h1c.552 0 1 .448 1 1v1.293l1.293 1.293a1 1 0 00.707.293H15V7h.01z" /></svg>'
         };
         return icons[iconName] || icons.plus;
     }
@@ -422,24 +504,23 @@ export class DashboardRoleManager {
                     widgetsHtml = this.getDevWidgets(stats);
                     break;
                 case 'school_admin':
-                    widgetsHtml = this.getSchoolAdminWidgets();
+                    const sStats = await this.fetchPlatformStats(); // Reuse platform stats or specialized school stats
+                    widgetsHtml = this.getSchoolAdminWidgets(sStats);
                     break;
                 case 'freelance_teacher':
-                    // Content focus -> Same widgets as Teacher (Projects + Tips)
-                    const fProjectsCount = await this.fetchProjectsCount();
-                    const fRecentProjects = await this.fetchRecentProjects();
-                    // Fetch ranking including both teacher types for a fuller list
-                    const fLeaderboard = await this.fetchLeaderboard(['freelance_teacher', 'teacher']);
-                    widgetsHtml = this.getTeacherWidgets(fProjectsCount, fRecentProjects, fLeaderboard, this.userData);
-                    break;
                 case 'teacher':
+                case 'professor-pro':
                     const projectsCount = await this.fetchProjectsCount();
                     const recentProjects = await this.fetchRecentProjects();
-                    const tLeaderboard = await this.fetchLeaderboard(['teacher', 'freelance_teacher']);
-                    widgetsHtml = this.getTeacherWidgets(projectsCount, recentProjects, tLeaderboard, this.userData);
+                    const leaderboard = await this.fetchLeaderboard(['teacher', 'freelance_teacher']);
+                    widgetsHtml = this.getTeacherWidgets(projectsCount, recentProjects, leaderboard, this.userData);
+                    break;
+                case 'consultant':
+                    widgetsHtml = this.getConsultantWidgets();
                     break;
                 case 'student':
-                    widgetsHtml = this.getStudentWidgets();
+                    const sLeaderboard = await this.fetchLeaderboard(['student']);
+                    widgetsHtml = this.getStudentWidgets(this.userData, sLeaderboard);
                     break;
                 case 'parent':
                     widgetsHtml = this.getParentWidgets();
@@ -453,6 +534,18 @@ export class DashboardRoleManager {
         }
 
         widgetsContainer.innerHTML = widgetsHtml;
+    }
+
+    async fetchRecentProjects() {
+        try {
+            const projectsRef = collection(db, "users", this.currentUser.uid, "projects");
+            const q = query(projectsRef, orderBy("createdAt", "desc"), limit(5));
+            const snapshot = await getDocs(q);
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        } catch (e) {
+            console.error("Erro ao buscar projetos recentes:", e);
+            return [];
+        }
     }
 
     async fetchProjectsCount() {
@@ -506,20 +599,6 @@ export class DashboardRoleManager {
         }
     }
 
-    async fetchRecentProjects() {
-        try {
-            const projectsRef = collection(db, "users", this.currentUser.uid, "projects");
-            const q = query(projectsRef, orderBy("createdAt", "desc"), limit(3));
-            const qSnapshot = await getDocs(q);
-            return qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        } catch (e) {
-            console.error("Erro ao buscar projetos recentes:", e);
-            return [];
-        }
-    }
-
-    // ... (SchoolAdmin reused)
-
     getTeacherWidgets(projectsCount = 0, recentProjects = [], leaderboard = [], userData = {}) {
         const safeData = userData || {};
         const xp = safeData.xp || 0;
@@ -533,140 +612,218 @@ export class DashboardRoleManager {
 
         const recentHtml = recentProjects.length > 0
             ? recentProjects.map(p => `
-                <div class="group relative bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition-all duration-300 cursor-pointer overflow-hidden" onclick="window.location.href='project-view.html?userProject=${p.id}'">
-                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-400 to-brand-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="group relative bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-brand-200 transition-all duration-500 cursor-pointer overflow-hidden mb-3" onclick="window.location.href='project-view.html?userProject=${p.id}'">
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-brand-400 to-brand-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-5">
+                            <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand-600 group-hover:bg-brand-50 transition-colors">
+                                ${this.getIconSvg('file')}
+                            </div>
                             <div class="flex flex-col">
-                                <span class="font-display font-bold text-slate-800 text-lg group-hover:text-brand-600 transition-colors">${p.title}</span>
-                                <div class="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
-                                    <span class="bg-slate-100 px-2 py-0.5 rounded-full font-medium text-slate-600">${p.grade || 'Geral'}</span>
-                                    <span>•</span>
-                                    <span>${p.createdAt ? new Date(p.createdAt.toDate()).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) : 'Recente'}</span>
+                                <span class="font-display font-black text-slate-800 text-lg group-hover:text-brand-600 transition-colors tracking-tight">${p.title}</span>
+                                <div class="flex items-center gap-3 text-xs text-slate-500 mt-1">
+                                    <span class="bg-slate-100 px-2.5 py-1 rounded-lg font-bold text-slate-600 uppercase tracking-tighter">${p.grade || 'Geral'}</span>
+                                    <span class="flex items-center gap-1">
+                                        ${this.getIconSvg('clock').replace('w-6 h-6', 'w-3 h-3')}
+                                        ${p.createdAt ? new Date(p.createdAt.toDate()).toLocaleDateString('pt-BR') : 'Hoje'}
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-brand-50 group-hover:text-brand-600 transition-all">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-brand-600 group-hover:text-white group-hover:rotate-45 transition-all duration-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </div>
                     </div>
                 </div>
             `).join('')
             : `
-            <div class="text-center py-12 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
-                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-3xl shadow-sm mx-auto mb-4">✨</div>
-                <h3 class="font-bold text-slate-700">Comece sua jornada</h3>
-                <p class="text-sm text-slate-400 mb-6 max-w-xs mx-auto">Crie seu primeiro planejamento com IA e transforme suas aulas.</p>
-                <a href="create-project.html" class="inline-flex items-center gap-2 text-brand-600 font-bold hover:underline">
-                    Criar Novo Projeto <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            <div class="text-center py-16 bg-white rounded-[2.5rem] border-2 border-dashed border-slate-100">
+                <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-brand-600 shadow-inner mx-auto mb-6">
+                    ${this.getIconSvg('sparkle').replace('w-6 h-6', 'w-10 h-10')}
+                </div>
+                <h3 class="font-display text-xl font-bold text-slate-700 mb-2">Seu arsenal está vazio</h3>
+                <p class="text-slate-400 mb-8 max-w-xs mx-auto text-sm leading-relaxed">Crie planos de aula profissionais e roteiros Arduino com o poder da nossa Inteligência Artificial.</p>
+                <a href="create-project.html" class="inline-flex items-center gap-2 bg-brand-600 text-white px-8 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-brand-700 transition-all shadow-xl shadow-brand-200">
+                    Começar Agora
                 </a>
             </div>`;
 
-        // Leaderboard HTML - Cleaner
         const leaderboardHtml = leaderboard.length > 0 ? leaderboard.map((u, i) => {
-            const medal = i === 0 ? '👑' : i === 1 ? '🥈' : i === 2 ? '🥉' : null;
-            const rankClass = i === 0 ? 'bg-gradient-to-r from-yellow-50 to-amber-50 border-amber-100 ring-1 ring-amber-100' : 'hover:bg-slate-50 border-transparent';
-            const textClass = i === 0 ? 'text-amber-700' : 'text-slate-600';
-
+            const medal = i === 0 ? 'crown' : i === 1 ? 'award' : i === 2 ? 'star' : null;
+            const medalColor = i === 0 ? 'text-amber-400' : i === 1 ? 'text-slate-300' : i === 2 ? 'text-amber-700' : 'text-slate-300';
             return `
-                <div class="flex items-center justify-between p-3 rounded-xl border ${rankClass} transition-all mb-2 last:mb-0">
-                    <div class="flex items-center gap-3">
-                        <span class="font-bold text-sm w-6 text-center text-slate-400">${medal || `${i + 1}º`}</span>
+                <div class="flex items-center justify-between p-4 rounded-2xl border border-transparent hover:bg-slate-50 hover:border-slate-100 transition-all mb-1 group">
+                    <div class="flex items-center gap-4">
+                        <span class="font-black text-sm w-6 text-center ${medalColor} group-hover:scale-110 transition-transform">
+                            ${medal ? this.getIconSvg(medal).replace('w-6 h-6', 'w-5 h-5') : `${i + 1}º`}
+                        </span>
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center overflow-hidden border border-slate-100">
-                                 ${u.photoURL ? `<img src="${u.photoURL}" class="w-full h-full object-cover">` : `<span class="text-xs font-bold text-slate-500">${(u.displayName || 'U').charAt(0)}</span>`}
+                            <div class="w-10 h-10 rounded-full ring-2 ring-white shadow-sm flex items-center justify-center overflow-hidden bg-slate-100">
+                                 ${u.photoURL ? `<img src="${u.photoURL}" class="w-full h-full object-cover">` : `<span class="text-xs font-black text-brand-600">${(u.displayName || 'U').charAt(0)}</span>`}
                             </div>
-                            <span class="font-bold text-sm ${textClass} truncate max-w-[100px]">${(u.displayName || 'User').split(' ')[0]}</span>
+                            <div class="flex flex-col">
+                                <span class="font-bold text-sm text-slate-800 truncate max-w-[120px]">${(u.displayName || 'Mestre').split(' ')[0]}</span>
+                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${u.role === 'professor-pro' ? 'PRO' : 'Elite'}</span>
+                            </div>
                         </div>
                     </div>
-                    <span class="font-bold text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-lg">${u.xp || 0} XP</span>
+                    <div class="text-right">
+                        <span class="block font-black text-xs text-brand-600">${u.xp || 0}</span>
+                        <span class="block text-[8px] font-black text-slate-400 uppercase tracking-tighter">XP TOTAL</span>
+                    </div>
                 </div>
             `;
-        }).join('') : '<div class="text-center py-8 text-slate-400 text-sm">Ranking ainda vazio.</div>';
+        }).join('') : '<div class="text-center py-8 text-slate-400 text-sm">Aguardando rankings...</div>';
 
         return `
-            <!-- XP Overview Hero -->
-            <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-[2rem] p-8 text-white shadow-xl relative overflow-hidden mb-8">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-brand-500 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20"></div>
-                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div class="flex items-center gap-6">
-                        <div class="relative">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-3xl font-bold shadow-lg shadow-brand-500/30">
+            <!-- Analytics Summary -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center">
+                        ${this.getIconSvg('folder')}
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Meus Roteiros</p>
+                        <p class="text-3xl font-black text-slate-900 leading-none">${projectsCount}</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5">
+                    <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                        ${this.getIconSvg('bot')}
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Aulas Geradas (IA)</p>
+                        <p class="text-3xl font-black text-slate-900 leading-none">${Math.min(projectsCount, 12)}</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5">
+                    <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        ${this.getIconSvg('book-open')}
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Matérias Oficiais</p>
+                        <p class="text-3xl font-black text-slate-900 leading-none">8</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm flex items-center gap-5">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                        ${this.getIconSvg('key')}
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Tokens Disponíveis</p>
+                        <p class="text-3xl font-black text-slate-900 leading-none">${userData.keys || 10}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Progress Banner -->
+            <div class="bg-slate-900 rounded-[3rem] p-10 md:p-14 text-white shadow-2xl relative overflow-hidden mb-12 border border-white/5">
+                <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-brand-600/30 blur-[150px] rounded-full -mr-48 -mt-48"></div>
+                <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/20 blur-[120px] rounded-full -ml-40 -mb-40"></div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+                    <div class="flex items-center gap-8">
+                        <div class="relative group">
+                            <div class="w-32 h-32 rounded-[2.5rem] gradient-brand flex items-center justify-center text-6xl font-black shadow-2xl group-hover:rotate-6 transition-all duration-700">
                                 <span>${level}</span>
                             </div>
-                            <div class="absolute -bottom-2 -right-2 bg-slate-900 text-xs font-bold px-2 py-1 rounded-lg border border-slate-700">NÍVEL</div>
+                            <div class="absolute -bottom-3 -right-3 bg-white text-brand-600 text-[10px] font-black px-4 py-1.5 rounded-full border-4 border-slate-900 shadow-xl">NÍVEL</div>
                         </div>
-                        <div>
-                            <h2 class="text-2xl font-display font-bold mb-1">Mestre da Educação</h2>
-                            <div class="flex items-center gap-2 text-slate-400 text-sm">
-                                <span>${xp} XP Total</span>
-                                <span class="w-1 h-1 bg-slate-600 rounded-full"></span>
-                                <span>Próximo: ${nextLevelXp} XP</span>
+                        <div class="text-center md:text-left">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 mb-4">
+                                <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-brand-100">Status: Educator Elite</span>
                             </div>
+                            <h2 class="text-4xl md:text-6xl font-black mb-2 font-display tracking-tighter leading-tight">Mestre da Inovação</h2>
+                            <p class="text-slate-400 text-lg md:text-xl font-medium">Você tem <span class="text-brand-400">${xp} XP</span>. Faltam <span class="text-white">${nextLevelXp - xp} XP</span> para o próximo nível.</p>
                         </div>
                     </div>
-                    <div class="w-full md:w-1/3">
-                        <div class="flex justify-between text-xs font-bold text-brand-300 mb-2">
-                            <span>PROGRESSO</span>
-                            <span>${Math.round(progressPct)}%</span>
+                    <div class="w-full md:w-[320px]">
+                        <div class="flex justify-between items-end mb-4 font-display">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] font-black text-brand-300 uppercase tracking-widest">Seu Progresso</span>
+                                <span class="text-3xl font-black">${Math.round(progressPct)}%</span>
+                            </div>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Nível ${level + 1}</span>
                         </div>
-                        <div class="w-full bg-slate-700/50 rounded-full h-3 backdrop-blur">
-                            <div class="bg-gradient-to-r from-brand-400 to-brand-600 h-3 rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(56,189,248,0.5)]" style="width: ${progressPct}%"></div>
+                        <div class="w-full bg-white/5 rounded-full h-4 backdrop-blur-xl p-1 border border-white/10">
+                            <div class="bg-gradient-to-r from-brand-400 via-brand-500 to-brand-600 h-2 rounded-full transition-all duration-1000 shadow-[0_0_20px_rgba(14,165,233,0.5)]" style="width: ${progressPct}%"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Dynamic Quick Actions Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            <!-- Enhanced Actions Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
                 ${actionsHtml}
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Main Column -->
-                <div class="lg:col-span-2 space-y-8">
-                    <!-- Recent Projects -->
-                    <div>
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="font-display text-xl font-bold text-slate-800 flex items-center gap-2">
-                                <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                Recentes
-                            </h3>
-                            <a href="my-projects.html" class="text-sm font-bold text-brand-600 hover:text-brand-700 hover:tracking-wide transition-all">Ver todos</a>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <!-- Primary View: Recent Projects & Tools -->
+                <div class="lg:col-span-2 space-y-12">
+                    <!-- Recent Creative Arsenal -->
+                    <div class="animate-in fade-in slide-in-from-bottom duration-700">
+                        <div class="flex items-center justify-between mb-8">
+                            <div>
+                                <h3 class="font-display text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+                                    <span class="w-1.5 h-8 bg-brand-600 rounded-full"></span>
+                                    Planejamentos Recentes
+                                </h3>
+                                <p class="text-slate-500 text-sm mt-1">Gere novos roteiros para suas aulas de amanhã.</p>
+                            </div>
+                            <a href="my-projects.html" class="px-5 py-2.5 bg-slate-50 text-slate-600 text-[10px] font-black uppercase tracking-widest rounded-xl border border-slate-200 hover:bg-slate-900 hover:text-white transition-all">Ver Histórico</a>
                         </div>
-                        <div class="space-y-3">
+                        <div class="space-y-4">
                             ${recentHtml}
                         </div>
                     </div>
 
-                    <!-- Library Banner (Redesigned) -->
-                    <div class="group relative overflow-hidden rounded-[2rem] bg-indigo-600 text-white p-8 cursor-pointer shadow-lg shadow-indigo-200 transition-transform hover:scale-[1.01]" onclick="window.location.href='library.html'">
-                        <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600"></div>
-                        <div class="absolute right-0 top-0 opacity-10 transform translate-x-10 -translate-y-10">
-                            <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                    <!-- Hub Arduino Promo Card -->
+                    <div class="relative overflow-hidden rounded-[3rem] bg-indigo-600 text-white p-10 md:p-14 group shadow-2xl shadow-indigo-100 cursor-pointer border border-indigo-400/20" onclick="window.location.href='arduino-projects.html'">
+                        <div class="absolute inset-0 bg-gradient-to-br from-indigo-700 via-indigo-600 to-brand-600 group-hover:scale-105 transition-transform duration-1000"></div>
+                        <div class="absolute -right-20 -bottom-20 opacity-10 transform -rotate-12 group-hover:rotate-0 transition-transform duration-1000">
+                           <img src="/images/logo.png" class="w-[500px]">
                         </div>
-                        <div class="relative z-10 flex gap-6 items-center">
-                            <div>
-                                <h3 class="text-2xl font-display font-bold mb-1">Biblioteca Izicode</h3>
-                                <p class="text-indigo-100 text-sm max-w-md">Acesse centenas de projetos alinhados à BNCC prontos para aplicar.</p>
-                            </div>
+                        <div class="relative z-10">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 mb-6 uppercase text-[10px] font-black tracking-widest">Novos Projetos Disponíveis</div>
+                            <h3 class="text-4xl md:text-5xl font-black mb-6 font-display tracking-tighter leading-[1.1]">Biblioteca Oficial<br>Arduino Izicode</h3>
+                            <p class="text-indigo-100 text-lg md:text-xl max-w-lg mb-8 leading-relaxed font-medium">Acesse esquemas reais, códigos prontos e roteiros pedagógicos alinhados à BNCC para seus alunos.</p>
+                            <span class="inline-flex items-center gap-3 bg-white text-indigo-700 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest group-hover:shadow-2xl transition-all">
+                                Explorar Biblioteca
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sidebar -->
-                <div class="space-y-8">
-                    <!-- Ranking -->
-                    <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="font-bold text-slate-800">Ranking Top 10</h3>
-                            <span class="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">Semanal</span>
+                <!-- Secondary View: Leaderboard & Stats -->
+                <div class="space-y-10">
+                    <!-- Ranking of Masters -->
+                    <div class="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-brand-50 blur-3xl rounded-full -mr-16 -mt-16 group-hover:bg-brand-100 transition-colors"></div>
+                        <div class="flex items-center justify-between mb-8 relative z-10">
+                            <h3 class="font-display font-black text-xl text-slate-800 tracking-tight">Mestres de Elite</h3>
+                            <div class="flex items-center gap-1.5 py-1 px-3 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-100">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                Ao Vivo
+                            </div>
                         </div>
-                        <div class="space-y-1">
+                        <div class="space-y-2 relative z-10">
                              ${leaderboardHtml}
                         </div>
-                        <div class="mt-4 pt-4 border-t border-slate-50 text-center">
-                            <a href="#" class="text-xs font-bold text-slate-400 hover:text-brand-600 transition-colors">Ver ranking completo</a>
+                        <div class="mt-8 pt-6 border-t border-slate-50 text-center relative z-10">
+                            <button class="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-brand-600 transition-colors">Global Ranking</button>
+                        </div>
+                    </div>
+
+                    <!-- Pedagogical Tip of the Day -->
+                    <div id="sidebarTip" class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-[3rem] p-10 border border-amber-100 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-8 text-7xl opacity-5">💡</div>
+                        <span class="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] block mb-4">Insight Maker</span>
+                        <p class="text-amber-900 font-bold leading-relaxed text-lg italic mb-6">"Use o Erro como Ferramenta: Na robótica, um motor que não gira é uma oportunidade de ensinar sobre circuitos, não uma falha."</p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-xl">✨</div>
+                            <span class="text-amber-700/60 text-xs font-black uppercase tracking-widest">#DicaIzicode</span>
                         </div>
                     </div>
                 </div>
@@ -674,31 +831,153 @@ export class DashboardRoleManager {
         `;
     }
 
-    getStudentWidgets() {
-        return `
-            <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg border border-slate-200">
-                <div class="flex items-center gap-2 mb-6">
-                    <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                    </svg>
-                    <h2 class="font-display text-2xl font-bold text-slate-900">Conquistas Recentes</h2>
+    getStudentWidgets(userData = {}, leaderboard = []) {
+        const safeData = userData || {};
+        const missions = safeData.missionsProgress || {};
+        const xp = safeData.xp || 0;
+        const levelInfo = gamificationSystem.calculateLevel(xp);
+        const progress = gamificationSystem.calculateProgress(xp);
+        const earnedBadgesIds = safeData.badges || [];
+
+        // Map badges
+        const badgesHtml = gamificationSystem.badges.map(badge => {
+            const isEarned = earnedBadgesIds.includes(badge.id);
+            const opacity = isEarned ? 'opacity-100 scale-100' : 'opacity-20 scale-90 grayscale';
+            return `
+                <div class="flex flex-col items-center group relative cursor-help">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-slate-50 flex items-center justify-center transition-all duration-500 ${opacity} group-hover:scale-110 shadow-sm border border-slate-100 ${isEarned ? 'text-brand-600' : 'text-slate-300'}">
+                        ${this.getIconSvg(badge.icon)}
+                    </div>
+                    <span class="text-[9px] font-black text-slate-400 mt-2 uppercase tracking-tighter text-center">${badge.name}</span>
+                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-2 bg-slate-900 text-white text-[10px] rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
+                        ${badge.description}
+                        <div class="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-slate-900"></div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="text-center p-4 bg-amber-50 rounded-2xl border border-amber-100">
-                        <div class="text-3xl mb-1">🚀</div>
-                        <p class="text-xs font-bold text-slate-900 line-clamp-1">Explorador</p>
+            `;
+        }).join('');
+
+        return `
+            <!-- Student Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand-500/20 blur-3xl rounded-full -mr-16 -mt-16"></div>
+                    <div class="relative z-10 flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] font-black text-brand-300 uppercase tracking-widest mb-1">Nível Atual</p>
+                            <h3 class="text-5xl font-black font-display tracking-tighter">${levelInfo.level}</h3>
+                            <p class="text-sm font-medium text-slate-400 mt-2">${levelInfo.name}</p>
+                        </div>
+                        <div class="text-brand-500 opacity-40 group-hover:scale-110 transition-transform duration-500">
+                            ${this.getIconSvg(levelInfo.icon)}
+                        </div>
                     </div>
-                    <div class="text-center p-4 bg-brand-50 rounded-2xl border border-brand-100">
-                        <div class="text-3xl mb-1">💡</div>
-                        <p class="text-xs font-bold text-slate-900 line-clamp-1">Inovador</p>
+                    <div class="mt-8">
+                        <div class="flex justify-between text-[10px] font-black uppercase tracking-widest mb-2 text-slate-400">
+                            <span>Progresso</span>
+                            <span>${progress}%</span>
+                        </div>
+                        <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+                            <div class="bg-brand-500 h-full rounded-full transition-all duration-1000" style="width: ${progress}%"></div>
+                        </div>
                     </div>
-                    <div class="text-center p-4 bg-purple-50 rounded-2xl border border-purple-100">
-                        <div class="text-3xl mb-1">🔨</div>
-                        <p class="text-xs font-bold text-slate-900 line-clamp-1">Maker</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Experiência Total</p>
+                        <h3 class="text-4xl font-black text-slate-900">${xp} XP</h3>
                     </div>
-                    <div class="text-center p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
-                        <div class="text-3xl mb-1">🐍</div>
-                        <p class="text-xs font-bold text-slate-900 line-clamp-1">Pythonista</p>
+                    <div class="flex gap-2 mt-6">
+                        <span class="px-3 py-1 bg-green-50 text-green-600 text-[10px] font-black rounded-full border border-green-100 uppercase tracking-tighter">Ativo Hoje</span>
+                        <span class="px-3 py-1 bg-brand-50 text-brand-600 text-[10px] font-black rounded-full border border-brand-100 uppercase tracking-tighter">${earnedBadgesIds.length} Conquistas</span>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-indigo-600 to-brand-600 rounded-[2.5rem] p-8 text-white relative overflow-hidden cursor-pointer hover:shadow-2xl hover:shadow-brand-200 transition-all border border-white/10" onclick="window.location.href='quiz-arena.html'">
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center mb-4">
+                            ${this.getIconSvg('award')}
+                        </div>
+                        <h4 class="text-2xl font-black font-display tracking-tight leading-tight mb-2">Arena de Quiz<br>Desafio Semanal</h4>
+                        <p class="text-brand-100 text-sm font-medium">Ganhe XP dobrado hoje!</p>
+                    </div>
+                    <div class="absolute -right-8 -bottom-8 text-9xl opacity-10 font-black">?</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <!-- Conquistas Section -->
+                <div class="lg:col-span-2 bg-white rounded-[3rem] p-10 border border-slate-100 shadow-sm self-start">
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="font-display text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+                            <span class="w-1.5 h-8 bg-brand-600 rounded-full"></span>
+                            Minhas Insígnias
+                        </h3>
+                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">${earnedBadgesIds.length} / ${gamificationSystem.badges.length}</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                        ${badgesHtml}
+                    </div>
+                </div>
+
+                <!-- Daily Missions -->
+                <div class="space-y-8">
+                    <h3 class="font-display text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+                        <span class="w-1.5 h-8 bg-purple-600 rounded-full"></span>
+                        Missões Diárias
+                    </h3>
+                    <div class="space-y-4">
+                        ${gamificationSystem.dailyMissions.map(mission => {
+            const mProgress = missions[mission.id] || { progress: 0, completed: false };
+            const isDone = mProgress.completed;
+            const target = mission.target || 1;
+            const progressPct = (mProgress.progress / target) * 100;
+
+            return `
+                                <div class="p-5 bg-white rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group hover:border-brand-200 transition-all">
+                                    <div class="flex items-center gap-4 relative z-10">
+                                        <div class="w-12 h-12 rounded-xl ${isDone ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-50 text-slate-600'} flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            ${this.getIconSvg(isDone ? 'check' : (mission.icon || 'star'))}
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-black text-slate-900 mb-0.5">${mission.name}</p>
+                                            <p class="text-[10px] font-medium text-slate-500">${mission.description}</p>
+                                            ${!isDone && target > 1 ? `
+                                                <div class="mt-2 w-full bg-slate-100 h-1 rounded-full overflow-hidden">
+                                                    <div class="bg-brand-500 h-full transition-all duration-500" style="width: ${progressPct}%"></div>
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="block text-xs font-black text-brand-600">+${mission.xp} XP</span>
+                                            ${mission.keys ? `<span class="block text-[8px] font-black text-amber-500 uppercase">🔑 +${mission.keys}</span>` : ''}
+                                        </div>
+                                    </div>
+                                    ${isDone ? '<div class="absolute inset-0 bg-emerald-500/5 backdrop-blur-[1px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><span class="bg-emerald-500 text-white text-[8px] font-black px-3 py-1 rounded-full">CONCLUÍDO</span></div>' : ''}
+                                </div>
+                            `;
+        }).join('')}
+                    </div>
+
+                    <!-- Ranking Preview -->
+                    <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-6 text-4xl opacity-10 rotate-12">🏆</div>
+                        <h4 class="text-xl font-black mb-4 font-display tracking-tight uppercase tracking-widest text-[10px] text-brand-400">TOP Global Alunos</h4>
+                        <div class="space-y-4">
+                            ${leaderboard.length > 0 ? leaderboard.slice(0, 3).map((u, i) => `
+                                <div class="flex items-center gap-4 group">
+                                    <span class="text-lg font-black ${i === 0 ? 'text-amber-400' : i === 1 ? 'text-slate-300' : 'text-amber-700'} w-6">${i + 1}º</span>
+                                    <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center font-bold text-xs uppercase">${u.name?.[0] || 'U'}</div>
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-bold truncate max-w-[120px]">${u.name || 'Anônimo'}</span>
+                                        <span class="text-[8px] uppercase tracking-widest opacity-50">Lvl ${Math.floor((u.xp || 0) / 1000) + 1}</span>
+                                    </div>
+                                    <span class="ml-auto text-xs font-black text-brand-400">${((u.xp || 0) / 1000).toFixed(1)}k XP</span>
+                                </div>
+                            `).join('') : '<p class="text-xs text-slate-500">Nenhum dado no ranking ainda.</p>'}
+                        </div>
+                        <button onclick="window.location.href='ranking.html'" class="w-full mt-6 py-3 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all">Ver Ranking Completo</button>
                     </div>
                 </div>
             </div>
@@ -850,6 +1129,90 @@ export class DashboardRoleManager {
         `;
     }
 
+    getSchoolAdminWidgets(stats) {
+        if (!stats) return '<div class="text-center">Erro ao carregar dados da escola.</div>';
+
+        return `
+            <!-- School Overview Hero -->
+            <div class="bg-slate-900 rounded-[3rem] p-10 md:p-14 text-white shadow-2xl relative overflow-hidden mb-12 border border-white/5">
+                <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-brand-600/30 blur-[150px] rounded-full -mr-48 -mt-48"></div>
+                <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/20 blur-[120px] rounded-full -ml-40 -mb-40"></div>
+                
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+                    <div class="flex items-center gap-8">
+                        <div class="w-24 h-24 rounded-[2rem] bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-4xl shadow-2xl">
+                            🏫
+                        </div>
+                        <div class="text-center md:text-left">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 mb-4">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-brand-100">Status: Instituição Pro</span>
+                            </div>
+                            <h2 class="text-4xl md:text-6xl font-black mb-2 font-display tracking-tighter leading-tight">Gestão Escolar</h2>
+                            <p class="text-slate-400 text-lg md:text-xl font-medium">Monitorando a evolução tecnológica da sua escola.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
+                    <div class="w-16 h-16 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">👨‍🏫</div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Corpo Docente</p>
+                    <p class="text-4xl font-black text-slate-900">${stats.teachers || 0} Professores</p>
+                </div>
+                <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
+                    <div class="w-16 h-16 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">🎓</div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Engajamento Alunos</p>
+                    <p class="text-4xl font-black text-slate-900">${stats.students || 0} Alunos Ativos</p>
+                </div>
+                <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
+                    <div class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">⚡</div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Nível de Inovação</p>
+                    <p class="text-4xl font-black text-slate-900">Elite Maker</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Management Shortcuts -->
+                <div class="space-y-8">
+                    <h3 class="font-display text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+                        <span class="w-1.5 h-8 bg-slate-900 rounded-full"></span>
+                        Ações Administrativas
+                    </h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <a href="school-management.html" class="flex items-center justify-between p-6 bg-white rounded-3xl border border-slate-100 hover:border-brand-300 hover:shadow-lg transition-all group">
+                            <div class="flex items-center gap-5">
+                                <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-xl group-hover:bg-brand-50">👥</div>
+                                <span class="font-black text-slate-800">Gerenciar Professores e Turmas</span>
+                            </div>
+                            <svg class="w-5 h-5 text-slate-400 group-hover:text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                        <a href="library.html" class="flex items-center justify-between p-6 bg-white rounded-3xl border border-slate-100 hover:border-purple-300 hover:shadow-lg transition-all group">
+                            <div class="flex items-center gap-5">
+                                <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-xl group-hover:bg-purple-50">📚</div>
+                                <span class="font-black text-slate-800">Biblioteca Currículo Oficial</span>
+                            </div>
+                            <svg class="w-5 h-5 text-slate-400 group-hover:text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Growth Insight -->
+                <div class="bg-gradient-to-br from-indigo-50 to-brand-50 rounded-[3rem] p-10 border border-indigo-100 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-8 text-7xl opacity-5">📈</div>
+                    <span class="text-[10px] font-black text-indigo-500 uppercase tracking-[0.2em] block mb-4">Relatório de Crescimento</span>
+                    <h4 class="text-2xl font-black text-slate-900 mb-4">Impacto Educacional</h4>
+                    <p class="text-slate-600 font-medium leading-relaxed mb-8">Sua escola atingiu 85% da meta de projetos maker para este semestre. Continue incentivando o uso da IA para criação de roteiros.</p>
+                    <div class="w-full bg-white/50 rounded-full h-4 p-1 border border-indigo-100">
+                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
     getConsultantWidgets() {
         return `
             <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-lg border border-slate-200">
@@ -947,10 +1310,11 @@ export class DashboardRoleManager {
             'dev': ['dashboard', 'library', 'school-management', 'create-project', 'my-projects', 'quiz-arena', 'student-area'],
             'school_admin': ['dashboard', 'library', 'school-management'],
             'freelance_teacher': ['dashboard', 'library', 'create-project', 'my-projects', 'quiz-arena', 'ia-assistant'],
-            'teacher': ['dashboard', 'my-projects', 'library', 'create-project', 'quiz-arena', 'school-management'],
+            'teacher': ['dashboard', 'my-projects', 'library', 'create-project', 'quiz-arena', 'school-management', 'ia-assistant'],
+            'professor-pro': ['dashboard', 'my-projects', 'library', 'create-project', 'quiz-arena', 'school-management', 'ia-assistant'],
             'student': ['dashboard', 'my-projects', 'library', 'student-area', 'quiz-arena'],
             'parent': ['dashboard', 'library', 'quiz-arena', 'student-area'],
-            'consultant': ['dashboard', 'my-projects', 'library', 'create-project']
+            'consultant': ['dashboard', 'my-projects', 'library', 'create-project', 'ia-assistant']
         };
 
         const allowedItems = navItemsMap[this.userRole] || navItemsMap.student;

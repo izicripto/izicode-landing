@@ -16,6 +16,8 @@
         }
       }
     </script>
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="/js/auth-guard.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -231,6 +233,7 @@
 
     <script type="module">
         import { GoogleGenerativeAI } from "@google/generative-ai";
+        import { auth, db, doc, getDoc, updateDoc } from "./js/firebase-config.js";
 
         const chatContainer = document.getElementById('chatContainer');
         const promptInput = document.getElementById('promptInput');
@@ -452,6 +455,32 @@
             promptInput.value = '';
             promptInput.style.height = 'auto';
             sendBtn.disabled = true;
+
+            // Record Mission Progress (AI Explorer)
+            try {
+                const user = auth.currentUser;
+                if (user) {
+                    const userRef = doc(db, "users", user.uid);
+                    const userDoc = await getDoc(userRef);
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        const missions = userData.missionsProgress || {};
+                        const aiMission = missions['ai-explorer'];
+
+                        if (aiMission && !aiMission.completed) {
+                            const updates = {};
+                            updates['missionsProgress.ai-explorer.progress'] = 1;
+                            updates['missionsProgress.ai-explorer.completed'] = true;
+                            updates['missionsProgress.ai-explorer.completedAt'] = new Date();
+                            updates.xp = (userData.xp || 0) + 10;
+                            await updateDoc(userRef, updates);
+                            console.log("AI Explorer Mission Completed!");
+                        }
+                    }
+                }
+            } catch (missionError) {
+                console.warn("Erro ao gravar missão IA:", missionError);
+            }
 
             // Loading
             const loadingId = appendLoading();

@@ -104,39 +104,59 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-slate-50 via-brand-50/30 to-slate-100 min-h-screen">
+<body class="min-h-screen">
+    <div class="fixed inset-0 -z-10 bg-[#f0f9ff]"
+        style="background-image: radial-gradient(at 0% 0%, hsla(203,100%,94%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(199,100%,92%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(190,100%,93%,1) 0, transparent 50%);">
+    </div>
 
     <!-- Sidebar Desktop -->
     <aside
-        class="w-72 bg-white/80 backdrop-blur-xl border-r border-slate-200/50 hidden lg:flex flex-col fixed h-full z-20 shadow-xl">
-        <div class="p-6 border-b border-slate-100">
-            <a href="dashboard.html" class="flex items-center gap-3 group">
+        class="w-72 bg-white/60 backdrop-blur-3xl border-r border-slate-200/50 hidden lg:flex flex-col fixed h-full z-20 shadow-[0_0_50px_rgba(0,0,0,0.03)]">
+        <div class="p-8 border-b border-slate-100/50">
+            <a href="dashboard.html" class="flex items-center gap-4 group">
                 <div
-                    class="bg-brand-50 p-2 rounded-2xl border border-brand-100 group-hover:scale-110 transition-transform">
+                    class="bg-white p-2.5 rounded-[1.25rem] shadow-xl shadow-brand-500/10 border border-brand-100 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500">
                     <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
                 </div>
-                <span class="font-display font-bold text-2xl text-slate-900">Izicode</span>
+                <div class="flex flex-col">
+                    <span
+                        class="font-display font-black text-2xl text-slate-900 tracking-tighter leading-none">Izicode</span>
+                    <span class="text-[10px] font-black text-brand-600 uppercase tracking-[0.2em] mt-1 ml-0.5">Edu
+                        Ecosystem</span>
+                </div>
             </a>
         </div>
 
-        <!-- User Profile -->
-        <div class="p-6 border-b border-slate-100">
-            <div class="flex items-center gap-3">
-                <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff"
-                    class="w-12 h-12 rounded-full border-2 border-brand-200 user-avatar-display">
-                <div class="flex-1 min-w-0">
-                    <p class="font-semibold text-slate-900 truncate user-name-display" id="userName">Carregando...</p>
-                    <div class="flex gap-2 mt-1 flex-wrap">
-                        <span class="text-xs bg-brand-100 text-brand-700 px-2 py-0.5 rounded-full font-medium">Nível
-                            <span id="userLevel">1</span></span>
-                        <span class="text-xs bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full font-medium"><span
-                                id="userXP">0</span> XP</span>
-                        <span
-                            class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium flex items-center gap-1"
-                            title="Chaves Disponíveis">
-                            🗝️ <span id="userKeys">--</span>
-                        </span>
+        <!-- User Profile (Premium Card) -->
+        <div class="px-6 py-8 border-b border-slate-100/50">
+            <div
+                class="bg-white/50 backdrop-blur-md rounded-[2rem] p-5 border border-white shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="relative">
+                        <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff"
+                            class="w-14 h-14 rounded-2xl border-2 border-white shadow-lg user-avatar-display object-cover">
+                        <div
+                            class="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 border-2 border-white rounded-full animate-pulse">
+                        </div>
                     </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-black text-slate-900 truncate user-name-display tracking-tight" id="userName">
+                            Carregando...</p>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Membro
+                            Verificado</p>
+                    </div>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <span
+                        class="text-[9px] bg-slate-900 text-white px-2.5 py-1 rounded-lg font-black uppercase tracking-tighter">LV
+                        <span id="userLevel">1</span></span>
+                    <span
+                        class="text-[9px] bg-brand-50 text-brand-700 px-2.5 py-1 rounded-lg font-black uppercase tracking-tighter"><span
+                            id="userXP">0</span> XP</span>
+                    <span
+                        class="text-[9px] bg-amber-50 text-amber-700 px-2.5 py-1 rounded-lg font-black uppercase tracking-tighter flex items-center gap-1">
+                        🗝️ <span id="userKeys">--</span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -174,6 +194,14 @@
                         d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                 </svg>
                 Gerador IA
+            </a>
+            <a href="ia-assistant.html"
+                class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+                Assistente IA
             </a>
             <a href="quiz-arena.html"
                 class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
@@ -247,29 +275,58 @@
     </div>
 
     <!-- Main Content -->
-    <main class="lg:ml-72 p-6 md:p-10">
-        <!-- Header -->
-        <header class="mb-10">
-            <h1 class="font-display text-4xl md:text-5xl font-bold text-slate-900 mb-2">
-                Olá, <span id="userFirstName" class="user-name-display">Professor</span>!
-            </h1>
-            <p class="text-slate-600 text-lg">Vamos transformar a educação hoje?</p>
+    <main class="lg:ml-72 p-6 md:p-12">
+        <!-- Header Section -->
+        <header class="mb-12 animate-in fade-in slide-in-from-top-4 duration-1000">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 mb-4">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
+                        <span class="text-[9px] font-black uppercase tracking-widest text-brand-700">Painel de Controle
+                            Ativo</span>
+                    </div>
+                    <h1
+                        class="font-display text-5xl md:text-7xl font-black text-slate-900 mb-2 tracking-tighter leading-none">
+                        Olá, <span id="userFirstName" class="user-name-display text-brand-600">Professor</span>!
+                    </h1>
+                    <p class="text-slate-500 text-lg md:text-xl font-medium tracking-tight">Vamos transformar a educação
+                        hoje?</p>
+                </div>
+
+                <div
+                    class="flex items-center gap-4 bg-white/50 backdrop-blur-xl p-3 rounded-[2rem] border border-white shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white text-xl">
+                        🚀</div>
+                    <div class="pr-6">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Plano Atual</p>
+                        <p class="text-sm font-black text-slate-900 tracking-tight">Membro Elite Pro</p>
+                    </div>
+                </div>
+            </div>
         </header>
 
         <!-- Daily Tip Widget -->
         <div id="dailyTipWidget"
-            class="hidden mb-10 bg-white border border-slate-100 rounded-3xl p-6 relative overflow-hidden shadow-sm">
-            <div class="relative z-10 flex items-start gap-4">
-                <div id="tipIcon" class="p-3 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm">
+            class="hidden mb-12 bg-white/60 backdrop-blur-2xl border border-white rounded-[2.5rem] p-8 relative overflow-hidden shadow-sm shadow-brand-500/5 group">
+            <div
+                class="absolute top-0 right-0 w-64 h-64 bg-brand-400/10 blur-3xl rounded-full -mr-32 -mt-32 group-hover:bg-brand-400/20 transition-all duration-1000">
+            </div>
+            <div class="relative z-10 flex items-start gap-8">
+                <div id="tipIcon"
+                    class="w-20 h-20 bg-white rounded-[1.5rem] shadow-xl shadow-brand-500/10 flex items-center justify-center text-4xl group-hover:rotate-6 transition-transform duration-500">
                     <!-- Icon Injected Here -->
                 </div>
-                <div>
-                    <div class="flex items-center gap-2 mb-1">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2">
                         <span id="tipTag"
-                            class="text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded-full">Dica</span>
-                        <h3 id="tipTitle" class="font-display font-bold text-slate-900">Pensamento do Dia</h3>
+                            class="text-[10px] font-black text-brand-600 uppercase tracking-widest bg-brand-50 px-3 py-1 rounded-full border border-brand-100">Insight
+                            do Dia</span>
+                        <h3 id="tipTitle" class="font-display font-black text-xl text-slate-900 tracking-tight">
+                            Pensamento do Dia</h3>
                     </div>
-                    <p id="tipText" class="text-slate-600 italic">"Carregando..."</p>
+                    <p id="tipText" class="text-slate-600 text-lg font-medium leading-relaxed italic pr-12">
+                        "Carregando..."</p>
                 </div>
             </div>
         </div>

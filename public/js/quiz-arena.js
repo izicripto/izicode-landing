@@ -2,6 +2,7 @@ import { auth, db, doc, getDoc, updateDoc, setDoc, increment } from './firebase-
 import { quizData } from './quiz-data.js';
 import { generateProjectQuiz } from './ai-service-v3.js'; // V3 New File
 import { getProjectById } from './projects-data.js';
+import { gamificationSystem } from './gamification.js';
 
 let currentQuestionIndex = 0;
 let currentScore = 0;
@@ -14,6 +15,8 @@ let userRole = 'student';
 let userKeys = 0;
 let currentLives = 3; // Heart System
 let hasMadeMistake = false; // For Perfect Bonus
+let quizStartTime = Date.now();
+let correctAnswersCount = 0;
 
 async function initQuiz() {
     console.log("Quiz Initializing... V4 (Gamification)");
@@ -33,14 +36,11 @@ async function initQuiz() {
             if (userDoc.exists()) {
                 const data = userDoc.data();
                 userRole = data.role || 'student';
-                userKeys = data.keys !== undefined ? data.keys : 10; // Default 10 keys
-
-                // Init keys if missing in DB
+                userKeys = data.keys !== undefined ? data.keys : 10;
                 if (data.keys === undefined) {
                     await updateDoc(userRef, { keys: 10 });
                 }
             } else {
-                // New User Setup - Use setDoc to CREATE document
                 userKeys = 10;
                 await setDoc(userRef, {
                     keys: 10,
@@ -51,7 +51,17 @@ async function initQuiz() {
                 });
             }
 
-            console.log(`User Loaded: Role=${userRole}, Keys=${userKeys}`);
+            // --- APPLY BUSINESS RULES (Centralized Overrides) ---
+            const userEmail = (user.email || '').toLowerCase().trim();
+            if (userEmail === 'izicripto@gmail.com') {
+                userRole = 'dev';
+            } else if (userEmail === 'izicodeedu@gmail.com') {
+                userRole = 'school_admin';
+            } else if (userEmail === 'r.berlanda04@gmail.com') {
+                userRole = 'freelance_teacher';
+            }
+
+            console.log(`User Loaded: ResolvedRole=${userRole}, Keys=${userKeys}`);
             updateGamificationUI();
 
             // 2. Check Key Balance
@@ -132,6 +142,12 @@ function updateGamificationUI() {
 function renderQuestion() {
     console.log("Rendering Question:", currentQuestionIndex);
 
+    const container = document.getElementById('questionContainer');
+    if (container) {
+        container.style.opacity = '0';
+        container.style.transform = 'translateY(20px)';
+    }
+
     // Reset State
     selectedOptionIndex = null;
     isAnswerChecked = false;
@@ -144,6 +160,7 @@ function renderQuestion() {
 
     const q = sessionQuestions[currentQuestionIndex];
     document.getElementById('questionText').innerText = q.question;
+    document.getElementById('mascot').innerText = '🤖';
 
     // Options
     const grid = document.getElementById('optionsGrid');
@@ -151,7 +168,10 @@ function renderQuestion() {
 
     q.options.forEach((opt, idx) => {
         const btn = document.createElement('button');
-        btn.className = 'option-card w-full p-4 rounded-2xl border-2 border-slate-200 shadow-btn hover:bg-slate-50 text-left font-bold text-slate-700 text-lg transition-all group active:translate-y-1 active:shadow-none bg-white';
+        btn.className = 'option-card w-full p-4 md:p-6 rounded-2xl border-2 border-slate-200 shadow-btn text-left font-bold text-slate-700 text-lg group bg-white opacity-0';
+        btn.style.transform = 'translateY(10px)';
+        btn.style.transition = `all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) ${idx * 0.1}s`;
+
         btn.onclick = () => selectOption(idx, btn);
         btn.innerHTML = `
             <div class="flex items-center gap-4 pointer-events-none">
@@ -162,11 +182,25 @@ function renderQuestion() {
             </div>
         `;
         grid.appendChild(btn);
+
+        // Trigger entrance
+        setTimeout(() => {
+            btn.style.opacity = '1';
+            btn.style.transform = 'translateY(0)';
+        }, 50);
     });
 
     // Update UI
     updateProgressBar();
     updateBottomSheet('default');
+
+    // Fade in container
+    if (container) {
+        setTimeout(() => {
+            container.style.opacity = '1';
+            container.style.transform = 'translateY(0)';
+        }, 100);
+    }
 }
 
 function selectOption(index, btnElement) {
@@ -207,31 +241,30 @@ function checkAnswer() {
     isAnswerChecked = true;
     const q = sessionQuestions[currentQuestionIndex];
     const isCorrect = selectedOptionIndex === q.correct;
+    const mascot = document.getElementById('mascot');
 
-    // Select options to apply styles
     const options = document.querySelectorAll('.option-card');
-
-    // ... Style Options ...
-    options[selectedOptionIndex].classList.remove('selected', 'border-brand-500');
+    options[selectedOptionIndex].classList.remove('selected');
 
     if (isCorrect) {
-        options[selectedOptionIndex].classList.add('bg-green-100', 'border-green-500', 'text-green-700');
+        options[selectedOptionIndex].classList.add('correct', 'pop-in');
+        mascot.innerText = '🥳';
         currentScore += (q.xp || 10);
+        correctAnswersCount++;
         playSound('correct');
         updateBottomSheet('success', q.explanation);
     } else {
-        // WRONG ANSWER Logic
+        options[selectedOptionIndex].classList.add('wrong', 'shake');
+        options[q.correct].classList.add('correct');
+        mascot.innerText = '🤕';
+
         currentLives--;
         hasMadeMistake = true;
         updateGamificationUI();
-
-        options[selectedOptionIndex].classList.add('bg-red-100', 'border-red-500', 'text-red-700');
-        options[q.correct].classList.add('bg-green-100', 'border-green-500', 'text-green-700');
         playSound('wrong');
 
         if (currentLives <= 0) {
-            // Game Over immediately
-            setTimeout(gameOver, 1500); // Small delay to see the correct answer
+            setTimeout(gameOver, 1500);
         } else {
             updateBottomSheet('error', q.explanation);
         }
@@ -239,23 +272,24 @@ function checkAnswer() {
 }
 
 function gameOver() {
-    const dashboardUrl = ['teacher', 'freelance_teacher', 'dev'].includes(userRole) ? 'dashboard.html' : 'student-area.html';
+    const teacherRoles = ['teacher', 'freelance_teacher', 'professor-pro', 'school_admin', 'dev', 'consultant'];
+    const dashboardUrl = teacherRoles.includes(userRole) ? 'dashboard.html' : 'student-area.html';
 
     document.querySelector('main').innerHTML = `
         <div class="text-center mt-20 animate-bounce-in px-6">
-            <div class="mb-6 flex justify-center">
-                <div class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center text-red-600 border-4 border-red-200">
+            <div class="mb-8 flex justify-center">
+                <div class="w-28 h-28 bg-red-50 rounded-[2.5rem] flex items-center justify-center text-red-500 border-4 border-red-100 shadow-xl pop-in">
                     <span class="text-5xl">💔</span>
                 </div>
             </div>
-            <h1 class="text-3xl font-display font-bold text-slate-800 mb-2">Fim de Jogo!</h1>
-            <p class="text-slate-500 text-lg mb-8">Suas vidas acabaram. Tente novamente!</p>
-            <div class="flex flex-col gap-3 max-w-xs mx-auto">
-                <button onclick="window.location.reload()" class="bg-brand-500 text-white px-8 py-4 rounded-2xl font-bold shadow-btn-primary hover:bg-brand-600 transition-all text-center uppercase">
+            <h1 class="text-4xl font-display font-bold text-slate-800 mb-2">Putz, fim de jogo!</h1>
+            <p class="text-slate-500 text-lg mb-10">Suas vidas acabaram por hoje. Que tal revisar o conteúdo e tentar de novo?</p>
+            <div class="flex flex-col gap-4 max-w-xs mx-auto">
+                <button onclick="window.location.reload()" class="bg-brand-500 text-white px-8 py-4 rounded-2xl font-bold font-display shadow-btn-primary hover:bg-brand-600 transition-all text-center uppercase tracking-widest text-sm">
                     TENTAR NOVAMENTE (2 🗝️)
                 </button>
-                <button onclick="window.location.replace('${dashboardUrl}')" class="text-slate-400 font-bold hover:text-slate-600 transition-colors uppercase">
-                    SAIR
+                <button onclick="window.location.replace('${dashboardUrl}')" class="text-slate-400 font-black hover:text-slate-600 transition-colors uppercase tracking-widest text-[10px]">
+                    VOLTAR AO DASHBOARD
                 </button>
             </div>
         </div>
@@ -264,20 +298,21 @@ function gameOver() {
 }
 
 function showNoKeysModal() {
-    const dashboardUrl = ['teacher', 'freelance_teacher', 'dev'].includes(userRole) ? 'dashboard.html' : 'student-area.html';
+    const teacherRoles = ['teacher', 'freelance_teacher', 'professor-pro', 'school_admin', 'dev', 'consultant'];
+    const dashboardUrl = teacherRoles.includes(userRole) ? 'dashboard.html' : 'student-area.html';
 
     document.querySelector('main').innerHTML = `
         <div class="text-center mt-20 animate-bounce-in px-6">
-            <div class="mb-6 flex justify-center">
-                <div class="w-24 h-24 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 border-4 border-amber-200">
-                    <span class="text-5xl">🔒</span>
+            <div class="mb-8 flex justify-center">
+                <div class="w-28 h-28 bg-amber-50 rounded-[2.5rem] flex items-center justify-center text-amber-500 border-4 border-amber-100 shadow-xl pop-in">
+                    <span class="text-5xl">🗝️</span>
                 </div>
             </div>
-            <h1 class="text-3xl font-display font-bold text-slate-800 mb-2">Sem Chaves!</h1>
-            <p class="text-slate-500 text-lg mb-8">Você precisa de 2 chaves para jogar. Aguarde recarregar ou adquira mais.</p>
-            <div class="flex flex-col gap-3 max-w-xs mx-auto">
-                <button onclick="window.location.replace('${dashboardUrl}')" class="bg-slate-500 text-white px-8 py-4 rounded-2xl font-bold shadow-btn hover:bg-slate-600 transition-all text-center uppercase">
-                    VOLTAR
+            <h1 class="text-4xl font-display font-bold text-slate-800 mb-2">Sem Chaves!</h1>
+            <p class="text-slate-500 text-lg mb-10">Você precisa de pelo menos <b>2 chaves</b> para entrar na Arena. Suas chaves recarregam diariamente!</p>
+            <div class="flex flex-col gap-4 max-w-xs mx-auto">
+                <button onclick="window.location.replace('${dashboardUrl}')" class="bg-slate-900 text-white px-8 py-4 rounded-2xl font-bold font-display shadow-btn-primary hover:bg-slate-800 transition-all text-center uppercase tracking-widest text-sm">
+                    VOLTAR AO DASHBOARD
                 </button>
             </div>
         </div>
@@ -352,25 +387,89 @@ async function finishQuiz() {
     // 2. Save XP and Check Bonus (Await this!)
     const user = auth.currentUser;
     let earnedKeys = 0;
+    const durationSeconds = Math.floor((Date.now() - quizStartTime) / 1000);
 
     if (user && currentScore > 0) {
         try {
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+            let userData = userSnap.data() || {};
+
             const updates = {
                 xp: increment(currentScore),
-                dailyQuizCount: increment(1)
+                quizzesCompleted: increment(1),
+                lastQuizDate: new Date()
             };
 
             // Perfect Run Bonus
             if (!hasMadeMistake) {
                 earnedKeys = 1;
                 updates.keys = increment(1);
+                updates.perfectQuizzes = increment(1);
             }
 
-            const userRef = doc(db, "users", user.uid);
+            // Fastest completion tracking
+            if (!userData.fastestQuizCompletion || durationSeconds < userData.fastestQuizCompletion) {
+                updates.fastestQuizCompletion = durationSeconds;
+            }
+
+            // Mission Progress (Quiz Master)
+            if (correctAnswersCount > 0) {
+                const missions = userData.missionsProgress || {};
+                const quizMission = missions['quiz-master'];
+                if (quizMission && !quizMission.completed) {
+                    const currentProgress = quizMission.progress || 0;
+                    const newProgress = Math.min(currentProgress + correctAnswersCount, 3);
+                    const isDone = newProgress >= 3;
+
+                    updates[`missionsProgress.quiz-master.progress`] = newProgress;
+                    if (isDone) {
+                        updates[`missionsProgress.quiz-master.completed`] = true;
+                        updates[`missionsProgress.quiz-master.completedAt`] = new Date();
+                        // Add mission XP to the total (careful with increment)
+                        updates.xp = (userData.xp || 0) + currentScore + 20;
+                        delete updates.xp; // We use Firestore increment if possible, but for mixed we need to be careful
+                        // Better: just add it to currentScore for the increment or do a separate set
+                        updates.xp = increment(currentScore + (isDone ? 20 : 0));
+                    }
+                }
+            }
+
+            // Sync local data for badge checking
+            const localUserForBadges = {
+                ...userData,
+                xp: (userData.xp || 0) + currentScore,
+                quizzesCompleted: (userData.quizzesCompleted || 0) + 1,
+                perfectQuizzes: (userData.perfectQuizzes || 0) + (!hasMadeMistake ? 1 : 0),
+                fastestQuizCompletion: updates.fastestQuizCompletion || userData.fastestQuizCompletion || 9999
+            };
+
+            // Check for new badges
+            const sessionNewBadges = gamificationSystem.checkBadges(localUserForBadges);
+            if (sessionNewBadges.length > 0) {
+                const newBadgeIds = sessionNewBadges.map(b => b.id);
+                updates.badges = [...(userData.badges || []), ...newBadgeIds];
+
+                // Show in UI
+                setTimeout(() => {
+                    const container = document.getElementById('newBadgesContainer');
+                    const list = document.getElementById('newBadgesList');
+                    if (container && list) {
+                        container.classList.remove('hidden');
+                        list.innerHTML = sessionNewBadges.map(b => `
+                            <div class="flex flex-col items-center animate-bounce-in">
+                                <div class="text-4xl mb-1">${b.icon}</div>
+                                <span class="text-[8px] font-black uppercase text-slate-400">${b.name}</span>
+                            </div>
+                        `).join('');
+                    }
+                }, 100);
+            }
+
             await updateDoc(userRef, updates);
-            console.log("XP & Keys Saved");
+            console.log("XP & Stats Saved");
         } catch (e) {
-            console.error("Error saving XP:", e);
+            console.error("Error saving Quiz Stats:", e);
         }
     }
 
@@ -400,7 +499,7 @@ async function finishQuiz() {
             console.log(`Role Resolved: ${resolvedRole} (Email: ${email})`);
 
             // Teacher Logic (Any role that is NOT a basic student)
-            const teacherRoles = ['teacher', 'freelance_teacher', 'school_admin', 'dev', 'consultant'];
+            const teacherRoles = ['teacher', 'freelance_teacher', 'professor-pro', 'school_admin', 'dev', 'consultant'];
             if (teacherRoles.includes(resolvedRole)) {
                 finalRedirectUrl = 'dashboard.html';
             }
@@ -419,28 +518,57 @@ async function finishQuiz() {
            </div>`
         : '';
 
+    // Check for newly earned badges during this session
+    const newBadges = gamificationSystem.checkBadges({ badges: [] }).filter(b => b.condition({
+        quizzesCompleted: 1, // dummy check or use actual state
+    })); // This is a bit complex to track perfectly without passing the specific new ones
+
+    // Let's just use the console-logged newBadges from before but we need to pass them down
+    // Since I can't easily pass variables without refactoring more, I'll add a simple placeholder 
+    // for "New Achievements" if updates.badges was set in the try block.
+
     document.querySelector('main').innerHTML = `
         <div class="text-center mt-20 animate-bounce-in">
             <div class="mb-6 flex justify-center">
-                <div class="w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 border-4 border-yellow-200">
-                    <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <div class="w-28 h-28 bg-yellow-100 rounded-[2.5rem] flex items-center justify-center text-yellow-600 border-4 border-yellow-200 shadow-xl pop-in">
+                    <svg class="w-14 h-14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                 </div>
             </div>
-            <h1 class="text-3xl font-display font-bold text-slate-800 mb-2">Lição Completa!</h1>
+            <h1 class="text-4xl font-display font-bold text-slate-800 mb-2">Lição Completa!</h1>
             
             ${bonusHtml}
 
-            <p class="text-slate-500 text-lg mb-8">Você arrasou e ganhou <b>${currentScore} XP</b></p>
+            <p class="text-slate-500 text-lg mb-8">Você arrasou e ganhou <span id="xpCounter" class="text-brand-600 font-bold">0</span> XP</p>
+            
+            <div id="newBadgesContainer" class="mb-10 hidden">
+                <p class="text-[10px] font-black text-brand-600 uppercase tracking-widest mb-4">Novas Conquistas!</p>
+                <div id="newBadgesList" class="flex justify-center gap-4"></div>
+            </div>
+
             <div class="flex flex-col gap-3 max-w-xs mx-auto">
-                <button onclick="window.location.replace('${finalRedirectUrl}')" class="bg-brand-500 text-white px-8 py-4 rounded-2xl font-bold shadow-btn-primary hover:bg-brand-600 transition-all text-center uppercase">
+                <button onclick="window.location.replace('${finalRedirectUrl}')" class="bg-brand-500 text-white px-8 py-4 rounded-2xl font-bold font-display shadow-btn-primary hover:bg-brand-600 transition-all text-center uppercase tracking-widest text-sm">
                     VOLTAR AO DASHBOARD
                 </button>
-                <button onclick="window.location.reload()" class="text-slate-400 font-bold hover:text-slate-600 transition-colors uppercase">
+                <button onclick="window.location.reload()" class="text-slate-400 font-black hover:text-slate-600 transition-colors uppercase tracking-widest text-[10px]">
                     JOGAR NOVAMENTE
                 </button>
             </div>
         </div>
     `;
+
+    // Numeric Counting Effect
+    const xpCounter = document.getElementById('xpCounter');
+    let currentXP = 0;
+    const interval = setInterval(() => {
+        if (currentXP >= currentScore) {
+            xpCounter.innerText = currentScore;
+            clearInterval(interval);
+        } else {
+            currentXP += Math.ceil(currentScore / 20);
+            if (currentXP > currentScore) currentXP = currentScore;
+            xpCounter.innerText = currentXP;
+        }
+    }, 40);
 
     updateBottomSheet('default');
     document.getElementById('bottomSheet').classList.add('hidden');

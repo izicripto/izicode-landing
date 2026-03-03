@@ -20,16 +20,16 @@ export const gamificationSystem = {
 
     // Sistema de níveis
     levels: [
-        { level: 1, name: "Iniciante Curioso", minXP: 0, icon: "🌱", color: "green" },
-        { level: 2, name: "Explorador Digital", minXP: 50, icon: "🔍", color: "blue" },
-        { level: 3, name: "Programador Júnior", minXP: 150, icon: "💻", color: "purple" },
-        { level: 4, name: "Maker em Treinamento", minXP: 300, icon: "🔧", color: "orange" },
-        { level: 5, name: "Maker Júnior", minXP: 500, icon: "🤖", color: "cyan" },
-        { level: 6, name: "Inventor Criativo", minXP: 800, icon: "💡", color: "yellow" },
-        { level: 7, name: "Mestre dos Códigos", minXP: 1200, icon: "🧙", color: "indigo" },
-        { level: 8, name: "Arquiteto de Soluções", minXP: 1800, icon: "🏗️", color: "pink" },
-        { level: 9, name: "Inovador Tech", minXP: 2500, icon: "🚀", color: "red" },
-        { level: 10, name: "Lenda Maker", minXP: 3500, icon: "👑", color: "gold" }
+        { level: 1, name: "Iniciante Curioso", minXP: 0, icon: "level-1", color: "green" },
+        { level: 2, name: "Explorador Digital", minXP: 50, icon: "level-2", color: "blue" },
+        { level: 3, name: "Programador Júnior", minXP: 150, icon: "level-3", color: "purple" },
+        { level: 4, name: "Maker em Treinamento", minXP: 300, icon: "level-4", color: "orange" },
+        { level: 5, name: "Maker Júnior", minXP: 500, icon: "level-5", color: "cyan" },
+        { level: 6, name: "Inventor Criativo", minXP: 800, icon: "level-6", color: "yellow" },
+        { level: 7, name: "Mestre dos Códigos", minXP: 1200, icon: "level-7", color: "indigo" },
+        { level: 8, name: "Arquiteto de Soluções", minXP: 1800, icon: "level-8", color: "pink" },
+        { level: 9, name: "Inovador Tech", minXP: 2500, icon: "level-9", color: "red" },
+        { level: 10, name: "Lenda Maker", minXP: 3500, icon: "level-10", color: "gold" }
     ],
 
     // Sistema de badges/conquistas
@@ -39,7 +39,7 @@ export const gamificationSystem = {
             id: "first-steps",
             name: "Primeiros Passos",
             description: "Complete seu primeiro desafio",
-            icon: "🎯",
+            icon: "target",
             rarity: "common",
             condition: (user) => user.challengesCompleted >= 1
         },
@@ -47,7 +47,7 @@ export const gamificationSystem = {
             id: "early-bird",
             name: "Madrugador",
             description: "Faça login 3 dias seguidos",
-            icon: "🌅",
+            icon: "sun",
             rarity: "common",
             condition: (user) => user.loginStreak >= 3
         },
@@ -57,7 +57,7 @@ export const gamificationSystem = {
             id: "scratch-novice",
             name: "Aprendiz Scratch",
             description: "Complete 3 desafios de Scratch",
-            icon: "🐱",
+            icon: "code",
             rarity: "common",
             condition: (user) => user.scratchChallenges >= 3
         },
@@ -65,7 +65,7 @@ export const gamificationSystem = {
             id: "scratch-master",
             name: "Mestre do Scratch",
             description: "Complete 10 desafios de Scratch",
-            icon: "🐱‍👤",
+            icon: "star",
             rarity: "rare",
             condition: (user) => user.scratchChallenges >= 10
         },
@@ -73,7 +73,7 @@ export const gamificationSystem = {
             id: "arduino-wizard",
             name: "Mago do Arduino",
             description: "Complete 5 desafios de Arduino",
-            icon: "⚡",
+            icon: "bolt",
             rarity: "rare",
             condition: (user) => user.arduinoChallenges >= 5
         },
@@ -81,7 +81,7 @@ export const gamificationSystem = {
             id: "microbit-hero",
             name: "Herói do Micro:bit",
             description: "Complete 5 desafios de Micro:bit",
-            icon: "🤖",
+            icon: "bot",
             rarity: "rare",
             condition: (user) => user.microbitChallenges >= 5
         },
@@ -91,7 +91,7 @@ export const gamificationSystem = {
             id: "perfectionist",
             name: "Perfeccionista",
             description: "Acerte 5 desafios de primeira",
-            icon: "💯",
+            icon: "check-circle",
             rarity: "epic",
             condition: (user) => user.firstTryWins >= 5
         },
@@ -99,7 +99,7 @@ export const gamificationSystem = {
             id: "speed-demon",
             name: "Velocista",
             description: "Complete um desafio em menos de 5 minutos",
-            icon: "⚡",
+            icon: "clock",
             rarity: "rare",
             condition: (user) => user.fastestCompletion <= 300
         },
@@ -109,7 +109,7 @@ export const gamificationSystem = {
             id: "helpful-hand",
             name: "Mão Amiga",
             description: "Ajude 5 colegas no fórum",
-            icon: "🤝",
+            icon: "users",
             rarity: "rare",
             condition: (user) => user.helpCount >= 5
         },
@@ -119,7 +119,7 @@ export const gamificationSystem = {
             id: "weekend-warrior",
             name: "Guerreiro de Fim de Semana",
             description: "Complete desafios em 4 fins de semana",
-            icon: "🎮",
+            icon: "gamepad",
             rarity: "epic",
             condition: (user) => user.weekendSessions >= 4
         },
@@ -127,7 +127,7 @@ export const gamificationSystem = {
             id: "night-owl",
             name: "Coruja Noturna",
             description: "Complete um desafio após 22h",
-            icon: "🦉",
+            icon: "moon",
             rarity: "uncommon",
             condition: (user) => user.lateNightCompletions >= 1
         },
@@ -135,9 +135,43 @@ export const gamificationSystem = {
             id: "legend",
             name: "Lenda Viva",
             description: "Alcance o nível 10",
-            icon: "👑",
+            icon: "crown",
             rarity: "legendary",
             condition: (user) => user.level >= 10
+        },
+
+        // --- Badges de Quiz (New) ---
+        {
+            id: "quiz-starter",
+            name: "Primeiro Quiz",
+            description: "Complete seu primeiro Quiz",
+            icon: "file-text",
+            rarity: "common",
+            condition: (user) => user.quizzesCompleted >= 1
+        },
+        {
+            id: "quiz-perfect",
+            name: "Gênio do Quiz",
+            description: "Acerte 100% das questões em um Quiz",
+            icon: "brain",
+            rarity: "rare",
+            condition: (user) => user.perfectQuizzes >= 1
+        },
+        {
+            id: "quiz-marathon",
+            name: "Maratonista de Quizzes",
+            description: "Complete 10 Quizzes diferentes",
+            icon: "medal",
+            rarity: "epic",
+            condition: (user) => user.quizzesCompleted >= 10
+        },
+        {
+            id: "quiz-lightning",
+            name: "Relâmpago do Quiz",
+            description: "Responda um Quiz em tempo recorde",
+            icon: "zap",
+            rarity: "rare",
+            condition: (user) => user.fastestQuizCompletion <= 60 // 1 minute
         }
     ],
 
@@ -199,28 +233,38 @@ export const gamificationSystem = {
             name: 'Explorador Diário',
             description: 'Entre na plataforma hoje',
             xp: 5,
-            keys: 1, // Reward 1 key
+            keys: 1,
             icon: 'check',
-            type: 'login'
+            type: 'login',
+            target: 1
         },
         {
             id: 'quiz-master',
             name: 'Mestre dos Quizzes',
-            description: 'Acerte 3 perguntas no Quiz',
+            description: 'Acerte 3 questões em qualquer Quiz',
             xp: 20,
-            keys: 2, // Reward 2 keys
+            keys: 2,
             icon: 'quiz',
             type: 'quiz',
             target: 3
         },
         {
+            id: 'ai-explorer',
+            name: 'Pioneiro Claude',
+            description: 'Interaja com o Assistente IA',
+            xp: 10,
+            icon: 'ai',
+            type: 'ai',
+            target: 1
+        },
+        {
             id: 'project-builder',
-            name: 'Construtor',
-            description: 'Avance 10% em qualquer projeto',
+            name: 'Arquiteto Master',
+            description: 'Crie ou edite um projeto/planejamento',
             xp: 30,
             icon: 'build',
             type: 'project',
-            target: 10
+            target: 1
         }
     ],
 

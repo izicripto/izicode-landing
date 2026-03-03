@@ -709,6 +709,24 @@ Crie um roteiro de aula detalhado baseado nas informações abaixo:
                     createdAt: serverTimestamp()
                 });
 
+                // Record Mission Progress (Project Builder)
+                const userRef = doc(db, "users", currentUser.uid);
+                const userDoc = await getDoc(userRef);
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    const missions = userData.missionsProgress || {};
+                    const projectMission = missions['project-builder'];
+
+                    if (projectMission && !projectMission.completed) {
+                        const updates = {};
+                        updates['missionsProgress.project-builder.progress'] = 1; // Target is 1
+                        updates['missionsProgress.project-builder.completed'] = true;
+                        updates['missionsProgress.project-builder.completedAt'] = new Date();
+                        updates.xp = (userData.xp || 0) + 30; // +30 XP from mission
+                        await updateDoc(userRef, updates);
+                    }
+                }
+
                 alert("Planejamento salvo com sucesso!");
                 window.location.href = "my-projects.html";
             } catch (error) {

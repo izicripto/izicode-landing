@@ -253,6 +253,18 @@ export class ChallengeManager {
     }
 
     /**
+     * Buscar desafios criados por um professor específico
+     */
+    static async getTeacherChallenges(teacherId) {
+        const q = query(
+            collection(db, 'challenges'),
+            where('createdBy', '==', teacherId)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
+
+    /**
      * Buscar desafio por ID
      */
     static async getChallenge(challengeId) {

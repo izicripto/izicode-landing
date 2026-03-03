@@ -12,44 +12,141 @@ export const projects = [
         difficulty: "Intermediário",
         duration: "4 aulas",
         grade: "Ensino Fundamental II (8º e 9º ano)",
-        image: "arduino-robot",
+        image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 9 - Indústria, Inovação e Infraestrutura",
         bncc: ["EF08TEC04", "EF09TEC01"],
+        schematic: "https://docs.arduino.cc/static/6df7cf50811eef2506253761cc27e467/A000066-schematic.pdf", // Link to schematic or placeholder image
+        hardwareDiagram: "https://docs.arduino.cc/static/f58d249f086888c3a5062340-pinout.png",
+        softwareFlow: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&q=80&w=800", // Logical flow visual
+        teacherGuide: {
+            objective: "Ensinar lógica de controle em malha fechada e calibração de sensores analógicos.",
+            skills: ["Resolução de problemas", "Pensamento Algorítmico", "Colaboração"],
+            assessment: "O robô consegue completar uma volta completa em menos de 30 segundos?"
+        },
+        hacksterLink: "https://www.hackster.io/Pj.gour/line-follower-robot-arduino-b10bf4",
+        stepImages: [
+            "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1555664424-778a1e5e1b48?auto=format&fit=crop&q=80&w=800"
+        ],
         content: `
-# Robô Seguidor de Linha
+# Robô Seguidor de Linha (Guia Completo)
 
-## 🎯 Visão Geral
-Nesta atividade de robótica móvel, os alunos constroem e programam um veículo capaz de navegar autonomamente. É uma introdução perfeita ao mundo dos algoritmos de controle e sensores de precisão, simulando tecnologias reais como carros autônomos e robôs de logística em armazéns.
+## 🎯 Visão Geral do Tutorial
+Este projeto transforma um chassi mecânico em um robô inteligente capaz de tomar decisões em tempo real. Utilizando sensores infravermelhos (IR), o robô detecta o contraste entre uma linha preta (que absorve luz) e uma superfície branca (que reflete luz), ajustando a velocidade dos motores para manter-se no trajeto.
 
-## 🎓 Objetivos de Aprendizagem
-- **Cultura Digital:** Compreender como sensores transformam sinais físicos (luz) em dados digitais.
-- **Pensamento Científico:** Aplicar o método de tentativa e erro para calibrar a sensibilidade dos sensores.
-- **Socioemocional:** Trabalhar em equipe para resolver falhas mecânicas e lógicas durante o teste.
+## 🔩 Materiais e Componentes
+- 1x **Arduino Uno R3** (o "cérebro" do robô)
+- 1x **Driver de Motor L298N** (permite controlar a direção e velocidade)
+- 2x **Sensores Infravermelhos TCRT5000**
+- 1x **Chassi Robótico** de 2 rodas + Roda boba
+- 2x **Motores DC (3-6V)** com caixa de redução
+- 1x **Suporte para 4 Pilhas AA** ou Bateria Li-Ion 7.4V
+- Jumpers Macho-Macho e Macho-Fêmea
 
-## 📦 Materiais Detalhados
-- **Arduino Uno:** O "cérebro" do robô.
-- **Driver L298N:** Essencial para controlar a potência e direção dos motores DC.
-- **Sensores TCRT5000:** Módulos infravermelhos que detectam a linha preta.
-- **Bateria Li-Ion ou 2x 18650:** Recomendado para maior autonomia e torque nos motores.
+## 🛠️ Passo a Passo da Montagem
 
-## 🚀 Passo a Passo Pedagógico
-### 1. Montagem do Chassi
-Fixe os motores e o apoio frontal (roda boba). Certifique-se de que os sensores de linha fiquem o mais próximo possível do chão (cerca de 3mm a 5mm) para uma leitura precisa.
+### 1. Preparação do Chassi
+Fixe os dois motores DC nas laterais do chassi usando os suportes em "T". Certifique-se de que os eixos estejam alinhados para que o robô não ande "torto". Instale a roda boba (caster wheel) na parte frontal para dar estabilidade.
 
-### 2. Conexões Elétricas
-- Ligue os motores ao driver.
-- Conecte o driver às portas digitais do Arduino (5, 6, 9, 10).
-- Alimente o Arduino e o Driver pela mesma fonte (GND comum).
+### 2. Instalação do Cérebro e Driver
+Monte o Arduino e o Driver L298N na parte superior do chassi. Use parafusos ou fita dupla face de alta resistência. **Dica:** Deixe o conector USB do Arduino voltado para fora para facilitar a programação futura.
 
-### 3. Programação e Calibração
-Carregue o código e observe o comportamento. **Dica Técnica:** Se o robô girar no sentido contrário, inverta os fios de um dos motores no driver. Use os potenciômetros nos sensores para ajustar a detecção conforme a luz da sua sala.
+### 3. Posicionamento dos Sensores IR
+Fixe os dois sensores TCRT5000 na parte frontal inferior do chassi. Eles devem estar posicionados a uma distância de aproximadamente **3mm a 5mm do chão**. A distância entre os dois sensores deve ser ligeiramente maior que a largura da fita isolante preta que você usará como pista.
 
-## 📝 Avaliação e Reflexão
-Ao final, peça para os alunos explicarem: Por que o robô "balança" ao seguir a linha? Como o valor lido pelo sensor afeta a velocidade das rodas?
+## ⚙️ Esquema de Ligação (Wiring)
 
-## 🌟 Desafios de Expansão
-- **Nível Ninja:** Implementar um controle PID simples para que o movimento seja suave e menos "truncado".
-- **Obstáculo:** Adicionar um sensor ultrassônico para que o robô pare se encontrar algo no caminho.
+### Conexão do Driver L298N:
+- **OUT1 / OUT2:** Motor Esquerdo
+- **OUT3 / OUT4:** Motor Direito
+- **12V In:** Positivo da Bateria
+- **GND In:** Negativo da Bateria + GND do Arduino (Crucial!)
+- **5V In:** Alimenta o Arduino (Pino Vin ou 5V)
+
+### Conexão dos Sensores:
+- **VCC:** 5V do Arduino
+- **GND:** GND do Arduino
+- **Digital Out (Esq):** Pino 2 do Arduino
+- **Digital Out (Dir):** Pino 3 do Arduino
+
+## 💻 Programação e Lógica
+A lógica baseia-se em quatro estados simples:
+1. **Ambos brancos:** Segue em frente.
+2. **Esquerda preto, Direita branco:** Vira para a esquerda.
+3. **Direita preto, Esquerda branco:** Vira para a direita.
+4. **Ambos preto:** Para ou reduz a velocidade (fim de linha).
+
+\`\`\`cpp
+// Pinos de controle dos motores
+const int motorE_frente = 5; 
+const int motorE_tras = 6;
+const int motorD_frente = 9;
+const int motorD_tras = 10;
+
+// Pinos dos sensores
+const int sensorE = 2;
+const int sensorD = 3;
+
+void setup() {
+  pinMode(motorE_frente, OUTPUT);
+  pinMode(motorE_tras, OUTPUT);
+  pinMode(motorD_frente, OUTPUT);
+  pinMode(motorD_tras, OUTPUT);
+  pinMode(sensorE, INPUT);
+  pinMode(sensorD, INPUT);
+}
+
+void loop() {
+  int leituraE = digitalRead(sensorE);
+  int leituraD = digitalRead(sensorD);
+
+  if(leituraE == LOW && leituraD == LOW) { // Branco / Branco
+    moverFrente();
+  } 
+  else if(leituraE == HIGH && leituraD == LOW) { // Preto / Branco
+    virarEsquerda();
+  }
+  else if(leituraE == LOW && leituraD == HIGH) { // Branco / Preto
+    virarDireita();
+  }
+  else {
+    parar();
+  }
+}
+
+void moverFrente() {
+  digitalWrite(motorE_frente, HIGH);
+  digitalWrite(motorE_tras, LOW);
+  digitalWrite(motorD_frente, HIGH);
+  digitalWrite(motorD_tras, LOW);
+}
+
+void virarEsquerda() {
+  digitalWrite(motorE_frente, LOW);
+  digitalWrite(motorE_tras, LOW);
+  digitalWrite(motorD_frente, HIGH);
+  digitalWrite(motorD_tras, LOW);
+}
+
+void virarDireita() {
+  digitalWrite(motorE_frente, HIGH);
+  digitalWrite(motorE_tras, LOW);
+  digitalWrite(motorD_frente, LOW);
+  digitalWrite(motorD_tras, LOW);
+}
+
+void parar() {
+  digitalWrite(motorE_frente, LOW);
+  digitalWrite(motorE_tras, LOW);
+  digitalWrite(motorD_frente, LOW);
+  digitalWrite(motorD_tras, LOW);
+}
+\`\`\`
+
+## ⚠️ Calibração e Dicas Finais
+- **Ajuste de Sensibilidade:** Use a chave de fenda pequena para girar o potenciômetro azul nos sensores IR. O LED de sinal deve acender apenas quando o sensor estiver sobre a fita preta.
+- **Inversão de Motores:** Se o robô girar para o lado errado, basta inverter os dois fios do motor correspondente no conector do Driver L298N.
 `
     },
     {
@@ -60,9 +157,14 @@ Ao final, peça para os alunos explicarem: Por que o robô "balança" ao seguir 
         difficulty: "Básico",
         duration: "2 aulas",
         grade: "Ensino Fundamental I (3º ao 5º ano)",
-        image: "scratch-game",
+        image: "https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 12 - Consumo e Produção Responsáveis",
         bncc: ["EF05CI04", "EF15AR26"],
+        teacherGuide: {
+            objective: "Introduzir os fundamentos da lógica de programação (colisão e variáveis) aplicada à conscientização ambiental.",
+            skills: ["Pensamento Sistêmico", "Consciência Ecológica", "Lógica de Blocos"],
+            assessment: "O aluno conseguiu implementar a lógica onde o lixo desaparece ao tocar na lixeira correta?"
+        },
         content: `
 # Jogo da Reciclagem no Scratch
 
@@ -96,9 +198,14 @@ Incentive os alunos a buscarem sons reais (como garrafas quebrando ou papel amas
         difficulty: "Básico",
         duration: "3 aulas",
         grade: "Ensino Fundamental II (6º e 7º ano)",
-        image: "microbit-weather",
+        image: "https://images.unsplash.com/photo-1590055531615-f16d3698cc88?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 13 - Ação Contra a Mudança Global do Clima",
         bncc: ["EF06CI13", "EF07TEC02"],
+        teacherGuide: {
+            objective: "Ensinar a coleta e interpretação de dados ambientais reais usando sensores digitais.",
+            skills: ["Análise de Dados", "Investigação Científica", "Alfabetização Climática"],
+            assessment: "Os alunos conseguem explicar a relação entre a luz medida e a variação da temperatura no experimento?"
+        },
         content: `
 # Estação Meteorológica com Micro:bit
 
@@ -131,9 +238,14 @@ Peça aos grupos para medirem a temperatura em diferentes locais: perto da janel
         difficulty: "Iniciante",
         duration: "1 aula",
         grade: "Ensino Fundamental I (Todas as idades)",
-        image: "makeymakeyy",
+        image: "https://images.unsplash.com/photo-1550985543-f47f38aee65e?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF15AR13", "EF04CI01"],
+        teacherGuide: {
+            objective: "Explorar a condutividade elétrica de materiais orgânicos e fechar circuitos usando o corpo humano.",
+            skills: ["Criatividade Musical", "Circuitos Básicos", "Curiosidade Científica"],
+            assessment: "O grupo conseguiu identificar quais frutas conduzem eletricidade e quais não?"
+        },
         content: `
 # Piano de Frutas com Makey Makey
 
@@ -172,9 +284,14 @@ Esta é a experiência "WAW" definitiva para introduzir eletrônica. Transformam
         difficulty: "Intermediário",
         duration: "5 aulas",
         grade: "Ensino Fundamental II e Médio",
-        image: "tinkercad-city",
+        image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 11 - Cidades e Comunidades Sustentáveis",
         bncc: ["EF09CI13", "EM13MAT307"],
+        teacherGuide: {
+            objective: "Projetar soluções urbanas usando modelagem 3D, integrando conceitos de geometria e sustentabilidade.",
+            skills: ["Visão Espacial", "Design Thinking", "Urbanismo Sustentável"],
+            assessment: "O projeto final contempla pelo menos duas soluções de energia renovável ou gestão de resíduos?"
+        },
         content: `
 # Cidade Inteligente e Sustentável no Tinkercad
 
@@ -206,7 +323,7 @@ Exporte os modelos em formato \`.STL\`. Se a escola possuir uma impressora 3D, i
         difficulty: "Iniciante",
         duration: "2 aulas",
         grade: "Ensino Médio",
-        image: "python",
+        image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 9 - Inovação",
         bncc: ["EM13TEC04", "EM13MAT403"],
         content: `
@@ -268,7 +385,7 @@ O Chatbot "pensa" de verdade ou ele apenas reage ao que foi programado? Como pod
         difficulty: "Básico",
         duration: "2 aulas",
         grade: "Ensino Fundamental II (6º ano)",
-        image: "arduino-traffic",
+        image: "https://images.unsplash.com/photo-1521791136064-7986c2923216?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 11 - Cidades Sustentáveis",
         bncc: ["EF06CI04"],
         content: `
@@ -318,7 +435,7 @@ void loop() {
         difficulty: "Básico",
         duration: "2 aulas",
         grade: "Ensino Fundamental I (4º e 5º ano)",
-        image: "scratch-game",
+        image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF04MA16"],
         content: `
@@ -347,7 +464,7 @@ Recrie um dos primeiros videogames da história. O objetivo é controlar uma raq
         difficulty: "Básico",
         duration: "1 aula",
         grade: "Ensino Fundamental II (6º ano)",
-        image: "microbit-compass",
+        image: "https://images.unsplash.com/photo-1519709042477-8d67af318bc5?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 9 - Inovação",
         bncc: ["EF06CI13"],
         content: `
@@ -382,7 +499,7 @@ O que acontece se você aproximar um imã ou um celular da bússola? Os dados co
         difficulty: "Avançado",
         duration: "6 aulas",
         grade: "Ensino Médio",
-        image: "arduino-robot",
+        image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 9 - Indústria e Inovação",
         bncc: ["EM13TEC03"],
         content: `
@@ -813,7 +930,7 @@ Crie um radar de velocidade para carrinhos de brinquedo!
         difficulty: "Intermediário",
         duration: "3 aulas",
         grade: "Ensino Médio",
-        image: "python",
+        image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 9 - Inovação",
         content: `
 # Primeiros Passos com Raspberry Pi
@@ -840,7 +957,7 @@ Diferente do Arduino, o Raspberry Pi é um computador completo. Neste projeto, o
         difficulty: "Muito Difícil",
         duration: "5 aulas",
         grade: "Ensino Médio e Técnico",
-        image: "raspberry-pi",
+        image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=800", // Gaming/Hardware
         ods: "ODS 9 - Indústria, Inovação e Infraestrutura",
         bncc: ["EM13MAT315", "EM13LGG701"],
         content: `
@@ -870,6 +987,335 @@ Discuta com a turma: Qual a importância de preservar jogos antigos? Por que exi
 ## 🚀 Desafios de Engenharia
 - **Case Personalizada:** Projete uma carcaça que comporte ventiladores de resfriamento (coolers) para evitar o superaquecimento durante longas sessões de jogo.
 - **Arcade Portátil:** Tente alimentar o Raspberry Pi com uma PowerBank e conectar uma tela LCD pequena para criar um GameBoy gigante!
+`
+    },
+    {
+        id: "horta-iot-cloud",
+        title: "Horta Inteligente IoT",
+        description: "Monitore a umidade da sua horta de qualquer lugar do mundo usando o Arduino IoT Cloud e receba alertas no celular.",
+        tools: ["Arduino", "IoT Cloud"],
+        difficulty: "Intermediário",
+        duration: "4 aulas",
+        grade: "Ensino Fundamental II e Médio",
+        image: "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&q=80&w=800",
+        ods: "ODS 2 - Fome Zero",
+        bncc: ["EF08TEC04", "EM13TEC04"],
+        schematic: "https://docs.arduino.cc/static/219323c2a0ba-schematic.pdf",
+        hardwareDiagram: "https://docs.arduino.cc/static/f16216628859-mkr-pinout.png",
+        softwareFlow: "https://images.unsplash.com/photo-1454165833767-027ffea30c4b?auto=format&fit=crop&q=80&w=800",
+        teacherGuide: {
+            objective: "Explorar a automação aplicada à sustentabilidade e monitoramento remoto via IoT.",
+            skills: ["Domínio de ferramentas cloud", "Eletrônica aplicada", "Análise de dados"],
+            assessment: "O sistema envia dados corretamente para o dashboard e ativa a bomba no limiar definido?",
+            hacksterLink: "https://www.hackster.io/mishraanurag/smart-garden-iot-cloud-8275e5"
+        },
+        stepImages: [
+            "https://images.unsplash.com/photo-1592150621124-3c344a39a5ec?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1530836361253-219323c2a0ba?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1516216628859-9bccecca29ca?auto=format&fit=crop&q=80&w=800"
+        ],
+        content: `
+# Horta Inteligente IoT (Official Cloud Project)
+
+## 🌿 Visão Geral do Projeto
+Este projeto utiliza a tecnologia **Arduino IoT Cloud** para criar um sistema de monitoramento agrícola inteligente. O objetivo é automatizar o cuidado com as plantas, garantindo que elas recebam água apenas quando necessário e permitindo que o usuário monitore a saúde do jardim de qualquer lugar do mundo através de um smartphone.
+
+## 🔩 Materiais Necessários
+- 1x **Arduino MKR WiFi 1010** ou **Arduino Nano 33 IoT**
+- 1x **Sensor de Umidade do Solo** (Analógico)
+- 1x **Módulo Relé 5V** (para controlar a bomba)
+- 1x **Mini Bomba de Água Submersível**
+- 1x Fonte de Alimentação 9V ou 12V
+- Mangueira de silicone e reservatório de água
+
+## 🛠️ Configuração da Arduino IoT Cloud
+
+### 1. Criando a "Thing"
+Acesse o portal [Arduino Cloud](https://create.arduino.cc/iot) e crie uma nova **Thing** chamada "Minha Horta". Associe sua placa (Device) através do assistente de configuração.
+
+### 2. Definindo as Variáveis Cloud
+Adicione as seguintes variáveis:
+- \`umidade_solo\` (Tipo: Integer, Permissão: Read Only)
+- \`bomba_status\` (Tipo: Boolean, Permissão: Read & Write)
+- \`rega_automatica\` (Tipo: Boolean, Permissão: Read & Write)
+
+### 3. Criando o Dashboard
+Monte um painel visual com os seguintes widgets:
+- **Gauge:** Conectado à variável \`umidade_solo\`.
+- **Switch:** Conectado à variável \`bomba_status\`.
+- **Messenger:** Para receber alertas de falta de água.
+
+## ⚙️ Esquema de Ligação (Hardware)
+
+1. **Sensor de Umidade:** VCC -> VCC, GND -> GND, Sinal -> Pino **A1**.
+2. **Módulo Relé:** VCC -> VCC, GND -> GND, IN -> Pino **D2**.
+3. **Bomba:** Conecte o fio positivo da bomba no terminal **Comum** (C) do relé e a fonte de energia no terminal **Normalmente Aberto** (NO). Isso garante que a bomba só ligue quando o Arduino enviar um sinal.
+
+## 💻 Programação IoT
+
+O código na Arduino Cloud é gerado automaticamente com os segredos de rede (WiFi), você só precisa preencher a lógica principal no \`thingProperties.h\` e no loop:
+
+\`\`\`cpp
+#include "thingProperties.h"
+
+void setup() {
+  Serial.begin(9600);
+  initProperties();
+  ArduinoCloud.begin(ArduinoIoTPreferredConnection);
+  
+  pinMode(2, OUTPUT); // Pino do Relé
+  setDebugMessageLevel(2);
+  ArduinoCloud.printDebugInfo();
+}
+
+void loop() {
+  ArduinoCloud.update();
+  
+  // Leitura do Sensor
+  int valorAnalogico = analogRead(A1);
+  umidade_solo = map(valorAnalogico, 1023, 0, 0, 100); // Converte para %
+  
+  // Lógica de Rega Automática
+  if (rega_automatica && umidade_solo < 30) {
+    onBombaStatusChange(); // Liga a bomba
+  }
+}
+
+void onBombaStatusChange()  {
+  if (bomba_status) {
+    digitalWrite(2, HIGH);
+    Serial.println("Bomba Ativada via Cloud");
+  } else {
+    digitalWrite(2, LOW);
+    Serial.println("Bomba Desligada");
+  }
+}
+\`\`\`
+
+## 🚀 Dicas de Uso
+- **Calibração:** Mergulhe o sensor em um copo com água para ver o valor máximo e deixe secar para o valor mínimo. Ajuste a função \`map()\` se necessário.
+- **Segurança:** Nunca deixe as conexões expostas à água. Use uma caixa estanque para proteger a eletrônica.
+`
+    },
+    {
+        id: "alarme-cloud-iot",
+        title: "Segurança Residencial IoT",
+        description: "Crie um sistema de alarme que avisa no seu dashboard se uma porta for aberta, usando sensores magnéticos e nuvem.",
+        tools: ["Arduino", "IoT Cloud"],
+        difficulty: "Intermediário",
+        duration: "3 aulas",
+        grade: "Ensino Médio",
+        image: "arduino-alarm",
+        ods: "ODS 11 - Cidades Inteligentes",
+        bncc: ["EM13TEC05"],
+        content: `
+# Alarme Residencial via Cloud API
+
+## 🏠 Visão Geral
+Aprenda a aplicar a **API do Arduino IoT Cloud** em cenários de segurança patrimonial. O foco é na baixa latência e na confiabilidade da conexão para monitoramento de estados críticos.
+
+## 🎓 Objetivos de Aprendizagem
+- **Event-Driven Programming:** Entender como as funções \`onVariableChange\` agem como gatilhos para ações.
+- **Log de Eventos:** Utilizar a nuvem para manter um histórico de quando o alarme foi acionado.
+- **Segurança Digital:** Discutir a importância da criptografia em dispositivos IoT residenciais.
+
+## 🛠️ Atividades Práticas
+1. **Configuração de Hardware:** Use um sensor magnético (Reed Switch) e um Buzzer.
+2. **Setup Cloud:** Crie uma variável \`alarme_ativo\` e uma \`intrusao_detectada\`.
+3. **Dashboard:** Crie um painel com um botão grande de "PÂNICO" que ativa o buzzer remotamente.
+
+## 💡 Dica Técnica (API Sync)
+Use o método \`ArduinoCloud.update()\` com frequência no loop para garantir que o dispositivo e a nuvem estejam sempre sincronizados sem bloqueios de tempo (\`delay\` é proibido aqui, use \`millis\`).
+`
+    },
+    {
+        id: "api-rest-arduino",
+        title: "Dashboard Web com API Cloud",
+        description: "Aprenda a consumir dados do Arduino IoT Cloud em um site externo usando a API REST oficial (arduino.cc), criando sua própria interface personalizada.",
+        tools: ["API Cloud", "Javascript", "Python"],
+        difficulty: "Avançado",
+        duration: "5 aulas",
+        grade: "Ensino Médio e Técnico",
+        image: "python",
+        ods: "ODS 9 - Inovação",
+        bncc: ["EM13TEC04"],
+        content: `
+# Dashboard Personalizado via API REST Arduino
+
+## 🌐 Visão Geral
+Nesta aula avançada, saímos do ambiente fechado dos Dashboards do Arduino e aprendemos a conectar nossos dados de hardware a qualquer lugar da internet usando a **API REST oficial (cloud-api.arduino.cc)**. É o passo final para transformar um projeto de robótica em uma solução de mercado.
+
+## 🎓 Objetivos de Aprendizagem
+- **Autenticação OAuth2:** Aprender como obter e usar IDs de cliente e Segredos para acesso seguro.
+- **Requisições HTTP (GET/POST):** Dominar o consumo de endpoints de dados em tempo real.
+- **Frontend Dinâmico:** Atualizar uma página HTML/JS automaticamente quando um valor no sensor físico mudar.
+
+## 🛠️ Atividades da Jornada
+1. **Credenciais API:** Acesse o painel de desenvolvedor no Arduino Cloud e gere uma chave de API para o seu usuário.
+2. **Endpoint de Propriedades:** Use o comando \`fetch\` (Javascript) ou a biblioteca \`requests\` (Python) para ler o valor de uma Thing específica.
+3. **Visualização Customizada:** Use a biblioteca **Chart.js** para criar gráficos de linha profissionais com os dados históricos que a API fornece.
+
+## 💻 Exemplo de Chamada (Javascript)
+\`\`\`javascript
+const response = await fetch('https://api2.arduino.cc/iot/v2/things/{id}/properties/{id_property}/timeseries', {
+  headers: { 'Authorization': 'Bearer ' + ACCESS_TOKEN }
+});
+const data = await response.json();
+console.log("Histórico de Sensores:", data);
+\`\`\`
+
+## 📝 Reflexão Profissional
+Como essa integração permite criar apps mobile nativos ou sistemas de gestão para empresas? Quais os limites de taxa (rate limits) da API gratuita?
+`
+    },
+    {
+        id: "radar-ultrassonico",
+        title: "Radar de Estacionamento",
+        description: "Recrie o sistema de sensores de ré de um carro usando um sensor ultrassônico e um buzzer para alertar a proximidade.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Intermediário",
+        duration: "3 aulas",
+        grade: "Ensino Fundamental II (8º e 9º ano)",
+        image: "https://images.unsplash.com/photo-1593344484962-796055d4a3a4?auto=format&fit=crop&q=80&w=800",
+        ods: "ODS 9 - Indústria e Inovação",
+        bncc: ["EF08TEC04", "EF09TEC01"],
+        schematic: "https://docs.arduino.cc/static/radar-circuit-view.pdf",
+        hardwareDiagram: "https://docs.arduino.cc/static/ultrasonic-wiring.png",
+        softwareFlow: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800",
+        teacherGuide: {
+            objective: "Demonstrar a aplicação de sensores em sistemas de segurança e medir a velocidade de resposta humana.",
+            skills: ["Física do som", "Lógica condicional", "Design de interface sonora"],
+            assessment: "O tempo entre os bipes reduz proporcionalmente à distância medida?",
+            hacksterLink: "https://www.hackster.io/akarsh98/arduino-uno-ultrasonic-radar-1-0-c6ee0d"
+        },
+        stepImages: [
+            "https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=800",
+            "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800"
+        ],
+        content: `
+# Radar de Estacionamento (Automotive Guide)
+
+## 🚙 Visão Geral do Projeto
+Este projeto replica o sistema de auxílio ao estacionamento presente em carros modernos. Utilizando ondas de ultra-som, o radar mede a distância entre o para-choque do veículo e obstáculos, fornecendo alertas visuais (LEDs) e sonoros (Buzzer) que aumentam de intensidade conforme a colisão se aproxima.
+
+## 🎓 Objetivos de Aprendizagem
+- **Física das Ondas:** Entender o princípio do eco e a velocidade do som.
+- **Lógica Progressiva:** Criar um sistema de alerta que "bipa" mais rápido conforme o objeto se aproxima.
+- **Prototipagem de Segurança:** Discutir como sistemas redundantes evitam acidentes.
+
+## 🔩 Materiais e Componentes
+- 1x **Arduino Uno** ou **Nano**
+- 1x **Sensor Ultrassônico HC-SR04**
+- 1x **Buzzer Ativo** 5V
+- 3x **LEDs** (Verde, Amarelo, Vermelho)
+- 3x **Resistores de 220Ω**
+- 1x Protoboard e Jumpers
+
+## 🛠️ Passo a Passo da Montagem
+
+### 1. Preparação do Sensor
+O sensor HC-SR04 possui 4 pinos: VCC, Trig, Echo e GND. Instale-o na borda da protoboard voltado para fora, simulando a posição no para-choque do carro.
+
+### 2. Semáforo de Alerta
+Conecte os três LEDs em série. O **Verde** indica segurança (> 30cm), o **Amarelo** indica cautela (15cm a 30cm) e o **Vermelho** indica perigo iminente (< 15cm).
+
+### 3. Alerta Sonoro
+Conecte o Buzzer. A lógica será: quanto menor a distância, menor será o tempo entre os "beeps", criando um senso de urgência.
+
+## ⚙️ Esquema de Ligação (Wiring)
+
+- **HC-SR04:** Trig -> Pino 9 | Echo -> Pino 10
+- **LED Verde:** Pino 2 (com resistor)
+- **LED Amarelo:** Pino 3 (com resistor)
+- **LED Vermelho:** Pino 4 (com resistor)
+- **Buzzer:** Pino 5
+- **GND e VCC:** Conectados aos respectivos barramentos da protoboard.
+
+## 💻 Programação Técnica
+\`\`\`cpp
+#define trigPin 9
+#define echoPin 10
+#define buzzer 3
+
+void loop() {
+  digitalWrite(trigPin, LOW); delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH); delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  long duracao = pulseIn(echoPin, HIGH);
+  int distancia = duracao / 58;
+  
+  if (distancia < 10) {
+    tone(buzzer, 1000); // Som contínuo
+  } else if (distancia < 30) {
+    tone(buzzer, 1000); delay(100); noTone(buzzer); delay(100);
+  }
+}
+\`\`\`
+`
+    },
+    {
+        id: "estacao-lcd-arduino",
+        title: "Monitor Ambiental com LCD",
+        description: "Crie uma estação que mostra temperatura e umidade em um display de cristal líquido (LCD), formatando dados profissionalmente.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Básico",
+        duration: "2 aulas",
+        grade: "Ensino Fundamental II (6º e 7º ano)",
+        image: "arduino-temp",
+        ods: "ODS 13 - Ação Climática",
+        bncc: ["EF06CI13", "EF07TEC02"],
+        content: `
+# Monitor Ambiental com LCD (Project Hub Edition)
+
+## 🌡️ Visão Geral
+Saia do Monitor Serial do computador e leve seus dados para um display físico! Este projeto ensina a usar bibliotecas externas para controlar periféricos de visualização, uma habilidade essencial para criar dispositivos independentes.
+
+## 🎓 Objetivos de Aprendizagem
+- **Bibliotecas:** Aprender a importar e usar a \`LiquidCrystal_I2C.h\`.
+- **UX/UI para Hardware:** Decidir como organizar as informações em uma tela limitada de 16x2 caracteres.
+- **Protocolos de Comunicação:** Uma introdução visual ao funcionamento do I2C (apenas 2 fios de dados).
+
+## 🛠️ Montagem e Código
+1. **Conexão I2C:** Ligue o SDA ao A4 e o SCL ao A5 do Arduino.
+2. **Setup do Sensor:** O DHT11 deve ser conectado a um pino digital (ex: pino 2).
+3. **Lógica de Loop:** Leia os dados a cada 2 segundos e use \`lcd.setCursor()\` para atualizar as linhas separadamente.
+
+## 📝 Dica de Ouro
+Use caracteres especiais! A biblioteca LCD permite criar o símbolo de grau (°) customizado para deixar seu design mais profissional.
+`
+    },
+    {
+        id: "cofre-eletronico-keypad",
+        title: "Cofre com Senha Digital",
+        description: "Construa um cofre funcional com teclado numérico e trava eletrônica (servo), protegendo seus objetos com código secreto.",
+        tools: ["Arduino", "C++"],
+        difficulty: "Avançado",
+        duration: "5 aulas",
+        grade: "Ensino Médio e Técnico",
+        image: "arduino-robot",
+        ods: "ODS 16 - Paz, Justiça e Instituições Eficazes",
+        bncc: ["EM13TEC05"],
+        content: `
+# Cofre Digital com Keypad
+
+## 🔐 Visão Geral
+Este é um projeto clássico do Arduino Project Hub que envolve lógica de strings, arrays e controle de estado. Os alunos desenvolvem um sistema de segurança completo, simulando o funcionamento de fechaduras de hotéis ou bancos.
+
+## 🎓 Objetivos de Aprendizagem
+- **Manipulação de Arrays:** Armazenar e comparar sequências de caracteres digitadas pelo usuário.
+- **Máquina de Estados:** Gerenciar os modos "Bloqueado", "Aguardando Senha", "Acesso Permitido" e "Senha Incorreta".
+- **Mecânica de Trava:** Usar um servomotor para criar o movimento físico de trancar e destrancar.
+
+## 📦 Componentes Chave
+- Teclado de Membrana 4x4
+- Servomotor SG90
+- Display LCD 16x2 (I2C)
+- LEDs de status (Verde e Vermelho)
+
+## 🛠️ Desafio de Lógica
+Implemente um sistema de "Tentativas Esgotadas". Se o usuário errar a senha 3 vezes, o sistema deve travar por 1 minuto e emitir um alarme sonoro constante.
 `
     }
 ];
