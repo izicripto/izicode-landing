@@ -348,7 +348,7 @@ Participar de olimpíadas e competições é uma forma poderosa de motivar aluno
 - Planejamento da próxima temporada
 
 📧 contato@izicode.com.br
-📱 WhatsApp: (41) 99999-9999
+📱 WhatsApp: (41) 99899-6996
 
 ---
 

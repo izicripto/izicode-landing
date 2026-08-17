@@ -332,7 +332,7 @@ Jogo no Scratch onde o jogador toma decisões sobre uma cidade/país e vê os im
 - Mentoria de projetos
 
 📧 contato@izicode.com.br
-📱 WhatsApp: (41) 99999-9999
+📱 WhatsApp: (41) 99899-6996
 
 ---
 

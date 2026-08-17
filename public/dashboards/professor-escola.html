@@ -4,126 +4,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Professor - Izicode Edu</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Dashboard Professor Escola - Izicode Edu</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
         rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
-                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="../css/tw/65a12f08.css">
+    <link rel="stylesheet" href="../css/dashboard-premium.css">
     <script type="module" src="../js/firebase-config.js"></script>
 </head>
 
-<body class="bg-slate-50">
+<body class="font-sans text-slate-900 bg-slate-50">
 
     <!-- Navbar -->
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-3">
-                    <img src="/images/logo.png" alt="Izicode" class="w-10 h-10">
-                    <span class="font-display font-bold text-xl text-slate-900">Izicode Edu</span>
-                    <span
-                        class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">PROFESSOR</span>
-                </div>
+            <div class="flex justify-between items-center h-20">
                 <div class="flex items-center gap-4">
-                    <button class="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-                        <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                        </svg>
-                    </button>
-                    <div class="flex items-center gap-3">
-                        <div class="text-right">
-                            <p class="text-sm font-black text-slate-900 user-name-display" id="userName">Carregando...
-                            </p>
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Professor
+                    <a href="../index.html" class="flex items-center gap-3 group">
+                        <div
+                            class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-100 group-hover:border-brand-200 transition-all">
+                            <img src="../images/logo.png" alt="Izicode" class="w-9 h-9 object-contain">
+                        </div>
+                        <span class="font-display font-black text-xl text-slate-900 tracking-tight hidden sm:inline">Izicode
+                            Edu</span>
+                    </a>
+                    <span
+                        class="px-3 py-1 bg-purple-100 text-purple-700 text-[10px] font-black uppercase tracking-widest rounded-full">Professor
+                        Escola</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-black text-slate-900 leading-none" id="userName">Carregando...</p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Professor
                                 Institucional</p>
                         </div>
                         <div class="relative">
                             <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=8b5cf6&color=fff"
-                                class="w-10 h-10 rounded-xl border-2 border-white shadow-lg user-avatar-display object-cover">
+                                class="w-10 h-10 rounded-xl border-2 border-white shadow-sm object-cover">
                             <div
                                 class="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full">
                             </div>
                         </div>
                     </div>
+                    <button onclick="handleLogout()" title="Sair"
+                        class="p-2.5 hover:bg-slate-100 rounded-xl transition-colors text-slate-500 hover:text-red-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
         <!-- Header -->
-        <div class="mb-8">
-            <h1 class="font-display text-3xl font-bold text-slate-900 mb-2">Bem-vinda, <span
-                    data-user-name-short>Professora</span>!</h1>
-            <p class="text-slate-600">Gerencie suas turmas e acompanhe o progresso dos alunos</p>
+        <div class="mb-10">
+            <h1 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-2">Bem-vindo(a), <span
+                    data-user-name-short>Professor(a)</span></h1>
+            <p class="text-slate-500 text-lg">Gerencie suas turmas e acompanhe o progresso dos alunos.</p>
         </div>
 
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            <div
-                class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                <div
-                    class="w-16 h-16 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
-                    👥</div>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Alunos Ativos</p>
-                <p class="text-4xl font-black text-slate-900" data-teacher-students>0</p>
+        <!-- Stats reais -->
+        <div class="grid sm:grid-cols-3 gap-5 mb-12">
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-2xl font-black text-slate-900 leading-none" data-teacher-classes-count>0</p>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Minhas Turmas</p>
+                </div>
             </div>
-            <div
-                class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                <div
-                    class="w-16 h-16 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
-                    🏫</div>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Minhas Turmas</p>
-                <p class="text-4xl font-black text-slate-900" data-teacher-classes>0</p>
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                        <circle cx="9" cy="7" r="4" stroke-width="2" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-2xl font-black text-slate-900 leading-none" data-teacher-students-count>0</p>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Alunos Ativos</p>
+                </div>
             </div>
-            <div
-                class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                <div
-                    class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
-                    📈</div>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Engajamento</p>
-                <p class="text-4xl font-black text-slate-900">87%</p>
-            </div>
-            <div
-                class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                <div
-                    class="w-16 h-16 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
-                    ⚡</div>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Desafios</p>
-                <p class="text-4xl font-black text-slate-900">12</p>
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-2xl font-black text-slate-900 leading-none" data-teacher-challenges-count>0</p>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Desafios Criados</p>
+                </div>
             </div>
         </div>
 
         <div class="grid lg:grid-cols-3 gap-8">
 
             <!-- Main Content -->
-            <div class="lg:col-span-2 space-y-8">
+            <div class="lg:col-span-2 space-y-12">
 
                 <!-- Minhas Turmas -->
                 <section>
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="font-display text-2xl font-bold text-slate-900 flex items-center gap-2">
-                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                            </svg>
+                        <h2 class="font-display text-2xl font-bold text-slate-900 flex items-center gap-3">
+                            <div
+                                class="w-11 h-11 gradient-brand rounded-2xl flex items-center justify-center text-white shadow-md">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" stroke-width="2" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                                </svg>
+                            </div>
                             Minhas Turmas
                         </h2>
-                        <button
-                            class="px-4 py-2 bg-brand-600 text-white rounded-xl font-medium hover:bg-brand-700 transition-colors flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button onclick="openClassModal()"
+                            class="px-5 py-2.5 bg-slate-900 text-white rounded-2xl text-sm font-bold shadow-lg hover:bg-slate-800 transition-all active:scale-95 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 4v16m8-8H4" />
                             </svg>
@@ -132,64 +143,31 @@
                     </div>
 
                     <div class="space-y-4" data-teacher-classes-container>
-                        <!-- Dynamic content -->
+                        <div class="bg-white rounded-3xl p-10 text-center border-2 border-dashed border-slate-200">
+                            <p class="text-slate-400 text-sm">Carregando turmas...</p>
+                        </div>
                     </div>
                 </section>
 
                 <!-- Biblioteca de Projetos -->
                 <section>
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="font-display text-2xl font-bold text-slate-900 flex items-center gap-2">
-                            <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                            </svg>
+                        <h2 class="font-display text-2xl font-bold text-slate-900 flex items-center gap-3">
+                            <div
+                                class="w-11 h-11 bg-white rounded-2xl flex items-center justify-center text-brand-600 shadow-sm border border-slate-200">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
                             Biblioteca de Projetos
                         </h2>
-                        <a href="../library.html" class="text-sm text-brand-600 font-medium hover:text-brand-700">
-                            Ver todos →
-                        </a>
+                        <a href="../library.html" class="text-sm text-brand-600 font-bold hover:text-brand-700">Ver
+                            todos →</a>
                     </div>
 
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div class="bg-white rounded-xl p-4 border border-slate-200 hover:shadow-lg transition-all">
-                            <div class="flex items-start gap-3">
-                                <div
-                                    class="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center text-2xl">
-                                    <svg class="w-8 h-8 text-white font-bold" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <div class="flex-1">
-                                    <h3 class="font-bold text-slate-900 mb-1">Jogo Pong Clássico</h3>
-                                    <p class="text-xs text-slate-500 mb-2">Scratch • 2 aulas • Básico</p>
-                                    <button class="text-xs text-brand-600 font-medium hover:text-brand-700">
-                                        Atribuir à turma →
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bg-white rounded-xl p-4 border border-slate-200 hover:shadow-lg transition-all">
-                            <div class="flex items-start gap-3">
-                                <div
-                                    class="w-12 h-12 bg-gradient-to-br from-teal-400 to-teal-600 rounded-lg flex items-center justify-center text-2xl">
-                                    <svg class="w-8 h-8 text-white font-bold" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
-                                </div>
-                                <div class="flex-1">
-                                    <h3 class="font-bold text-slate-900 mb-1">Semáforo Inteligente</h3>
-                                    <p class="text-xs text-slate-500 mb-2">Arduino • 2 aulas • Básico</p>
-                                    <button class="text-xs text-brand-600 font-medium hover:text-brand-700">
-                                        Atribuir à turma →
-                                    </button>
-                                </div>
-                            </div>
+                    <div id="featuredProjects" class="grid md:grid-cols-2 gap-4">
+                        <div class="col-span-full text-center py-8 text-slate-400 text-sm">Carregando projetos...
                         </div>
                     </div>
                 </section>
@@ -199,91 +177,57 @@
             <!-- Sidebar -->
             <div class="space-y-6">
 
-                <!-- Planejamento Semanal -->
-                <div class="bg-white rounded-2xl p-6 border border-slate-200">
-                    <h3 class="font-display text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        Planejamento Semanal
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="p-3 bg-blue-50 rounded-xl border border-blue-200">
-                            <p class="text-xs text-blue-600 font-bold mb-1">SEGUNDA • 6º A</p>
-                            <p class="text-sm font-medium text-slate-900">Robô Seguidor de Linha</p>
-                        </div>
-                        <div class="p-3 bg-purple-50 rounded-xl border border-purple-200">
-                            <p class="text-xs text-purple-600 font-bold mb-1">QUARTA • 7º B</p>
-                            <p class="text-sm font-medium text-slate-900">Jogo Pong com Scratch</p>
-                        </div>
-                        <div class="p-3 bg-green-50 rounded-xl border border-green-200">
-                            <p class="text-xs text-green-600 font-bold mb-1">SEXTA • 6º A</p>
-                            <p class="text-sm font-medium text-slate-900">Bússola Digital Micro:bit</p>
-                        </div>
-                    </div>
-                    <button class="w-full mt-4 text-sm text-brand-600 font-medium hover:text-brand-700">
-                        Editar planejamento
-                    </button>
-                </div>
-
                 <!-- Alunos Destaque -->
-                <div class="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl p-6 text-white">
+                <div class="bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl p-6 text-white">
                     <h3 class="font-display text-lg font-bold mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                         </svg>
                         Alunos Destaque
                     </h3>
-                    <div class="space-y-3">
-                        <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3">
-                            <p class="font-bold text-sm">Maria Santos</p>
-                            <p class="text-xs opacity-90">6º A • 485 XP • <span class="text-yellow-200 font-bold">1º
-                                    lugar</span></p>
-                        </div>
-                        <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3">
-                            <p class="font-bold text-sm">Pedro Lima</p>
-                            <p class="text-xs opacity-90">7º B • 420 XP • <span class="text-slate-100 font-bold">2º
-                                    lugar</span></p>
-                        </div>
+                    <div id="topStudents" class="space-y-3">
+                        <p class="text-sm text-white/80">Carregando...</p>
                     </div>
                 </div>
 
-                <!-- Ações Rápidas -->
-                <div class="bg-white rounded-2xl p-6 border border-slate-200">
+                <!-- Acesso Rápido -->
+                <div class="bg-white rounded-3xl p-6 border border-slate-200">
                     <h3 class="font-display text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                         <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
-                        Ações Rápidas
+                        Acesso Rápido
                     </h3>
                     <div class="space-y-2">
-                        <button
-                            class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left text-sm font-medium text-slate-700 transition-colors flex items-center gap-3">
-                            <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <a href="../library.html"
+                            class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left text-sm font-bold text-slate-700 transition-colors flex items-center gap-3">
+                            <svg class="w-5 h-5 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4v16m8-8H4" />
+                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                             </svg>
-                            Criar Desafio Personalizado
-                        </button>
-                        <button
-                            class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left text-sm font-medium text-slate-700 transition-colors flex items-center gap-3">
-                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            Biblioteca de Projetos
+                        </a>
+                        <a href="../quiz-arena.html"
+                            class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left text-sm font-bold text-slate-700 transition-colors flex items-center gap-3">
+                            <svg class="w-5 h-5 text-purple-600 flex-shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                             </svg>
-                            Gerar Relatório PDF
-                        </button>
-                        <button
-                            class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left text-sm font-medium text-slate-700 transition-colors flex items-center gap-3">
-                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            Quiz Arena
+                        </a>
+                        <a href="../school-management.html"
+                            class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left text-sm font-bold text-slate-700 transition-colors flex items-center gap-3">
+                            <svg class="w-5 h-5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2M5 21h2m0 0h10M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 6v-3a1 1 0 011-1h0a1 1 0 011 1v3" />
                             </svg>
-                            Planejar Próxima Semana
-                        </button>
+                            Gestão Escolar
+                        </a>
                     </div>
                 </div>
 
@@ -291,37 +235,221 @@
         </div>
     </div>
 
+    <!-- Nova Turma Modal -->
+    <div id="classModal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeClassModal()"></div>
+            <div class="relative bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
+                <h2 class="font-display text-2xl font-bold mb-6">Nova Turma</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Nome da turma (Ex: 6º Ano
+                            A)</label>
+                        <input type="text" id="classNameInput"
+                            class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Série/Ano</label>
+                        <input type="text" id="classGradeInput" placeholder="Ex: 6º Ano Fund. II"
+                            class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Turno</label>
+                        <select id="classShiftInput"
+                            class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none">
+                            <option value="morning">Manhã</option>
+                            <option value="afternoon">Tarde</option>
+                            <option value="evening">Noite</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-8 flex gap-3">
+                    <button onclick="closeClassModal()"
+                        class="flex-1 py-3 border border-slate-200 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition-all">Cancelar</button>
+                    <button onclick="createClass(this)" id="btnCreateClass"
+                        class="flex-1 py-3 bg-brand-600 text-white rounded-xl font-bold hover:shadow-lg transition-all">Criar
+                        Turma</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
-        import { auth, db } from '../js/firebase-config.js';
+        import { auth, db, signOut } from '../js/firebase-config.js';
         import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import DashboardManager from '../js/dashboard-manager.js';
+        import { UserManager, ClassManager, ChallengeManager } from '../js/database.js';
+        import { getAllProjects } from '../js/projects-data.js';
+
+        let currentUser = null;
+        let currentClasses = [];
 
         document.addEventListener('DOMContentLoaded', () => {
-            const dashboardManager = new DashboardManager();
-
             auth.onAuthStateChanged(async (user) => {
-                if (user) {
-                    try {
-                        const userRef = doc(db, 'users', user.uid);
-                        const snap = await getDoc(userRef);
-                        const userData = snap.data();
-
-                        // Verification to ensure only school teachers see this
-                        if (userData.role !== 'teacher' && userData.role !== 'professor-escola' && userData.role !== 'admin') {
-                            console.warn('Unauthorized access to school dashboard');
-                            // window.location.href = '../dashboard.html';
-                        }
-
-                        dashboardManager.currentUser = { ...user, ...userData };
-                        await dashboardManager.renderSchoolTeacherDashboard();
-                    } catch (e) {
-                        console.error('Error loading dashboard:', e);
-                    }
-                } else {
+                if (!user) {
                     window.location.href = '../login.html';
+                    return;
+                }
+
+                const userRef = doc(db, 'users', user.uid);
+                const snap = await getDoc(userRef);
+                const userData = snap.data();
+                currentUser = { uid: user.uid, ...userData };
+
+                updateUserHeader(user, userData);
+                renderFeaturedProjects();
+
+                try {
+                    await Promise.all([loadClasses(), loadChallengeCount()]);
+                } catch (e) {
+                    console.error('Erro ao carregar dashboard:', e);
                 }
             });
         });
+
+        function updateUserHeader(user, userData) {
+            const displayName = userData?.displayName || user.displayName || 'Professor(a)';
+            const firstName = displayName.split(' ')[0];
+            document.getElementById('userName').textContent = displayName;
+            document.querySelector('[data-user-name-short]').textContent = firstName;
+
+            const avatarEl = document.getElementById('userAvatar');
+            avatarEl.src = userData?.photoURL || user.photoURL
+                || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=8b5cf6&color=fff`;
+        }
+
+        window.handleLogout = async () => {
+            await signOut(auth);
+            window.location.href = '../login.html';
+        };
+
+        async function loadClasses() {
+            currentClasses = await ClassManager.getTeacherClasses(currentUser.uid);
+            document.querySelector('[data-teacher-classes-count]').textContent = currentClasses.length;
+
+            const uniqueStudentIds = new Set(currentClasses.flatMap(c => c.studentIds || []));
+            document.querySelector('[data-teacher-students-count]').textContent = uniqueStudentIds.size;
+
+            renderClasses();
+            renderTopStudents(uniqueStudentIds);
+        }
+
+        async function loadChallengeCount() {
+            const challenges = await ChallengeManager.getTeacherChallenges(currentUser.uid);
+            document.querySelector('[data-teacher-challenges-count]').textContent = challenges.length;
+        }
+
+        function renderClasses() {
+            const container = document.querySelector('[data-teacher-classes-container]');
+
+            if (currentClasses.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-3xl p-10 text-center border-2 border-dashed border-slate-200">
+                        <p class="text-slate-500 mb-4">Você ainda não tem turmas criadas.</p>
+                        <button onclick="openClassModal()" class="px-6 py-3 bg-brand-600 text-white rounded-2xl font-bold hover:shadow-lg transition-all">Criar Primeira Turma</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = currentClasses.map(cls => `
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 hover:shadow-lg transition-all">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-900">${cls.name}</h3>
+                            <p class="text-sm text-slate-500">${cls.grade || 'Série não informada'}</p>
+                        </div>
+                        <span class="px-3 py-1 bg-brand-50 text-brand-700 text-sm font-bold rounded-full">${(cls.studentIds || []).length} alunos</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function renderTopStudents(studentIdSet) {
+            const container = document.getElementById('topStudents');
+            const studentIds = Array.from(studentIdSet);
+
+            if (studentIds.length === 0) {
+                container.innerHTML = '<p class="text-sm text-white/80">Adicione alunos às suas turmas para ver o destaque aqui.</p>';
+                return;
+            }
+
+            const students = (await Promise.all(studentIds.map(id => UserManager.getUser(id).catch(() => null))))
+                .filter(Boolean)
+                .sort((a, b) => (b.xp || 0) - (a.xp || 0))
+                .slice(0, 3);
+
+            if (students.length === 0) {
+                container.innerHTML = '<p class="text-sm text-white/80">Nenhum dado de progresso ainda.</p>';
+                return;
+            }
+
+            const medals = ['1º lugar', '2º lugar', '3º lugar'];
+            container.innerHTML = students.map((s, i) => `
+                <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3">
+                    <p class="font-bold text-sm">${s.displayName || 'Aluno'}</p>
+                    <p class="text-xs opacity-90">${s.xp || 0} XP • <span class="font-bold">${medals[i]}</span></p>
+                </div>
+            `).join('');
+        }
+
+        function renderFeaturedProjects() {
+            const container = document.getElementById('featuredProjects');
+            const featured = getAllProjects().slice(0, 4);
+
+            container.innerHTML = featured.map(p => `
+                <a href="../project-view.html?id=${p.id}" class="bg-white rounded-2xl p-4 border border-slate-200 hover:shadow-lg hover:border-brand-200 transition-all flex items-start gap-3">
+                    <div class="w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-bold text-slate-900 mb-1 truncate">${p.title}</h3>
+                        <p class="text-xs text-slate-500 mb-2">${(p.tools || []).join(', ')} • ${p.duration} • ${p.difficulty}</p>
+                        <span class="text-xs text-brand-600 font-bold">Ver projeto →</span>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        // Nova Turma Modal
+        window.openClassModal = () => {
+            document.getElementById('classModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        };
+        window.closeClassModal = () => {
+            document.getElementById('classModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('classNameInput').value = '';
+            document.getElementById('classGradeInput').value = '';
+        };
+        window.createClass = async (btn) => {
+            const name = document.getElementById('classNameInput').value.trim();
+            const grade = document.getElementById('classGradeInput').value.trim();
+            const shift = document.getElementById('classShiftInput').value;
+
+            if (!name) return alert('Informe o nome da turma.');
+
+            btn.disabled = true;
+            btn.textContent = 'Criando...';
+
+            try {
+                await ClassManager.createClass(currentUser.uid, {
+                    name,
+                    grade,
+                    shift,
+                    schoolId: currentUser.schoolId || null
+                });
+                closeClassModal();
+                await loadClasses();
+            } catch (e) {
+                console.error('Erro ao criar turma:', e);
+                alert('Não foi possível criar a turma agora. Tente novamente.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Criar Turma';
+            }
+        };
     </script>
 </body>
 

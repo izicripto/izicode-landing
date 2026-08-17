@@ -10,3 +10,8 @@ Disallow: /dashboard.html
 Disallow: /student-area.html
 Disallow: /my-projects.html
 Disallow: /create-project.html
+Disallow: /admin/
+Disallow: /admin-panel.html
+Disallow: /platform-admin.html
+Disallow: /platform-dev.html
+Disallow: /school-management.html

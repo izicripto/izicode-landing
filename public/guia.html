@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Guia - Izicode Edu</title>
+    <meta name="description" id="pageDescription" content="Guias completos de tecnologia educacional, robótica e cultura maker para escolas.">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/tw/65a12f08.css">
+    <style>
+        .prose h1 { font-family: 'Outfit', sans-serif; font-size: 2.1rem; font-weight: 800; color: #0f172a; margin-top: 0; }
+        .prose h2 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-top: 2.2rem; padding-top: 1.2rem; border-top: 1px solid #f1f5f9; }
+        .prose h3 { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: #1e293b; }
+        .prose table { width: 100%; border-collapse: collapse; }
+        .prose th, .prose td { border: 1px solid #e2e8f0; padding: 0.5rem 0.8rem; text-align: left; }
+        .prose th { background: #f8fafc; }
+        .prose a { color: #0284c7; }
+        .prose code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+    </style>
+</head>
+
+<body class="bg-white min-h-screen flex flex-col font-sans text-slate-700">
+    <!-- Navbar -->
+    <nav class="p-6 md:px-12 flex justify-between items-center max-w-7xl mx-auto w-full">
+        <a href="index.html" class="flex items-center gap-4 group">
+            <div
+                class="bg-white p-2 rounded-2xl shadow-sm border border-slate-100 group-hover:border-brand-200 group-hover:shadow-brand-200/50 group-hover:scale-105 transition-all duration-300">
+                <img src="images/logo.png" alt="Izicode Logo"
+                    class="w-12 h-12 object-contain group-hover:rotate-6 transition-transform duration-300">
+            </div>
+            <span class="font-display font-black text-2xl md:text-3xl text-slate-900 tracking-tight">Izicode Edu</span>
+        </a>
+        <a href="portal.html"
+            class="text-base md:text-lg font-bold text-slate-500 hover:text-brand-600 transition-colors flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Portal de Conteúdo
+        </a>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 pb-24 w-full flex-1">
+        <div id="loadingState" class="text-center py-24 text-slate-400">Carregando guia...</div>
+        <div id="notFoundState" class="hidden text-center py-24">
+            <p class="text-xl font-bold text-slate-700">Guia não encontrado.</p>
+            <a href="portal.html" class="text-brand-600 font-bold hover:underline mt-2 inline-block">Voltar ao Portal de
+                Conteúdo</a>
+        </div>
+
+        <article id="guideContent" class="prose prose-slate max-w-none hidden bg-white"></article>
+
+        <!-- CTA -->
+        <section id="ctaSection"
+            class="hidden mt-16 bg-brand-600 rounded-[2rem] p-10 text-center text-white">
+            <h2 class="font-display text-2xl md:text-3xl font-bold mb-3">Quer ajuda para aplicar isso na sua escola?
+            </h2>
+            <p class="text-brand-50 mb-6">Fale com a gente e monte um plano de implementação real.</p>
+            <a href="contact.html"
+                class="inline-flex items-center gap-2 bg-white text-brand-700 px-8 py-4 rounded-2xl font-bold hover:bg-brand-50 transition-all shadow-xl">
+                Falar com a Izicode Edu
+            </a>
+        </section>
+    </main>
+
+    <footer class="text-center text-sm text-slate-400 py-10 border-t border-slate-100">
+        © 2026 Izicode Edu.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
+    <script>
+        const GUIDES = {
+            '01-GUIA-HACKATHON-ESCOLAR': 'Guia de Hackathon Escolar',
+            '02-GUIA-OLIMPIADAS-COMPETICOES': 'Guia de Olimpíadas e Competições',
+            '03-GUIA-PRATICAS-RESTAURATIVAS': 'Guia de Práticas Restaurativas',
+            '04-GUIA-PROJETOS-ODS': 'Guia de Projetos ODS',
+            '05-GUIA-BNCC-TECNOLOGIA': 'Guia BNCC e Tecnologia',
+            '06-GUIA-ECOLOGIA-SUSTENTABILIDADE': 'Guia de Ecologia e Sustentabilidade',
+            '07-MANUAL-IMPLEMENTACAO': 'Manual de Implementação'
+        };
+
+        async function loadGuide() {
+            const params = new URLSearchParams(window.location.search);
+            const slug = params.get('doc');
+
+            if (!slug || !GUIDES[slug]) {
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('notFoundState').classList.remove('hidden');
+                return;
+            }
+
+            try {
+                const res = await fetch(`docs/${slug}.md`);
+                if (!res.ok) throw new Error('not found');
+                const markdown = await res.text();
+
+                document.title = `${GUIDES[slug]} - Izicode Edu`;
+                document.getElementById('pageTitle').textContent = `${GUIDES[slug]} - Izicode Edu`;
+                document.getElementById('pageDescription').setAttribute('content', GUIDES[slug] + ' — guia completo Izicode Edu.');
+
+                const clean = DOMPurify.sanitize(marked.parse(markdown));
+                const contentEl = document.getElementById('guideContent');
+                contentEl.innerHTML = clean;
+
+                document.getElementById('loadingState').classList.add('hidden');
+                contentEl.classList.remove('hidden');
+                document.getElementById('ctaSection').classList.remove('hidden');
+            } catch (e) {
+                console.error('Erro ao carregar guia:', e);
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('notFoundState').classList.remove('hidden');
+            }
+        }
+
+        loadGuide();
+    </script>
+</body>
+
+</html>

@@ -5,21 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configurando seu Perfil - Izicode Edu</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
         rel="stylesheet">
     <script type="module" src="js/firebase-config.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
-                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="css/tw/df519444.css">
     <style>
         .step-content {
             display: none;
@@ -322,8 +312,26 @@
             selectedProfile = role;
             isInstitutional = true;
 
+            // school.name/institution vem do Firestore (gravável por school_admin/admin) —
+            // nunca interpolar direto em innerHTML, monta-se o DOM à parte para não
+            // correr risco de XSS armazenado caso uma conta desse tipo seja comprometida.
             const subtitle = document.getElementById('onboardingSubtitle');
-            subtitle.innerHTML = `Vínculo confirmado com <span class="text-brand-600 font-bold">${school.name || school.institution || 'Sua Escola'}</span>!<br>Entrando como <span class="font-bold">${role === 'teacher' ? 'Professor' : 'Aluno'}</span>.`;
+            subtitle.textContent = 'Vínculo confirmado com ';
+
+            const nameEl = document.createElement('span');
+            nameEl.className = 'text-brand-600 font-bold';
+            nameEl.textContent = school.name || school.institution || 'Sua Escola';
+            subtitle.appendChild(nameEl);
+
+            subtitle.appendChild(document.createTextNode('!'));
+            subtitle.appendChild(document.createElement('br'));
+            subtitle.appendChild(document.createTextNode('Entrando como '));
+
+            const roleEl = document.createElement('span');
+            roleEl.className = 'font-bold';
+            roleEl.textContent = role === 'teacher' ? 'Professor' : 'Aluno';
+            subtitle.appendChild(roleEl);
+            subtitle.appendChild(document.createTextNode('.'));
 
             // Auto skip to step 2 details
             setTimeout(() => nextStep(2), 800);

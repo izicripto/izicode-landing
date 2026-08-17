@@ -335,7 +335,7 @@ Escolha algo significativo para o grupo:
 - Acompanhamento contínuo
 
 📧 contato@izicode.com.br
-📱 WhatsApp: (41) 99999-9999
+📱 WhatsApp: (41) 99899-6996
 
 ---
 

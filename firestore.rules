@@ -38,8 +38,47 @@ service cloud.firestore {
     
     // Users collection
     match /users/{userId} {
-      allow read: if isAuthenticated();
-      allow write: if request.auth != null && request.auth.uid == userId;
+      // Cross-user reads are scoped to the same school so classmates/
+      // colleagues can appear in rosters and leaderboards, without letting
+      // any signed-in account dump every user's name/email/role/plan.
+      function sameSchool() {
+        let me = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+        return isAuthenticated() &&
+               'schoolId' in resource.data && resource.data.schoolId != null &&
+               'schoolId' in me && me.schoolId == resource.data.schoolId;
+      }
+
+      allow read: if isOwner(userId) || isAdmin() || sameSchool();
+
+      // A user may only self-assign non-privileged roles/plans.
+      // Promotion to 'admin', 'professor-pro' or a paid subscription plan
+      // must go through an admin or a trusted Cloud Function (Admin SDK
+      // writes bypass these rules entirely, so that path is unaffected).
+      function isSafeSelfRole() {
+        return !('role' in request.resource.data) ||
+               (request.resource.data.role != 'admin' && request.resource.data.role != 'professor-pro');
+      }
+
+      function isSafeSelfSubscription() {
+        return !('subscription' in request.resource.data) ||
+               !('plan' in request.resource.data.subscription) ||
+               request.resource.data.subscription.plan == 'free';
+      }
+
+      allow create: if isAuthenticated() && request.auth.uid == userId &&
+                       isSafeSelfRole() && isSafeSelfSubscription();
+
+      allow update: if isAuthenticated() && request.auth.uid == userId &&
+                       (
+                         isAdmin() ||
+                         (
+                           (isSafeSelfRole() || request.resource.data.role == resource.data.role) &&
+                           (isSafeSelfSubscription() ||
+                             (('subscription' in request.resource.data) &&
+                              request.resource.data.subscription.plan == resource.data.subscription.plan))
+                         )
+                       );
+
       allow delete: if isAdmin();
       
       // Projetos do usuário

@@ -5,11 +5,11 @@ import { getTechCuriosity } from './pedagogical-tips.js';
 export async function initStudentDashboard() {
     auth.onAuthStateChanged(async (user) => {
         if (user) {
-            await loadStudentProfile(user);
+            const userData = await loadStudentProfile(user);
             await loadActiveProjects(user);
             await loadAchievements(user);
             await initDailyMissions(user);
-            await loadLeaderboard();
+            await loadLeaderboard(userData?.schoolId);
             setupQuickActions();
         } else {
             window.location.href = 'index.html';
@@ -91,8 +91,10 @@ async function loadStudentProfile(user) {
             subtitleEl.innerHTML = `Running Quiz <b>Curiosidade:</b> <span class="italic text-slate-600">"${curiosity.text}"</span>`;
         }
 
+        return userData;
     } catch (error) {
         console.error("Error loading profile:", error);
+        return null;
     }
 }
 
@@ -228,20 +230,22 @@ async function initDailyMissions(user) {
     });
 }
 
-async function loadLeaderboard() {
+async function loadLeaderboard(schoolId) {
     const list = document.querySelector('#leaderboardList');
     if (!list) return;
 
-    try {
-        // Query users sorted by XP
-        // In a real app, ideally filter by role in the query like: where("role", "in", ["student", "maker"])
-        // But for now we might fetch top 20 and filter client side if the filtered set is small, 
-        // or just add the where clause if the index exists.
-        // Let's try client-side filtering for simplicity on small datasets, 
-        // OR add a basic where clause if we assume all students are 'student'.
+    // Firestore now scopes cross-user reads to users sharing the same
+    // schoolId (see firestore.rules), so a student with no school linked
+    // has no valid cross-user leaderboard to show.
+    if (!schoolId) {
+        list.innerHTML = '<p class="text-sm text-slate-400 text-center py-4">Vincule-se a uma escola para ver o ranking da sua turma.</p>';
+        return;
+    }
 
+    try {
         const q = query(
             collection(db, "users"),
+            where("schoolId", "==", schoolId),
             orderBy("xp", "desc"),
             limit(100) // Fetch more to allow filtering
         );

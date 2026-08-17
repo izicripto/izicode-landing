@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicializar Banco de Dados - Izicode Edu</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+    <link rel="stylesheet" href="../css/tw/99914b93.css">
+    <meta name="robots" content="noindex, nofollow">
+    </head>
 
 <body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-8">
     <div class="max-w-2xl w-full">
@@ -29,9 +30,9 @@
                 </p>
             </div>
 
-            <button id="initButton"
+            <button id="initButton" disabled
                 class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
-                🚀 INICIALIZAR BANCO DE DADOS
+                Verificando permissão...
             </button>
 
             <div id="console" class="mt-6 bg-slate-900 rounded-xl p-4 font-mono text-sm h-96 overflow-y-auto hidden">
@@ -41,11 +42,37 @@
     </div>
 
     <script type="module">
-        import { initializeDatabase } from './js/init-database.js';
+        import { auth, db, doc, getDoc, onAuthStateChanged } from '../js/firebase-config.js';
+        import { initializeDatabase } from '../js/init-database.js';
 
         const button = document.getElementById('initButton');
         const consoleDiv = document.getElementById('console');
         const consoleOutput = document.getElementById('consoleOutput');
+
+        // Guard: only a signed-in account with role "admin" in Firestore
+        // may run this page. Everyone else never sees the button enabled.
+        button.disabled = true;
+        button.textContent = 'Verificando permissão...';
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                button.textContent = '🔒 Faça login como administrador para continuar';
+                return;
+            }
+            try {
+                const snap = await getDoc(doc(db, 'users', user.uid));
+                const isAdmin = snap.exists() && snap.data().role === 'admin';
+                if (!isAdmin) {
+                    button.textContent = '🔒 Acesso restrito a administradores';
+                    return;
+                }
+                button.disabled = false;
+                button.textContent = '🚀 INICIALIZAR BANCO DE DADOS';
+            } catch (e) {
+                console.error('Erro ao verificar permissão:', e);
+                button.textContent = '🔒 Não foi possível verificar sua permissão';
+            }
+        });
 
         // Interceptar console.log
         const originalLog = console.log;

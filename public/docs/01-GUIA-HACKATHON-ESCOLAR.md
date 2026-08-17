@@ -264,7 +264,7 @@ Precisando de ajuda para organizar seu hackathon?
 - **Avaliação:** Participamos do júri com critérios pedagógicos
 
 📧 contato@izicode.com.br
-📱 WhatsApp: (41) 99999-9999
+📱 WhatsApp: (41) 99899-6996
 
 ---
 

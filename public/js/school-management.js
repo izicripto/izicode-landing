@@ -5,15 +5,43 @@ let currentSchoolId = null;
 let currentUserData = null;
 
 // valid secrets
+// A wider pool makes the child login harder to guess/brute-force than the
+// original 6 options (~1 in 6 chance per try). Keep entries simple and
+// recognizable for young students; validateSecret() is a plain string
+// match either way, so growing this list never invalidates secrets that
+// were already handed out.
 const SECRET_IMAGES = [
     { id: 'cat', emoji: '🐱', name: 'Gato' },
     { id: 'dog', emoji: '🐶', name: 'Cachorro' },
     { id: 'wizard', emoji: '🧙‍♂️', name: 'Mago' },
     { id: 'rocket', emoji: '🚀', name: 'Foguete' },
     { id: 'robot', emoji: '🤖', name: 'Robô' },
-    { id: 'sun', emoji: '☀️', name: 'Sol' }
+    { id: 'sun', emoji: '☀️', name: 'Sol' },
+    { id: 'star', emoji: '⭐', name: 'Estrela' },
+    { id: 'moon', emoji: '🌙', name: 'Lua' },
+    { id: 'rainbow', emoji: '🌈', name: 'Arco-íris' },
+    { id: 'butterfly', emoji: '🦋', name: 'Borboleta' },
+    { id: 'lion', emoji: '🦁', name: 'Leão' },
+    { id: 'frog', emoji: '🐸', name: 'Sapo' },
+    { id: 'panda', emoji: '🐼', name: 'Panda' },
+    { id: 'unicorn', emoji: '🦄', name: 'Unicórnio' },
+    { id: 'dinosaur', emoji: '🦕', name: 'Dinossauro' },
+    { id: 'ghost', emoji: '👻', name: 'Fantasma' },
+    { id: 'alien', emoji: '👽', name: 'Alien' },
+    { id: 'ball', emoji: '⚽', name: 'Bola' },
+    { id: 'apple', emoji: '🍎', name: 'Maçã' },
+    { id: 'car', emoji: '🚗', name: 'Carro' },
+    { id: 'airplane', emoji: '✈️', name: 'Avião' },
+    { id: 'boat', emoji: '⛵', name: 'Barco' },
+    { id: 'balloon', emoji: '🎈', name: 'Balão' },
+    { id: 'crown', emoji: '👑', name: 'Coroa' }
 ];
-const SECRET_WORDS = ['LUA', 'SOL', 'MAR', 'CEU', 'GOL', 'LUZ'];
+const SECRET_WORDS = [
+    'LUA', 'SOL', 'MAR', 'CEU', 'GOL', 'LUZ', 'FLOR', 'REI', 'PAZ', 'RIO',
+    'GATO', 'PATO', 'LOBO', 'URSO', 'TIGRE', 'PEIXE', 'FADA', 'BRUXA',
+    'DRAGAO', 'PIRATA', 'FOGUETE', 'PLANETA', 'ESTRELA', 'ARCOIRIS',
+    'ROBO', 'MUSICA', 'FUTEBOL', 'CASTELO', 'JARDIM', 'FLORESTA'
+];
 
 function generateSecret(type) {
     if (type === 'word') {

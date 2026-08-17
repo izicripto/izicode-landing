@@ -21,10 +21,9 @@
     <meta property="og:title" content="Izicode Edu - Inovação e Robótica Escolar">
     <meta property="og:description"
         content="Leve a Robótica Educacional e a Cultura Maker para sua escola com quem entende de BNCC e Metodologias Ativas.">
-    <meta property="og:image" content="https://izicode.com.br/images/logo.png">
+    <meta property="og:image" content="https://izicode.com.br/images/logocomfundo.png">
 
     <link rel="icon" type="image/png" href="images/logo.png">
-    <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
         rel="stylesheet">
@@ -82,22 +81,7 @@
             transform-origin: center bottom;
         }
     </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Space Grotesk', 'sans-serif'],
-                        display: ['Outfit', 'sans-serif']
-                    },
-                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } },
-                    backgroundImage: {
-                        'tech-dots': 'radial-gradient(circle, #e0f2fe 1px, transparent 1px)'
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="css/tw/b923d04d.css">
     <style>
         .bg-dots {
             background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
@@ -231,6 +215,10 @@
                             class="text-lg font-bold text-slate-600 hover:text-brand-600 transition-colors">Metodologia</a>
                         <a href="#ferramentas"
                             class="text-lg font-bold text-slate-600 hover:text-brand-600 transition-colors">Ferramentas</a>
+                        <a href="portal.html"
+                            class="text-lg font-bold text-slate-600 hover:text-brand-600 transition-colors">Portal</a>
+                        <a href="pricing.html"
+                            class="text-lg font-bold text-slate-600 hover:text-brand-600 transition-colors">Planos</a>
                         <a href="#faq"
                             class="text-lg font-bold text-slate-600 hover:text-brand-600 transition-colors">FAQ</a>
                         <a href="login.html"
@@ -267,6 +255,10 @@
                         class="block text-2xl font-bold text-slate-700 hover:text-brand-600 p-4 rounded-2xl hover:bg-slate-50 transition-all">Metodologia</a>
                     <a href="#ferramentas" @click="mobileMenuOpen = false"
                         class="block text-2xl font-bold text-slate-700 hover:text-brand-600 p-4 rounded-2xl hover:bg-slate-50 transition-all">Ferramentas</a>
+                    <a href="portal.html" @click="mobileMenuOpen = false"
+                        class="block text-2xl font-bold text-slate-700 hover:text-brand-600 p-4 rounded-2xl hover:bg-slate-50 transition-all">Portal</a>
+                    <a href="pricing.html" @click="mobileMenuOpen = false"
+                        class="block text-2xl font-bold text-slate-700 hover:text-brand-600 p-4 rounded-2xl hover:bg-slate-50 transition-all">Planos</a>
                     <a href="#faq" @click="mobileMenuOpen = false"
                         class="block text-2xl font-bold text-slate-700 hover:text-brand-600 p-4 rounded-2xl hover:bg-slate-50 transition-all">FAQ</a>
                     <div class="pt-4 px-4">
@@ -312,8 +304,40 @@
                             <div
                                 class="absolute -inset-4 bg-brand-200 rounded-[2.5rem] rotate-3 group-hover:rotate-1 transition-all opacity-40 blur-lg">
                             </div>
-                            <img src="images/01.jpg" alt="Alunos trabalhando"
+                            <img src="images/01.jpg" alt="Alunos trabalhando" fetchpriority="high" decoding="async"
                                 class="relative rounded-[2rem] shadow-2xl w-full h-auto object-cover transform transition-transform group-hover:scale-[1.01]">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Prova Social -->
+            <section class="py-14 bg-white border-y border-slate-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <p class="text-center text-xs font-bold text-slate-400 uppercase tracking-widest mb-8">Somado desde
+                        2022</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                        <div>
+                            <p class="font-display text-4xl lg:text-5xl font-black text-brand-600">125+</p>
+                            <p class="mt-2 text-sm lg:text-base font-bold text-slate-500 uppercase tracking-wide">Turmas
+                                atendidas</p>
+                        </div>
+                        <div>
+                            <p class="font-display text-4xl lg:text-5xl font-black text-brand-600">2.582+</p>
+                            <p class="mt-2 text-sm lg:text-base font-bold text-slate-500 uppercase tracking-wide">Alunos
+                                impactados</p>
+                        </div>
+                        <div>
+                            <p class="font-display text-4xl lg:text-5xl font-black text-brand-600">99+</p>
+                            <p class="mt-2 text-sm lg:text-base font-bold text-slate-500 uppercase tracking-wide">
+                                Equipes
+                                formadas</p>
+                        </div>
+                        <div>
+                            <p class="font-display text-4xl lg:text-5xl font-black text-brand-600">158+</p>
+                            <p class="mt-2 text-sm lg:text-base font-bold text-slate-500 uppercase tracking-wide">
+                                Projetos
+                                maker aplicados</p>
                         </div>
                     </div>
                 </div>
@@ -406,37 +430,37 @@
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
                         <a href="https://scratch.mit.edu" target="_blank"
                             class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                            <img src="images/scratch.png" alt="Scratch"
+                            <img src="images/scratch.png" alt="Scratch" loading="lazy" decoding="async"
                                 class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
                             <span class="font-bold text-slate-700 text-base">Scratch</span>
                         </a>
                         <a href="https://www.arduino.cc" target="_blank"
                             class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                            <img src="images/arduino.png" alt="Arduino"
+                            <img src="images/arduino.png" alt="Arduino" loading="lazy" decoding="async"
                                 class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
                             <span class="font-bold text-slate-700 text-base">Arduino</span>
                         </a>
                         <a href="https://makecode.microbit.org/" target="_blank"
                             class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                            <img src="images/microbit.png" alt="Micro:bit"
+                            <img src="images/microbit.png" alt="Micro:bit" loading="lazy" decoding="async"
                                 class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
                             <span class="font-bold text-slate-700 text-base">Micro:bit</span>
                         </a>
                         <a href="https://code.org" target="_blank"
                             class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                            <img src="images/code.png" alt="Code.org"
+                            <img src="images/code.png" alt="Code.org" loading="lazy" decoding="async"
                                 class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
                             <span class="font-bold text-slate-700 text-base">Code.org</span>
                         </a>
                         <a href="https://www.tinkercad.com" target="_blank"
                             class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                            <img src="images/tinkercad.jpg" alt="Tinkercad"
+                            <img src="images/tinkercad.jpg" alt="Tinkercad" loading="lazy" decoding="async"
                                 class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
                             <span class="font-bold text-slate-700 text-base">Tinkercad</span>
                         </a>
                         <a href="https://lab.open-roberta.org/" target="_blank"
                             class="p-6 bg-slate-50 rounded-3xl flex flex-col items-center justify-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-slate-100 group">
-                            <img src="images/openroberta.png" alt="Open Roberta"
+                            <img src="images/openroberta.png" alt="Open Roberta" loading="lazy" decoding="async"
                                 class="h-12 mb-3 object-contain grayscale group-hover:grayscale-0 transition-all">
                             <span class="font-bold text-slate-700 text-base">Open Roberta</span>
                         </a>
@@ -457,11 +481,13 @@
                             <!-- Colagem de imagens -->
                             <div class="relative">
                                 <img src="images/children-making-robot-2.jpg" alt="Crianças construindo robôs"
+                                    loading="lazy" decoding="async"
                                     class="rounded-[2.5rem] shadow-2xl w-full object-cover h-[500px] relative border-4 border-white transform transition-transform duration-700 group-hover:scale-[1.01]">
 
                                 <!-- Segunda imagem flutuante (Parallax effect visual) -->
                                 <div class="absolute -bottom-16 -right-16 w-2/3 hidden md:block z-20">
-                                    <img src="images/close-up-making-robots.jpg" alt="Detalhe robótica"
+                                    <img src="images/close-up-making-robots.jpg" alt="Detalhe robótica" loading="lazy"
+                                        decoding="async"
                                         class="rounded-[2rem] shadow-2xl border-8 border-white transform rotate-3 transition-transform duration-700 group-hover:rotate-1 hover:scale-105">
                                 </div>
 
@@ -578,7 +604,7 @@
                                     <h4 class="font-display text-2xl font-bold text-slate-900 mb-4">Compromisso com a
                                         Educação</h4>
                                     <p class="text-slate-600 text-lg leading-relaxed">
-                                        Nossa curadoria garante o cumprimento rigoroso das 10 competências da
+                                        Nossa curadoria aborda o cumprimento das 10 competências da
                                         <strong>BNCC</strong>, contribui para os <strong>ODS</strong> da ONU e segue as
                                         diretrizes de segurança do <strong>CERT.br</strong>.
                                     </p>
@@ -664,7 +690,7 @@
                             <div class="relative">
                                 <!-- Imagem Principal -->
                                 <img src="images/mixed-race-boy-glasses-rising-hand-answer-lesson.jpg"
-                                    alt="Aluno participando"
+                                    alt="Aluno participando" loading="lazy" decoding="async"
                                     class="rounded-[2.5rem] shadow-2xl w-full object-cover h-[500px] relative border-4 border-white transform transition-transform duration-700 group-hover:scale-[1.01]">
                             </div>
                         </div>
@@ -936,10 +962,18 @@
                         </div>
                     </div>
 
-                    <div class="mt-16">
+                    <div class="mt-16 flex flex-col items-center gap-6">
                         <p class="text-slate-400 text-lg font-medium tracking-wide uppercase opacity-80">
                             Apoiamos para ver nossos alunos vencerem
                         </p>
+                        <a href="olimpiadas.html"
+                            class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-bold border border-white/10 hover:border-white/20 transition-all">
+                            Ver calendário completo de olimpíadas e competições
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </section>
@@ -987,9 +1021,21 @@
                                 d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.44-.645 1.44-1.44s-.645-1.44-1.44-1.44z" />
                         </svg>
                     </a>
+                    <a href="https://wa.me/5541998996996" target="_blank"
+                        class="text-slate-400 hover:text-white transition-all hover-shake scale-125">
+                        <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 22h-.004c-1.926 0-3.816-.518-5.469-1.499l-.392-.233-4.06.994 1.05-3.786-.253-.412C1.815 15.31 1.28 13.61 1.28 11.9 1.278 6.454 5.905 1.9 12.05 1.9c2.97 0 5.762 1.14 7.865 3.212a10.72 10.72 0 013.19 7.632c-.003 5.45-4.63 10-10.055 10z" />
+                        </svg>
+                    </a>
                 </div>
                 <p class="text-slate-500 text-sm font-medium tracking-wide">&copy; 2026 Izicode Edu - Excelência em
                     Tecnologia Educacional.</p>
+                <p class="text-slate-500 text-sm font-medium tracking-wide mt-2">
+                    <a href="https://wa.me/5541998996996" target="_blank" class="hover:text-white transition-colors">📱
+                        (41)
+                        99899-6996</a>
+                </p>
             </div>
         </footer>
     </body>

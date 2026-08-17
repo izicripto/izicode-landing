@@ -191,9 +191,9 @@ export class DashboardRoleManager {
         // Atualizar saudação baseada no role
         // Atualizar saudação baseada no role
         const greetingMap = {
-            'dev': 'Modo Desenvolvedor Ativo 👨‍💻',
+            'dev': 'Modo Desenvolvedor Ativo',
             'school_admin': 'Vamos gerenciar sua escola hoje?',
-            'freelance_teacher': 'Suas aulas, suas regras! 🚀',
+            'freelance_teacher': 'Suas aulas, suas regras!',
             'teacher': 'Vamos transformar a educação hoje?',
             'student': 'Pronto para aprender algo novo?',
             'parent': 'Vamos acompanhar o progresso?',
@@ -216,7 +216,19 @@ export class DashboardRoleManager {
 
             if (levelEl) levelEl.textContent = levelInfo.level;
             if (xpEl) xpEl.textContent = xp;
-            if (keysEl) keysEl.textContent = this.userData.keys !== undefined ? this.userData.keys : 10;
+            if (keysEl) keysEl.textContent = this.userData.keys || 0;
+        }
+
+        const planLabelMap = {
+            'professor-pro': 'Professor PRO',
+            'admin': 'Administrador',
+            'dev': 'Desenvolvedor',
+            'school_admin': 'Gestão Escolar'
+        };
+        const planEl = document.getElementById('userPlanLabel');
+        if (planEl) {
+            planEl.textContent = planLabelMap[this.userRole]
+                || (this.userData?.subscription?.plan === 'free' || !this.userData?.subscription?.plan ? 'Plano Gratuito' : this.userData.subscription.plan);
         }
     }
 
@@ -504,7 +516,7 @@ export class DashboardRoleManager {
                     widgetsHtml = this.getDevWidgets(stats);
                     break;
                 case 'school_admin':
-                    const sStats = await this.fetchPlatformStats(); // Reuse platform stats or specialized school stats
+                    const sStats = await this.fetchSchoolStats();
                     widgetsHtml = this.getSchoolAdminWidgets(sStats);
                     break;
                 case 'freelance_teacher':
@@ -512,7 +524,8 @@ export class DashboardRoleManager {
                 case 'professor-pro':
                     const projectsCount = await this.fetchProjectsCount();
                     const recentProjects = await this.fetchRecentProjects();
-                    const leaderboard = await this.fetchLeaderboard(['teacher', 'freelance_teacher']);
+                    // Widget mostra "TOP Global Alunos" — o filtro precisa ser de papéis de aluno, não de professor.
+                    const leaderboard = await this.fetchLeaderboard(['student', 'maker']);
                     widgetsHtml = this.getTeacherWidgets(projectsCount, recentProjects, leaderboard, this.userData);
                     break;
                 case 'consultant':
@@ -567,6 +580,12 @@ export class DashboardRoleManager {
     }
 
     async fetchLeaderboard(targetRoles) {
+        // Firestore now scopes cross-user reads to the requester's own
+        // school (see firestore.rules), so there is no valid query for a
+        // user with no schoolId (e.g. an independent freelance teacher).
+        const schoolId = this.userData?.schoolId;
+        if (!schoolId) return [];
+
         try {
             const roles = Array.isArray(targetRoles) ? targetRoles : [targetRoles];
             const usersRef = collection(db, "users");
@@ -574,6 +593,7 @@ export class DashboardRoleManager {
             // Using "in" operator for roles
             const q = query(
                 usersRef,
+                where("schoolId", "==", schoolId),
                 where("role", "in", roles),
                 orderBy("xp", "desc"),
                 limit(10)
@@ -586,7 +606,7 @@ export class DashboardRoleManager {
             try {
                 const roles = Array.isArray(targetRoles) ? targetRoles : [targetRoles];
                 const usersRef = collection(db, "users");
-                const qFallback = query(usersRef, orderBy("xp", "desc"), limit(500)); // Increase fallback limit
+                const qFallback = query(usersRef, where("schoolId", "==", schoolId), orderBy("xp", "desc"), limit(500)); // Increase fallback limit
                 const snapshot = await getDocs(qFallback);
                 return snapshot.docs
                     .map(d => d.data())
@@ -818,11 +838,11 @@ export class DashboardRoleManager {
 
                     <!-- Pedagogical Tip of the Day -->
                     <div id="sidebarTip" class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-[3rem] p-10 border border-amber-100 shadow-sm relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-8 text-7xl opacity-5">💡</div>
+                        <div class="absolute top-0 right-0 p-8 text-amber-400 opacity-10">${this.getIconSvg('sparkle').replace('w-6 h-6', 'w-24 h-24')}</div>
                         <span class="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em] block mb-4">Insight Maker</span>
                         <p class="text-amber-900 font-bold leading-relaxed text-lg italic mb-6">"Use o Erro como Ferramenta: Na robótica, um motor que não gira é uma oportunidade de ensinar sobre circuitos, não uma falha."</p>
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-xl">✨</div>
+                            <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-amber-500">${this.getIconSvg('sparkle')}</div>
                             <span class="text-amber-700/60 text-xs font-black uppercase tracking-widest">#DicaIzicode</span>
                         </div>
                     </div>
@@ -951,7 +971,7 @@ export class DashboardRoleManager {
                                         </div>
                                         <div class="text-right">
                                             <span class="block text-xs font-black text-brand-600">+${mission.xp} XP</span>
-                                            ${mission.keys ? `<span class="block text-[8px] font-black text-amber-500 uppercase">🔑 +${mission.keys}</span>` : ''}
+                                            ${mission.keys ? `<span class="block text-[8px] font-black text-amber-500 uppercase flex items-center gap-1 justify-end">${this.getIconSvg('key').replace('w-6 h-6', 'w-3 h-3')} +${mission.keys}</span>` : ''}
                                         </div>
                                     </div>
                                     ${isDone ? '<div class="absolute inset-0 bg-emerald-500/5 backdrop-blur-[1px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><span class="bg-emerald-500 text-white text-[8px] font-black px-3 py-1 rounded-full">CONCLUÍDO</span></div>' : ''}
@@ -962,7 +982,7 @@ export class DashboardRoleManager {
 
                     <!-- Ranking Preview -->
                     <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-6 text-4xl opacity-10 rotate-12">🏆</div>
+                        <div class="absolute top-0 right-0 p-6 text-amber-400 opacity-10 rotate-12">${this.getIconSvg('award').replace('w-6 h-6', 'w-14 h-14')}</div>
                         <h4 class="text-xl font-black mb-4 font-display tracking-tight uppercase tracking-widest text-[10px] text-brand-400">TOP Global Alunos</h4>
                         <div class="space-y-4">
                             ${leaderboard.length > 0 ? leaderboard.slice(0, 3).map((u, i) => `
@@ -1043,6 +1063,28 @@ export class DashboardRoleManager {
             };
         } catch (e) {
             console.error("Stats Error:", e);
+            return null;
+        }
+    }
+
+    // Same shape as fetchPlatformStats() but scoped to the admin's own
+    // school, since Firestore rules only let a school_admin read users
+    // that share their schoolId (see firestore.rules).
+    async fetchSchoolStats() {
+        const schoolId = this.userData?.schoolId;
+        if (!schoolId) return null;
+
+        try {
+            const usersSnap = await getDocs(query(collection(db, "users"), where("schoolId", "==", schoolId)));
+            const users = usersSnap.docs.map(d => d.data());
+
+            return {
+                totalUsers: users.length,
+                teachers: users.filter(u => u.role === 'teacher').length,
+                students: users.filter(u => u.role === 'student').length
+            };
+        } catch (e) {
+            console.error("School Stats Error:", e);
             return null;
         }
     }
@@ -1132,6 +1174,8 @@ export class DashboardRoleManager {
     getSchoolAdminWidgets(stats) {
         if (!stats) return '<div class="text-center">Erro ao carregar dados da escola.</div>';
 
+        const studentsPerTeacher = stats.teachers > 0 ? Math.round(stats.students / stats.teachers) : null;
+
         return `
             <!-- School Overview Hero -->
             <div class="bg-slate-900 rounded-[3rem] p-10 md:p-14 text-white shadow-2xl relative overflow-hidden mb-12 border border-white/5">
@@ -1140,13 +1184,13 @@ export class DashboardRoleManager {
                 
                 <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
                     <div class="flex items-center gap-8">
-                        <div class="w-24 h-24 rounded-[2rem] bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-4xl shadow-2xl">
-                            🏫
+                        <div class="w-24 h-24 rounded-[2rem] bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white shadow-2xl">
+                            ${this.getIconSvg('home').replace('w-6 h-6', 'w-10 h-10')}
                         </div>
                         <div class="text-center md:text-left">
                             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 mb-4">
                                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-brand-100">Status: Instituição Pro</span>
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-brand-100">${stats.totalUsers} membros na plataforma</span>
                             </div>
                             <h2 class="text-4xl md:text-6xl font-black mb-2 font-display tracking-tighter leading-tight">Gestão Escolar</h2>
                             <p class="text-slate-400 text-lg md:text-xl font-medium">Monitorando a evolução tecnológica da sua escola.</p>
@@ -1158,19 +1202,19 @@ export class DashboardRoleManager {
             <!-- Stats Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="w-16 h-16 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">👨‍🏫</div>
+                    <div class="w-16 h-16 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">${this.getIconSvg('users').replace('w-6 h-6', 'w-8 h-8')}</div>
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Corpo Docente</p>
                     <p class="text-4xl font-black text-slate-900">${stats.teachers || 0} Professores</p>
                 </div>
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="w-16 h-16 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">🎓</div>
+                    <div class="w-16 h-16 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">${this.getIconSvg('book-open').replace('w-6 h-6', 'w-8 h-8')}</div>
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Engajamento Alunos</p>
                     <p class="text-4xl font-black text-slate-900">${stats.students || 0} Alunos Ativos</p>
                 </div>
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">⚡</div>
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Nível de Inovação</p>
-                    <p class="text-4xl font-black text-slate-900">Elite Maker</p>
+                    <div class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">${this.getIconSvg('chart').replace('w-6 h-6', 'w-8 h-8')}</div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Comunidade Total</p>
+                    <p class="text-4xl font-black text-slate-900">${stats.totalUsers || 0} Membros</p>
                 </div>
             </div>
 
@@ -1184,14 +1228,14 @@ export class DashboardRoleManager {
                     <div class="grid grid-cols-1 gap-4">
                         <a href="school-management.html" class="flex items-center justify-between p-6 bg-white rounded-3xl border border-slate-100 hover:border-brand-300 hover:shadow-lg transition-all group">
                             <div class="flex items-center gap-5">
-                                <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-xl group-hover:bg-brand-50">👥</div>
+                                <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-600 group-hover:bg-brand-50 group-hover:text-brand-600">${this.getIconSvg('users').replace('w-6 h-6', 'w-5 h-5')}</div>
                                 <span class="font-black text-slate-800">Gerenciar Professores e Turmas</span>
                             </div>
                             <svg class="w-5 h-5 text-slate-400 group-hover:text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </a>
                         <a href="library.html" class="flex items-center justify-between p-6 bg-white rounded-3xl border border-slate-100 hover:border-purple-300 hover:shadow-lg transition-all group">
                             <div class="flex items-center gap-5">
-                                <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-xl group-hover:bg-purple-50">📚</div>
+                                <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-600 group-hover:bg-purple-50 group-hover:text-purple-600">${this.getIconSvg('book-open').replace('w-6 h-6', 'w-5 h-5')}</div>
                                 <span class="font-black text-slate-800">Biblioteca Currículo Oficial</span>
                             </div>
                             <svg class="w-5 h-5 text-slate-400 group-hover:text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -1201,13 +1245,13 @@ export class DashboardRoleManager {
 
                 <!-- Growth Insight -->
                 <div class="bg-gradient-to-br from-indigo-50 to-brand-50 rounded-[3rem] p-10 border border-indigo-100 shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-8 text-7xl opacity-5">📈</div>
-                    <span class="text-[10px] font-black text-indigo-500 uppercase tracking-[0.2em] block mb-4">Relatório de Crescimento</span>
-                    <h4 class="text-2xl font-black text-slate-900 mb-4">Impacto Educacional</h4>
-                    <p class="text-slate-600 font-medium leading-relaxed mb-8">Sua escola atingiu 85% da meta de projetos maker para este semestre. Continue incentivando o uso da IA para criação de roteiros.</p>
-                    <div class="w-full bg-white/50 rounded-full h-4 p-1 border border-indigo-100">
-                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 85%"></div>
-                    </div>
+                    <div class="absolute top-0 right-0 p-8 text-indigo-400 opacity-10">${this.getIconSvg('chart').replace('w-6 h-6', 'w-24 h-24')}</div>
+                    <span class="text-[10px] font-black text-indigo-500 uppercase tracking-[0.2em] block mb-4">Panorama da Escola</span>
+                    <h4 class="text-2xl font-black text-slate-900 mb-4">Corpo Docente e Discente</h4>
+                    <p class="text-slate-600 font-medium leading-relaxed mb-4">${stats.totalUsers} pessoas cadastradas na plataforma: ${stats.teachers} professor(es) e ${stats.students} aluno(s).</p>
+                    ${studentsPerTeacher !== null
+                    ? `<p class="text-indigo-700 font-black">${studentsPerTeacher} aluno(s) por professor em média.</p>`
+                    : `<p class="text-slate-500 text-sm">Cadastre professores para ver a proporção aluno/professor.</p>`}
                 </div>
             </div>
         `;

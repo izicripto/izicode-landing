@@ -5,22 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes do Projeto - Izicode Edu</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
         rel="stylesheet">
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="/js/auth-guard.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
-                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1' } }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="css/tw/71ce27d9.css">
     <style>
         /* Typography for rendered markdown */
         .prose h1 {
@@ -188,7 +178,7 @@
             <div class="mt-8 flex flex-wrap gap-6 text-sm text-slate-500 border-t border-slate-100 pt-6">
                 <div>
                     <span class="block font-bold text-slate-900 mb-1">BNCC</span>
-                    <span id="projectBNCC" class="bg-slate-100 px-2 py-1 rounded">EF00TEC00</span>
+                    <div id="projectBNCC" class="flex flex-wrap gap-1.5"></div>
                 </div>
                 <div>
                     <span class="block font-bold text-slate-900 mb-1">ODS (ONU)</span>
@@ -303,6 +293,22 @@
         </div>
     </footer>
 
+    <!-- Modal: detalhe da habilidade BNCC -->
+    <div id="bnccModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl relative">
+            <button onclick="document.getElementById('bnccModal').classList.add('hidden'); document.getElementById('bnccModal').classList.remove('flex');"
+                class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <span id="bnccModalCode" class="inline-block text-xs font-bold px-2.5 py-1 bg-brand-50 text-brand-700 rounded-full mb-3">EF00TEC00</span>
+            <p id="bnccModalArea" class="text-sm font-bold text-slate-400 uppercase tracking-wide mb-3"></p>
+            <p id="bnccModalText" class="text-slate-700 leading-relaxed"></p>
+            <p id="bnccModalAnchor" class="text-slate-500 text-sm leading-relaxed mt-4 pt-4 border-t border-slate-100 hidden"></p>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
@@ -310,6 +316,7 @@
 
     <script type="module">
         import { getProjectById } from './js/projects-data.js';
+        import { getBnccSkill } from './js/bncc-data.js';
         import { auth, db, storage, doc, getDoc, setDoc, updateDoc, serverTimestamp, increment, ref, uploadBytes, getDownloadURL } from './js/firebase-config.js';
 
         // Get ID from URL
@@ -331,6 +338,20 @@
 
         let project = null; // Will hold the project data object
 
+        // Histórico local de projetos vistos, usado pela recomendação
+        // inteligente da Biblioteca (library.html) — sem custo de API,
+        // roda inteiramente no navegador.
+        function markProjectAsViewed(id) {
+            try {
+                const key = 'izicode_viewed_projects';
+                const viewed = JSON.parse(localStorage.getItem(key) || '[]');
+                const next = [id, ...viewed.filter(v => v !== id)].slice(0, 30);
+                localStorage.setItem(key, JSON.stringify(next));
+            } catch (e) {
+                // localStorage indisponível (modo privado, etc.) — não bloqueia a navegação
+            }
+        }
+
         // Global quiz navigation function
         window.goToQuiz = function () {
             let url = 'quiz-arena.html?';
@@ -346,6 +367,7 @@
                 project = getProjectById(staticProjectId);
                 renderProject(project);
                 initInteraction(project.id, false);
+                markProjectAsViewed(project.id);
             } else if (userProjectId) {
                 // Scenario 2: User AI Project (Firestore)
                 auth.onAuthStateChanged(async (user) => {
@@ -420,6 +442,51 @@
             }
         }
 
+        // Chips clicáveis de BNCC: mostram o texto oficial da habilidade
+        // (ou, para marcadores internos do Izicode Edu, um aviso claro de
+        // que não é um código emitido pelo MEC) — ver js/bncc-data.js.
+        function renderBnccChips(codes) {
+            const container = document.getElementById('projectBNCC');
+            if (!codes || codes.length === 0) {
+                container.innerHTML = '<span class="bg-slate-100 px-2 py-1 rounded">Geral</span>';
+                return;
+            }
+            container.innerHTML = codes.map(code => {
+                const skill = getBnccSkill(code.trim());
+                const badgeClass = skill
+                    ? (skill.official ? 'bg-brand-50 text-brand-700 hover:bg-brand-100' : 'bg-amber-50 text-amber-700 hover:bg-amber-100')
+                    : 'bg-slate-100 text-slate-600';
+                return `<button type="button" onclick="window.openBnccDetail('${code.trim()}')"
+                    class="px-2 py-1 rounded font-mono text-xs font-bold transition-colors ${badgeClass}">
+                    ${code.trim()}${skill && !skill.official ? ' ⚠' : ''}
+                </button>`;
+            }).join('');
+        }
+
+        window.openBnccDetail = function (code) {
+            const skill = getBnccSkill(code);
+            document.getElementById('bnccModalCode').textContent = code;
+
+            if (!skill) {
+                document.getElementById('bnccModalArea').textContent = 'Código não catalogado';
+                document.getElementById('bnccModalText').textContent = 'Ainda não temos a descrição verificada deste código na nossa base.';
+                document.getElementById('bnccModalAnchor').classList.add('hidden');
+            } else if (skill.official) {
+                document.getElementById('bnccModalArea').textContent = skill.area;
+                document.getElementById('bnccModalText').textContent = skill.text;
+                document.getElementById('bnccModalAnchor').classList.add('hidden');
+            } else {
+                document.getElementById('bnccModalArea').textContent = skill.area;
+                document.getElementById('bnccModalText').textContent = skill.text;
+                document.getElementById('bnccModalAnchor').innerHTML = `<strong>Competência Geral 5 (BNCC) — Cultura Digital:</strong><br>${skill.officialAnchor}`;
+                document.getElementById('bnccModalAnchor').classList.remove('hidden');
+            }
+
+            const modal = document.getElementById('bnccModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
         function renderProject(data) {
             document.getElementById('projectTitle').textContent = data.title;
             document.title = `${data.title} - Izicode Edu`;
@@ -433,7 +500,7 @@
                 ${data.duration}
             `;
 
-            document.getElementById('projectBNCC').textContent = Array.isArray(data.bncc) ? data.bncc.join(', ') : (data.bncc || 'Geral');
+            renderBnccChips(Array.isArray(data.bncc) ? data.bncc : (data.bncc ? [data.bncc] : []));
             document.getElementById('projectODS').textContent = data.ods || 'Geral';
 
             // Render Markdown Content (Sanitized)

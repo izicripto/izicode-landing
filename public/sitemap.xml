@@ -19,10 +19,69 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://izicode.com.br/docs/README.md</loc>
-    <lastmod>2026-02-01</lastmod>
+    <loc>https://izicode.com.br/olimpiadas.html</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/pricing.html</loc>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <!-- Adicionei a biblioteca e o shop, removi docs individuais do sitemap por enquanto para focar na conversão -->
+  <url>
+    <loc>https://izicode.com.br/contact.html</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/portal.html</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/guia.html?doc=07-MANUAL-IMPLEMENTACAO</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/guia.html?doc=05-GUIA-BNCC-TECNOLOGIA</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/guia.html?doc=01-GUIA-HACKATHON-ESCOLAR</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/guia.html?doc=02-GUIA-OLIMPIADAS-COMPETICOES</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/guia.html?doc=03-GUIA-PRATICAS-RESTAURATIVAS</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/guia.html?doc=04-GUIA-PROJETOS-ODS</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/guia.html?doc=06-GUIA-ECOLOGIA-SUSTENTABILIDADE</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
 </urlset>

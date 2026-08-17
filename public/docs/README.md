@@ -56,7 +56,7 @@ Todos os documentos estão disponíveis em formato Markdown e podem ser converti
 **Izicode Edu - Consultoria em Tecnologia Educacional**
 
 📧 contato@izicode.com.br
-📱 WhatsApp: (41) 99999-9999
+📱 WhatsApp: (41) 99899-6996
 🌐 https://izicode-landing.vercel.app
 
 ---
