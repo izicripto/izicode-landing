@@ -14,7 +14,7 @@ const TOOLS: Tool[] = [
   { name: "MakeyMakey", logo: "/makeymakey.png", url: "https://makeymakey.com" },
   { name: "App Inventor", logo: "/appinventor.png", url: "https://appinventor.mit.edu" },
   { name: "Python", logo: "/python-logo.jpg", url: "https://www.python.org" },
-  { name: "RPG Maker", logo: "/rpgmaker.jpeg", url: "https://www.rpgmakerweb.com", internal: true },
+  { name: "RPG Maker", logo: "/rpgmaker.jpeg", url: "https://izicodeedurpg.vercel.app/", internal: true },
 ]
 
 export function Tools() {
