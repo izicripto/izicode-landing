@@ -8,7 +8,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # A landing page (app/) e o restante do site (public/) ainda são dois
+      # projetos separados — o app roda numa SPA React/Vite, o resto é HTML
+      # estático servido direto. Aqui buildamos o app e sobrepomos a saída
+      # em cima de public/ só nesta pasta de trabalho do runner (nunca é
+      # commitado): substitui public/index.html pela home nova e adiciona os
+      # assets do app na raiz. Todas as outras páginas em public/ (login,
+      # dashboards, portal etc.) continuam do jeito que estão.
+      - name: Build React app
+        run: |
+          cd app
+          npm ci
+          npm run build
+
+      - name: Merge React build into public/
+        run: cp -r app/dist/. public/
+
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:

@@ -14,8 +14,11 @@ firebase-debug.log
 node_modules/
 npm-debug.log
 yarn-error.log
-package-lock.json
 yarn.lock
+
+# app/package-lock.json IS tracked on purpose: the CI build (see
+# .github/workflows/firebase-hosting-merge.yml) runs `npm ci`, which
+# requires a committed lockfile to install reproducible versions.
 
 # Scripts de inicialização (contém lógica sensível)
 init-db-admin.mjs
