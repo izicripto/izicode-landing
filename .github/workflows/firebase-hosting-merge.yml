@@ -30,10 +30,15 @@ jobs:
       - name: Merge React build into public/
         run: cp -r app/dist/. public/
 
+      # --only hosting,firestore:rules — as regras de segurança do Firestore
+      # (firestore.rules) moravam só no repositório até agora: este workflow
+      # nunca as publicava, então mudanças de rules (como a subcoleção
+      # courseProgress da Academia do Professor) ficavam commitadas mas
+      # inertes, e toda escrita que dependesse delas era negada em produção.
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting
+          args: deploy --only hosting,firestore:rules
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: izicodeedu-532ac
