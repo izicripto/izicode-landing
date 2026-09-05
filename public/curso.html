@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Curso - Academia do Professor - Izicode Edu</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/tw/academia.css">
+    <style>
+        .prose h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 2.2rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .prose h2:first-child {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .prose h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 1.5rem;
+        }
+
+        .prose p,
+        .prose li {
+            line-height: 1.75;
+        }
+
+        .prose table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .prose th,
+        .prose td {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 0.8rem;
+            text-align: left;
+        }
+
+        .prose th {
+            background: #f8fafc;
+        }
+
+        .prose a {
+            color: #0284c7;
+        }
+
+        .prose code {
+            background: #f1f5f9;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-family: ui-monospace, monospace;
+        }
+
+        .prose pre {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            overflow-x: auto;
+        }
+
+        .prose pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        .prose blockquote {
+            border-left: 3px solid #7dd3fc;
+            padding-left: 1rem;
+            color: #475569;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 min-h-screen flex flex-col font-sans text-slate-700">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center h-16">
+            <a href="academia.html" class="flex items-center gap-3 group">
+                <div
+                    class="bg-white p-1.5 rounded-xl shadow-sm border border-slate-100 group-hover:border-brand-200 transition-all">
+                    <img src="images/logo.png" alt="Izicode" class="w-8 h-8 object-contain">
+                </div>
+                <span class="font-display font-black text-lg text-slate-900 hidden sm:inline">Academia do
+                    Professor</span>
+            </a>
+            <a href="academia.html"
+                class="text-sm font-bold text-slate-500 hover:text-brand-600 transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Todos os cursos
+            </a>
+        </div>
+    </nav>
+
+    <div id="loadingState" class="text-center py-24 text-slate-400 flex-1">Carregando curso...</div>
+    <div id="notFoundState" class="hidden text-center py-24 flex-1">
+        <p class="text-xl font-bold text-slate-700">Curso não encontrado.</p>
+        <a href="academia.html" class="text-brand-600 font-bold hover:underline mt-2 inline-block">Voltar à
+            Academia</a>
+    </div>
+
+    <main id="courseLayout" class="hidden max-w-7xl mx-auto px-6 py-10 w-full flex-1 grid lg:grid-cols-4 gap-8">
+        <!-- Sidebar -->
+        <aside class="lg:col-span-1">
+            <div class="bg-white border border-slate-200 rounded-3xl p-5 sticky top-24">
+                <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
+                    <img id="courseLogo" src="" alt="" class="h-9 w-9 object-contain">
+                    <h1 id="courseTitle" class="font-display font-bold text-slate-900 leading-tight"></h1>
+                </div>
+                <div id="moduleList" class="space-y-1"></div>
+            </div>
+        </aside>
+
+        <!-- Content -->
+        <div class="lg:col-span-3">
+            <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-10">
+                <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+                    <span id="moduleMeta" class="text-xs font-black text-brand-600 uppercase tracking-widest"></span>
+                    <span id="moduleDuration"
+                        class="text-xs font-bold text-slate-400 flex items-center gap-1.5"></span>
+                </div>
+                <h2 id="moduleTitle" class="font-display text-2xl md:text-3xl font-bold text-slate-900 mb-8"></h2>
+
+                <article id="moduleContent" class="prose prose-slate max-w-none hidden"></article>
+
+                <div id="lockedState" class="hidden text-center py-16 border-2 border-dashed border-slate-200 rounded-3xl">
+                    <div class="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Módulo exclusivo do plano PRO</h3>
+                    <p class="text-slate-500 mb-8 max-w-sm mx-auto">Desbloqueie esta e todas as outras trilhas
+                        completas da Academia do Professor.</p>
+                    <button onclick="openProModal()"
+                        class="px-8 py-3 bg-brand-600 text-white rounded-2xl font-bold hover:bg-brand-700 transition-all">
+                        Desbloquear com PRO
+                    </button>
+                </div>
+
+                <div class="mt-10 pt-8 border-t border-slate-100 flex items-center justify-between flex-wrap gap-4">
+                    <button id="btnComplete" onclick="markComplete()"
+                        class="px-6 py-3 bg-slate-100 text-slate-700 rounded-2xl font-bold hover:bg-slate-200 transition-all flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Marcar como concluído
+                    </button>
+                    <button id="btnNext" onclick="goToNextModule()"
+                        class="px-6 py-3 bg-brand-600 text-white rounded-2xl font-bold hover:bg-brand-700 transition-all flex items-center gap-2">
+                        Próximo módulo
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PRO Modal -->
+    <div id="proModal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 py-8">
+            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeProModal()"></div>
+            <div class="relative bg-white rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden p-8 lg:p-10">
+                <button onclick="closeProModal()"
+                    class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <span
+                    class="inline-block px-3 py-1 bg-brand-50 text-brand-600 text-xs font-black uppercase tracking-widest rounded-full mb-6">Academia
+                    PRO</span>
+                <h2 class="font-display text-3xl font-bold text-slate-900 mb-3">Libere todas as trilhas</h2>
+                <p class="text-slate-500 mb-8">Solicite acesso PRO e nossa equipe entra em contato pra liberar o
+                    acesso completo à Academia do Professor e às demais ferramentas PRO da plataforma.</p>
+                <button onclick="requestPro(this)"
+                    class="w-full py-4 bg-brand-600 text-white rounded-2xl font-bold text-lg hover:bg-brand-700 hover:shadow-xl transition-all">
+                    Solicitar Acesso PRO
+                </button>
+                <p class="text-center text-xs text-slate-400 mt-4">Sem cobrança automática — nossa equipe entra em
+                    contato pelo seu e-mail.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"></script>
+    <script type="module">
+        import { getCourseById } from './js/courses-data.js';
+        import { auth, db } from './js/firebase-config.js';
+        import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const params = new URLSearchParams(window.location.search);
+        const courseId = params.get('id');
+        let moduloParam = params.get('modulo');
+
+        let course = null;
+        let currentModuleIndex = 0;
+        let currentUser = null;
+        let userData = null;
+        let completedModules = [];
+
+        async function init() {
+            course = getCourseById(courseId);
+            if (!course || course.comingSoon) {
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('notFoundState').classList.remove('hidden');
+                return;
+            }
+
+            document.title = `${course.title} - Academia do Professor - Izicode Edu`;
+            document.getElementById('courseTitle').textContent = course.title;
+            document.getElementById('courseLogo').src = course.logo;
+            document.getElementById('courseLogo').alt = course.tool;
+
+            if (moduloParam) {
+                const idx = course.modules.findIndex(m => m.id === moduloParam);
+                if (idx >= 0) currentModuleIndex = idx;
+            }
+
+            auth.onAuthStateChanged(async (user) => {
+                currentUser = user;
+                if (user) {
+                    const snap = await getDoc(doc(db, 'users', user.uid));
+                    userData = snap.exists() ? snap.data() : null;
+
+                    const progressSnap = await getDoc(doc(db, 'users', user.uid, 'courseProgress', course.id));
+                    completedModules = progressSnap.exists() ? (progressSnap.data().completedModules || []) : [];
+                }
+                renderSidebar();
+                renderModule();
+            });
+
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('courseLayout').classList.remove('hidden');
+        }
+
+        function isPro() {
+            return userData?.role === 'professor-pro' || userData?.role === 'admin';
+        }
+
+        function canAccess(module) {
+            return module.free || isPro();
+        }
+
+        function renderSidebar() {
+            const list = document.getElementById('moduleList');
+            list.innerHTML = course.modules.map((m, i) => {
+                const locked = !canAccess(m);
+                const done = completedModules.includes(m.id);
+                const active = i === currentModuleIndex;
+                return `
+                    <button onclick="goToModule(${i})" class="w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 transition-all ${active ? 'bg-brand-50 text-brand-700' : 'hover:bg-slate-50 text-slate-600'}">
+                        <span class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black ${done ? 'bg-emerald-500 text-white' : active ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-400'}">
+                            ${done ? '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>' : (i + 1)}
+                        </span>
+                        <span class="flex-1 text-sm font-bold leading-tight">${m.title}</span>
+                        ${locked ? '<svg class="w-4 h-4 flex-shrink-0 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>' : ''}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function renderModule() {
+            const module = course.modules[currentModuleIndex];
+            const locked = !canAccess(module);
+
+            document.getElementById('moduleMeta').textContent = `Módulo ${currentModuleIndex + 1} de ${course.modules.length}`;
+            document.getElementById('moduleDuration').innerHTML = `
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                ${module.duration}
+            `;
+            document.getElementById('moduleTitle').textContent = module.title;
+
+            const contentEl = document.getElementById('moduleContent');
+            const lockedEl = document.getElementById('lockedState');
+            const btnComplete = document.getElementById('btnComplete');
+            const btnNext = document.getElementById('btnNext');
+
+            if (locked) {
+                contentEl.classList.add('hidden');
+                lockedEl.classList.remove('hidden');
+                btnComplete.classList.add('hidden');
+            } else {
+                lockedEl.classList.add('hidden');
+                contentEl.classList.remove('hidden');
+                contentEl.innerHTML = DOMPurify.sanitize(marked.parse(module.content));
+                btnComplete.classList.remove('hidden');
+
+                const done = completedModules.includes(module.id);
+                btnComplete.innerHTML = done
+                    ? `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Concluído`
+                    : `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Marcar como concluído`;
+                btnComplete.className = done
+                    ? 'px-6 py-3 bg-emerald-50 text-emerald-700 rounded-2xl font-bold flex items-center gap-2'
+                    : 'px-6 py-3 bg-slate-100 text-slate-700 rounded-2xl font-bold hover:bg-slate-200 transition-all flex items-center gap-2';
+            }
+
+            btnNext.classList.toggle('hidden', currentModuleIndex >= course.modules.length - 1);
+
+            const url = new URL(window.location);
+            url.searchParams.set('modulo', module.id);
+            window.history.replaceState({}, '', url);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.goToModule = (index) => {
+            currentModuleIndex = index;
+            renderSidebar();
+            renderModule();
+        };
+
+        window.goToNextModule = () => {
+            if (currentModuleIndex < course.modules.length - 1) {
+                window.goToModule(currentModuleIndex + 1);
+            }
+        };
+
+        window.markComplete = async () => {
+            if (!currentUser) {
+                alert('Faça login para salvar seu progresso na Academia do Professor.');
+                window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
+                return;
+            }
+
+            const module = course.modules[currentModuleIndex];
+            if (!completedModules.includes(module.id)) {
+                completedModules.push(module.id);
+            }
+
+            try {
+                await setDoc(doc(db, 'users', currentUser.uid, 'courseProgress', course.id), {
+                    completedModules,
+                    lastAccessedAt: serverTimestamp()
+                }, { merge: true });
+                renderSidebar();
+                renderModule();
+            } catch (e) {
+                console.error('Erro ao salvar progresso:', e);
+                alert('Não foi possível salvar seu progresso agora. Tente novamente.');
+            }
+        };
+
+        window.openProModal = () => {
+            document.getElementById('proModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        };
+        window.closeProModal = () => {
+            document.getElementById('proModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        };
+        window.requestPro = async (btn) => {
+            if (!currentUser) {
+                alert('Faça login para solicitar acesso PRO.');
+                window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
+                return;
+            }
+
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
+
+            try {
+                await addDoc(collection(db, 'leads'), {
+                    name: currentUser.displayName || 'Professor(a)',
+                    email: currentUser.email,
+                    role: userData?.role || 'freelance_teacher',
+                    goal: 'Solicitação de acesso PRO — Academia do Professor',
+                    message: `Pedido de acesso PRO enviado a partir do curso "${course.title}".`,
+                    source: 'academia_curso_pro_request',
+                    status: 'new',
+                    createdAt: serverTimestamp()
+                });
+                alert('Pedido registrado! Nossa equipe vai entrar em contato pelo seu e-mail para liberar o acesso PRO.');
+                closeProModal();
+            } catch (e) {
+                console.error('Erro ao registrar pedido de acesso PRO:', e);
+                alert('Não foi possível registrar seu pedido agora. Tente novamente.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        };
+
+        init();
+    </script>
+</body>
+
+</html>

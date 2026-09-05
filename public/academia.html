@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academia do Professor - Izicode Edu</title>
+    <meta name="description"
+        content="Cursos gratuitos para professores aprenderem Arduino, Scratch, Micro:bit e as demais ferramentas do currículo Izicode Edu, na prática.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://izicode.com.br/academia.html">
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/tw/academia.css">
+</head>
+
+<body class="bg-white min-h-screen flex flex-col font-sans text-slate-700">
+    <!-- Navbar -->
+    <nav class="p-6 md:px-12 flex justify-between items-center max-w-7xl mx-auto w-full">
+        <a href="index.html" class="flex items-center gap-4 group">
+            <div
+                class="bg-white p-2 rounded-2xl shadow-sm border border-slate-100 group-hover:border-brand-200 group-hover:shadow-brand-200/50 group-hover:scale-105 transition-all duration-300">
+                <img src="images/logo.png" alt="Izicode Logo"
+                    class="w-12 h-12 object-contain group-hover:rotate-6 transition-transform duration-300">
+            </div>
+            <span class="font-display font-black text-2xl md:text-3xl text-slate-900 tracking-tight">Izicode Edu</span>
+        </a>
+        <a href="portal.html"
+            class="text-base md:text-lg font-bold text-slate-500 hover:text-brand-600 transition-colors flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Portal de Conteúdo
+        </a>
+    </nav>
+
+    <!-- Hero -->
+    <header class="max-w-4xl mx-auto px-6 pt-8 pb-16 text-center">
+        <span
+            class="inline-flex items-center gap-2 px-5 py-2 mb-6 text-sm font-bold tracking-widest text-brand-700 uppercase bg-brand-50 rounded-full border border-brand-100">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            Academia do Professor
+        </span>
+        <h1 class="font-display text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">
+            Aprenda as ferramentas que você vai ensinar
+        </h1>
+        <p class="text-lg md:text-xl text-slate-500 leading-relaxed">
+            Trilhas práticas, direto ao ponto, escritas para quem vai dar aula com essa ferramenta amanhã —
+            não para quem quer virar especialista.
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 pb-24 w-full flex-1">
+        <div id="coursesGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- preenchido via JS -->
+        </div>
+
+        <!-- CTA -->
+        <section class="mt-20 bg-brand-600 rounded-[2.5rem] p-10 md:p-14 text-center text-white">
+            <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">Quer todas as trilhas completas?</h2>
+            <p class="text-brand-50 text-lg max-w-2xl mx-auto mb-8">
+                O primeiro módulo de cada curso é gratuito. Com o plano PRO, sua conta libera todos os módulos de
+                todas as trilhas.
+            </p>
+            <a href="pricing.html"
+                class="inline-flex items-center gap-2 bg-white text-brand-700 px-8 py-4 rounded-2xl font-bold hover:bg-brand-50 hover:scale-105 transition-all shadow-xl">
+                Ver Planos
+            </a>
+        </section>
+    </main>
+
+    <footer class="text-center text-sm text-slate-400 py-10 border-t border-slate-100">
+        © 2026 Izicode Edu.
+    </footer>
+
+    <script type="module">
+        import { getAllCourses } from './js/courses-data.js';
+
+        const ICONS = {
+            book: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />`,
+            clock: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />`,
+        };
+
+        function renderCourses() {
+            const grid = document.getElementById('coursesGrid');
+            const courses = getAllCourses();
+
+            grid.innerHTML = courses.map(course => {
+                if (course.comingSoon) {
+                    return `
+                        <div class="bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl p-6 opacity-70">
+                            <div class="flex items-center gap-3 mb-4">
+                                <img src="${course.logo}" alt="${course.tool}" class="h-10 w-10 object-contain grayscale">
+                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-100 px-3 py-1 rounded-full">Em breve</span>
+                            </div>
+                            <h3 class="font-display font-bold text-lg text-slate-500 mb-2">${course.title}</h3>
+                            <p class="text-sm text-slate-400">${course.description}</p>
+                        </div>
+                    `;
+                }
+
+                const totalModules = course.modules.length;
+                const freeModules = course.modules.filter(m => m.free).length;
+
+                return `
+                    <a href="curso.html?id=${course.id}" class="group bg-white border border-slate-200 rounded-3xl p-6 hover:border-brand-200 hover:shadow-xl hover:-translate-y-1 transition-all block">
+                        <div class="flex items-center justify-between mb-4">
+                            <img src="${course.logo}" alt="${course.tool}" class="h-10 w-10 object-contain">
+                            <span class="text-[10px] font-black text-brand-600 uppercase tracking-widest bg-brand-50 px-3 py-1 rounded-full">${course.level}</span>
+                        </div>
+                        <h3 class="font-display font-bold text-xl text-slate-900 mb-2 group-hover:text-brand-600 transition-colors">${course.title}</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed mb-5">${course.description}</p>
+                        <div class="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wide pt-4 border-t border-slate-100">
+                            <span class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">${ICONS.book}</svg>
+                                ${totalModules} módulos
+                            </span>
+                            <span class="text-emerald-600">${freeModules} grátis</span>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        renderCourses();
+    </script>
+</body>
+
+</html>

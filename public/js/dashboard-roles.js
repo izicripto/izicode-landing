@@ -305,6 +305,14 @@ export class DashboardRoleManager {
                 href: 'ia-assistant.html',
                 bgColor: 'bg-white',
                 borderColor: 'border-purple-200'
+            },
+            {
+                title: 'Academia do Professor',
+                description: 'Trilhas práticas de Arduino, Scratch e mais — primeiro módulo grátis.',
+                icon: 'book-open',
+                href: 'academia.html',
+                bgColor: 'bg-white',
+                borderColor: 'border-amber-200'
             }
         ];
     }
@@ -334,6 +342,14 @@ export class DashboardRoleManager {
                 href: 'ia-assistant.html',
                 bgColor: 'bg-white',
                 borderColor: 'border-emerald-200'
+            },
+            {
+                title: 'Academia do Professor',
+                description: 'Trilhas práticas de Arduino, Scratch e mais — primeiro módulo grátis.',
+                icon: 'book-open',
+                href: 'academia.html',
+                bgColor: 'bg-white',
+                borderColor: 'border-amber-200'
             }
         ];
     }

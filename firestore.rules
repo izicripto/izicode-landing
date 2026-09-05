@@ -85,6 +85,11 @@ service cloud.firestore {
       match /projects/{projectId} {
         allow read, write: if isOwner(userId) || isAdmin();
       }
+
+      // Progresso do usuário na Academia do Professor (courses-data.js)
+      match /courseProgress/{courseId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
     }
     
     // Schools collection
