@@ -3,8 +3,10 @@
  * Integration with Gemini API for dynamic quiz generation
  */
 
-// Retrieve API Key from LocalStorage (set by Assistant Settings)
-const getApiKey = () => localStorage.getItem('gemini_api_key');
+// A chave Gemini NÃO é mais hardcoded: deve vir do Cloud Function
+// generateAIProject (recomendado) ou de chave pessoal salva pelo usuário
+// em localStorage via Assistente IA. Fail-closed: sem chave, erro explícito.
+const getApiKey = () => localStorage.getItem('gemini_api_key') || "";
 
 export async function generateProjectQuiz(projectTitle, projectContent, userRole = 'student') {
     console.log(`Generating AI Quiz (V3) for: ${projectTitle} (Role: ${userRole})`);
@@ -55,12 +57,12 @@ export async function generateProjectQuiz(projectTitle, projectContent, userRole
     console.log("AI Service V3 - Key Loaded:", apiKey ? `${apiKey.substring(0, 4)}...` : "NONE");
 
     if (!apiKey || apiKey.includes('PLACEHOLDER')) {
-        if (apiKey) localStorage.removeItem('gemini_api_key'); 
-        throw new Error("Chave API Inválida (PLACEHOLDER detectado). Configure novamente no Assistente IA.");
+        localStorage.removeItem('gemini_api_key');
+        throw new Error("Chave API do Gemini não configurada. Gere via Cloud Function ou configure sua chave pessoal no Assistente IA.");
     }
 
-    // Models - Priority to 2.5
-    const models = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-pro"];
+    // Models - Priority to 3.6 / flash-latest
+    const models = ["gemini-3.6-flash", "gemini-flash-latest", "gemini-3.8-flash", "gemini-3.5-flash"];
     let errors = [];
 
     for (const model of models) {

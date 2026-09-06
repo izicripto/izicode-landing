@@ -4,392 +4,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Izicode Edu</title>
+    <title>Visão Geral - Izicode Edu</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="icon" type="image/png" href="/images/logo.png">
-    <script type="module" src="js/firebase-config.js"></script>
-    <!-- Auth Guard -->
-    <script type="module" src="/js/auth-guard.js"></script>
-    <!-- Role-Based Dashboard -->
-    <script type="module" src="/js/dashboard-roles.js"></script>
-    <script src="/js/pwa-install.js"></script>
-
-    <script type="module">
-        import { auth, db, doc, getDoc, collection, query, where, getDocs, signOut } from './js/firebase-config.js';
-
-        // O Auth Guard já cuida da verificação de login e preenchimento de nome/foto
-        // Aqui focamos apenas na lógica específica do Dashboard (carregar projetos, etc)
-
-        async function loadDashboardData() {
-            // Exemplo: Carregar contagem de projetos
-            // ...
-        }
-
-        // Existing logout and toggleMobileMenu functions should remain if not explicitly removed
-        window.logout = () => {
-            signOut(auth).then(() => window.location.href = "index.html");
-        };
-
-        // Toggle mobile menu
-        window.toggleMobileMenu = () => {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-        };
-    </script>
-    <script type="module">
-        import { getDailyTip } from './js/pedagogical-tips.js';
-
-        // Load Daily Tip
-        const tip = getDailyTip();
-        if (tip) {
-            const widget = document.getElementById('dailyTipWidget');
-            const iconContainer = document.getElementById('tipIcon');
-
-            // Set SVG Icon based on type
-            let iconSvg = '';
-            if (tip.type === 'motivation') {
-                // Star/Sparkle
-                iconSvg = '<svg class="w-8 h-8 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>';
-            } else if (tip.type === 'rpg') {
-                // D20 / Dice
-                iconSvg = '<svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>';
-            } else {
-                // Lightbulb
-                iconSvg = '<svg class="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>';
-            }
-            iconContainer.innerHTML = iconSvg;
-
-            document.getElementById('tipTitle').innerText = tip.title || 'Pensamento do Dia';
-            document.getElementById('tipText').innerText = `"${tip.text}"`;
-
-            if (tip.type === 'motivation') {
-                document.getElementById('tipTag').innerText = "MOTIVAÇÃO";
-                document.getElementById('tipTag').className = "text-xs font-bold text-sky-600 uppercase tracking-wider bg-sky-100 px-2 py-0.5 rounded-full";
-                widget.className = "mb-10 bg-gradient-to-r from-sky-50 to-blue-50 border border-sky-100 rounded-3xl p-6 relative overflow-hidden";
-            } else if (tip.type === 'rpg') {
-                document.getElementById('tipTag').innerText = tip.tag || "GAMIFICAÇÃO";
-                document.getElementById('tipTag').className = "text-xs font-bold text-purple-600 uppercase tracking-wider bg-purple-100 px-2 py-0.5 rounded-full";
-                widget.className = "mb-10 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-100 rounded-3xl p-6 relative overflow-hidden";
-            } else {
-                document.getElementById('tipTag').innerText = tip.tag || "DICA PEDAGÓGICA";
-            }
-
-            widget.classList.remove('hidden');
-        }
-    </script>
+    <link rel="icon" type="image/png" href="images/logo.png">
     <link rel="stylesheet" href="css/tw/816a4ed3.css">
+    <link rel="stylesheet" href="css/shell.css">
     <style>
-        @keyframes gradient {
-
-            0%,
-            100% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
+        body { background:
+            radial-gradient(circle at 0% 0%, rgba(14,165,233,0.10), transparent 40%),
+            radial-gradient(circle at 100% 0%, rgba(99,102,241,0.08), transparent 40%),
+            #f8fafc; }
+        .dashboard-greeting {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #fff;
+            border-radius: 28px;
+            padding: 32px;
+            display: grid; gap: 24px;
+            position: relative; overflow: hidden;
+            margin-bottom: 24px;
+        }
+        @media (min-width: 768px) {
+            .dashboard-greeting { grid-template-columns: 1fr auto; align-items: center; }
+        }
+        .dashboard-greeting::after {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(14,165,233,0.30), transparent 50%);
+            pointer-events: none;
+        }
+        .dashboard-greeting > * { position: relative; z-index: 1; }
+        .dashboard-greeting h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+            font-weight: 800; margin: 0 0 8px; line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        .dashboard-greeting p { color: #cbd5e1; margin: 0; font-size: 1.05rem; }
+        .dashboard-greeting em { font-style: normal; color: #38bdf8; }
+        .plan-pill {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 12px 18px; border-radius: 16px;
+        }
+        .tip-card {
+            background: linear-gradient(135deg, #f0f9ff, #eff6ff);
+            border: 1px solid rgba(14,165,233,0.16);
+            border-radius: 24px;
+            padding: 24px;
+            display: flex; gap: 18px;
+            margin-bottom: 24px;
+        }
+        .tip-card__icon {
+            width: 56px; height: 56px;
+            background: #fff;
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 6px 18px rgba(14,165,233,0.15);
+            flex-shrink: 0;
         }
     </style>
 </head>
 
-<body class="min-h-screen">
-    <div class="fixed inset-0 -z-10 bg-[#f0f9ff]"
-        style="background-image: radial-gradient(at 0% 0%, hsla(203,100%,94%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(199,100%,92%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(190,100%,93%,1) 0, transparent 50%);">
-    </div>
+<body>
+    <div data-iz-sidebar></div>
+    <div data-iz-drawer></div>
+    <div class="iz-shell">
+        <div data-iz-topbar></div>
+        <div class="iz-main">
+            <main class="iz-content">
 
-    <!-- Sidebar Desktop -->
-    <aside
-        class="w-72 bg-white/60 backdrop-blur-3xl border-r border-slate-200/50 hidden lg:flex flex-col fixed h-full z-20 shadow-[0_0_50px_rgba(0,0,0,0.03)]">
-        <div class="p-8 border-b border-slate-100/50">
-            <a href="dashboard.html" class="flex items-center gap-4 group">
-                <div
-                    class="bg-white p-2.5 rounded-[1.25rem] shadow-xl shadow-brand-500/10 border border-brand-100 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500">
-                    <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
-                </div>
-                <div class="flex flex-col">
-                    <span
-                        class="font-display font-black text-2xl text-slate-900 tracking-tighter leading-none">Izicode</span>
-                    <span class="text-[10px] font-black text-brand-600 uppercase tracking-[0.2em] mt-1 ml-0.5">Edu
-                        Ecosystem</span>
-                </div>
-            </a>
-        </div>
-
-        <!-- User Profile (Premium Card) -->
-        <div class="px-6 py-8 border-b border-slate-100/50">
-            <div
-                class="bg-white/50 backdrop-blur-md rounded-[2rem] p-5 border border-white shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="relative">
-                        <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff"
-                            class="w-14 h-14 rounded-2xl border-2 border-white shadow-lg user-avatar-display object-cover">
-                        <div
-                            class="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 border-2 border-white rounded-full animate-pulse">
+                <header class="iz-page-header">
+                    <div>
+                        <h1 class="iz-page-title">
+                            Olá, <em id="userFirstName" class="user-name-display">Professor</em>!
+                        </h1>
+                        <p class="iz-page-subtitle" id="userGreeting">Vamos transformar a educação hoje?</p>
+                    </div>
+                    <div class="plan-pill" id="userPlanBadge">
+                        <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#0ea5e9,#6366f1);display:flex;align-items:center;justify-content:center;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 2l8 4v6c0 5.25-3.5 9.75-8 10-4.5-.25-8-4.75-8-10V6l8-4z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span style="display:block;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;">Plano Atual</span>
+                            <strong id="userPlanLabel" style="font-size:0.95rem;">Carregando...</strong>
                         </div>
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="font-black text-slate-900 truncate user-name-display tracking-tight" id="userName">
-                            Carregando...</p>
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Membro
-                            Verificado</p>
+                </header>
+
+                <div id="dailyTipWidget" class="tip-card" style="display:none;">
+                    <div class="tip-card__icon" id="tipIcon"></div>
+                    <div style="flex:1;">
+                        <div class="iz-row" style="gap:10px;margin-bottom:6px;">
+                            <span id="tipTag" class="iz-badge iz-badge--brand">Insight do Dia</span>
+                            <h3 id="tipTitle" style="font-family:'Outfit',sans-serif;font-size:1.05rem;font-weight:700;margin:0;">Pensamento do Dia</h3>
+                        </div>
+                        <p id="tipText" style="margin:0;color:#475569;font-size:0.95rem;line-height:1.6;">Carregando...</p>
                     </div>
                 </div>
-                <div class="flex gap-2 flex-wrap">
-                    <span
-                        class="text-[9px] bg-slate-900 text-white px-2.5 py-1 rounded-lg font-black uppercase tracking-tighter">LV
-                        <span id="userLevel">1</span></span>
-                    <span
-                        class="text-[9px] bg-brand-50 text-brand-700 px-2.5 py-1 rounded-lg font-black uppercase tracking-tighter"><span
-                            id="userXP">0</span> XP</span>
-                    <span
-                        class="text-[9px] bg-amber-50 text-amber-700 px-2.5 py-1 rounded-lg font-black uppercase tracking-tighter flex items-center gap-1">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                        </svg>
-                        <span id="userKeys">--</span>
-                    </span>
+
+                <div id="role-widgets" class="iz-stack iz-stack--lg">
+                    <div class="iz-empty">
+                        <div class="iz-empty__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                        </div>
+                        <h3>Carregando seu painel...</h3>
+                        <p>Estamos preparando tudo para você.</p>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider px-4 mb-3">Principal</div>
-            <a href="dashboard.html"
-                class="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-brand-500 to-brand-600 text-white rounded-xl font-medium shadow-lg shadow-brand-200">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-                Dashboard
-            </a>
-            <a href="my-projects.html"
-                class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
-                </svg>
-                Meus Planejamentos
-            </a>
-            <a href="library.html"
-                class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
-                Biblioteca
-            </a>
-            <a href="create-project.html"
-                class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                </svg>
-                Gerador IA
-            </a>
-            <a href="ia-assistant.html"
-                class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-                Assistente IA
-            </a>
-            <a href="quiz-arena.html"
-                class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-                Arena de Quiz
-            </a>
-            <button onclick="openSettings()"
-                class="w-full flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium transition-all hover:translate-x-1 text-left">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Configurações
-            </button>
-
-        </nav>
-
-        <div class="p-4 border-t border-slate-100">
-            <button onclick="logout()"
-                class="flex items-center gap-3 text-red-500 hover:text-red-700 hover:bg-red-50 px-4 py-3 w-full text-sm font-medium transition-all rounded-xl">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                Sair
-            </button>
-        </div>
-    </aside>
-
-    <!-- Mobile Header -->
-    <div class="lg:hidden bg-white/80 backdrop-blur-xl border-b border-slate-200/50 sticky top-0 z-30 shadow-sm">
-        <div class="flex items-center justify-between p-4">
-            <div class="flex items-center gap-3">
-                <img src="/images/logo.png" alt="Logo" class="w-10 h-10">
-                <span class="font-display font-bold text-xl">Izicode</span>
-            </div>
-            <button onclick="toggleMobileMenu()" class="p-2 hover:bg-slate-100 rounded-lg">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden bg-white border-t border-slate-100 p-4">
-            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
-                <img id="userAvatarMobile" src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff"
-                    class="w-10 h-10 rounded-full user-avatar-display">
-                <p class="font-semibold user-name-display" id="userNameMobile">Carregando...</p>
-            </div>
-            <nav class="space-y-1">
-                <a href="dashboard.html"
-                    class="block px-4 py-2 bg-brand-50 text-brand-700 rounded-lg font-medium">Dashboard</a>
-                <a href="my-projects.html" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg">Meus
-                    Planejamentos</a>
-                <a href="library.html"
-                    class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg">Biblioteca</a>
-                <a href="create-project.html"
-                    class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg">Gerador IA</a>
-                <a href="student-area.html" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg">Área do
-                    Aluno</a>
-                <button onclick="logout()"
-                    class="block w-full text-left px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg mt-4">Sair</button>
-            </nav>
+            </main>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="lg:ml-72 p-6 md:p-12">
-        <!-- Header Section -->
-        <header class="mb-12 animate-in fade-in slide-in-from-top-4 duration-1000">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                    <div
-                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 mb-4">
-                        <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse"></span>
-                        <span class="text-[9px] font-black uppercase tracking-widest text-brand-700">Painel de Controle
-                            Ativo</span>
-                    </div>
-                    <h1
-                        class="font-display text-5xl md:text-7xl font-black text-slate-900 mb-2 tracking-tighter leading-none">
-                        Olá, <span id="userFirstName" class="user-name-display text-brand-600">Professor</span>!
-                    </h1>
-                    <p class="text-slate-500 text-lg md:text-xl font-medium tracking-tight">Vamos transformar a educação
-                        hoje?</p>
-                </div>
-
-                <div
-                    class="flex items-center gap-4 bg-white/50 backdrop-blur-xl p-3 rounded-[2rem] border border-white shadow-sm">
-                    <div class="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 2l8 4v6c0 5.25-3.5 9.75-8 10-4.5-.25-8-4.75-8-10V6l8-4z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" />
-                        </svg>
-                    </div>
-                    <div class="pr-6">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Plano Atual</p>
-                        <p class="text-sm font-black text-slate-900 tracking-tight" id="userPlanLabel">Carregando...</p>
-                    </div>
-                </div>
+    <div class="iz-modal-backdrop" id="apiKeyModal" aria-hidden="true">
+        <div class="iz-modal" role="dialog" aria-modal="true">
+            <button type="button" class="iz-modal__close" data-iz-close>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h2>Configurações</h2>
+            <p>Defina sua chave pessoal do Google Gemini para usar no Assistente IA e no Gerador de Quizzes.</p>
+            <div class="iz-field">
+                <label for="apiKeyInput">Chave API do Google Gemini</label>
+                <input type="password" id="apiKeyInput" placeholder="Cole sua chave API aqui...">
+                <span class="iz-field__hint">A chave é salva apenas no seu navegador (localStorage) e nunca é enviada para os nossos servidores.</span>
             </div>
-        </header>
-
-        <!-- Daily Tip Widget -->
-        <div id="dailyTipWidget"
-            class="hidden mb-12 bg-white/60 backdrop-blur-2xl border border-white rounded-[2.5rem] p-8 relative overflow-hidden shadow-sm shadow-brand-500/5 group">
-            <div
-                class="absolute top-0 right-0 w-64 h-64 bg-brand-400/10 blur-3xl rounded-full -mr-32 -mt-32 group-hover:bg-brand-400/20 transition-all duration-1000">
-            </div>
-            <div class="relative z-10 flex items-start gap-8">
-                <div id="tipIcon"
-                    class="w-20 h-20 bg-white rounded-[1.5rem] shadow-xl shadow-brand-500/10 flex items-center justify-center text-4xl group-hover:rotate-6 transition-transform duration-500">
-                    <!-- Icon Injected Here -->
-                </div>
-                <div class="flex-1">
-                    <div class="flex items-center gap-3 mb-2">
-                        <span id="tipTag"
-                            class="text-[10px] font-black text-brand-600 uppercase tracking-widest bg-brand-50 px-3 py-1 rounded-full border border-brand-100">Insight
-                            do Dia</span>
-                        <h3 id="tipTitle" class="font-display font-black text-xl text-slate-900 tracking-tight">
-                            Pensamento do Dia</h3>
-                    </div>
-                    <p id="tipText" class="text-slate-600 text-lg font-medium leading-relaxed italic pr-12">
-                        "Carregando..."</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dynamic Dashboard Content -->
-        <div id="role-widgets" class="space-y-8 min-h-[50vh]">
-            <!-- Content will be injected by dashboard-roles.js -->
-            <div class="flex justify-center p-12">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-brand-600"></div>
-            </div>
-        </div>
-
-
-
-    </main>
-
-    <!-- API Key Modal -->
-    <div id="settingsModal"
-        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h2 class="font-display text-xl font-bold text-slate-900 mb-4">Configurações</h2>
-
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-slate-700 mb-1">Chave API do Google Gemini</label>
-                <p class="text-xs text-slate-500 mb-2">Necessária para o Assistente IA e Gerador de Quizzes.</p>
-                <input type="password" id="apiKeyInput"
-                    class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-                    placeholder="Cole sua chave API aqui...">
-            </div>
-
-            <div class="flex justify-end space-x-3 mt-6">
-                <button onclick="document.getElementById('settingsModal').classList.add('hidden')"
-                    class="px-4 py-2 text-slate-500 hover:text-slate-700 font-medium">Cancelar</button>
-                <button onclick="saveApiKey()"
-                    class="px-6 py-2 bg-brand-600 text-white rounded-xl font-medium hover:bg-brand-700 shadow-lg shadow-brand-500/20">Salvar
-                    Configuração</button>
+            <div class="iz-row" style="justify-content:flex-end;gap:8px;">
+                <button type="button" class="iz-btn iz-btn--ghost" data-iz-close>Cancelar</button>
+                <button type="button" class="iz-btn iz-btn--primary" id="saveApiKeyBtn">Salvar Configuração</button>
             </div>
         </div>
     </div>
 
-    <script>
-        // API Key Logic
-        function openSettings() {
-            const key = localStorage.getItem('gemini_api_key');
-            if (key) document.getElementById('apiKeyInput').value = key;
-            document.getElementById('settingsModal').classList.remove('hidden');
-        }
+    <script type="module">
+        import { initShell, showToast, openModal } from './js/shell.js';
+        import { auth, db, doc, getDoc } from './js/firebase-config.js';
+        import { getDailyTip } from './js/pedagogical-tips.js';
+        import { gamificationSystem } from './js/gamification.js';
+        import { DashboardRoleManager } from './js/dashboard-roles.js';
 
-        window.saveApiKey = function () {
-            const key = document.getElementById('apiKeyInput').value.trim();
-            if (key) {
-                if (key.includes('PLACEHOLDER')) {
-                    alert("Por favor, insira uma chave válida, não o texto de exemplo.");
-                    return;
-                }
-                localStorage.setItem('gemini_api_key', key);
-                alert("Chave API salva com sucesso!");
-                document.getElementById('settingsModal').classList.add('hidden');
+        const { role, userData } = await initShell({ requireAuth: true });
+
+        if (userData) {
+            const firstName = (userData.displayName || auth.currentUser?.displayName || 'Professor').split(' ')[0];
+            const header = document.getElementById('userFirstName');
+            if (header) header.textContent = firstName;
+
+            const greetings = {
+                dev: 'Modo Desenvolvedor Ativo',
+                school_admin: 'Vamos gerenciar sua escola hoje?',
+                freelance_teacher: 'Suas aulas, suas regras!',
+                teacher: 'Vamos transformar a educação hoje?',
+                'professor-pro': 'Continue construindo aulas incríveis!',
+                student: 'Pronto para aprender algo novo?',
+                parent: 'Vamos acompanhar o progresso?',
+                consultant: 'Vamos criar conteúdo incrível?'
+            };
+            const greetEl = document.getElementById('userGreeting');
+            if (greetEl) greetEl.textContent = greetings[role] || greetings.student;
+
+            const planLabels = {
+                'professor-pro': 'Professor PRO',
+                admin: 'Administrador',
+                dev: 'Desenvolvedor',
+                school_admin: 'Gestão Escolar',
+                teacher: 'Plano Escola',
+                freelance_teacher: 'Plano Autônomo'
+            };
+            const planEl = document.getElementById('userPlanLabel');
+            if (planEl) {
+                planEl.textContent = planLabels[role]
+                    || (userData.subscription?.plan === 'free' || !userData.subscription?.plan ? 'Plano Gratuito' : userData.subscription.plan);
             }
         }
+
+        // Dica do dia
+        const tip = getDailyTip();
+        if (tip) {
+            const widget = document.getElementById('dailyTipWidget');
+            const iconEl = document.getElementById('tipIcon');
+            const icons = {
+                motivation: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>',
+                rpg: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>',
+                default: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>'
+            };
+            iconEl.innerHTML = icons[tip.type] || icons.default;
+            document.getElementById('tipTitle').textContent = tip.title || 'Pensamento do Dia';
+            document.getElementById('tipText').textContent = `"${tip.text}"`;
+            const tagEl = document.getElementById('tipTag');
+            tagEl.textContent = tip.type === 'motivation' ? 'Motivação' : (tip.type === 'rpg' ? (tip.tag || 'Gamificação') : (tip.tag || 'Dica Pedagógica'));
+            widget.style.display = 'flex';
+        }
+
+        // Renderizar widgets do role via DashboardRoleManager
+        new DashboardRoleManager().initialize().catch(err => {
+            const container = document.getElementById('role-widgets');
+            if (container) {
+                container.innerHTML = `<div class="iz-empty">
+                    <div class="iz-empty__icon" style="background:rgba(239,68,68,0.1);color:#dc2626;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M12 5a7 7 0 100 14 7 7 0 000-14z" />
+                        </svg>
+                    </div>
+                    <h3>Não foi possível carregar o painel</h3>
+                    <p>${err.message || 'Tente recarregar a página.'}</p>
+                </div>`;
+            }
+        });
+
+        // API Key Modal
+        const apiKeyModal = document.getElementById('apiKeyModal');
+        document.querySelectorAll('[data-iz-close]').forEach(btn => {
+            btn.addEventListener('click', () => apiKeyModal.classList.remove('is-open'));
+        });
+        window.openSettings = () => {
+            const input = document.getElementById('apiKeyInput');
+            input.value = localStorage.getItem('gemini_api_key') || '';
+            apiKeyModal.classList.add('is-open');
+        };
+        document.getElementById('saveApiKeyBtn').addEventListener('click', () => {
+            const value = document.getElementById('apiKeyInput').value.trim();
+            if (value.includes('PLACEHOLDER') || value.length < 10) {
+                showToast({ title: 'Chave inválida', message: 'Verifique e tente novamente.', type: 'error' });
+                return;
+            }
+            localStorage.setItem('gemini_api_key', value);
+            apiKeyModal.classList.remove('is-open');
+            showToast({ title: 'Sucesso', message: 'Chave API salva localmente.', type: 'success' });
+        });
     </script>
-
-
-
 </body>
 
 </html>

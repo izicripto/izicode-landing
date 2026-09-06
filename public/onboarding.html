@@ -183,66 +183,67 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- STEP EXTRA: Quick Start (Para convites) -->
-                    <div id="quickStartSection" class="step-content">
-                        <div class="text-center mb-10">
-                            <h2 class="font-display text-3xl font-bold text-slate-900 mb-3">Quase lá!</h2>
-                            <p class="text-slate-600 text-lg">Você foi convidado como Professor.</p>
-                        </div>
-
-                        <div class="max-w-md mx-auto space-y-4 mb-10">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-700 mb-1">Como devemos te
-                                    chamar?</label>
-                                <input type="text" id="quickName"
-                                    class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 outline-none"
-                                    placeholder="Digite seu nome completo">
-                            </div>
-                        </div>
-
-                        <div class="text-center">
-                            <button id="quickStartBtn"
-                                class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 px-10 rounded-xl shadow-lg transition-all transform hover:scale-105">
-                                Começar Agora
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- STEP 2: Detalhes -->
-                    <div id="step2" class="step-content">
-                        <div class="text-center mb-8">
-                            <button onclick="prevStep(1)"
-                                class="text-slate-400 hover:text-brand-600 text-sm mb-4 font-medium flex items-center justify-center gap-1 mx-auto">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                                Voltar
-                            </button>
-                            <h2 class="font-display text-2xl font-bold text-slate-900" id="step2Title">Conte mais sobre
-                                você
-                            </h2>
-                        </div>
-
-                        <div class="space-y-4 max-w-md mx-auto mb-10">
-                            <!-- Formulário Dinâmico -->
-                            <div id="dynamicForm"></div>
-                        </div>
-
-                        <div class="text-center">
-                            <button onclick="finishOnboarding()" id="btnFinish"
-                                class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 px-10 rounded-xl shadow-lg shadow-brand-200/50 transition-all transform hover:scale-105 flex items-center gap-2 mx-auto">
-                                <span id="btnFinishText">Acessar Plataforma</span>
-                                <div id="spinner"
-                                    class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin">
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-
                 </div>
+
+                <!-- STEP EXTRA: Quick Start (Para convites) -->
+                <div id="quickStartSection" class="step-content">
+                    <div class="text-center mb-10">
+                        <h2 class="font-display text-3xl font-bold text-slate-900 mb-3">Quase lá!</h2>
+                        <p class="text-slate-600 text-lg">Você foi convidado como Professor.</p>
+                    </div>
+
+                    <div class="max-w-md mx-auto space-y-4 mb-10">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Como devemos te
+                                chamar?</label>
+                            <input type="text" id="quickName"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand-500 outline-none"
+                                placeholder="Digite seu nome completo">
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button id="quickStartBtn"
+                            class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 px-10 rounded-xl shadow-lg transition-all transform hover:scale-105">
+                            Começar Agora
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Detalhes -->
+                <div id="step2" class="step-content">
+                    <div class="text-center mb-8">
+                        <button onclick="prevStep(1)"
+                            class="text-slate-400 hover:text-brand-600 text-sm mb-4 font-medium flex items-center justify-center gap-1 mx-auto">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            Voltar
+                        </button>
+                        <h2 class="font-display text-2xl font-bold text-slate-900" id="step2Title">Conte mais sobre
+                            você
+                        </h2>
+                    </div>
+
+                    <div class="space-y-4 max-w-md mx-auto mb-10">
+                        <!-- Formulário Dinâmico -->
+                        <div id="dynamicForm"></div>
+                    </div>
+
+                    <div class="text-center">
+                        <button onclick="finishOnboarding()" id="btnFinish"
+                            class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 px-10 rounded-xl shadow-lg shadow-brand-200/50 transition-all transform hover:scale-105 flex items-center gap-2 mx-auto">
+                            <span id="btnFinishText">Acessar Plataforma</span>
+                            <div id="spinner"
+                                class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin">
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
             </div>
+        </div>
     </main>
 
     <script type="module">
@@ -529,9 +530,20 @@
             }
 
             try {
-                const userRef = doc(db, "users", userData.uid);
+                const currentUser = auth.currentUser;
+                const uid = userData?.uid || currentUser?.uid;
+                if (!uid) {
+                    alert("Sessão expirada ou usuário não autenticado. Por favor, faça login novamente.");
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const userRef = doc(db, "users", uid);
                 await setDoc(userRef, {
-                    ...userData,
+                    uid: uid,
+                    displayName: userData?.displayName || currentUser?.displayName || 'Usuário',
+                    email: userData?.email || currentUser?.email || null,
+                    photoURL: userData?.photoURL || currentUser?.photoURL || null,
                     role: selectedProfile,
                     ...extraData,
                     schoolId: inviteSchoolId || null,

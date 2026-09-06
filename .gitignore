@@ -2,7 +2,8 @@
 serviceAccountKey.json
 firebase-debug.log
 .firebase/
-.firebaserc
+# .firebaserc contém apenas o alias do projeto (não é segredo) e PRECISA
+# ser versionado para o deploy/CI funcionar. Não ignorar.
 
 # Environment variables
 .env

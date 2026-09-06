@@ -74,13 +74,13 @@
     <!-- Header -->
     <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
         <div class="flex items-center space-x-3">
-            <a href="dashboard.html" class="text-gray-400 hover:text-gray-600">
+            <button onclick="if(window.history.length > 1) { window.history.back(); } else { window.location.href='portal.html'; }" class="text-gray-400 hover:text-gray-600 p-1" title="Voltar">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-            </a>
-            <a href="dashboard.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            </button>
+            <a href="portal.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 <img src="/images/logo.png" alt="Izicode Logo" class="w-10 h-10">
             </a>
             <div>
@@ -416,8 +416,8 @@
             try {
                 genAI = new GoogleGenerativeAI(key);
 
-                // Default to 1.5 flash for init
-                model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+                // Default to gemini-3.8-flash for init
+                model = genAI.getGenerativeModel({ model: "gemini-3.8-flash" });
                 chat = model.startChat({
                     history: [
                         {
@@ -485,7 +485,7 @@
             // Loading
             const loadingId = appendLoading();
 
-            const modelCandidates = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"];
+            const modelCandidates = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.6-flash", "gemini-flash-latest"];
             let success = false;
             let lastError = null;
 
@@ -494,13 +494,6 @@
                 try {
                     console.log(`Tentando enviar com modelo: ${modelName}...`);
                     const currentModel = genAI.getGenerativeModel({ model: modelName });
-
-                    // Create NEW chat session for each attempt to avoid stale state
-                    // Ideally we would preserve history, but for recovery let's start fresh + current context
-                    // For a robust chat app, we should maintain a history array and pass it here.
-                    // For this fix, we'll just try to send the message. 
-                    // Note: If we create a new chat, we lose previous context. 
-                    // Ideally: `chat.sendMessage` is what we want. If `chat` is broken, we re-create it.
 
                     if (!chat || chat.model !== modelName) {
                         chat = currentModel.startChat({
@@ -539,8 +532,15 @@
             if (!success) {
                 console.log('Tentando descoberta dinâmica de modelos...');
                 try {
-                    const availableModels = await fetchAvailableModels(localStorage.getItem('gemini_api_key'));
-                    const validModel = availableModels.find(m => m.name.includes('gemini') && m.supportedGenerationMethods?.includes('generateContent'));
+                    const currentKey = localStorage.getItem('gemini_api_key');
+                    const availableModels = await fetchAvailableModels(currentKey);
+                    // Filter out deprecated models that return 404
+                    const validModel = availableModels.find(m => 
+                        m.name.includes('gemini') && 
+                        !m.name.includes('1.5') && 
+                        !m.name.includes('2.5') && 
+                        m.supportedGenerationMethods?.includes('generateContent')
+                    );
 
                     if (validModel) {
                         const modelName = validModel.name.replace('models/', '');
@@ -576,9 +576,11 @@
 
             if (!success) {
                 removeLoading(loadingId);
-                let errorMessage = '❌ Desculpe, ocorrem um erro com a IA.';
-                if (lastError?.message?.includes('404')) {
-                    errorMessage = '❌ Erro de Conexão: Nenhum modelo de IA disponível ou suportado encontrado.';
+                let errorMessage = '❌ Desculpe, ocorreu um erro com a IA.';
+                if (lastError?.message?.includes('503')) {
+                    errorMessage = '⚠️ Os servidores da IA estão com alta demanda temporária. Por favor, aguarde alguns instantes e tente novamente.';
+                } else if (lastError?.message?.includes('404')) {
+                    errorMessage = '❌ Erro de Conexão: Modelo não disponível no momento. Tente novamente em breve.';
                 } else if (lastError?.message?.includes('API key')) {
                     errorMessage = '❌ Chave API inválida ou expirada.';
                 }

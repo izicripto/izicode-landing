@@ -46,13 +46,48 @@ exports.newLeadNotification = functions.firestore.document('leads/{leadId}').onC
 
 /**
  * Stripe Webhook - Para liberar planos PRO automaticamente
- * TODO: Configurar STRIPE_WEBHOOK_SECRET no firebase config
+ * TODO: Configurar STRIPE_WEBHOOK_SECRET no firebase config.
+ * Fail-closed: sem assinatura válida, rejeita com 400. Nunca confie
+ * apenas no corpo da requisição.
  */
 exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
+    if (req.method !== 'POST') {
+        res.status(405).send({ error: 'Method not allowed' });
+        return;
+    }
     const sig = req.headers['stripe-signature'];
-    // Lógica de verificação de assinatura e atualização do role do usuário para 'professor-pro'
-    // Logamos o evento para debug por enquanto
-    console.log("Stripe Webhook received:", req.body.type);
+    const webhookSecret = functions.config().stripe?.webhook_secret;
+    if (!sig || !webhookSecret) {
+        console.error("Stripe Webhook: assinatura ou secret ausentes. Recusando.");
+        res.status(400).send({ error: 'Missing signature or server misconfigured' });
+        return;
+    }
+    // TODO: verificar assinatura com stripe SDK (stripe.webhooks.constructEvent)
+    // usando o rawBody, e só então atualizar role do usuário para 'professor-pro'
+    // via Admin SDK. Logamos o evento para debug por enquanto.
+    console.log("Stripe Webhook received:", req.body && req.body.type);
+    res.status(200).send({ received: true });
+});
+
+/**
+ * Hotmart Webhook (Hottok) - valida token e libera plano PRO
+ * Configure HOTMART_HOTTOK no firebase config. Fail-closed.
+ */
+exports.hotmartWebhook = functions.https.onRequest(async (req, res) => {
+    if (req.method !== 'POST') {
+        res.status(405).send({ error: 'Method not allowed' });
+        return;
+    }
+    const hottok = req.body?.hottok || req.headers['x-hotmart-hottok'];
+    const expected = functions.config().hotmart?.hottok;
+    if (!expected || hottok !== expected) {
+        console.error("Hotmart Webhook: hottok inválido ou não configurado.");
+        res.status(403).send({ error: 'Forbidden' });
+        return;
+    }
+    // TODO: validar status (approved), localizar usuário pelo email do comprador
+    // e atualizar users/{uid}.subscription.plan via Admin SDK.
+    console.log("Hotmart Webhook aprovado:", req.body?.event || req.body?.type || 'purchase');
     res.status(200).send({ received: true });
 });
 

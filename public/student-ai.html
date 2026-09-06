@@ -175,7 +175,7 @@
         function initAI(key) {
             try {
                 genAI = new GoogleGenerativeAI(key);
-                model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+                model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
 
                 // --- CRITICAL: KIIDS SAFE SYSTEM PROMPT ---
                 chat = model.startChat({

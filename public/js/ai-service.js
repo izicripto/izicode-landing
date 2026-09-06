@@ -3,9 +3,10 @@
  * Integration with Gemini API for dynamic quiz generation
  */
 
-// Replace with your API Key or handle via Firebase Config/Functions
-// Retrieve API Key from LocalStorage (set by Assistant Settings)
-const getApiKey = () => localStorage.getItem('gemini_api_key');
+// A chave Gemini NÃO é mais hardcoded: deve vir do Cloud Function
+// generateAIProject (recomendado) ou de chave pessoal salva pelo usuário
+// em localStorage via Assistente IA. Fail-closed: sem chave, erro explícito.
+const getApiKey = () => localStorage.getItem('gemini_api_key') || "";
 
 // Base URL handled dynamically in function
 
@@ -53,13 +54,13 @@ export async function generateProjectQuiz(projectTitle, projectContent, userRole
         }
     `;
 
-    const models = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-pro"];
+    const models = ["gemini-3.6-flash", "gemini-flash-latest", "gemini-3.8-flash", "gemini-3.5-flash"];
     let errors = [];
 
     const apiKey = getApiKey();
     if (!apiKey || apiKey.includes('PLACEHOLDER')) {
-        if (apiKey) localStorage.removeItem('gemini_api_key'); // Clear bad key
-        throw new Error("Chave API Inválida ou não configurada. A chave provisória foi removida. Configure novamente no Assistente IA.");
+        localStorage.removeItem('gemini_api_key'); // Clear bad key
+        throw new Error("Chave API do Gemini não configurada. Gere via Cloud Function ou configure sua chave pessoal no Assistente IA.");
     }
 
     for (const model of models) {

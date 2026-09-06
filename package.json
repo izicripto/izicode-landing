@@ -1,0 +1,17 @@
+{
+  "name": "izicodeeduportal",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Izicode Edu Platform - scripts raiz (deploy Firebase). O site servido é public/; app/ é a SPA React buildada e mesclada via CI.",
+  "scripts": {
+    "serve": "firebase emulators:start --only hosting",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:rules": "firebase deploy --only firestore:rules",
+    "deploy:functions": "firebase deploy --only functions",
+    "deploy": "firebase deploy --only hosting,firestore:rules",
+    "build:app": "npm --prefix app ci && npm --prefix app run build"
+  },
+  "engines": {
+    "node": "20"
+  }
+}

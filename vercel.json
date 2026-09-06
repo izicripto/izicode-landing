@@ -1,8 +1,0 @@
-{
-  "version": 2,
-  "name": "izicode-landing",
-  "public": true,
-  "cleanUrls": false,
-  "trailingSlash": false,
-  "outputDirectory": "public"
-}

@@ -106,7 +106,7 @@ Antes de cada commit:
 ### 1. Usar Variáveis de Ambiente
 ```javascript
 // ❌ ERRADO
-const apiKey = "AIzaSyBhdrACOna_u_zrrqYrR3Ou5FDCO77Zp5A";
+const apiKey = "AIzaSy...REAL_KEY_EXPOSTA...";
 
 // ✅ CORRETO
 const apiKey = process.env.VITE_FIREBASE_API_KEY;
@@ -114,9 +114,9 @@ const apiKey = process.env.VITE_FIREBASE_API_KEY;
 
 ### 2. Separar Configs Públicas e Privadas
 ```javascript
-// firebase-config.js (PÚBLICO)
+// firebase-config.js (PÚBLICO, mas com restrição de domínio no Console)
 export const firebaseConfig = {
-  apiKey: "AIzaSyBhdrACOna_u_zrrqYrR3Ou5FDCO77Zp5A", // OK
+  apiKey: "AIzaSy... (restrita por domínio)", // OK se restrita
   // ...
 };
 

@@ -1,11 +1,24 @@
 import json
+import os
 import re
 import urllib.parse
 
 # --- CONSTANTES ---
-TELEGRAM_BOT_TOKEN = "8594251169:AAEj3nY6hfEAsWtEzCHiGRnVxHavOtJe1nk"
-TELEGRAM_CHAT_ID = "455755580"
-TELEGRAM_CONTENT_FILE = "/home/izicripto/.openclaw/workspace/izicode-landing/docs/TELEGRAM_BOT_CONTENT.md"
+# NUNCA commitar tokens. Configure via variáveis de ambiente:
+#   TELEGRAM_BOT_TOKEN e TELEGRAM_CHAT_ID
+# Opcional: arquivo .env na raiz (não commitado, ver .env.example).
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
+TELEGRAM_CONTENT_FILE = os.environ.get(
+    "TELEGRAM_CONTENT_FILE",
+    os.path.join(os.path.dirname(__file__), "..", "docs", "TELEGRAM_BOT_CONTENT.md"),
+)
 
 # --- FUNÇÕES AUXILIARES ---
 
@@ -101,6 +114,9 @@ def handle_bot_command(user_input, telegram_content):
     if not telegram_content:
         return "Erro: Conteúdo do bot não carregado. Tente novamente mais tarde."
 
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+        return "Erro: TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID não configurados. Defina as variáveis de ambiente."
+
     command = user_input.strip().lstrip('/').strip().lower()
     
     if command == "start" or command == "help" or command == "ajuda":
@@ -129,7 +145,9 @@ def handle_bot_command(user_input, telegram_content):
         return f"Comando desconhecido: `/{command}`. Tente `/help` para ver a lista de comandos disponíveis."
 
 # --- EXECUÇÃO DA SIMULAÇÃO ---
-# Simula a chamada para o comando /consultores
-telegram_content_data = read_telegram_content(TELEGRAM_CONTENT_FILE)
-user_input_simulated = "consultores"
-print(handle_bot_command(user_input_simulated, telegram_content_data))
+# Executado apenas quando rodado diretamente (evita side-effect em import).
+if __name__ == "__main__":
+    # Simula a chamada para o comando /consultores
+    telegram_content_data = read_telegram_content(TELEGRAM_CONTENT_FILE)
+    user_input_simulated = "consultores"
+    print(handle_bot_command(user_input_simulated, telegram_content_data))
