@@ -10,6 +10,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="css/tw/3afda25f.css">
     <link rel="stylesheet" href="css/dashboard-premium.css">
+    <link rel="stylesheet" href="css/shell.css">
     <script type="module" src="js/firebase-config.js"></script>
     <style>
         .no-scrollbar::-webkit-scrollbar {
@@ -49,36 +50,12 @@
             radial-gradient(at 100% 0%, hsla(190,100%,93%,1) 0, transparent 50%);">
     </div>
 
-    <!-- Header -->
-    <nav class="bg-white/40 backdrop-blur-2xl border-b border-white/20 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center gap-4">
-                    <a href="dashboard.html" onclick="if (window.history.length > 1) { window.history.back(); return false; }" class="p-2 hover:bg-white/50 rounded-xl transition-all">
-                        <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                        </svg>
-                    </a>
-                    <div class="flex items-center gap-3">
-                        <img src="/images/logo.png" alt="Izicode" class="w-10 h-10">
-                        <span class="font-display font-bold text-2xl text-slate-900 tracking-tight">Arduino Hub</span>
-                    </div>
-                </div>
-                <div
-                    class="hidden md:flex items-center gap-1 bg-white/50 p-1 rounded-2xl border border-white/50 shadow-sm">
-                    <button
-                        class="px-5 py-2.5 bg-brand-600 text-white rounded-[1rem] shadow-lg text-sm font-bold">Inspirado
-                        em arduino.cc</button>
-                    <button onclick="window.location.href='library.html'"
-                        class="px-5 py-2.5 text-slate-600 hover:bg-white/80 rounded-[1rem] transition-all text-sm font-bold">Ver
-                        Todos</button>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <div class="iz-shell">
+        <div data-iz-sidebar></div>
+        <div class="iz-main">
+            <div data-iz-topbar></div>
+            <main class="iz-content" style="max-width:1280px;">
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <!-- Hero Section -->
         <div class="text-center mb-16 animate-fade-in">
             <span
@@ -104,7 +81,9 @@
                 <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-brand-600"></div>
             </div>
         </div>
-    </main>
+            </main>
+        </div>
+    </div>
 
     <!-- Detailed Project Viewer Modal -->
     <div id="projectViewer" class="fixed inset-0 z-[110] hidden overflow-y-auto">
@@ -221,7 +200,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script type="module">
+        import { initShell } from './js/shell.js';
         import { getAllProjects } from './js/projects-data.js';
+
+        await initShell({ requireAuth: true });
 
         const container = document.getElementById('arduinoProjects');
         const projects = getAllProjects().filter(p =>
