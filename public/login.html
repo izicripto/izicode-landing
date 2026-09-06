@@ -119,15 +119,12 @@
 
                     if (userData.onboardingCompleted || isHardcoded) {
                         console.log("[Login] Perfil completo ou override detectado.");
-                        if (detectedRole === 'student' || detectedRole === 'parent') {
-                            window.location.href = "dashboards/aluno.html";
-                        } else if (detectedRole === 'freelance_teacher' || detectedRole === 'professor-pro') {
-                            window.location.href = "dashboards/professor-autonomo.html";
-                        } else if (detectedRole === 'teacher' || detectedRole === 'school_admin') {
-                            window.location.href = "dashboards/professor-escola.html";
-                        } else {
-                            window.location.href = "dashboard.html";
-                        }
+                        // Destino único: /app (SPA). O próprio painel decide
+                        // qual home mostrar conforme o papel, então não é mais
+                        // preciso espalhar essa regra por várias páginas.
+                        const saved = sessionStorage.getItem('redirect_after_login');
+                        sessionStorage.removeItem('redirect_after_login');
+                        window.location.href = saved || "/app";
                         return;
                     } else {
                         console.log("[Login] Onboarding pendente.");

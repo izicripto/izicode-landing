@@ -152,20 +152,11 @@
 
         const { role, userData } = await initShell({ requireAuth: true });
 
-        // dashboard.html é a tela genérica antiga. Papéis com painel próprio
-        // e completo devem sempre cair lá, mesmo entrando por um link/favorito
-        // antigo direto nesta URL — sem isso, quem tem role 'professor-pro'
-        // (ou qualquer variação não mapeada aqui) via um painel vazio/legado.
-        const SPECIALIZED_DASHBOARD = {
-            'freelance_teacher': 'dashboards/professor-autonomo.html',
-            'professor-pro': 'dashboards/professor-autonomo.html',
-            'teacher': 'dashboards/professor-escola.html',
-            'school_admin': 'dashboards/professor-escola.html',
-            'student': 'dashboards/aluno.html',
-            'parent': 'dashboards/aluno.html'
-        };
-        if (SPECIALIZED_DASHBOARD[role]) {
-            window.location.replace(SPECIALIZED_DASHBOARD[role]);
+        // O painel agora é o SPA em /app: uma sidebar única que troca só o
+        // conteúdo ao navegar. Esta página segue existindo apenas como
+        // rede de segurança para links e favoritos antigos.
+        if (role !== 'admin' && role !== 'dev') {
+            window.location.replace('/app');
         } else {
 
         if (userData) {

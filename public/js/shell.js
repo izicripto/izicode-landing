@@ -125,14 +125,32 @@ function resolveRole(user, userData) {
     return getRoleFromEmail(user?.email) || 'student';
 }
 
+// Home de cada papel: clicar na logo (ou em "voltar") de qualquer tela
+// logada deve levar ao painel do usuário, nunca à landing page pública.
+const HOME_BY_ROLE = {
+    'freelance_teacher': 'dashboards/professor-autonomo.html',
+    'professor-pro': 'dashboards/professor-autonomo.html',
+    'teacher': 'dashboards/professor-escola.html',
+    'school_admin': 'dashboards/professor-escola.html',
+    'student': 'dashboards/aluno.html',
+    'parent': 'dashboards/aluno.html'
+};
+
+export function getHomeForRole(role) {
+    return HOME_BY_ROLE[role] || 'dashboard.html';
+}
+
+// Todos os links do shell são normalizados para caminho absoluto a partir
+// da raiz do site. Com caminhos relativos, um link como
+// 'dashboards/aluno.html' clicado de dentro de /dashboards/ resolvia para
+// /dashboards/dashboards/aluno.html (404) — a navegação entre painéis
+// quebrava dependendo da pasta em que a página estava.
 function resolvePath(href) {
     if (!href) return '#';
-    if (href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:')) return href;
-    const inSubfolder = window.location.pathname.includes('/dashboards/');
-    if (inSubfolder && !href.startsWith('../') && !href.startsWith('/') && !href.startsWith('dashboards/')) {
-        return '../' + href;
+    if (href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('/')) {
+        return href;
     }
-    return href;
+    return '/' + href.replace(/^\.\.\//, '');
 }
 
 function getCurrentPath() {
@@ -167,7 +185,7 @@ function buildSidebar(role, user, userData) {
 
     return `
         <aside class="iz-sidebar" aria-label="Navegação principal">
-            <a href="${resolvePath('dashboard.html')}" class="iz-sidebar__brand">
+            <a href="${resolvePath(getHomeForRole(role))}" class="iz-sidebar__brand">
                 <img src="${resolvePath('images/logo.png')}" alt="Izicode Edu">
                 <div class="iz-sidebar__brand-text">
                     <strong>Izicode</strong>

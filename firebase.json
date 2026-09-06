@@ -7,6 +7,16 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "rewrites": [
+      {
+        "source": "/app/**",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/app",
+        "destination": "/index.html"
+      }
+    ],
     "headers": [
       {
         "source": "**",
