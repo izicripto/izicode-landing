@@ -1,7 +1,7 @@
 // Service Worker para Izicode Edu PWA
-// Versão 1.2.0
+// Versão 1.3.0 — bump força a limpeza do cache antigo em todo cliente
 
-const CACHE_NAME = 'izicode-edu-v1.2';
+const CACHE_NAME = 'izicode-edu-v1.3';
 const OFFLINE_URL = '/offline.html';
 
 // Recursos para cache inicial
