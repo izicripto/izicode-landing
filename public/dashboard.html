@@ -152,6 +152,22 @@
 
         const { role, userData } = await initShell({ requireAuth: true });
 
+        // dashboard.html é a tela genérica antiga. Papéis com painel próprio
+        // e completo devem sempre cair lá, mesmo entrando por um link/favorito
+        // antigo direto nesta URL — sem isso, quem tem role 'professor-pro'
+        // (ou qualquer variação não mapeada aqui) via um painel vazio/legado.
+        const SPECIALIZED_DASHBOARD = {
+            'freelance_teacher': 'dashboards/professor-autonomo.html',
+            'professor-pro': 'dashboards/professor-autonomo.html',
+            'teacher': 'dashboards/professor-escola.html',
+            'school_admin': 'dashboards/professor-escola.html',
+            'student': 'dashboards/aluno.html',
+            'parent': 'dashboards/aluno.html'
+        };
+        if (SPECIALIZED_DASHBOARD[role]) {
+            window.location.replace(SPECIALIZED_DASHBOARD[role]);
+        } else {
+
         if (userData) {
             const firstName = (userData.displayName || auth.currentUser?.displayName || 'Professor').split(' ')[0];
             const header = document.getElementById('userFirstName');
@@ -239,6 +255,8 @@
             apiKeyModal.classList.remove('is-open');
             showToast({ title: 'Sucesso', message: 'Chave API salva localmente.', type: 'success' });
         });
+
+        } // fim do else (role sem painel especializado)
     </script>
 </body>
 

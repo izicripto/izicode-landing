@@ -121,9 +121,9 @@
                         console.log("[Login] Perfil completo ou override detectado.");
                         if (detectedRole === 'student' || detectedRole === 'parent') {
                             window.location.href = "dashboards/aluno.html";
-                        } else if (detectedRole === 'freelance_teacher') {
+                        } else if (detectedRole === 'freelance_teacher' || detectedRole === 'professor-pro') {
                             window.location.href = "dashboards/professor-autonomo.html";
-                        } else if (detectedRole === 'teacher') {
+                        } else if (detectedRole === 'teacher' || detectedRole === 'school_admin') {
                             window.location.href = "dashboards/professor-escola.html";
                         } else {
                             window.location.href = "dashboard.html";
