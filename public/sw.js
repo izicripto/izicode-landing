@@ -1,7 +1,7 @@
 // Service Worker para Izicode Edu PWA
-// Versão 1.3.0 — bump força a limpeza do cache antigo em todo cliente
+// Versão 1.4.0 — HTML/JS sempre buscados com cache:'no-store' (ver fetch handler)
 
-const CACHE_NAME = 'izicode-edu-v1.3';
+const CACHE_NAME = 'izicode-edu-v1.4';
 const OFFLINE_URL = '/offline.html';
 
 // Recursos para cache inicial
@@ -68,8 +68,21 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // HTML e JS nunca devem vir do cache HTTP do navegador: buscamos pela URL
+  // (string, não o Request original) com cache:'no-store' para garantir que
+  // o SW sempre bata na rede de verdade, mesmo que a resposta anterior
+  // tenha sido salva com um Cache-Control antigo mais permissivo (esse foi
+  // o motivo de deploys corrigidos ainda aparecerem "bugados" por até 1h).
+  // Não dá para reconstruir um Request de navegação com `new Request()` —
+  // o Fetch API proíbe isso para requests com mode 'navigate' — por isso
+  // usamos a URL crua em vez do objeto event.request nesses casos.
+  const isCodeAsset = event.request.destination === 'document' || event.request.destination === 'script';
+  const fetchPromise = isCodeAsset
+    ? fetch(event.request.url, { cache: 'no-store', credentials: 'same-origin' })
+    : fetch(event.request);
+
   event.respondWith(
-    fetch(event.request)
+    fetchPromise
       .then((response) => {
         // Se a resposta for válida, clone e armazene no cache
         if (response && response.status === 200) {
