@@ -1,52 +1,20 @@
 /**
- * Checkout Module - Integração com Hotmart
- * Gerencia o fluxo de checkout e trial de assinaturas
+ * Checkout Module - Integração com AbacatePay
+ * Gerencia o fluxo de checkout de assinaturas (PIX via AbacatePay)
  */
 
-import { auth, db, doc, setDoc, updateDoc, serverTimestamp } from './firebase-config.js';
+import { auth, db, doc, setDoc, updateDoc, getDoc, serverTimestamp } from './firebase-config.js';
+import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-functions.js';
 
 export class CheckoutManager {
-    constructor() {
-        this.hotmartUrls = {
-            school: 'https://pay.hotmart.com/XXXXXXX?off=izicode-school',
-            enterprise: 'https://pay.hotmart.com/XXXXXXX?off=izicode-enterprise'
-        };
-    }
 
     /**
-     * Inicia trial de 14 dias para o plano especificado
+     * Cria uma cobrança PIX na AbacatePay (via Cloud Function, que guarda a
+     * API key no servidor) e redireciona o usuário para o checkout.
+     * `plan` deve ser 'professor_pro' ou 'escola'; `schoolId` é obrigatório
+     * apenas para o plano escola.
      */
-    async startTrial(plan) {
-        const user = auth.currentUser;
-        if (!user) {
-            throw new Error('Usuário não autenticado');
-        }
-
-        const trialEndsAt = new Date();
-        trialEndsAt.setDate(trialEndsAt.getDate() + 14);
-
-        try {
-            const userRef = doc(db, 'users', user.uid);
-            await updateDoc(userRef, {
-                'subscription.plan': plan,
-                'subscription.status': 'trial',
-                'subscription.trialStartedAt': new Date().toISOString(),
-                'subscription.trialEndsAt': trialEndsAt.toISOString(),
-                'subscription.updatedAt': serverTimestamp()
-            });
-
-            console.log(`Trial de 14 dias iniciado para o plano ${plan}`);
-            return true;
-        } catch (error) {
-            console.error('Erro ao iniciar trial:', error);
-            throw error;
-        }
-    }
-
-    /**
-     * Redireciona para checkout do Hotmart
-     */
-    redirectToCheckout(plan) {
+    async redirectToCheckout(plan, schoolId = null) {
         const user = auth.currentUser;
         if (!user) {
             alert('Você precisa estar logado para continuar.');
@@ -54,14 +22,19 @@ export class CheckoutManager {
             return;
         }
 
-        // Construir URL com parâmetros do usuário
-        const checkoutUrl = new URL(this.hotmartUrls[plan]);
-        checkoutUrl.searchParams.append('email', user.email);
-        checkoutUrl.searchParams.append('name', user.displayName || '');
-        checkoutUrl.searchParams.append('uid', user.uid);
-
-        // Redirecionar
-        window.location.href = checkoutUrl.toString();
+        try {
+            const functionsInstance = getFunctions();
+            const createCheckout = httpsCallable(functionsInstance, 'createAbacatePayCheckout');
+            const result = await createCheckout({ plan, schoolId });
+            if (result.data?.checkoutUrl) {
+                window.location.href = result.data.checkoutUrl;
+            } else {
+                throw new Error('URL de checkout não recebida.');
+            }
+        } catch (error) {
+            console.error('Erro ao iniciar checkout AbacatePay:', error);
+            alert('Não foi possível iniciar o pagamento agora. Tente novamente em instantes.');
+        }
     }
 
     /**

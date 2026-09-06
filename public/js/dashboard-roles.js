@@ -389,7 +389,7 @@ export class DashboardRoleManager {
                 title: 'Izicode em Casa',
                 description: 'Plataforma de lógica e desafios maker',
                 icon: 'home',
-                href: 'student-area.html',
+                href: 'dashboards/aluno.html',
                 gradient: 'from-emerald-500 to-emerald-600',
                 textColor: 'white'
             },
@@ -405,7 +405,7 @@ export class DashboardRoleManager {
                 title: 'Progresso',
                 description: 'Acompanhar o desenvolvimento do aluno',
                 icon: 'chart',
-                href: 'student-area.html',
+                href: 'dashboards/aluno.html',
                 bgColor: 'bg-white/80',
                 borderColor: 'border-purple-300'
             }

@@ -6,604 +6,452 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Professor Autônomo - Izicode Edu</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../css/tw/65a12f08.css">
+    <link rel="stylesheet" href="../css/shell.css">
     <link rel="stylesheet" href="../css/dashboard-premium.css">
-    <script type="module" src="../js/firebase-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 
 <body class="font-sans text-slate-900 bg-slate-50 overflow-x-hidden">
 
-    <!-- Navbar -->
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center gap-4">
-                    <a href="../index.html" class="flex items-center gap-3 group">
-                        <div
-                            class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-100 group-hover:border-brand-200 transition-all">
-                            <img src="../images/logo.png" alt="Izicode" class="w-9 h-9 object-contain">
+    <div data-iz-sidebar></div>
+    <div data-iz-drawer></div>
+    <div class="iz-shell">
+        <div data-iz-topbar></div>
+        <div class="iz-main">
+            <main class="iz-content">
+
+                <header class="iz-page-header">
+                    <div>
+                        <h1 class="iz-page-title">Bem-vindo, <em id="userDisplayName">Professor</em></h1>
+                        <p class="iz-page-subtitle">Suas ferramentas e projetos, num só lugar.</p>
+                    </div>
+                </header>
+
+                <div class="iz-grid iz-grid--stats" style="margin-bottom:40px;">
+                    <div class="iz-card iz-stat">
+                        <div class="iz-stat__icon" style="background:var(--iz-brand-muted);color:var(--iz-brand);">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+                            </svg>
                         </div>
-                        <span class="font-display font-black text-xl text-slate-900 tracking-tight hidden sm:inline">Izicode
-                            Edu</span>
-                    </a>
-                    <span
-                        class="px-3 py-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full">Professor
-                        Autônomo</span>
-                </div>
-                <div class="hidden md:flex items-center gap-6">
-                    <button onclick="openPricingModal()"
-                        class="text-sm font-bold text-slate-600 hover:text-brand-600 transition-colors">Recursos
-                        PRO</button>
-                    <a href="#ferramentas"
-                        class="text-sm font-bold text-slate-600 hover:text-brand-600 transition-colors">Ferramentas</a>
-                    <a href="#meus-projetos"
-                        class="text-sm font-bold text-slate-600 hover:text-brand-600 transition-colors">Meus
-                        Projetos</a>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
-                        <div class="text-right hidden sm:block">
-                            <p class="text-sm font-black text-slate-900 leading-none" id="userName">Carregando...</p>
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1"
-                                data-teacher-plan>—</p>
+                        <div>
+                            <p class="iz-stat__value" data-teacher-projects-count>0</p>
+                            <p class="iz-stat__label">Projetos Criados</p>
                         </div>
-                        <div class="relative">
-                            <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff"
-                                class="w-10 h-10 rounded-xl border-2 border-white shadow-sm object-cover">
-                            <div
-                                class="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full">
+                    </div>
+                    <div class="iz-card iz-stat">
+                        <div class="iz-stat__icon" style="background:rgba(245,158,11,0.1);color:#b45309;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l8 4v6c0 5.25-3.5 9.75-8 10-4.5-.25-8-4.75-8-10V6l8-4z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="iz-stat__value" data-teacher-plan-label>Gratuito</p>
+                            <p class="iz-stat__label">Plano Atual</p>
+                        </div>
+                    </div>
+                    <div class="iz-card iz-stat">
+                        <div class="iz-stat__icon" style="background:rgba(34,197,94,0.1);color:#16a34a;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="iz-stat__value" data-teacher-member-since>—</p>
+                            <p class="iz-stat__label">Membro desde</p>
+                        </div>
+                    </div>
+                </div>
+
+                <section id="ferramentas" style="margin-bottom:56px;">
+                    <div class="iz-section-title" style="margin-bottom:24px;">
+                        <h2>
+                            <span class="iz-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>
+                                </svg>
+                            </span>
+                            Arsenal de Ferramentas
+                        </h2>
+                        <span data-teacher-plan-tag class="iz-badge iz-badge--gray">Plano Gratuito</span>
+                    </div>
+
+                    <div class="iz-grid iz-grid--tools">
+                        <a href="../academia.html" class="iz-card iz-card--tool">
+                            <div class="iz-card__tool-icon" style="background:#7c3aed;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
                             </div>
+                            <h3 class="iz-card__tool-title">Academia do Professor</h3>
+                            <p class="iz-card__tool-desc">Trilhas práticas de Arduino, Scratch e mais — primeiro módulo grátis.</p>
+                            <span class="iz-card__tool-link" style="color:#7c3aed;">APRENDER</span>
+                        </a>
+
+                        <a href="#" onclick="openStudioHub(); return false;" class="iz-card iz-card--tool">
+                            <div class="iz-card__tool-icon" style="background:var(--iz-brand);">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                                </svg>
+                            </div>
+                            <h3 class="iz-card__tool-title">Estúdio IA</h3>
+                            <p class="iz-card__tool-desc">Planos de aula, criação de conteúdo e o Assistente IA — tudo aqui.</p>
+                            <span class="iz-card__tool-link">ABRIR ESTÚDIO</span>
+                        </a>
+
+                        <a href="#meus-projetos" onclick="document.getElementById('meus-projetos').scrollIntoView({behavior:'smooth'}); return false;" class="iz-card iz-card--tool">
+                            <div class="iz-card__tool-icon" style="background:#6366f1;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+                                </svg>
+                            </div>
+                            <h3 class="iz-card__tool-title">Meus Projetos</h3>
+                            <p class="iz-card__tool-desc">Acesse e organize todos os seus roteiros criados pela IA ou salvos.</p>
+                            <span class="iz-card__tool-link" style="color:#6366f1;">GERENCIAR</span>
+                        </a>
+
+                        <a href="../arduino-projects.html" class="iz-card iz-card--tool">
+                            <div class="iz-card__tool-icon" style="background:#b45309;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="7" y="7" width="10" height="10" rx="1.5" stroke-width="2"/>
+                                    <path stroke-linecap="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 4h2m14-4h2m-2 4h2"/>
+                                </svg>
+                            </div>
+                            <h3 class="iz-card__tool-title">Arduino Hub</h3>
+                            <p class="iz-card__tool-desc">Projetos avançados de robótica e roteiros completos com Arduino.</p>
+                            <span class="iz-card__tool-link" style="color:#b45309;">EXPLORAR HUB</span>
+                        </a>
+
+                        <a href="#" onclick="checkAccess('vip'); return false;" class="iz-card iz-card--tool">
+                            <div class="iz-card__tool-icon" style="background:#16a34a;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4" stroke-width="2"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                                </svg>
+                            </div>
+                            <h3 class="iz-card__tool-title">Networking</h3>
+                            <p class="iz-card__tool-desc">Participe do grupo de professores makers da Izicode Edu.</p>
+                            <span class="iz-card__tool-link" style="color:#16a34a;">SOLICITAR</span>
+                        </a>
+                    </div>
+                </section>
+
+                <section id="meus-projetos" style="margin-bottom:56px;">
+                    <div class="iz-section-title" style="margin-bottom:24px;">
+                        <h2>
+                            <span class="iz-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                                </svg>
+                            </span>
+                            Meus Projetos & Planejamentos
+                        </h2>
+                        <button onclick="checkAccess('ai')" class="iz-btn iz-btn--primary">
+                            Novo projeto com IA
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div id="projectList" class="iz-grid iz-grid--projects">
+                        <div class="iz-empty">
+                            <div class="iz-empty__icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                                </svg>
+                            </div>
+                            <h3>Nenhum projeto encontrado</h3>
+                            <p>Comece agora mesmo usando o Estúdio IA para criar roteiros com Arduino.</p>
+                            <button onclick="checkAccess('ai')" class="iz-btn iz-btn--primary" style="margin-top:8px;">Criar meu primeiro projeto</button>
                         </div>
                     </div>
-                    <button onclick="handleLogout()" title="Sair"
-                        class="p-2.5 hover:bg-slate-100 rounded-xl transition-colors text-slate-500 hover:text-red-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                    </button>
-                </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Studio IA Hub Modal -->
+    <div id="studioHubModal" class="iz-modal-backdrop" aria-hidden="true">
+        <div class="iz-modal" role="dialog" aria-modal="true">
+            <button type="button" class="iz-modal__close" onclick="closeStudioHub()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <h2>
+                <span class="iz-icon" style="margin-right:10px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                    </svg>
+                </span>
+                Estúdio IA
+            </h2>
+            <p class="iz-text-muted" style="margin:4px 0 20px;">Escolha o que você quer criar agora.</p>
+            <div class="iz-stack">
+                <button type="button" class="iz-card" style="padding:18px;display:flex;align-items:center;gap:14px;text-align:left;cursor:pointer;border:1px solid var(--iz-border);" onclick="closeStudioHub(); checkAccess('ai');">
+                    <div class="iz-stat__icon" style="background:var(--iz-brand-muted);color:var(--iz-brand);width:44px;height:44px;flex-shrink:0;border-radius:12px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <div>
+                        <h3 style="font-weight:700;font-size:0.95rem;margin:0 0 2px;">Planejamento de Aulas</h3>
+                        <p class="iz-text-muted iz-text-sm" style="margin:0;">Gere um plano de aula alinhado à BNCC a partir de um objetivo pedagógico.</p>
+                    </div>
+                </button>
+                <a href="../create-project.html" class="iz-card" style="padding:18px;display:flex;align-items:center;gap:14px;text-align:left;border:1px solid var(--iz-border);">
+                    <div class="iz-stat__icon" style="background:rgba(99,102,241,0.1);color:#6366f1;width:44px;height:44px;flex-shrink:0;border-radius:12px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    </div>
+                    <div>
+                        <h3 style="font-weight:700;font-size:0.95rem;margin:0 0 2px;">Criação de Conteúdo</h3>
+                        <p class="iz-text-muted iz-text-sm" style="margin:0;">Monte roteiros, atividades e materiais de aula com apoio da IA.</p>
+                    </div>
+                </a>
+                <a href="../ia-assistant.html" class="iz-card" style="padding:18px;display:flex;align-items:center;gap:14px;text-align:left;border:1px solid var(--iz-border);">
+                    <div class="iz-stat__icon" style="background:rgba(20,184,166,0.1);color:#0d9488;width:44px;height:44px;flex-shrink:0;border-radius:12px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h.01M15 9h.01"/></svg>
+                    </div>
+                    <div>
+                        <h3 style="font-weight:700;font-size:0.95rem;margin:0 0 2px;">Assistente IA</h3>
+                        <p class="iz-text-muted iz-text-sm" style="margin:0;">Converse livremente para tirar dúvidas pedagógicas ou técnicas.</p>
+                    </div>
+                </a>
             </div>
         </div>
-    </nav>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-
-        <!-- Header -->
-        <div class="mb-10">
-            <h1 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-2">Bem-vindo, <span
-                    data-user-name-short>Professor</span></h1>
-            <p class="text-slate-500 text-lg">Suas ferramentas e projetos, num só lugar.</p>
-        </div>
-
-        <!-- Stats reais -->
-        <div class="grid sm:grid-cols-3 gap-5 mb-12">
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-black text-slate-900 leading-none" data-teacher-projects-count>0</p>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Projetos Criados</p>
-                </div>
-            </div>
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 2l8 4v6c0 5.25-3.5 9.75-8 10-4.5-.25-8-4.75-8-10V6l8-4z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" />
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-black text-slate-900 leading-none" data-teacher-plan-label>Gratuito</p>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Plano Atual</p>
-                </div>
-            </div>
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-black text-slate-900 leading-none" data-teacher-member-since>—</p>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Membro desde</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Arsenal de Ferramentas -->
-        <section id="ferramentas" class="mb-14">
-            <div class="flex items-center justify-between mb-8 flex-wrap gap-4">
-                <h2 class="font-display text-2xl md:text-3xl font-bold text-slate-900 flex items-center gap-3">
-                    <div
-                        class="w-11 h-11 gradient-brand rounded-2xl flex items-center justify-center text-white shadow-md">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
-                        </svg>
-                    </div>
-                    Arsenal de Ferramentas
-                </h2>
-                <span data-teacher-plan-tag
-                    class="px-4 py-1.5 bg-slate-100 text-slate-500 text-xs font-black uppercase tracking-widest rounded-full">Plano
-                    Gratuito</span>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
-                <!-- Academia do Professor Card -->
-                <div class="bg-white rounded-3xl p-7 border border-slate-200 group relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl hover:border-purple-200 cursor-pointer"
-                    onclick="window.location.href='../academia.html'">
-                    <div
-                        class="w-14 h-14 bg-purple-600 text-white rounded-2xl flex items-center justify-center shadow-md mb-5 group-hover:rotate-6 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-xl mb-2">Academia do Professor</h3>
-                    <p class="text-sm text-slate-500 leading-snug mb-6">Trilhas práticas de Arduino, Scratch e mais —
-                        primeiro módulo grátis.</p>
-                    <span class="text-xs font-bold text-purple-600 flex items-center gap-2">APRENDER
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </span>
-                </div>
-
-                <!-- AI Studio Card -->
-                <div class="bg-white rounded-3xl p-7 border border-slate-200 group relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl hover:border-brand-200 cursor-pointer"
-                    onclick="checkAccess('ai')">
-                    <div
-                        class="w-14 h-14 gradient-brand text-white rounded-2xl flex items-center justify-center shadow-md mb-5 group-hover:rotate-6 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-xl mb-2">Estúdio IA</h3>
-                    <p class="text-sm text-slate-500 leading-snug mb-6">Gere planos de aula alinhados à BNCC e
-                        roteiros Arduino em segundos.</p>
-                    <span class="text-xs font-bold text-brand-600 flex items-center gap-2">USAR AGORA
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </span>
-                </div>
-
-                <!-- Project Management Card -->
-                <div class="bg-white rounded-3xl p-7 border border-slate-200 group relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl hover:border-indigo-200 cursor-pointer"
-                    onclick="document.getElementById('meus-projetos').scrollIntoView({ behavior: 'smooth' })">
-                    <div
-                        class="w-14 h-14 bg-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-md mb-5 group-hover:rotate-6 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-xl mb-2">Meus Projetos</h3>
-                    <p class="text-sm text-slate-500 leading-snug mb-6">Acesse e organize todos os seus roteiros
-                        criados pela IA ou salvos.</p>
-                    <span class="text-xs font-bold text-indigo-600 flex items-center gap-2">GERENCIAR
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </span>
-                </div>
-
-                <!-- Arduino Hub Card -->
-                <div class="bg-white rounded-3xl p-7 border border-slate-200 group relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl hover:border-amber-200 cursor-pointer"
-                    onclick="window.location.href='../arduino-projects.html'">
-                    <div
-                        class="w-14 h-14 bg-amber-500 text-white rounded-2xl flex items-center justify-center shadow-md mb-5 group-hover:rotate-6 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <rect x="7" y="7" width="10" height="10" rx="1.5" stroke-width="2" />
-                            <path stroke-linecap="round" stroke-width="2"
-                                d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 4h2m14-4h2m-2 4h2" />
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-xl mb-2">Arduino Hub</h3>
-                    <p class="text-sm text-slate-500 leading-snug mb-6">Projetos avançados de robótica e roteiros
-                        completos com Arduino.</p>
-                    <span class="text-xs font-bold text-amber-600 flex items-center gap-2">EXPLORAR HUB
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </span>
-                </div>
-
-                <!-- Community Access Card -->
-                <div class="bg-white rounded-3xl p-7 border border-slate-200 group relative overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200 cursor-pointer"
-                    onclick="checkAccess('vip')">
-                    <div
-                        class="w-14 h-14 bg-emerald-500 text-white rounded-2xl flex items-center justify-center shadow-md mb-5 group-hover:rotate-6 transition-transform">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                            <circle cx="9" cy="7" r="4" stroke-width="2" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-slate-900 text-xl mb-2">Networking</h3>
-                    <p class="text-sm text-slate-500 leading-snug mb-6">Participe do grupo de professores makers da
-                        Izicode Edu.</p>
-                    <span class="text-xs font-bold text-emerald-600 flex items-center gap-2">SOLICITAR
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Meus Projetos -->
-        <section id="meus-projetos" class="mb-14">
-            <div class="flex items-center justify-between mb-8 flex-wrap gap-4">
-                <h2 class="font-display text-2xl md:text-3xl font-bold text-slate-900 flex items-center gap-3">
-                    <div
-                        class="w-11 h-11 bg-white rounded-2xl flex items-center justify-center text-brand-600 shadow-sm border border-slate-200">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                    </div>
-                    Meus Projetos & Planejamentos
-                </h2>
-                <button onclick="checkAccess('ai')"
-                    class="px-6 py-3 bg-slate-900 text-white rounded-2xl text-sm font-bold shadow-lg hover:bg-slate-800 transition-all active:scale-95">Novo
-                    projeto com IA</button>
-            </div>
-
-            <div id="projectList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div
-                    class="col-span-full bg-white rounded-3xl p-12 text-center border-2 border-dashed border-slate-200">
-                    <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4v16m8-8H4" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-2">Nenhum projeto encontrado</h3>
-                    <p class="text-slate-500 mb-8 max-w-sm mx-auto">Comece agora mesmo usando o Estúdio IA para criar
-                        roteiros com Arduino.</p>
-                    <button onclick="checkAccess('ai')"
-                        class="px-8 py-3 gradient-brand text-white rounded-2xl font-bold">Criar meu primeiro
-                        projeto</button>
-                </div>
-            </div>
-        </section>
     </div>
 
     <!-- AI Generator Modal -->
-    <div id="aiModal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4">
-            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeAiModal()"></div>
-            <div class="relative bg-white rounded-3xl p-8 max-w-xl w-full shadow-2xl">
-                <h2 class="font-display text-2xl font-bold mb-6 flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-brand-50 flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                        </svg>
-                    </div>
-                    Gerador de Aulas com IA
-                </h2>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Público Alvo (Ex: 5º ano Fund
-                            I)</label>
-                        <input type="text" id="aiTarget"
-                            class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Matéria/Tema (Ex:
-                            Sustentabilidade)</label>
-                        <input type="text" id="aiSubject"
-                            class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Objetivo Pedagógico</label>
-                        <textarea id="aiObjective" rows="3"
-                            class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none"></textarea>
-                    </div>
+    <div id="aiModal" class="iz-modal-backdrop" aria-hidden="true">
+        <div class="iz-modal" role="dialog" aria-modal="true">
+            <button type="button" class="iz-modal__close" onclick="closeAiModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <h2>
+                <span class="iz-icon" style="margin-right:10px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                    </svg>
+                </span>
+                Gerador de Aulas com IA
+            </h2>
+            <div class="iz-stack">
+                <div class="iz-field">
+                    <label for="aiTarget">Público Alvo (Ex: 5º Ano Fund. I)</label>
+                    <input type="text" id="aiTarget" class="iz-input" placeholder="Ex: 5º Ano Fund. I">
                 </div>
-                <div class="mt-8 flex gap-3">
-                    <button onclick="closeAiModal()"
-                        class="flex-1 py-3 border border-slate-200 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition-all">Cancelar</button>
-                    <button onclick="generatePlan()" id="btnGenerate"
-                        class="flex-1 py-3 bg-brand-600 text-white rounded-xl font-bold hover:shadow-lg transition-all flex items-center justify-center gap-2">
-                        Gerar Plano
-                    </button>
+                <div class="iz-field">
+                    <label for="aiSubject">Matéria/Tema (Ex: Sustentabilidade)</label>
+                    <input type="text" id="aiSubject" class="iz-input" placeholder="Ex: Sustentabilidade">
                 </div>
+                <div class="iz-field">
+                    <label for="aiObjective">Objetivo Pedagógico</label>
+                    <textarea id="aiObjective" rows="3" class="iz-input" placeholder="Descreva o objetivo pedagógico..."></textarea>
+                </div>
+            </div>
+            <div class="iz-row" style="justify-content:flex-end;gap:8px;margin-top:16px;">
+                <button type="button" class="iz-btn iz-btn--ghost" onclick="closeAiModal()">Cancelar</button>
+                <button type="button" class="iz-btn iz-btn--primary" onclick="generatePlan()" id="btnGenerate">Gerar Plano</button>
             </div>
         </div>
     </div>
 
     <!-- Project Viewer Modal -->
-    <div id="projectViewer" class="fixed inset-0 z-[110] hidden overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4 py-12">
-            <div class="fixed inset-0 bg-slate-900/80 backdrop-blur-md" onclick="closeProjectViewer()"></div>
-            <div class="relative bg-white rounded-3xl p-8 max-w-4xl w-full shadow-2xl max-h-[90vh] overflow-y-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 id="viewTitle" class="font-display text-2xl font-bold text-slate-900">Projeto</h2>
-                    <button onclick="closeProjectViewer()"
-                        class="p-2 hover:bg-slate-100 rounded-full transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div id="viewContent" class="prose prose-slate max-w-none">
-                    <!-- Markdown Content will be rendered here -->
-                </div>
-                <div class="mt-8 pt-6 border-t border-slate-100 flex justify-end gap-3">
-                    <button onclick="window.print()"
-                        class="px-6 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition-all">Imprimir
-                        PDF</button>
-                    <button onclick="closeProjectViewer()"
-                        class="px-6 py-2 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition-all">Fechar</button>
-                </div>
+    <div id="projectViewer" class="iz-modal-backdrop" aria-hidden="true">
+        <div class="iz-modal" style="max-width:800px;" role="dialog" aria-modal="true">
+            <button type="button" class="iz-modal__close" onclick="closeProjectViewer()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <h2 id="viewTitle">Projeto</h2>
+            <div id="viewContent" class="iz-prose"></div>
+            <div class="iz-row" style="justify-content:flex-end;gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid var(--iz-border);">
+                <button type="button" class="iz-btn iz-btn--ghost" onclick="window.print()">Imprimir PDF</button>
+                <button type="button" class="iz-btn iz-btn--primary" onclick="closeProjectViewer()">Fechar</button>
             </div>
         </div>
     </div>
 
     <!-- PRO Access Modal -->
-    <div id="pricingModal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4 py-8">
-            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closePricingModal()"></div>
-            <div class="relative bg-white rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden">
-                <button onclick="closePricingModal()"
-                    class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors z-10">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                <div class="p-8 lg:p-10">
-                    <span
-                        class="inline-block px-3 py-1 bg-brand-50 text-brand-600 text-xs font-black uppercase tracking-widest rounded-full mb-6">Recursos
-                        PRO</span>
-                    <h2 class="font-display text-3xl font-bold text-slate-900 mb-3">Libere as ferramentas
-                        completas</h2>
-                    <p class="text-slate-500 mb-8">Solicite acesso PRO e nossa equipe entra em contato para liberar
-                        as ferramentas abaixo na sua conta.</p>
+    <div id="pricingModal" class="iz-modal-backdrop" aria-hidden="true">
+        <div class="iz-modal" role="dialog" aria-modal="true">
+            <button type="button" class="iz-modal__close" onclick="closePricingModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <span class="iz-badge iz-badge--brand" style="margin-bottom:16px;">Recursos PRO</span>
+            <h2>Libere as ferramentas completas</h2>
+            <p style="color:var(--iz-text-muted);">Solicite acesso PRO e nossa equipe entra em contato para liberar as ferramentas abaixo na sua conta.</p>
 
-                    <div class="space-y-4 mb-10">
-                        <div class="flex items-start gap-3">
-                            <div
-                                class="w-7 h-7 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
-                            <span class="text-sm font-medium text-slate-700">Estúdio de IA sem limite de
-                                geração</span>
-                        </div>
-                        <div class="flex items-start gap-3">
-                            <div
-                                class="w-7 h-7 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
-                            <span class="text-sm font-medium text-slate-700">Projetos e planejamentos
-                                ilimitados</span>
-                        </div>
-                        <div class="flex items-start gap-3">
-                            <div
-                                class="w-7 h-7 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
-                            <span class="text-sm font-medium text-slate-700">Acesso à biblioteca completa de
-                                projetos</span>
-                        </div>
-                        <div class="flex items-start gap-3">
-                            <div
-                                class="w-7 h-7 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
-                            <span class="text-sm font-medium text-slate-700">Entrada no grupo de networking de
-                                professores</span>
-                        </div>
+            <div class="iz-stack" style="margin:20px 0;">
+                <div class="iz-row" style="gap:10px;">
+                    <div class="iz-icon" style="background:rgba(34,197,94,0.1);color:#16a34a;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     </div>
-
-                    <button onclick="subscribeNow(this)"
-                        class="w-full py-4 bg-brand-600 text-white rounded-2xl font-bold text-lg hover:bg-brand-700 hover:shadow-xl transition-all">
-                        Solicitar Acesso PRO
-                    </button>
-                    <p class="text-center text-xs text-slate-400 mt-4">Sem cobrança automática — nossa equipe entra
-                        em contato pelo seu e-mail.</p>
+                    <span style="font-size:0.9rem;">Estúdio de IA sem limite de geração</span>
+                </div>
+                <div class="iz-row" style="gap:10px;">
+                    <div class="iz-icon" style="background:rgba(34,197,94,0.1);color:#16a34a;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                    <span style="font-size:0.9rem;">Projetos e planejamentos ilimitados</span>
+                </div>
+                <div class="iz-row" style="gap:10px;">
+                    <div class="iz-icon" style="background:rgba(34,197,94,0.1);color:#16a34a;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                    <span style="font-size:0.9rem;">Acesso à biblioteca completa de projetos</span>
+                </div>
+                <div class="iz-row" style="gap:10px;">
+                    <div class="iz-icon" style="background:rgba(34,197,94,0.1);color:#16a34a;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                    <span style="font-size:0.9rem;">Entrada no grupo de networking de professores</span>
                 </div>
             </div>
+
+            <button onclick="subscribeNow(this)" class="iz-btn iz-btn--primary iz-btn--lg" style="width:100%;justify-content:center;">
+                Solicitar Acesso PRO
+            </button>
+            <p class="iz-text-muted iz-text-sm" style="text-align:center;margin-top:12px;">Sem cobrança automática — nossa equipe entra em contato pelo seu e-mail.</p>
         </div>
     </div>
 
     <script type="module">
-        import { auth, db, signOut } from '../js/firebase-config.js';
+        import { initShell, showToast } from '../js/shell.js';
+        import { db } from '../js/firebase-config.js';
         import { collection, query, orderBy, onSnapshot, getDoc, doc, deleteDoc, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-functions.js';
 
-        let currentUserData = null;
-        let unsubscribeProjects = null;
+        const { user, userData: currentUserData, role } = await initShell({ requireAuth: true });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            auth.onAuthStateChanged(async (user) => {
-                if (user) {
-                    const userRef = doc(db, 'users', user.uid);
-                    const snap = await getDoc(userRef);
-                    currentUserData = snap.data();
-                    updateUserHeader(user, currentUserData);
-                    loadProjects(user.uid);
-                    updateProBadges();
-                } else {
-                    window.location.href = '../login.html';
-                }
-            });
+        // Display name
+        const displayName = currentUserData?.displayName || user?.displayName || 'Professor';
+        document.getElementById('userDisplayName').textContent = displayName.split(' ')[0];
+
+        // Member since
+        const memberSinceEl = document.querySelector('[data-teacher-member-since]');
+        if (currentUserData?.createdAt?.toDate && memberSinceEl) {
+            memberSinceEl.textContent = currentUserData.createdAt.toDate().toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' });
+        }
+
+        // Plan badges
+        const isPro = role === 'professor-pro' || role === 'admin' || currentUserData?.subscription?.plan === 'pro';
+        const label = isPro ? 'PRO' : 'Gratuito';
+        const tagLabel = isPro ? 'Plano PRO' : 'Plano Gratuito';
+        document.querySelectorAll('[data-teacher-plan-label]').forEach(el => el.textContent = label);
+        document.querySelectorAll('[data-teacher-plan-tag]').forEach(el => {
+            el.textContent = tagLabel;
+            el.className = isPro ? 'iz-badge iz-badge--amber' : 'iz-badge iz-badge--gray';
         });
 
-        function updateUserHeader(user, userData) {
-            const displayName = userData?.displayName || user.displayName || 'Professor';
-            const firstName = displayName.split(' ')[0];
+        let unsubscribeProjects = null;
 
-            document.getElementById('userName').textContent = displayName;
-            document.querySelector('[data-user-name-short]').textContent = firstName;
+        // Project Management
+        const q = query(collection(db, 'users', user.uid, 'projects'), orderBy('createdAt', 'desc'));
 
-            const avatarEl = document.getElementById('userAvatar');
-            avatarEl.src = userData?.photoURL || user.photoURL
-                || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=0ea5e9&color=fff`;
+        unsubscribeProjects = onSnapshot(q, (snapshot) => {
+            document.querySelectorAll('[data-teacher-projects-count]').forEach(el => el.textContent = snapshot.size);
 
-            const memberSinceEl = document.querySelector('[data-teacher-member-since]');
-            if (userData?.createdAt?.toDate) {
-                memberSinceEl.textContent = userData.createdAt.toDate().toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' });
-            }
-        }
-
-        function updateProBadges() {
-            const isPro = currentUserData?.role === 'professor-pro' || currentUserData?.role === 'admin';
-            const label = isPro ? 'PRO' : 'Gratuito';
-            const tagLabel = isPro ? 'Plano PRO' : 'Plano Gratuito';
-
-            document.querySelectorAll('[data-teacher-plan]').forEach(el => el.textContent = label);
-            document.querySelectorAll('[data-teacher-plan-label]').forEach(el => el.textContent = label);
-            document.querySelectorAll('[data-teacher-plan-tag]').forEach(el => {
-                el.textContent = tagLabel;
-                el.className = isPro
-                    ? 'px-4 py-1.5 bg-amber-50 text-amber-700 text-xs font-black uppercase tracking-widest rounded-full border border-amber-200'
-                    : 'px-4 py-1.5 bg-slate-100 text-slate-500 text-xs font-black uppercase tracking-widest rounded-full';
-            });
-        }
-
-        window.handleLogout = async () => {
-            if (unsubscribeProjects) unsubscribeProjects();
-            await signOut(auth);
-            window.location.href = '../login.html';
-        };
-
-        // Access Control
-        window.checkAccess = (tool) => {
-            const isPro = currentUserData?.role === 'professor-pro' || currentUserData?.role === 'admin';
-
-            if (!isPro) {
-                openPricingModal();
+            const list = document.getElementById('projectList');
+            if (snapshot.empty) {
+                list.innerHTML = `
+                    <div class="iz-empty">
+                        <div class="iz-empty__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                            </svg>
+                        </div>
+                        <h3>Nenhum projeto encontrado</h3>
+                        <p>Comece agora mesmo usando o Estúdio IA para criar roteiros com Arduino.</p>
+                        <button onclick="checkAccess('ai')" class="iz-btn iz-btn--primary" style="margin-top:8px;">Criar meu primeiro projeto</button>
+                    </div>
+                `;
                 return;
             }
 
-            if (tool === 'ai') {
-                openAiModal();
-            } else if (tool === 'vip') {
-                alert('Acesso ao grupo de networking solicitado! Em breve você recebe o convite no seu e-mail.');
-            }
-        };
-
-        // Project Management
-        function loadProjects(uid) {
-            const q = query(collection(db, 'users', uid, 'projects'), orderBy('createdAt', 'desc'));
-            if (unsubscribeProjects) unsubscribeProjects();
-
-            unsubscribeProjects = onSnapshot(q, (snapshot) => {
-                document.querySelectorAll('[data-teacher-projects-count]').forEach(el => el.textContent = snapshot.size);
-
-                const list = document.getElementById('projectList');
-                if (snapshot.empty) {
-                    list.innerHTML = `
-                        <div class="col-span-full bg-white rounded-3xl p-12 text-center border-2 border-dashed border-slate-200">
-                            <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                                <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            list.innerHTML = snapshot.docs.map(d => {
+                const data = d.data();
+                const date = data.createdAt?.toDate().toLocaleDateString('pt-BR') || 'Recentemente';
+                return `
+                    <div class="iz-card" style="padding:20px;display:flex;align-items:center;justify-content:space-between;">
+                        <div class="iz-row" style="gap:14px;min-width:0;flex:1;">
+                            <div class="iz-stat__icon" style="background:var(--iz-brand-muted);color:var(--iz-brand);width:44px;height:44px;flex-shrink:0;border-radius:12px;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-900 mb-2">Nenhum projeto encontrado</h3>
-                            <p class="text-slate-500 mb-8 max-w-sm mx-auto">Comece agora mesmo usando o Estúdio IA para criar roteiros com Arduino.</p>
-                            <button onclick="checkAccess('ai')" class="px-8 py-3 gradient-brand text-white rounded-2xl font-bold">Criar meu primeiro projeto</button>
-                        </div>
-                    `;
-                    return;
-                }
-
-                list.innerHTML = snapshot.docs.map(doc => {
-                    const data = doc.data();
-                    const date = data.createdAt?.toDate().toLocaleDateString('pt-BR') || 'Recentemente';
-                    return `
-                        <div class="bg-white rounded-3xl p-6 border border-slate-200 flex items-center justify-between transition-all hover:shadow-lg">
-                            <div class="flex items-center gap-4 min-w-0">
-                                <div class="w-12 h-12 gradient-brand rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                </div>
-                                <div class="min-w-0">
-                                    <h3 class="font-bold text-slate-900 text-lg truncate">${data.title}</h3>
-                                    <p class="text-sm text-slate-500 font-medium">Salvo em ${date}</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-2 flex-shrink-0">
-                                <button onclick="viewProject('${doc.id}')" class="px-5 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-bold hover:shadow-lg transition-all">Ver</button>
-                                <button onclick="deleteProject('${doc.id}')" class="p-2.5 text-red-500 hover:bg-red-50 rounded-xl transition-colors" title="Excluir">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                </button>
+                            <div style="min-width:0;">
+                                <h3 style="font-weight:700;font-size:1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${data.title}</h3>
+                                <p class="iz-text-muted iz-text-sm">Salvo em ${date}</p>
                             </div>
                         </div>
-                    `;
-                }).join('');
-            });
-        }
+                        <div class="iz-row" style="gap:8px;flex-shrink:0;">
+                            <button onclick="viewProject('${d.id}')" class="iz-btn iz-btn--primary iz-btn--sm">Ver</button>
+                            <button onclick="deleteProject('${d.id}')" class="iz-btn iz-btn--ghost iz-btn--sm" title="Excluir" style="color:var(--iz-error);">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        });
 
         window.viewProject = async (id) => {
-            const uid = auth.currentUser.uid;
-            const snap = await getDoc(doc(db, 'users', uid, 'projects', id));
+            const snap = await getDoc(doc(db, 'users', user.uid, 'projects', id));
             if (snap.exists()) {
                 const data = snap.data();
                 document.getElementById('viewTitle').textContent = data.title;
                 document.getElementById('viewContent').innerHTML = marked.parse(data.content || '');
-                document.getElementById('projectViewer').classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
+                document.getElementById('projectViewer').classList.add('is-open');
             }
         };
 
         window.deleteProject = async (id) => {
             if (confirm('Deseja realmente excluir este projeto?')) {
-                const uid = auth.currentUser.uid;
-                await deleteDoc(doc(db, 'users', uid, 'projects', id));
+                await deleteDoc(doc(db, 'users', user.uid, 'projects', id));
+                showToast({ title: 'Excluído', message: 'Projeto removido com sucesso.', type: 'success' });
             }
         };
 
-        // AI Logic
+        // Access Control
+        window.checkAccess = (tool) => {
+            if (!isPro) {
+                openPricingModal();
+                return;
+            }
+            if (tool === 'ai') openAiModal();
+            else if (tool === 'vip') {
+                showToast({ title: 'Solicitação', message: 'Acesso ao grupo de networking solicitado! Em breve você recebe o convite no seu e-mail.', type: 'success' });
+            }
+        };
+
+        // Studio IA Hub
+        window.openStudioHub = () => {
+            document.getElementById('studioHubModal').classList.add('is-open');
+        };
+        window.closeStudioHub = () => {
+            document.getElementById('studioHubModal').classList.remove('is-open');
+        };
+
+        // AI Modal
         window.openAiModal = () => {
-            document.getElementById('aiModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
+            document.getElementById('aiModal').classList.add('is-open');
         };
-
         window.closeAiModal = () => {
-            document.getElementById('aiModal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
+            document.getElementById('aiModal').classList.remove('is-open');
         };
-
         window.closeProjectViewer = () => {
-            document.getElementById('projectViewer').classList.add('hidden');
-            document.body.style.overflow = 'auto';
+            document.getElementById('projectViewer').classList.remove('is-open');
         };
 
         window.generatePlan = async () => {
@@ -612,10 +460,13 @@
             const objective = document.getElementById('aiObjective').value;
             const btn = document.getElementById('btnGenerate');
 
-            if (!target || !subject || !objective) return alert('Preencha todos os campos!');
+            if (!target || !subject || !objective) {
+                showToast({ title: 'Atenção', message: 'Preencha todos os campos!', type: 'error' });
+                return;
+            }
 
             btn.disabled = true;
-            btn.innerHTML = `<span>Gerando...</span> <div class="w-4 h-4 border-2 border-white border-t-transparent animate-spin rounded-full"></div>`;
+            btn.innerHTML = `<span>Gerando...</span> <div class="iz-spinner"></div>`;
 
             try {
                 const functions = getFunctions();
@@ -625,29 +476,28 @@
                 if (result.data.success) {
                     closeAiModal();
                     viewProject(result.data.projectId);
+                    showToast({ title: 'Sucesso', message: 'Plano gerado com sucesso!', type: 'success' });
                 }
             } catch (error) {
                 console.error(error);
-                alert(error.message || 'Erro ao gerar plano. Verifique se atingiu o limite ou tente novamente.');
+                showToast({ title: 'Erro', message: error.message || 'Erro ao gerar plano. Verifique se atingiu o limite ou tente novamente.', type: 'error' });
             } finally {
                 btn.disabled = false;
                 btn.textContent = 'Gerar Plano';
             }
         };
 
-        // PRO Access Modal
+        // Pricing Modal
         window.openPricingModal = () => {
-            document.getElementById('pricingModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
+            document.getElementById('pricingModal').classList.add('is-open');
         };
         window.closePricingModal = () => {
-            document.getElementById('pricingModal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
+            document.getElementById('pricingModal').classList.remove('is-open');
         };
+
         window.subscribeNow = async (btn) => {
-            const user = auth.currentUser;
             if (!user) {
-                alert('Faça login para solicitar acesso PRO.');
+                showToast({ title: 'Atenção', message: 'Faça login para solicitar acesso PRO.', type: 'error' });
                 return;
             }
 
@@ -665,11 +515,11 @@
                     status: 'new',
                     createdAt: serverTimestamp()
                 });
-                alert('Pedido registrado! Nossa equipe vai entrar em contato pelo seu e-mail para liberar o acesso PRO.');
+                showToast({ title: 'Pedido registrado', message: 'Nossa equipe vai entrar em contato pelo seu e-mail para liberar o acesso PRO.', type: 'success' });
                 closePricingModal();
             } catch (e) {
                 console.error('Erro ao registrar pedido de acesso PRO:', e);
-                alert('Não foi possível registrar seu pedido agora. Tente novamente em instantes.');
+                showToast({ title: 'Erro', message: 'Não foi possível registrar seu pedido agora. Tente novamente em instantes.', type: 'error' });
             } finally {
                 if (btn) { btn.disabled = false; btn.textContent = originalText; }
             }

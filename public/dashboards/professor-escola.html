@@ -6,339 +6,225 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Professor Escola - Izicode Edu</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../css/tw/65a12f08.css">
+    <link rel="stylesheet" href="../css/shell.css">
     <link rel="stylesheet" href="../css/dashboard-premium.css">
-    <script type="module" src="../js/firebase-config.js"></script>
 </head>
 
 <body class="font-sans text-slate-900 bg-slate-50">
 
-    <!-- Navbar -->
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center gap-4">
-                    <a href="../index.html" class="flex items-center gap-3 group">
-                        <div
-                            class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-100 group-hover:border-brand-200 transition-all">
-                            <img src="../images/logo.png" alt="Izicode" class="w-9 h-9 object-contain">
+    <div data-iz-sidebar></div>
+    <div data-iz-drawer></div>
+    <div class="iz-shell">
+        <div data-iz-topbar></div>
+        <div class="iz-main">
+            <main class="iz-content">
+
+                <header class="iz-page-header">
+                    <div>
+                        <h1 class="iz-page-title">Bem-vindo(a), <em id="userDisplayName">Professor(a)</em></h1>
+                        <p class="iz-page-subtitle">Gerencie suas turmas e acompanhe o progresso dos alunos.</p>
+                    </div>
+                </header>
+
+                <div class="iz-grid iz-grid--stats" style="margin-bottom:40px;">
+                    <div class="iz-card iz-stat">
+                        <div class="iz-stat__icon" style="background:var(--iz-brand-muted);color:var(--iz-brand);">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
                         </div>
-                        <span class="font-display font-black text-xl text-slate-900 tracking-tight hidden sm:inline">Izicode
-                            Edu</span>
-                    </a>
-                    <span
-                        class="px-3 py-1 bg-purple-100 text-purple-700 text-[10px] font-black uppercase tracking-widest rounded-full">Professor
-                        Escola</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
-                        <div class="text-right hidden sm:block">
-                            <p class="text-sm font-black text-slate-900 leading-none" id="userName">Carregando...</p>
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Professor
-                                Institucional</p>
-                        </div>
-                        <div class="relative">
-                            <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=8b5cf6&color=fff"
-                                class="w-10 h-10 rounded-xl border-2 border-white shadow-sm object-cover">
-                            <div
-                                class="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full">
-                            </div>
+                        <div>
+                            <p class="iz-stat__value" data-teacher-classes-count>0</p>
+                            <p class="iz-stat__label">Minhas Turmas</p>
                         </div>
                     </div>
-                    <button onclick="handleLogout()" title="Sair"
-                        class="p-2.5 hover:bg-slate-100 rounded-xl transition-colors text-slate-500 hover:text-red-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                    </button>
+                    <div class="iz-card iz-stat">
+                        <div class="iz-stat__icon" style="background:rgba(139,92,246,0.1);color:#7c3aed;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                <circle cx="9" cy="7" r="4" stroke-width="2"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="iz-stat__value" data-teacher-students-count>0</p>
+                            <p class="iz-stat__label">Alunos Ativos</p>
+                        </div>
+                    </div>
+                    <div class="iz-card iz-stat">
+                        <div class="iz-stat__icon" style="background:rgba(245,158,11,0.1);color:#b45309;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="iz-stat__value" data-teacher-challenges-count>0</p>
+                            <p class="iz-stat__label">Desafios Criados</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </nav>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div class="iz-grid" style="grid-template-columns:1fr 340px;gap:32px;align-items:start;">
 
-        <!-- Header -->
-        <div class="mb-10">
-            <h1 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-2">Bem-vindo(a), <span
-                    data-user-name-short>Professor(a)</span></h1>
-            <p class="text-slate-500 text-lg">Gerencie suas turmas e acompanhe o progresso dos alunos.</p>
-        </div>
+                    <div class="iz-stack iz-stack--lg">
 
-        <!-- Stats reais -->
-        <div class="grid sm:grid-cols-3 gap-5 mb-12">
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-black text-slate-900 leading-none" data-teacher-classes-count>0</p>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Minhas Turmas</p>
-                </div>
-            </div>
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                        <circle cx="9" cy="7" r="4" stroke-width="2" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-black text-slate-900 leading-none" data-teacher-students-count>0</p>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Alunos Ativos</p>
-                </div>
-            </div>
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-black text-slate-900 leading-none" data-teacher-challenges-count>0</p>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Desafios Criados</p>
-                </div>
-            </div>
-        </div>
+                        <section>
+                            <div class="iz-section-title" style="margin-bottom:20px;">
+                                <h2>
+                                    <span class="iz-icon">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                            <circle cx="9" cy="7" r="4" stroke-width="2"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                                        </svg>
+                                    </span>
+                                    Minhas Turmas
+                                </h2>
+                                <button onclick="openClassModal()" class="iz-btn iz-btn--primary iz-btn--sm">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                    Nova Turma
+                                </button>
+                            </div>
 
-        <div class="grid lg:grid-cols-3 gap-8">
+                            <div class="iz-stack" data-teacher-classes-container>
+                                <div class="iz-empty">
+                                    <p class="iz-text-muted" style="font-size:0.9rem;">Carregando turmas...</p>
+                                </div>
+                            </div>
+                        </section>
 
-            <!-- Main Content -->
-            <div class="lg:col-span-2 space-y-12">
+                        <section>
+                            <div class="iz-section-title" style="margin-bottom:20px;">
+                                <h2>
+                                    <span class="iz-icon">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                        </svg>
+                                    </span>
+                                    Biblioteca de Projetos
+                                </h2>
+                                <a href="../library.html" class="iz-btn iz-btn--ghost iz-btn--sm">Ver todos →</a>
+                            </div>
 
-                <!-- Minhas Turmas -->
-                <section>
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="font-display text-2xl font-bold text-slate-900 flex items-center gap-3">
-                            <div
-                                class="w-11 h-11 gradient-brand rounded-2xl flex items-center justify-center text-white shadow-md">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                                    <circle cx="9" cy="7" r="4" stroke-width="2" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+                            <div id="featuredProjects" class="iz-grid iz-grid--projects">
+                                <div class="iz-empty" style="grid-column:1/-1;">
+                                    <p class="iz-text-muted" style="font-size:0.9rem;">Carregando projetos...</p>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+
+                    <div class="iz-stack">
+                        <div class="iz-card" style="background:linear-gradient(135deg,#f59e0b,#ea580c);color:#fff;border:none;">
+                            <h3 style="font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;margin:0 0 16px;display:flex;align-items:center;gap:8px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                                 </svg>
+                                Alunos Destaque
+                            </h3>
+                            <div id="topStudents" class="iz-stack" style="--iz-gap:10px;">
+                                <p style="font-size:0.85rem;opacity:0.85;">Carregando...</p>
                             </div>
-                            Minhas Turmas
-                        </h2>
-                        <button onclick="openClassModal()"
-                            class="px-5 py-2.5 bg-slate-900 text-white rounded-2xl text-sm font-bold shadow-lg hover:bg-slate-800 transition-all active:scale-95 flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4v16m8-8H4" />
-                            </svg>
-                            Nova Turma
-                        </button>
-                    </div>
-
-                    <div class="space-y-4" data-teacher-classes-container>
-                        <div class="bg-white rounded-3xl p-10 text-center border-2 border-dashed border-slate-200">
-                            <p class="text-slate-400 text-sm">Carregando turmas...</p>
                         </div>
-                    </div>
-                </section>
 
-                <!-- Biblioteca de Projetos -->
-                <section>
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="font-display text-2xl font-bold text-slate-900 flex items-center gap-3">
-                            <div
-                                class="w-11 h-11 bg-white rounded-2xl flex items-center justify-center text-brand-600 shadow-sm border border-slate-200">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                </svg>
+                        <div class="iz-card">
+                            <h3 style="font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;margin:0 0 16px;display:flex;align-items:center;gap:8px;">
+                                <span class="iz-icon" style="background:var(--iz-brand-muted);color:var(--iz-brand);width:28px;height:28px;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                    </svg>
+                                </span>
+                                Acesso Rápido
+                            </h3>
+                            <div class="iz-stack" style="--iz-gap:8px;">
+                                <a href="../academia.html" class="iz-btn iz-btn--ghost iz-btn--sm" style="justify-content:flex-start;width:100%;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                    Academia do Professor
+                                </a>
+                                <a href="../library.html" class="iz-btn iz-btn--ghost iz-btn--sm" style="justify-content:flex-start;width:100%;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                    Biblioteca de Projetos
+                                </a>
+                                <a href="../quiz-arena.html" class="iz-btn iz-btn--ghost iz-btn--sm" style="justify-content:flex-start;width:100%;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                                    Quiz Arena
+                                </a>
+                                <a href="../school-management.html" class="iz-btn iz-btn--ghost iz-btn--sm" style="justify-content:flex-start;width:100%;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2M5 21h2m0 0h10M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 6v-3a1 1 0 011-1h0a1 1 0 011 1v3"/></svg>
+                                    Gestão Escolar
+                                </a>
                             </div>
-                            Biblioteca de Projetos
-                        </h2>
-                        <a href="../library.html" class="text-sm text-brand-600 font-bold hover:text-brand-700">Ver
-                            todos →</a>
-                    </div>
-
-                    <div id="featuredProjects" class="grid md:grid-cols-2 gap-4">
-                        <div class="col-span-full text-center py-8 text-slate-400 text-sm">Carregando projetos...
                         </div>
-                    </div>
-                </section>
-
-            </div>
-
-            <!-- Sidebar -->
-            <div class="space-y-6">
-
-                <!-- Alunos Destaque -->
-                <div class="bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl p-6 text-white">
-                    <h3 class="font-display text-lg font-bold mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                        Alunos Destaque
-                    </h3>
-                    <div id="topStudents" class="space-y-3">
-                        <p class="text-sm text-white/80">Carregando...</p>
                     </div>
                 </div>
 
-                <!-- Acesso Rápido -->
-                <div class="bg-white rounded-3xl p-6 border border-slate-200">
-                    <h3 class="font-display text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                        Acesso Rápido
-                    </h3>
-                    <div class="space-y-2">
-                        <a href="../academia.html"
-                            class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left text-sm font-bold text-slate-700 transition-colors flex items-center gap-3">
-                            <svg class="w-5 h-5 text-purple-600 flex-shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                            </svg>
-                            Academia do Professor
-                        </a>
-                        <a href="../library.html"
-                            class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left text-sm font-bold text-slate-700 transition-colors flex items-center gap-3">
-                            <svg class="w-5 h-5 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                            </svg>
-                            Biblioteca de Projetos
-                        </a>
-                        <a href="../quiz-arena.html"
-                            class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left text-sm font-bold text-slate-700 transition-colors flex items-center gap-3">
-                            <svg class="w-5 h-5 text-purple-600 flex-shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                            </svg>
-                            Quiz Arena
-                        </a>
-                        <a href="../school-management.html"
-                            class="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-left text-sm font-bold text-slate-700 transition-colors flex items-center gap-3">
-                            <svg class="w-5 h-5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2M5 21h2m0 0h10M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 6v-3a1 1 0 011-1h0a1 1 0 011 1v3" />
-                            </svg>
-                            Gestão Escolar
-                        </a>
-                    </div>
-                </div>
-
-            </div>
+            </main>
         </div>
     </div>
 
     <!-- Nova Turma Modal -->
-    <div id="classModal" class="fixed inset-0 z-[100] hidden overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4">
-            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeClassModal()"></div>
-            <div class="relative bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-                <h2 class="font-display text-2xl font-bold mb-6">Nova Turma</h2>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Nome da turma (Ex: 6º Ano
-                            A)</label>
-                        <input type="text" id="classNameInput"
-                            class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Série/Ano</label>
-                        <input type="text" id="classGradeInput" placeholder="Ex: 6º Ano Fund. II"
-                            class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Turno</label>
-                        <select id="classShiftInput"
-                            class="w-full px-4 py-2 rounded-xl border border-slate-200 focus:ring-2 focus:ring-brand-500 outline-none">
-                            <option value="morning">Manhã</option>
-                            <option value="afternoon">Tarde</option>
-                            <option value="evening">Noite</option>
-                        </select>
-                    </div>
+    <div id="classModal" class="iz-modal-backdrop" aria-hidden="true">
+        <div class="iz-modal" role="dialog" aria-modal="true">
+            <button type="button" class="iz-modal__close" onclick="closeClassModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <h2>Nova Turma</h2>
+            <div class="iz-stack">
+                <div class="iz-field">
+                    <label for="classNameInput">Nome da turma (Ex: 6º Ano A)</label>
+                    <input type="text" id="classNameInput" class="iz-input" placeholder="Ex: 6º Ano A">
                 </div>
-                <div class="mt-8 flex gap-3">
-                    <button onclick="closeClassModal()"
-                        class="flex-1 py-3 border border-slate-200 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition-all">Cancelar</button>
-                    <button onclick="createClass(this)" id="btnCreateClass"
-                        class="flex-1 py-3 bg-brand-600 text-white rounded-xl font-bold hover:shadow-lg transition-all">Criar
-                        Turma</button>
+                <div class="iz-field">
+                    <label for="classGradeInput">Série/Ano</label>
+                    <input type="text" id="classGradeInput" class="iz-input" placeholder="Ex: 6º Ano Fund. II">
                 </div>
+                <div class="iz-field">
+                    <label for="classShiftInput">Turno</label>
+                    <select id="classShiftInput" class="iz-input">
+                        <option value="morning">Manhã</option>
+                        <option value="afternoon">Tarde</option>
+                        <option value="evening">Noite</option>
+                    </select>
+                </div>
+            </div>
+            <div class="iz-row" style="justify-content:flex-end;gap:8px;margin-top:16px;">
+                <button type="button" class="iz-btn iz-btn--ghost" onclick="closeClassModal()">Cancelar</button>
+                <button type="button" class="iz-btn iz-btn--primary" onclick="createClass(this)" id="btnCreateClass">Criar Turma</button>
             </div>
         </div>
     </div>
 
     <script type="module">
-        import { auth, db, signOut } from '../js/firebase-config.js';
+        import { initShell, showToast } from '../js/shell.js';
+        import { db } from '../js/firebase-config.js';
         import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { UserManager, ClassManager, ChallengeManager } from '../js/database.js';
         import { getAllProjects } from '../js/projects-data.js';
 
-        let currentUser = null;
-        let currentClasses = [];
+        const { user, userData: currentUserData } = await initShell({ requireAuth: true });
+        const currentUser = { uid: user.uid, ...currentUserData };
 
-        document.addEventListener('DOMContentLoaded', () => {
-            auth.onAuthStateChanged(async (user) => {
-                if (!user) {
-                    window.location.href = '../login.html';
-                    return;
-                }
+        // Display name
+        const displayName = currentUserData?.displayName || user?.displayName || 'Professor(a)';
+        document.getElementById('userDisplayName').textContent = displayName.split(' ')[0];
 
-                const userRef = doc(db, 'users', user.uid);
-                const snap = await getDoc(userRef);
-                const userData = snap.data();
-                currentUser = { uid: user.uid, ...userData };
-
-                updateUserHeader(user, userData);
-                renderFeaturedProjects();
-
-                try {
-                    await Promise.all([loadClasses(), loadChallengeCount()]);
-                } catch (e) {
-                    console.error('Erro ao carregar dashboard:', e);
-                }
-            });
-        });
-
-        function updateUserHeader(user, userData) {
-            const displayName = userData?.displayName || user.displayName || 'Professor(a)';
-            const firstName = displayName.split(' ')[0];
-            document.getElementById('userName').textContent = displayName;
-            document.querySelector('[data-user-name-short]').textContent = firstName;
-
-            const avatarEl = document.getElementById('userAvatar');
-            avatarEl.src = userData?.photoURL || user.photoURL
-                || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=8b5cf6&color=fff`;
-        }
-
-        window.handleLogout = async () => {
-            await signOut(auth);
-            window.location.href = '../login.html';
-        };
-
+        // Load data
         async function loadClasses() {
-            currentClasses = await ClassManager.getTeacherClasses(currentUser.uid);
+            const currentClasses = await ClassManager.getTeacherClasses(currentUser.uid);
             document.querySelector('[data-teacher-classes-count]').textContent = currentClasses.length;
 
             const uniqueStudentIds = new Set(currentClasses.flatMap(c => c.studentIds || []));
             document.querySelector('[data-teacher-students-count]').textContent = uniqueStudentIds.size;
 
-            renderClasses();
+            renderClasses(currentClasses);
             renderTopStudents(uniqueStudentIds);
         }
 
@@ -347,27 +233,25 @@
             document.querySelector('[data-teacher-challenges-count]').textContent = challenges.length;
         }
 
-        function renderClasses() {
+        function renderClasses(classes) {
             const container = document.querySelector('[data-teacher-classes-container]');
-
-            if (currentClasses.length === 0) {
+            if (classes.length === 0) {
                 container.innerHTML = `
-                    <div class="bg-white rounded-3xl p-10 text-center border-2 border-dashed border-slate-200">
-                        <p class="text-slate-500 mb-4">Você ainda não tem turmas criadas.</p>
-                        <button onclick="openClassModal()" class="px-6 py-3 bg-brand-600 text-white rounded-2xl font-bold hover:shadow-lg transition-all">Criar Primeira Turma</button>
+                    <div class="iz-empty">
+                        <p>Você ainda não tem turmas criadas.</p>
+                        <button onclick="openClassModal()" class="iz-btn iz-btn--primary" style="margin-top:8px;">Criar Primeira Turma</button>
                     </div>
                 `;
                 return;
             }
-
-            container.innerHTML = currentClasses.map(cls => `
-                <div class="bg-white rounded-3xl p-6 border border-slate-200 hover:shadow-lg transition-all">
-                    <div class="flex items-start justify-between">
+            container.innerHTML = classes.map(cls => `
+                <div class="iz-card" style="padding:20px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
                         <div>
-                            <h3 class="font-bold text-lg text-slate-900">${cls.name}</h3>
-                            <p class="text-sm text-slate-500">${cls.grade || 'Série não informada'}</p>
+                            <h3 style="font-weight:700;font-size:1rem;margin:0;">${cls.name}</h3>
+                            <p class="iz-text-muted iz-text-sm" style="margin:4px 0 0;">${cls.grade || 'Série não informada'}</p>
                         </div>
-                        <span class="px-3 py-1 bg-brand-50 text-brand-700 text-sm font-bold rounded-full">${(cls.studentIds || []).length} alunos</span>
+                        <span class="iz-badge iz-badge--brand">${(cls.studentIds || []).length} alunos</span>
                     </div>
                 </div>
             `).join('');
@@ -378,7 +262,7 @@
             const studentIds = Array.from(studentIdSet);
 
             if (studentIds.length === 0) {
-                container.innerHTML = '<p class="text-sm text-white/80">Adicione alunos às suas turmas para ver o destaque aqui.</p>';
+                container.innerHTML = '<p style="font-size:0.85rem;opacity:0.85;">Adicione alunos às suas turmas para ver o destaque aqui.</p>';
                 return;
             }
 
@@ -388,15 +272,15 @@
                 .slice(0, 3);
 
             if (students.length === 0) {
-                container.innerHTML = '<p class="text-sm text-white/80">Nenhum dado de progresso ainda.</p>';
+                container.innerHTML = '<p style="font-size:0.85rem;opacity:0.85;">Nenhum dado de progresso ainda.</p>';
                 return;
             }
 
             const medals = ['1º lugar', '2º lugar', '3º lugar'];
             container.innerHTML = students.map((s, i) => `
-                <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3">
-                    <p class="font-bold text-sm">${s.displayName || 'Aluno'}</p>
-                    <p class="text-xs opacity-90">${s.xp || 0} XP • <span class="font-bold">${medals[i]}</span></p>
+                <div style="background:rgba(255,255,255,0.2);backdrop-filter:blur(8px);border-radius:10px;padding:12px;">
+                    <p style="font-weight:700;font-size:0.9rem;margin:0;">${s.displayName || 'Aluno'}</p>
+                    <p style="font-size:0.8rem;opacity:0.9;margin:4px 0 0;">${s.xp || 0} XP • <strong>${medals[i]}</strong></p>
                 </div>
             `).join('');
         }
@@ -404,31 +288,31 @@
         function renderFeaturedProjects() {
             const container = document.getElementById('featuredProjects');
             const featured = getAllProjects().slice(0, 4);
-
             container.innerHTML = featured.map(p => `
-                <a href="../project-view.html?id=${p.id}" class="bg-white rounded-2xl p-4 border border-slate-200 hover:shadow-lg hover:border-brand-200 transition-all flex items-start gap-3">
-                    <div class="w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <a href="../project-view.html?id=${p.id}" class="iz-card" style="padding:16px;display:flex;gap:14px;align-items:flex-start;text-decoration:none;">
+                    <div class="iz-stat__icon" style="background:var(--iz-brand-muted);color:var(--iz-brand);width:44px;height:44px;flex-shrink:0;border-radius:10px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                         </svg>
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="font-bold text-slate-900 mb-1 truncate">${p.title}</h3>
-                        <p class="text-xs text-slate-500 mb-2">${(p.tools || []).join(', ')} • ${p.duration} • ${p.difficulty}</p>
-                        <span class="text-xs text-brand-600 font-bold">Ver projeto →</span>
+                    <div style="flex:1;min-width:0;">
+                        <h3 style="font-weight:700;font-size:0.95rem;margin:0 0 4px;">${p.title}</h3>
+                        <p class="iz-text-muted iz-text-sm" style="margin:0 0 6px;">${(p.tools || []).join(', ')} • ${p.duration} • ${p.difficulty}</p>
+                        <span style="font-size:0.8rem;font-weight:600;color:var(--iz-brand);">Ver projeto →</span>
                     </div>
                 </a>
             `).join('');
         }
 
-        // Nova Turma Modal
+        await Promise.all([loadClasses(), loadChallengeCount()]);
+        renderFeaturedProjects();
+
+        // Class Modal
         window.openClassModal = () => {
-            document.getElementById('classModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
+            document.getElementById('classModal').classList.add('is-open');
         };
         window.closeClassModal = () => {
-            document.getElementById('classModal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
+            document.getElementById('classModal').classList.remove('is-open');
             document.getElementById('classNameInput').value = '';
             document.getElementById('classGradeInput').value = '';
         };
@@ -437,7 +321,10 @@
             const grade = document.getElementById('classGradeInput').value.trim();
             const shift = document.getElementById('classShiftInput').value;
 
-            if (!name) return alert('Informe o nome da turma.');
+            if (!name) {
+                showToast({ title: 'Atenção', message: 'Informe o nome da turma.', type: 'error' });
+                return;
+            }
 
             btn.disabled = true;
             btn.textContent = 'Criando...';
@@ -451,9 +338,10 @@
                 });
                 closeClassModal();
                 await loadClasses();
+                showToast({ title: 'Sucesso', message: 'Turma criada com sucesso!', type: 'success' });
             } catch (e) {
                 console.error('Erro ao criar turma:', e);
-                alert('Não foi possível criar a turma agora. Tente novamente.');
+                showToast({ title: 'Erro', message: 'Não foi possível criar a turma agora. Tente novamente.', type: 'error' });
             } finally {
                 btn.disabled = false;
                 btn.textContent = 'Criar Turma';

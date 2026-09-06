@@ -273,7 +273,7 @@ function checkAnswer() {
 
 function gameOver() {
     const teacherRoles = ['teacher', 'freelance_teacher', 'professor-pro', 'school_admin', 'dev', 'consultant'];
-    const dashboardUrl = teacherRoles.includes(userRole) ? 'dashboard.html' : 'student-area.html';
+    const dashboardUrl = teacherRoles.includes(userRole) ? 'dashboard.html' : 'dashboards/aluno.html';
 
     document.querySelector('main').innerHTML = `
         <div class="text-center mt-20 animate-bounce-in px-6">
@@ -299,7 +299,7 @@ function gameOver() {
 
 function showNoKeysModal() {
     const teacherRoles = ['teacher', 'freelance_teacher', 'professor-pro', 'school_admin', 'dev', 'consultant'];
-    const dashboardUrl = teacherRoles.includes(userRole) ? 'dashboard.html' : 'student-area.html';
+    const dashboardUrl = teacherRoles.includes(userRole) ? 'dashboard.html' : 'dashboards/aluno.html';
 
     document.querySelector('main').innerHTML = `
         <div class="text-center mt-20 animate-bounce-in px-6">
@@ -474,7 +474,7 @@ async function finishQuiz() {
     }
 
     // 3. Refresh Role for Redirect using Business Rules (DB + Overrides)
-    let finalRedirectUrl = 'student-area.html'; // Default fallback
+    let finalRedirectUrl = 'dashboards/aluno.html'; // Default fallback
     if (user) {
         try {
             console.log("Checking role rules...");

@@ -57,7 +57,7 @@ onAuthStateChanged(auth, (user) => {
         }
     } else {
         console.log("Estado: Não logado");
-        if (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('student-area.html')) {
+        if (window.location.pathname.includes('dashboard.html') || window.location.pathname.includes('/dashboards/aluno.html')) {
             // Comentado para facilitar testes se o redirect estiver agressivo
             // window.location.href = "index.html";
         }

@@ -59,9 +59,8 @@ Localização: `serviceAccountKey.json` (local apenas)
 Arquivo: `.env` (criar baseado em `.env.example`)
 
 **Variáveis sensíveis:**
-- `HOTMART_CLIENT_ID`
-- `HOTMART_CLIENT_SECRET`
-- `HOTMART_BASIC_AUTH`
+- `ABACATEPAY_API_KEY`
+- `ABACATEPAY_WEBHOOK_SECRET`
 
 ---
 
@@ -84,9 +83,9 @@ git push origin --force --all
    - Deletar a chave comprometida
    - Gerar nova chave
 
-2. **Hotmart:**
-   - Revogar client_secret comprometido
-   - Gerar novo
+2. **AbacatePay:**
+   - Revogar a API key comprometida no painel da AbacatePay
+   - Gerar nova e atualizar `abacatepay.api_key` / `abacatepay.webhook_secret`
 
 ---
 
@@ -127,11 +126,11 @@ import serviceAccount from './serviceAccountKey.json';
 ### 3. Usar Firebase Functions para Lógica Sensível
 ```javascript
 // ❌ ERRADO - Client-side
-const hotmartSecret = "abc123"; // NUNCA!
+const abacatePayApiKey = "abc123"; // NUNCA!
 
 // ✅ CORRETO - Server-side (Firebase Functions)
 exports.processPayment = functions.https.onRequest((req, res) => {
-  const secret = process.env.HOTMART_SECRET;
+  const apiKey = functions.config().abacatepay.api_key;
   // ...
 });
 ```

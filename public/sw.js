@@ -10,7 +10,7 @@ const STATIC_ASSETS = [
   '/index.html',
   '/dashboard.html',
   '/login.html',
-  '/student-area.html',
+  '/dashboards/aluno.html',
   '/create-project.html',
   '/library.html',
   '/manifest.json',

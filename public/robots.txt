@@ -7,7 +7,7 @@ Sitemap: https://izicode.com.br/sitemap.xml
 
 # Bloquear áreas privadas (painéis administrativos e de usuário logado)
 Disallow: /dashboard.html
-Disallow: /student-area.html
+Disallow: /dashboards/aluno.html
 Disallow: /my-projects.html
 Disallow: /create-project.html
 Disallow: /admin/

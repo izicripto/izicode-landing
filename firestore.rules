@@ -65,6 +65,23 @@ service cloud.firestore {
                request.resource.data.subscription.plan == 'free';
       }
 
+      // Plano gratuito do professor autônomo: até 3 planos de aula/roteiros
+      // de IA salvos (contador vitalício simples). Virar 'pro' (feito por
+      // admin/Cloud Function, nunca pelo próprio usuário) libera uso ilimitado.
+      // O contador só pode subir de 1 em 1 e nunca é gravável para baixo pelo
+      // próprio usuário, evitando reset manual do limite.
+      function currentUsage() {
+        return ('subscription' in resource.data && 'projectsCreated' in resource.data.subscription)
+          ? resource.data.subscription.projectsCreated : 0;
+      }
+
+      function isSafeUsageIncrement() {
+        let before = currentUsage();
+        let after = ('subscription' in request.resource.data && 'projectsCreated' in request.resource.data.subscription)
+          ? request.resource.data.subscription.projectsCreated : before;
+        return after == before || after == before + 1;
+      }
+
       allow create: if isAuthenticated() && request.auth.uid == userId &&
                        isSafeSelfRole() && isSafeSelfSubscription();
 
@@ -75,7 +92,8 @@ service cloud.firestore {
                            (isSafeSelfRole() || request.resource.data.role == resource.data.role) &&
                            (isSafeSelfSubscription() ||
                              (('subscription' in request.resource.data) &&
-                              request.resource.data.subscription.plan == resource.data.subscription.plan))
+                              request.resource.data.subscription.plan == resource.data.subscription.plan)) &&
+                           isSafeUsageIncrement()
                          )
                        );
 
@@ -90,21 +108,47 @@ service cloud.firestore {
       match /courseProgress/{courseId} {
         allow read, write: if isOwner(userId) || isAdmin();
       }
+
+      // Perfis de crianças vinculados à conta do responsável (LGPD: o
+      // titular dos dados é o responsável, que cria e controla o acesso;
+      // a criança não tem login/credenciais próprias, apenas um "perfil"
+      // dentro da sessão do responsável, protegido pelas mesmas regras de
+      // dono de conta).
+      match /children/{childId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
     }
     
     // Schools collection
+    // 'plan' controla o acesso comercial: 'demo' é a demonstração criada a
+    // partir do código de acesso escola (sem gerenciamento de turmas real),
+    // 'active' é liberado após a contratação (cobrança por professores +
+    // alunos). Só admin/Cloud Function promove demo -> active.
+    function isSchoolPlanActive(schoolId) {
+      let school = get(/databases/$(database)/documents/schools/$(schoolId)).data;
+      return school != null && school.plan == 'active';
+    }
+
     match /schools/{schoolId} {
       allow read: if isAuthenticated();
       allow create: if isSchoolAdmin() || isAdmin();
-      allow update: if (isSchoolAdmin() && request.auth.uid == resource.data.adminId) || isAdmin();
+      allow update: if (isSchoolAdmin() && request.auth.uid == resource.data.adminId &&
+                          request.resource.data.plan == resource.data.plan) || isAdmin();
     }
-    
-    // Classes collection
-    // Classes collection
+
+    // Classes collection (gerenciamento de turmas)
+    // Criação/edição de turmas reais exige plano 'active' da escola; o
+    // acesso 'demo' (via código de demonstração) só permite leitura, para
+    // que a escola experimente a plataforma antes de contratar.
     match /classes/{classId} {
       allow read: if isAuthenticated();
-      allow create: if isSchoolTeacher() || isSchoolAdmin() || isAdmin();
-      allow update, delete: if isSchoolAdmin() || isAdmin() || (isTeacher() && resource.data.teacherId == request.auth.uid);
+      allow create: if isAdmin() ||
+                       ((isSchoolTeacher() || isSchoolAdmin()) &&
+                        isSchoolPlanActive(request.resource.data.schoolId));
+      allow update, delete: if isAdmin() ||
+                               (isSchoolAdmin() && isSchoolPlanActive(resource.data.schoolId)) ||
+                               (isTeacher() && resource.data.teacherId == request.auth.uid &&
+                                isSchoolPlanActive(resource.data.schoolId));
     }
     
     // Challenges collection

@@ -65,9 +65,18 @@ const NAV_ITEMS = {
     student: [
         { group: 'Aprender', items: [
             { href: 'dashboards/aluno.html', label: 'Meu Painel', icon: 'home' },
-            { href: 'student-area.html', label: 'Área do Aluno', icon: 'gamepad' },
+            { href: 'dashboards/aluno.html', label: 'Área do Aluno', icon: 'gamepad' },
             { href: 'quiz-arena.html', label: 'Arena de Quiz', icon: 'quiz' },
             { href: 'ranking.html', label: 'Ranking', icon: 'trophy' }
+        ]},
+        { group: 'Recursos', items: [
+            { href: 'library.html', label: 'Biblioteca', icon: 'library' }
+        ]}
+    ],
+    parent: [
+        { group: 'Meus Filhos', items: [
+            { href: 'dashboards/aluno.html', label: 'Área do Aluno', icon: 'gamepad' },
+            { href: 'quiz-arena.html', label: 'Arena de Quiz', icon: 'quiz' }
         ]},
         { group: 'Recursos', items: [
             { href: 'library.html', label: 'Biblioteca', icon: 'library' }

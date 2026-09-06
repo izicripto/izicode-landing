@@ -21,10 +21,10 @@
                     <img src="/images/logo.png" alt="Izicode Edu Logo" class="w-10 h-10">
                     <span class="font-display font-bold text-xl text-slate-900">Izicode Edu</span>
                 </a>
-                <a href="https://pay.hotmart.com/SEU_LINK_AQUI"
+                <button onclick="goToCheckout()"
                     class="bg-green-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-green-700 transition-colors shadow-lg shadow-green-200">
                     Comprar Agora
-                </a>
+                </button>
             </div>
         </div>
     </nav>
@@ -99,7 +99,6 @@
 
                         <script>
                             const BASE_PRICE = 297.00;
-                            const HOTMART_ID = 'H12345678X'; // Placeholder ID
                             let activeDiscount = 0;
 
                             function checkCoupon() {
@@ -148,21 +147,12 @@
                             }
 
                             function goToCheckout() {
-                                // Link real para Hotmart Checkout
-                                // Se tiver cupom, passa como parâmetro
-                                const baseUrl = `https://pay.hotmart.com/${HOTMART_ID}`;
-                                const params = new URLSearchParams();
-                                params.append('checkoutMode', '10'); // Modo customizado
-
-                                if (activeDiscount > 0) {
-                                    const couponCode = document.getElementById('coupon').value.toUpperCase();
-                                    params.append('offDiscount', couponCode); // Parâmetro hipotético
-                                }
-
-                                // Redirecionamento (simulado para demo)
-                                console.log(`Redirecionando para: ${baseUrl}?${params.toString()}`);
-                                alert('Redirecionando para o Checkout Seguro da Hotmart...');
-                                // window.location.href = `${baseUrl}?${params.toString()}`;
+                                // TODO: produto físico (Kit Missão Maker) ainda não tem
+                                // Cloud Function de checkout própria — precisa de um endpoint
+                                // AbacatePay separado do de assinaturas (com endereço de
+                                // entrega). Por ora, encaminha para contato comercial.
+                                alert('Em breve: checkout via AbacatePay. Por enquanto, fale com nossa equipe pelo formulário de contato.');
+                                window.location.href = 'contact.html';
                             }
                         </script>
                     </div>

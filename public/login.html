@@ -119,8 +119,8 @@
 
                     if (userData.onboardingCompleted || isHardcoded) {
                         console.log("[Login] Perfil completo ou override detectado.");
-                        if (detectedRole === 'student') {
-                            window.location.href = "student-area.html";
+                        if (detectedRole === 'student' || detectedRole === 'parent') {
+                            window.location.href = "dashboards/aluno.html";
                         } else if (detectedRole === 'freelance_teacher') {
                             window.location.href = "dashboards/professor-autonomo.html";
                         } else if (detectedRole === 'teacher') {

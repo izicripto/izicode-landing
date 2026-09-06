@@ -6,329 +6,258 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Dashboard - Izicode Edu</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../css/tw/ca3c546a.css">
-    <script type="module" src="../js/firebase-config.js"></script>
+    <link rel="stylesheet" href="../css/shell.css">
 </head>
 
 <body class="font-sans bg-slate-50 min-h-screen">
 
-    <!-- Navbar -->
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center gap-3">
-                    <div class="bg-white p-1.5 rounded-2xl shadow-sm border border-slate-100">
-                        <img src="../images/logo.png" alt="Izicode" class="w-9 h-9 object-contain">
-                    </div>
-                    <span class="font-display font-black text-xl text-slate-900 hidden sm:inline">Izicode Edu</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <div class="text-right">
-                        <p class="text-sm font-black text-slate-900" id="userName">Carregando...</p>
-                        <p class="text-xs text-slate-400 font-bold">Aluno(a)</p>
-                    </div>
-                    <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff"
-                        class="w-10 h-10 rounded-xl border-2 border-white shadow-sm object-cover">
-                    <button onclick="handleLogout()" title="Sair"
-                        class="p-2.5 hover:bg-slate-100 rounded-xl transition-colors text-slate-500 hover:text-red-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <div data-iz-sidebar></div>
+    <div data-iz-drawer></div>
+    <div class="iz-shell">
+        <div data-iz-topbar></div>
+        <div class="iz-main">
+            <main class="iz-content">
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-        <!-- Hero Section - Nível e XP -->
-        <div class="bg-gradient-to-r from-brand-600 via-purple-600 to-pink-600 rounded-3xl p-8 mb-8 text-white shadow-2xl">
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                <div class="flex-1 w-full">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="text-white/90">
-                            <svg class="w-14 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                        </span>
-                        <div>
-                            <h1 class="font-display text-3xl md:text-4xl font-bold" id="levelName">Carregando...</h1>
-                            <p class="text-brand-100">Nível <span id="levelNumber">-</span></p>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm mb-2">
-                            <span><span id="currentXP">0</span> XP</span>
-                            <span><span id="progressPercent">0</span>% para próximo nível</span>
-                        </div>
-                        <div class="w-full bg-white/20 rounded-full h-4 overflow-hidden">
-                            <div id="progressBar"
-                                class="bg-gradient-to-r from-yellow-400 to-yellow-200 h-full rounded-full transition-all duration-500"
-                                style="width: 0%"></div>
-                        </div>
-                        <p class="text-sm text-brand-100 mt-2" id="nextLevelHint"></p>
-                    </div>
-
-                    <div class="flex gap-4 flex-wrap">
-                        <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
-                            <p class="text-xs text-brand-100">Desafios Completos</p>
-                            <p class="text-2xl font-bold" id="challengesCompleted">0</p>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
-                            <p class="text-xs text-brand-100">Badges Conquistados</p>
-                            <p class="text-2xl font-bold" id="badgesCount">0</p>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
-                            <p class="text-xs text-brand-100">Sequência de Dias</p>
-                            <p class="text-2xl font-bold flex items-center gap-1.5" id="streakCount">0
-                                <svg class="w-5 h-5 text-orange-300" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1014 0c0-1.187-.433-2.328-1.221-3.193a.5.5 0 01.127-.805 4.911 4.911 0 001.25-3.233 1 1 0 00-1.066-1.011 4.962 4.962 0 01-1.488.013 10.32 10.32 0 01-2.207-1.218z"
-                                        clip-rule="evenodd" />
+                <!-- Hero Section - Nível e XP -->
+                <div style="background:linear-gradient(135deg,var(--iz-brand),#7c3aed,#db2777);border-radius:28px;padding:32px;margin-bottom:32px;color:#fff;box-shadow:0 20px 40px rgba(15,23,42,0.15);">
+                    <div style="display:flex;flex-direction:column;gap:24px;">
+                        <div class="flex-1 w-full">
+                            <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:rgba(255,255,255,0.9);">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                 </svg>
-                            </p>
+                                <div>
+                                    <h1 id="levelName" style="font-family:'Outfit',sans-serif;font-size:2rem;font-weight:800;margin:0;">Carregando...</h1>
+                                    <p style="color:rgba(255,255,255,0.75);margin:4px 0 0;">Nível <span id="levelNumber">-</span></p>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom:16px;">
+                                <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:8px;">
+                                    <span><span id="currentXP">0</span> XP</span>
+                                    <span><span id="progressPercent">0</span>% para próximo nível</span>
+                                </div>
+                                <div style="width:100%;background:rgba(255,255,255,0.2);border-radius:99px;height:14px;overflow:hidden;">
+                                    <div id="progressBar" style="background:linear-gradient(90deg,#fbbf24,#fde68a);height:100%;border-radius:99px;transition:width 0.5s;width:0%;"></div>
+                                </div>
+                                <p style="font-size:0.85rem;color:rgba(255,255,255,0.7);margin:8px 0 0;" id="nextLevelHint"></p>
+                            </div>
+
+                            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                                <div style="background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);border-radius:12px;padding:12px 16px;">
+                                    <p style="font-size:0.75rem;color:rgba(255,255,255,0.7);margin:0;">Desafios Completos</p>
+                                    <p style="font-size:1.5rem;font-weight:700;margin:4px 0 0;" id="challengesCompleted">0</p>
+                                </div>
+                                <div style="background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);border-radius:12px;padding:12px 16px;">
+                                    <p style="font-size:0.75rem;color:rgba(255,255,255,0.7);margin:0;">Badges Conquistados</p>
+                                    <p style="font-size:1.5rem;font-weight:700;margin:4px 0 0;" id="badgesCount">0</p>
+                                </div>
+                                <div style="background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);border-radius:12px;padding:12px 16px;">
+                                    <p style="font-size:0.75rem;color:rgba(255,255,255,0.7);margin:0;">Sequência de Dias</p>
+                                    <p style="font-size:1.5rem;font-weight:700;margin:4px 0 0;display:flex;align-items:center;gap:6px;" id="streakCount">0
+                                        <svg width="18" height="18" viewBox="0 0 20 20" fill="#fb923c" style="flex-shrink:0;">
+                                            <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1014 0c0-1.187-.433-2.328-1.221-3.193a.5.5 0 01.127-.805 4.911 4.911 0 001.25-3.233 1 1 0 00-1.066-1.011 4.962 4.962 0 01-1.488.013 10.32 10.32 0 01-2.207-1.218z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ranking -->
+                        <div style="background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);border-radius:20px;padding:24px;text-align:center;min-width:160px;">
+                            <p style="font-size:0.85rem;color:rgba(255,255,255,0.7);margin:0 0 8px;">Seu Ranking</p>
+                            <div style="font-family:'Outfit',sans-serif;font-size:3rem;font-weight:800;" id="rankPosition">—</div>
+                            <p style="font-size:0.75rem;color:rgba(255,255,255,0.7);margin:8px 0 0;" id="rankContext">Sem dados ainda</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Ranking -->
-                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:ml-8 w-full md:w-auto">
-                    <div class="text-center">
-                        <p class="text-sm text-brand-100 mb-2">Seu Ranking</p>
-                        <div class="text-5xl font-display font-black" id="rankPosition">—</div>
-                        <p class="text-xs text-brand-100 mt-2" id="rankContext">Sem dados ainda</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid lg:grid-cols-3 gap-8">
-
-            <!-- Coluna Principal -->
-            <div class="lg:col-span-2 space-y-8">
-
-                <!-- Desafios Disponíveis -->
-                <section>
-                    <h2 class="font-display text-2xl font-bold text-slate-900 flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 rounded-2xl bg-brand-50 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        Desafios Disponíveis
-                    </h2>
-                    <div class="grid md:grid-cols-2 gap-4" id="challengesContainer">
-                        <div class="col-span-full text-center py-8 text-slate-400 text-sm">Carregando desafios...</div>
-                    </div>
-                </section>
-
-                <!-- Ferramentas Integradas -->
-                <section>
-                    <h2 class="font-display text-2xl font-bold text-slate-900 flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 rounded-2xl bg-purple-50 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
-                            </svg>
-                        </div>
-                        Ferramentas de Prática
-                    </h2>
-                    <div class="grid md:grid-cols-2 gap-4">
-
-                        <a href="https://blockly.games" target="_blank"
-                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-purple-500 hover:shadow-xl transition-all group">
-                            <div class="flex items-center gap-4 mb-4">
-                                <div
-                                    class="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3
-                                        class="font-display text-lg font-bold text-slate-900 group-hover:text-purple-600 transition-colors">
-                                        Blockly Games</h3>
-                                    <p class="text-sm text-slate-500">Programação visual</p>
-                                </div>
-                            </div>
-                            <p class="text-sm text-slate-600">Aprenda lógica de programação com jogos interativos</p>
-                        </a>
-
-                        <a href="https://lab.open-roberta.org" target="_blank"
-                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-orange-500 hover:shadow-xl transition-all group">
-                            <div class="flex items-center gap-4 mb-4">
-                                <div
-                                    class="w-14 h-14 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3
-                                        class="font-display text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">
-                                        Open Roberta Lab</h3>
-                                    <p class="text-sm text-slate-500">NEPO Visual</p>
-                                </div>
-                            </div>
-                            <p class="text-sm text-slate-600">Programe Arduino e Micro:bit com blocos NEPO</p>
-                        </a>
-
-                        <a href="https://scratch.mit.edu/projects/editor" target="_blank"
-                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-orange-500 hover:shadow-xl transition-all group">
-                            <div class="flex items-center gap-4 mb-4">
-                                <div
-                                    class="w-14 h-14 bg-gradient-to-br from-orange-300 to-orange-500 rounded-xl flex items-center justify-center">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3
-                                        class="font-display text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">
-                                        Scratch Editor</h3>
-                                    <p class="text-sm text-slate-500">MIT Scratch</p>
-                                </div>
-                            </div>
-                            <p class="text-sm text-slate-600">Crie jogos e animações com Scratch</p>
-                        </a>
-
-                        <a href="https://www.tinkercad.com/circuits" target="_blank"
-                            class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-cyan-500 hover:shadow-xl transition-all group">
-                            <div class="flex items-center gap-4 mb-4">
-                                <div
-                                    class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-xl flex items-center justify-center">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3
-                                        class="font-display text-lg font-bold text-slate-900 group-hover:text-cyan-600 transition-colors">
-                                        Tinkercad Circuits</h3>
-                                    <p class="text-sm text-slate-500">Simulador</p>
-                                </div>
-                            </div>
-                            <p class="text-sm text-slate-600">Simule circuitos Arduino online</p>
-                        </a>
-
-                    </div>
-                </section>
-            </div>
-
-            <!-- Sidebar -->
-            <div class="space-y-6">
-
-                <!-- Minhas Conquistas -->
-                <div class="bg-white rounded-2xl p-6 border-2 border-slate-200">
-                    <h3 class="font-display text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Minhas Conquistas
-                    </h3>
-                    <div class="grid grid-cols-3 gap-3" id="badgesGrid"></div>
-                    <p class="w-full mt-4 text-sm text-slate-400 text-center" id="badgesFooter"></p>
-                </div>
-
-                <!-- Ranking Top 5 -->
-                <div class="bg-white rounded-2xl p-6 border-2 border-slate-200">
-                    <h3 class="font-display text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                        </svg>
-                        Top da Turma
-                    </h3>
-                    <div class="space-y-3" id="rankingList">
-                        <p class="text-sm text-slate-400">Carregando...</p>
-                    </div>
-                    <a href="../ranking.html" class="block w-full mt-4 text-sm text-brand-600 font-medium hover:text-brand-700 text-center">
-                        Ver ranking completo
+                <!-- Acesso Rápido -->
+                <div class="iz-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;">
+                    <a href="../quiz-arena.html" class="iz-card" style="text-align:center;padding:20px 12px;">
+                        <div class="iz-icon" style="background:rgba(139,92,246,0.1);color:#7c3aed;margin:0 auto 10px;">🎮</div>
+                        <strong style="font-size:0.9rem;">Quiz Arena</strong>
+                    </a>
+                    <a href="../library.html" class="iz-card" style="text-align:center;padding:20px 12px;">
+                        <div class="iz-icon" style="background:var(--iz-brand-muted);color:var(--iz-brand);margin:0 auto 10px;">📚</div>
+                        <strong style="font-size:0.9rem;">Biblioteca</strong>
+                    </a>
+                    <a href="../student-ai.html" class="iz-card" style="text-align:center;padding:20px 12px;">
+                        <div class="iz-icon" style="background:rgba(20,184,166,0.1);color:#0d9488;margin:0 auto 10px;">🤖</div>
+                        <strong style="font-size:0.9rem;">Tutor IA</strong>
+                    </a>
+                    <a href="../my-projects.html" class="iz-card" style="text-align:center;padding:20px 12px;">
+                        <div class="iz-icon" style="background:rgba(245,158,11,0.1);color:#b45309;margin:0 auto 10px;">🚀</div>
+                        <strong style="font-size:0.9rem;">Meus Projetos</strong>
                     </a>
                 </div>
 
-                <!-- Próxima Conquista -->
-                <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl p-6 text-white">
-                    <h3 class="font-display text-lg font-bold mb-3 flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                        Próxima Conquista
-                    </h3>
-                    <div id="nextBadgeCard" class="bg-white/20 backdrop-blur-sm rounded-xl p-4">
-                        <p class="text-sm text-center text-purple-100">Carregando...</p>
+                <div class="iz-grid" style="grid-template-columns:1fr 320px;gap:32px;align-items:start;">
+
+                    <!-- Coluna Principal -->
+                    <div class="iz-stack iz-stack--lg">
+
+                        <section>
+                            <h2 style="font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:700;margin:0 0 20px;display:flex;align-items:center;gap:10px;">
+                                <span class="iz-icon" style="background:var(--iz-brand-muted);color:var(--iz-brand);">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </span>
+                                Desafios Disponíveis
+                            </h2>
+                            <div class="iz-grid iz-grid--challenges" id="challengesContainer">
+                                <div class="iz-empty" style="grid-column:1/-1;">
+                                    <p class="iz-text-muted" style="font-size:0.9rem;">Carregando desafios...</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section>
+                            <h2 style="font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:700;margin:0 0 20px;display:flex;align-items:center;gap:10px;">
+                                <span class="iz-icon" style="background:rgba(139,92,246,0.1);color:#7c3aed;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>
+                                    </svg>
+                                </span>
+                                Ferramentas de Prática
+                            </h2>
+                            <div class="iz-grid iz-grid--tools">
+
+                                <a href="https://blockly.games" target="_blank" class="iz-card iz-card--tool">
+                                    <div class="iz-card__tool-icon" style="background:linear-gradient(135deg,#a78bfa,#7c3aed);">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="iz-card__tool-title" style="color:#7c3aed;">Blockly Games</h3>
+                                    <p class="iz-card__tool-desc">Programação visual</p>
+                                    <span class="iz-card__tool-link" style="color:#7c3aed;">Aprender lógica de programação com jogos interativos</span>
+                                </a>
+
+                                <a href="https://lab.open-roberta.org" target="_blank" class="iz-card iz-card--tool">
+                                    <div class="iz-card__tool-icon" style="background:linear-gradient(135deg,#fb923c,#ea580c);">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="iz-card__tool-title" style="color:#ea580c;">Open Roberta Lab</h3>
+                                    <p class="iz-card__tool-desc">NEPO Visual</p>
+                                    <span class="iz-card__tool-link" style="color:#ea580c;">Programe Arduino e Micro:bit com blocos NEPO</span>
+                                </a>
+
+                                <a href="https://scratch.mit.edu/projects/editor" target="_blank" class="iz-card iz-card--tool">
+                                    <div class="iz-card__tool-icon" style="background:linear-gradient(135deg,#fb923c,#f97316);">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="iz-card__tool-title" style="color:#f97316;">Scratch Editor</h3>
+                                    <p class="iz-card__tool-desc">MIT Scratch</p>
+                                    <span class="iz-card__tool-link" style="color:#f97316;">Crie jogos e animações com Scratch</span>
+                                </a>
+
+                                <a href="https://www.tinkercad.com/circuits" target="_blank" class="iz-card iz-card--tool">
+                                    <div class="iz-card__tool-icon" style="background:linear-gradient(135deg,#22d3ee,#0891b2);">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 class="iz-card__tool-title" style="color:#0891b2;">Tinkercad Circuits</h3>
+                                    <p class="iz-card__tool-desc">Simulador</p>
+                                    <span class="iz-card__tool-link" style="color:#0891b2;">Simule circuitos Arduino online</span>
+                                </a>
+
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="iz-stack">
+
+                        <div class="iz-card">
+                            <h3 style="font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;margin:0 0 16px;display:flex;align-items:center;gap:8px;">
+                                <span class="iz-icon" style="background:rgba(245,158,11,0.1);color:#b45309;width:28px;height:28px;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </span>
+                                Minhas Conquistas
+                            </h3>
+                            <div class="iz-grid iz-grid--badges" id="badgesGrid"></div>
+                            <p class="iz-text-muted iz-text-sm" style="text-align:center;margin-top:12px;" id="badgesFooter"></p>
+                        </div>
+
+                        <div class="iz-card">
+                            <h3 style="font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;margin:0 0 16px;display:flex;align-items:center;gap:8px;">
+                                <span class="iz-icon" style="background:var(--iz-brand-muted);color:var(--iz-brand);width:28px;height:28px;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                    </svg>
+                                </span>
+                                Top da Turma
+                            </h3>
+                            <div class="iz-stack" style="--iz-gap:10px;" id="rankingList">
+                                <p class="iz-text-muted iz-text-sm">Carregando...</p>
+                            </div>
+                            <a href="../ranking.html" class="iz-btn iz-btn--ghost iz-btn--sm" style="width:100%;justify-content:center;margin-top:12px;">Ver ranking completo</a>
+                        </div>
+
+                        <div class="iz-card" style="background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;border:none;">
+                            <h3 style="font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;margin:0 0 12px;display:flex;align-items:center;gap:8px;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                                Próxima Conquista
+                            </h3>
+                            <div id="nextBadgeCard" style="background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border-radius:12px;padding:16px;">
+                                <p class="iz-text-sm" style="text-align:center;opacity:0.8;">Carregando...</p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-            </div>
+            </main>
         </div>
     </div>
 
     <script type="module">
-        import { auth, db, signOut } from '../js/firebase-config.js';
+        import { initShell, showToast } from '../js/shell.js';
+        import { db } from '../js/firebase-config.js';
         import { doc, getDoc, collection, query, where, orderBy, limit, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { ChallengeManager } from '../js/database.js';
         import { gamificationSystem } from '../js/gamification.js';
 
-        document.addEventListener('DOMContentLoaded', () => {
-            auth.onAuthStateChanged(async (user) => {
-                if (!user) {
-                    window.location.href = '../login.html';
-                    return;
-                }
+        const { user, userData: currentUserData } = await initShell({ requireAuth: true });
 
-                const snap = await getDoc(doc(db, 'users', user.uid));
-                if (!snap.exists()) {
-                    window.location.href = '../onboarding.html';
-                    return;
-                }
-                const userData = { uid: user.uid, ...snap.data() };
-
-                updateHeader(user, userData);
-                renderHero(userData);
-                renderBadges(userData);
-
-                try {
-                    await Promise.all([
-                        renderChallenges(userData),
-                        renderRanking(userData)
-                    ]);
-                } catch (e) {
-                    console.error('Erro ao carregar dashboard do aluno:', e);
-                }
-            });
-        });
-
-        function updateHeader(user, userData) {
-            const displayName = userData.displayName || user.displayName || 'Aluno(a)';
-            document.getElementById('userName').textContent = displayName;
-            document.getElementById('userAvatar').src = userData.photoURL || user.photoURL
-                || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=0ea5e9&color=fff`;
+        if (!currentUserData) {
+            window.location.href = '../onboarding.html';
         }
 
-        window.handleLogout = async () => {
-            await signOut(auth);
-            window.location.href = '../login.html';
-        };
+        // Conta de responsável: os dados de progresso (XP, badges, etc.) não
+        // ficam no doc do usuário (o titular é o responsável), e sim no
+        // primeiro perfil de criança vinculado em users/{uid}/children.
+        // MVP: usa sempre o primeiro filho cadastrado.
+        let progressRef = doc(db, 'users', user.uid);
+        let progressData = currentUserData;
 
-        function renderHero(userData) {
+        if (currentUserData.role === 'parent') {
+            const childrenSnap = await getDocs(collection(db, 'users', user.uid, 'children'));
+            if (!childrenSnap.empty) {
+                const childDoc = childrenSnap.docs[0];
+                progressRef = childDoc.ref;
+                progressData = childDoc.data();
+                document.title = `${progressData.name || 'Meu Filho(a)'} - Izicode Edu`;
+            }
+        }
+
+        const userData = { uid: user.uid, ...progressData };
+
+        function renderHero() {
             const xp = userData.xp || 0;
             const levelInfo = gamificationSystem.calculateLevel(xp);
             const progress = gamificationSystem.calculateProgress(xp);
@@ -349,7 +278,7 @@
             document.getElementById('streakCount').childNodes[0].textContent = (userData.loginStreak || 0) + ' ';
         }
 
-        function renderBadges(userData) {
+        function renderBadges() {
             const earnedIds = userData.badges || [];
             const grid = document.getElementById('badgesGrid');
             const allBadges = gamificationSystem.badges;
@@ -357,16 +286,13 @@
             const shown = earned.slice(0, 6);
 
             if (shown.length === 0) {
-                grid.innerHTML = `<p class="col-span-3 text-sm text-slate-400 text-center py-4">Complete desafios para conquistar seus primeiros badges.</p>`;
+                grid.innerHTML = `<p class="col-span-3 iz-text-muted iz-text-sm" style="text-align:center;padding:16px 0;">Complete desafios para conquistar seus primeiros badges.</p>`;
             } else {
                 grid.innerHTML = shown.map(badge => `
-                    <div class="aspect-square bg-gradient-to-br from-brand-50 to-brand-100 rounded-xl flex items-center justify-center border-2 border-brand-200 relative group cursor-pointer">
-                        <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <div class="iz-badge-card" title="${badge.name}">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--iz-brand);">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                            ${badge.name}
-                        </div>
                     </div>
                 `).join('');
             }
@@ -377,58 +303,58 @@
             const nextBadgeCard = document.getElementById('nextBadgeCard');
             if (nextBadge) {
                 nextBadgeCard.innerHTML = `
-                    <p class="font-bold text-center mb-1">${nextBadge.name}</p>
-                    <p class="text-xs text-center text-purple-100">${nextBadge.description}</p>
+                    <p style="font-weight:700;text-align:center;margin:0 0 4px;">${nextBadge.name}</p>
+                    <p style="font-size:0.8rem;text-align:center;opacity:0.8;margin:0;">${nextBadge.description}</p>
                 `;
             } else {
-                nextBadgeCard.innerHTML = `<p class="text-sm text-center text-purple-100">Você conquistou todos os badges disponíveis!</p>`;
+                nextBadgeCard.innerHTML = '<p style="font-size:0.85rem;text-align:center;opacity:0.8;">Você conquistou todos os badges disponíveis!</p>';
             }
         }
 
-        async function renderChallenges(userData) {
+        async function renderChallenges() {
             const container = document.getElementById('challengesContainer');
             const challenges = await ChallengeManager.getPublicChallenges();
 
             if (challenges.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 text-sm">Nenhum desafio disponível no momento. Volte em breve!</div>`;
+                container.innerHTML = `<div class="iz-empty" style="grid-column:1/-1;"><p class="iz-text-muted">Nenhum desafio disponível no momento. Volte em breve!</p></div>`;
                 return;
             }
 
             const difficultyStyle = {
-                'Fácil': 'bg-green-100 text-green-700', 'facil': 'bg-green-100 text-green-700',
-                'Médio': 'bg-yellow-100 text-yellow-700', 'medio': 'bg-yellow-100 text-yellow-700',
-                'Difícil': 'bg-red-100 text-red-700', 'dificil': 'bg-red-100 text-red-700'
+                'Fácil': 'iz-badge--success', 'facil': 'iz-badge--success',
+                'Médio': 'iz-badge--amber', 'medio': 'iz-badge--amber',
+                'Difícil': 'iz-badge--error', 'dificil': 'iz-badge--error'
             };
 
             container.innerHTML = challenges.slice(0, 6).map(c => `
-                <div class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-brand-500 hover:shadow-xl transition-all cursor-pointer group">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-brand-400 to-brand-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <div class="iz-card iz-card--challenge">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;">
+                        <div class="iz-stat__icon" style="background:var(--iz-brand-muted);color:var(--iz-brand);width:44px;height:44px;border-radius:12px;flex-shrink:0;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
                         </div>
-                        <span class="px-3 py-1 ${difficultyStyle[c.difficulty] || 'bg-slate-100 text-slate-600'} text-xs font-bold rounded-full">${(c.difficulty || '').toUpperCase()}</span>
+                        <span class="iz-badge ${difficultyStyle[c.difficulty] || 'iz-badge--gray'}">${(c.difficulty || '').toUpperCase()}</span>
                     </div>
-                    <h3 class="font-display text-lg font-bold text-slate-900 mb-2 group-hover:text-brand-600 transition-colors">${c.title}</h3>
-                    <p class="text-sm text-slate-600 mb-4">${c.description || ''}</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs text-slate-500">${c.platform || ''}</span>
-                        <div class="flex items-center gap-1 text-amber-600 font-bold">
+                    <h3 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:1rem;margin:0 0 6px;">${c.title}</h3>
+                    <p class="iz-text-muted iz-text-sm" style="margin:0 0 12px;">${c.description || ''}</p>
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <span class="iz-text-muted iz-text-sm">${c.platform || ''}</span>
+                        <div style="display:flex;align-items:center;gap:4px;color:#b45309;font-weight:600;font-size:0.85rem;">
                             <span>+${c.xpReward || 0}</span>
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        async function renderRanking(userData) {
+        async function renderRanking() {
             const rankingList = document.getElementById('rankingList');
             const schoolId = userData.schoolId;
 
             if (!schoolId) {
-                rankingList.innerHTML = `<p class="text-sm text-slate-400">Vincule-se a uma escola para ver o ranking da turma.</p>`;
+                rankingList.innerHTML = '<p class="iz-text-muted iz-text-sm">Vincule-se a uma escola para ver o ranking da turma.</p>';
                 document.getElementById('rankContext').textContent = 'Sem escola vinculada';
                 return;
             }
@@ -446,24 +372,24 @@
                 students = snap.docs.map(d => d.data());
             } catch (e) {
                 console.error('Erro ao buscar ranking:', e);
-                rankingList.innerHTML = `<p class="text-sm text-slate-400">Não foi possível carregar o ranking agora.</p>`;
+                rankingList.innerHTML = '<p class="iz-text-muted iz-text-sm">Não foi possível carregar o ranking agora.</p>';
                 return;
             }
 
             if (students.length === 0) {
-                rankingList.innerHTML = `<p class="text-sm text-slate-400">Ainda não há dados suficientes para o ranking.</p>`;
+                rankingList.innerHTML = '<p class="iz-text-muted iz-text-sm">Ainda não há dados suficientes para o ranking.</p>';
                 document.getElementById('rankPosition').textContent = '—';
                 document.getElementById('rankContext').textContent = 'Sem dados ainda';
                 return;
             }
 
-            const medalBg = ['from-yellow-50 to-yellow-100 border-yellow-200', 'from-slate-50 to-slate-100 border-slate-200', 'from-orange-50 to-orange-100 border-orange-200'];
+            const medalBg = ['iz-card--gold', 'iz-card--silver', 'iz-card--bronze'];
             rankingList.innerHTML = students.slice(0, 5).map((s, i) => `
-                <div class="flex items-center gap-3 p-3 ${i < 3 ? `bg-gradient-to-r ${medalBg[i]} rounded-xl border` : 'bg-slate-50 rounded-xl'}">
-                    <div class="text-lg font-bold ${i < 3 ? 'text-2xl' : ''} ${i === 0 ? 'text-yellow-500' : i === 1 ? 'text-slate-400' : i === 2 ? 'text-orange-400' : 'text-slate-400'}">${i + 1}º</div>
-                    <div class="flex-1 min-w-0">
-                        <p class="font-bold text-sm text-slate-900 truncate">${s.displayName || 'Aluno'}</p>
-                        <p class="text-xs text-slate-500">${s.xp || 0} XP</p>
+                <div class="iz-row iz-card--ranking ${i < 3 ? medalBg[i] : ''}" style="gap:12px;padding:10px 14px;border-radius:12px;${i >= 3 ? 'background:var(--iz-surface);' : ''}">
+                    <div style="font-weight:700;${i < 3 ? 'font-size:1.2rem;' : ''} color:${i === 0 ? '#b45309' : i === 1 ? '#64748b' : i === 2 ? '#c2410c' : '#94a3b8'};flex-shrink:0;width:32px;text-align:center;">${i + 1}º</div>
+                    <div style="flex:1;min-width:0;">
+                        <p style="font-weight:700;font-size:0.85rem;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.displayName || 'Aluno'}</p>
+                        <p class="iz-text-muted" style="font-size:0.75rem;margin:2px 0 0;">${s.xp || 0} XP</p>
                     </div>
                 </div>
             `).join('');
@@ -475,10 +401,14 @@
                 rankEl.textContent = `#${myIndex + 1}`;
                 contextEl.textContent = students.length >= 50 ? 'entre os top 50' : `de ${students.length} alunos`;
             } else {
-                rankEl.textContent = `50+`;
+                rankEl.textContent = '50+';
                 contextEl.textContent = 'continue ganhando XP para subir';
             }
         }
+
+        renderHero();
+        renderBadges();
+        await Promise.all([renderChallenges(), renderRanking()]);
     </script>
 
 </body>

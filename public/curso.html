@@ -262,7 +262,7 @@
         }
 
         function isPro() {
-            return userData?.role === 'professor-pro' || userData?.role === 'admin';
+            return userData?.role === 'professor-pro' || userData?.role === 'admin' || userData?.subscription?.plan === 'pro';
         }
 
         function canAccess(module) {

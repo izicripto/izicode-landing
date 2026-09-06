@@ -675,13 +675,13 @@ Crie um roteiro de aula detalhado baseado nas informações abaixo:
                 const userDocRef = doc(db, "users", currentUser.uid);
                 const userSnap = await getDoc(userDocRef);
                 const userData = userSnap.exists() ? userSnap.data() : {};
-                const subscription = userData.subscription || 'free';
+                const plan = (userData.subscription && userData.subscription.plan) || 'free';
 
-                if (subscription === 'free') {
+                if (plan === 'free') {
                     const projectsRef = collection(db, "users", currentUser.uid, "projects");
                     const projectsSnap = await getDocs(projectsRef);
-                    if (projectsSnap.size >= 5) {
-                        alert("🔒 Limite do Plano Gratuito Atingido!\n\nVocê já tem 5 planejamentos salvos. Faça um upgrade para criar mais.");
+                    if (projectsSnap.size >= 3) {
+                        alert("🔒 Limite do Plano Gratuito Atingido!\n\nVocê já tem 3 planejamentos salvos no plano gratuito. Faça upgrade para o Professor Pro e crie planejamentos ilimitados com acesso total à IA.");
                         return;
                     }
                 }

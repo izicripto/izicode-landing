@@ -45,50 +45,151 @@ exports.newLeadNotification = functions.firestore.document('leads/{leadId}').onC
 });
 
 /**
- * Stripe Webhook - Para liberar planos PRO automaticamente
- * TODO: Configurar STRIPE_WEBHOOK_SECRET no firebase config.
- * Fail-closed: sem assinatura válida, rejeita com 400. Nunca confie
- * apenas no corpo da requisição.
+ * AbacatePay Webhook - libera o plano PRO (professor autônomo) ou ativa
+ * o plano da escola automaticamente após confirmação de pagamento.
+ *
+ * Configure em `firebase functions:config:set abacatepay.webhook_secret="..."`
+ * e cadastre a URL desta function com `?webhookSecret=<mesmo valor>` no
+ * painel da AbacatePay (é assim que a AbacatePay autentica webhooks: um
+ * secret na própria query string da URL, não em header/assinatura HMAC).
+ * Fail-closed: sem secret configurado ou secret incorreto, rejeita com 401.
  */
-exports.stripeWebhook = functions.https.onRequest(async (req, res) => {
+exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
     if (req.method !== 'POST') {
         res.status(405).send({ error: 'Method not allowed' });
         return;
     }
-    const sig = req.headers['stripe-signature'];
-    const webhookSecret = functions.config().stripe?.webhook_secret;
-    if (!sig || !webhookSecret) {
-        console.error("Stripe Webhook: assinatura ou secret ausentes. Recusando.");
-        res.status(400).send({ error: 'Missing signature or server misconfigured' });
+
+    const expectedSecret = functions.config().abacatepay?.webhook_secret;
+    const providedSecret = req.query?.webhookSecret;
+    if (!expectedSecret || providedSecret !== expectedSecret) {
+        console.error("AbacatePay Webhook: webhookSecret ausente ou inválido. Recusando.");
+        res.status(401).send({ error: 'Unauthorized' });
         return;
     }
-    // TODO: verificar assinatura com stripe SDK (stripe.webhooks.constructEvent)
-    // usando o rawBody, e só então atualizar role do usuário para 'professor-pro'
-    // via Admin SDK. Logamos o evento para debug por enquanto.
-    console.log("Stripe Webhook received:", req.body && req.body.type);
-    res.status(200).send({ received: true });
+
+    const event = req.body?.event;
+    const billing = req.body?.data?.billing || req.body?.data || {};
+
+    if (event !== 'billing.paid') {
+        console.log("AbacatePay Webhook: evento ignorado:", event);
+        res.status(200).send({ received: true, ignored: true });
+        return;
+    }
+
+    const email = billing?.customer?.metadata?.email || billing?.customer?.email;
+    const targetSchoolId = billing?.metadata?.schoolId || billing?.frequency?.metadata?.schoolId;
+
+    if (!email && !targetSchoolId) {
+        console.error("AbacatePay Webhook: nenhum email de cliente ou schoolId no payload.");
+        res.status(400).send({ error: 'Missing customer email or schoolId' });
+        return;
+    }
+
+    try {
+        if (targetSchoolId) {
+            // Pagamento do pacote Escola: ativa o plano da escola (turmas liberadas).
+            await admin.firestore().collection('schools').doc(targetSchoolId).set({
+                plan: 'active',
+                activatedAt: admin.firestore.FieldValue.serverTimestamp(),
+                paymentProvider: 'abacatepay'
+            }, { merge: true });
+            console.log(`AbacatePay: escola ${targetSchoolId} ativada (plan=active).`);
+        } else {
+            // Pagamento do professor autônomo: libera o plano PRO da conta.
+            const usersSnap = await admin.firestore().collection('users').where('email', '==', email).limit(1).get();
+            if (usersSnap.empty) {
+                console.error(`AbacatePay Webhook: nenhum usuário encontrado para o email ${email}.`);
+                res.status(404).send({ error: 'User not found' });
+                return;
+            }
+            await usersSnap.docs[0].ref.set({
+                subscription: {
+                    plan: 'pro',
+                    provider: 'abacatepay',
+                    activatedAt: admin.firestore.FieldValue.serverTimestamp()
+                }
+            }, { merge: true });
+            console.log(`AbacatePay: usuário ${email} promovido a plano PRO.`);
+        }
+
+        res.status(200).send({ received: true });
+    } catch (error) {
+        console.error("AbacatePay Webhook: erro ao processar pagamento:", error.message);
+        res.status(500).send({ error: 'Internal error processing payment' });
+    }
 });
 
 /**
- * Hotmart Webhook (Hottok) - valida token e libera plano PRO
- * Configure HOTMART_HOTTOK no firebase config. Fail-closed.
+ * Cria uma cobrança na AbacatePay e devolve a URL de checkout para o
+ * front-end redirecionar o usuário. A chave da API (AbacatePay API Key)
+ * fica só no servidor (functions.config().abacatepay.api_key) — nunca no
+ * cliente. Configure com:
+ *   firebase functions:config:set abacatepay.api_key="abc_..." abacatepay.webhook_secret="..."
+ *
+ * Valores de referência (ajustar depois com o time comercial):
+ *   professor_pro: R$ 29,90/mês | escola: R$ 199,90/mês (base, cobrado por
+ *   professor+aluno em cima disso — ajustar quando o modelo de preço por
+ *   assento estiver definido).
  */
-exports.hotmartWebhook = functions.https.onRequest(async (req, res) => {
-    if (req.method !== 'POST') {
-        res.status(405).send({ error: 'Method not allowed' });
-        return;
+const ABACATEPAY_PLANS = {
+    professor_pro: { name: 'Izicode Edu - Professor PRO', priceCents: 2990 },
+    escola: { name: 'Izicode Edu - Plano Escola', priceCents: 19990 }
+};
+
+exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) => {
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be logged in.');
     }
-    const hottok = req.body?.hottok || req.headers['x-hotmart-hottok'];
-    const expected = functions.config().hotmart?.hottok;
-    if (!expected || hottok !== expected) {
-        console.error("Hotmart Webhook: hottok inválido ou não configurado.");
-        res.status(403).send({ error: 'Forbidden' });
-        return;
+
+    const { plan, schoolId } = data;
+    const planConfig = ABACATEPAY_PLANS[plan];
+    if (!planConfig) {
+        throw new functions.https.HttpsError('invalid-argument', `Plano desconhecido: ${plan}`);
     }
-    // TODO: validar status (approved), localizar usuário pelo email do comprador
-    // e atualizar users/{uid}.subscription.plan via Admin SDK.
-    console.log("Hotmart Webhook aprovado:", req.body?.event || req.body?.type || 'purchase');
-    res.status(200).send({ received: true });
+
+    const apiKey = functions.config().abacatepay?.api_key;
+    if (!apiKey) {
+        console.error("Configuração 'abacatepay.api_key' ausente no Firebase Functions");
+        throw new functions.https.HttpsError('failed-precondition', 'Pagamentos temporariamente indisponíveis.');
+    }
+
+    const userRecord = await admin.auth().getUser(context.auth.uid);
+
+    try {
+        const response = await axios.post(
+            'https://api.abacatepay.com/v1/billing/create',
+            {
+                frequency: 'ONE_TIME',
+                methods: ['PIX'],
+                products: [{
+                    externalId: plan,
+                    name: planConfig.name,
+                    quantity: 1,
+                    price: planConfig.priceCents
+                }],
+                returnUrl: 'https://izicodeedu-532ac.web.app/dashboard.html',
+                completionUrl: 'https://izicodeedu-532ac.web.app/dashboard.html?payment=success',
+                customer: {
+                    name: userRecord.displayName || 'Usuário Izicode',
+                    email: userRecord.email,
+                    metadata: { email: userRecord.email }
+                },
+                metadata: schoolId ? { schoolId } : undefined
+            },
+            { headers: { Authorization: `Bearer ${apiKey}` } }
+        );
+
+        const checkoutUrl = response.data?.data?.url;
+        if (!checkoutUrl) {
+            throw new Error('AbacatePay não retornou uma URL de checkout.');
+        }
+
+        return { success: true, checkoutUrl };
+    } catch (error) {
+        console.error("AbacatePay: erro ao criar cobrança:", error.response?.data || error.message);
+        throw new functions.https.HttpsError('internal', 'Erro ao iniciar o pagamento. Tente novamente.');
+    }
 });
 
 /**
@@ -114,7 +215,7 @@ exports.generateAIProject = functions.https.onCall(async (data, context) => {
     }
 
     const userData = userDoc.data();
-    const isPro = userData.role === 'professor-pro' || userData.role === 'admin';
+    const isPro = userData.role === 'professor-pro' || userData.role === 'admin' || userData.subscription?.plan === 'pro';
     const usageCount = userData.aiUsageCount || 0;
 
     if (!isPro && usageCount >= 3) {
