@@ -31,6 +31,35 @@ Ele confere primeiro qual conta está ativa no `gcloud`. **Precisa ser a conta d
 
 No fim, o script imprime o caminho do JSON e o que fazer no GitHub. A chave é gravada **fora do repositório** (na pasta do usuário), de propósito: um JSON de conta de serviço dentro do projeto é candidato a entrar num `git add -A` distraído.
 
+### O faturamento precisa estar ativo
+
+Cloud Functions não existe no plano gratuito (Spark) — exige o Blaze, que só liga com uma **conta de faturamento aberta**. O script confere isso no passo 3, antes de qualquer outra coisa.
+
+Foi exatamente onde a primeira execução parou: o `izicodeedu-532ac` estava vinculado à conta `01B478-168102-F6F259`, que está **fechada**, junto com outros três projetos. O erro que aparecia era um `FAILED_PRECONDITION` no meio da habilitação das APIs, sem dizer que a causa era faturamento.
+
+Resolvido vinculando o projeto à conta aberta:
+
+```bash
+gcloud billing projects link izicodeedu-532ac --billing-account=0150C7-1BC6B9-FC3E45
+```
+
+Para ver o estado das contas a qualquer momento:
+
+```bash
+gcloud billing accounts list --format="table(name,displayName,open)"
+gcloud billing projects describe izicodeedu-532ac
+```
+
+### Teto de gasto
+
+Existe um orçamento de **R$ 50/mês** na conta de faturamento, filtrado só para este projeto, com alertas em 50%, 90% e 100%:
+
+```bash
+gcloud billing budgets list --billing-account=0150C7-1BC6B9-FC3E45
+```
+
+Atenção ao que isso é e ao que não é: **orçamento no Google Cloud alerta, não corta**. Passar do teto manda e-mail para os administradores do faturamento, mas o serviço continua rodando. Um corte automático exigiria uma função que desvincula o faturamento ao receber o alerta — o que derruba o site junto, e por isso não foi feito.
+
 ### Jeito manual: pelo Console
 
 1. No Console do Google Cloud, logado como o **dono do projeto**, com `izicodeedu-532ac` selecionado, vá em **IAM e Admin → Contas de serviço → Criar conta de serviço**.
