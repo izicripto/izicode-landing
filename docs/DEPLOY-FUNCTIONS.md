@@ -102,6 +102,18 @@ Essa diferença é deliberada: contrato com escola envolve nota fiscal, dados de
 
 `lookupClass` devolve apenas nome e avatar. `studentLogin` confere a palavra no servidor e devolve um token assinado, então a sessão do aluno vale para as regras do Firestore como qualquer outra. Antes, o "login" era só uma gravação em `localStorage`, que qualquer pessoa podia digitar no console para virar outro aluno.
 
+### Permissão extra para assinar o token (atenção)
+
+`studentLogin` usa `admin.auth().createCustomToken()`, e isso **não funciona só com o deploy**: a conta de serviço que roda as functions precisa poder assinar tokens. Sem essa permissão a função publica normalmente e só falha quando um aluno tenta entrar, com o erro `Permission 'iam.serviceAccounts.signBlob' denied`.
+
+Para conceder, uma vez:
+
+1. No Console do Google Cloud → **IAM e Admin → IAM**, com o projeto `izicodeedu-532ac`.
+2. Encontre a conta de serviço que executa as functions — normalmente `izicodeedu-532ac@appspot.gserviceaccount.com`.
+3. Adicione o papel **Criador de token de conta de serviço** (`roles/iam.serviceAccountTokenCreator`).
+
+Vale conferir isso logo depois do primeiro deploy de functions, testando a entrada por um código de turma real: é o tipo de erro que só aparece com um aluno na frente da tela.
+
 ## Webhook da AbacatePay
 
 Depois do deploy, cadastre esta URL no painel da AbacatePay (o segredo vai na própria query string, que é como a AbacatePay autentica):

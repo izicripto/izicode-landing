@@ -57,6 +57,9 @@ export function AssinaturaPage() {
   const [conferindo, setConferindo] = useState(false)
   const [status, setStatus] = useState<StatusPagamento | null>(null)
   const [tentativa, setTentativa] = useState(0)
+  // Checkout fora do ar: um toast some em 7 segundos e leva a venda junto.
+  // Este aviso fica na tela com um caminho alternativo até a pessoa sair.
+  const [indisponivel, setIndisponivel] = useState(false)
 
   // O id vem da URL de retorno da AbacatePay; o localStorage é a reserva
   // para quando a pessoa volta pelo botão do navegador, sem a query.
@@ -82,7 +85,7 @@ export function AssinaturaPage() {
         return resultado
       } catch (err) {
         if (!silencioso) {
-          const { titulo, detalhe } = descreverFalhaCheckout(err)
+          const { titulo, detalhe } = descreverFalhaCheckout(err, "conferir")
           toast.erro(titulo, detalhe)
         }
         return null
@@ -118,9 +121,30 @@ export function AssinaturaPage() {
     } catch (err) {
       const { titulo, detalhe } = descreverFalhaCheckout(err)
       toast.erro(titulo, detalhe)
+      if (titulo.includes("indisponíveis")) setIndisponivel(true)
       setCriando(null)
     }
   }
+
+  /** Caminho de saída quando o pagamento automático não está disponível. */
+  const avisoIndisponivel = indisponivel && (
+    <div className="mb-6 flex flex-wrap items-start gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-5">
+      <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" />
+      <div className="min-w-0 flex-1">
+        <p className="font-semibold">O pagamento automático está fora do ar</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Nada foi cobrado de você. Nossa equipe consegue gerar a cobrança manualmente e liberar seu
+          acesso hoje mesmo — é só nos dizer qual plano você quer.
+        </p>
+        <Button className="mt-4" variant="outline" asChild>
+          <Link to={`/contato?plano=${params.get("plano") ?? "pro_mensal"}`}>
+            Falar com a equipe
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </Button>
+      </div>
+    </div>
+  )
 
   /* ---------------- Já é PRO ---------------- */
   if (pro && status?.status !== "paid") {
@@ -273,6 +297,8 @@ export function AssinaturaPage() {
           subtitle="Confira os assentos antes de gerar a cobrança."
         />
 
+        {avisoIndisponivel}
+
         <div className="max-w-2xl rounded-3xl border bg-card p-7 shadow-sm">
           <dl className="grid gap-4 sm:grid-cols-2">
             <div>
@@ -346,6 +372,8 @@ export function AssinaturaPage() {
         title="Assinar"
         subtitle="Contrate direto por aqui, com Pix. O acesso é liberado assim que o pagamento é confirmado."
       />
+
+      {avisoIndisponivel}
 
       <div className="grid gap-5 lg:grid-cols-2">
         {AUTOATENDIMENTO.map((plano) => (
