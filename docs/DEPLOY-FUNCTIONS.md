@@ -9,6 +9,27 @@ Todo push para `main` dispara o workflow `.github/workflows/firebase-hosting-mer
 
 O segundo passo é separado de propósito: se o deploy de functions falhar (cota, permissão do token, erro de build), o site já publicado no passo anterior continua no ar. A falha aparece no log da Action, sem derrubar o deploy inteiro.
 
+## Credencial do CI para functions (pendente)
+
+O deploy de **hosting** funciona com o secret `FIREBASE_TOKEN` já configurado. O de **functions** falha com esse mesmo token: o Firebase descontinuou os tokens de `firebase login:ci` para operações que tocam o Google Cloud, e deploy de functions é uma delas. O sintoma é exatamente esse — o site publica, as functions não.
+
+O caminho suportado hoje é uma conta de serviço. Passo a passo (precisa ser feito por quem é dono do projeto):
+
+1. No Console do Google Cloud, com o projeto `izicodeedu-532ac` selecionado, vá em **IAM e Admin → Contas de serviço → Criar conta de serviço**.
+2. Dê um nome como `github-actions-deploy`.
+3. Conceda estes papéis:
+   - `Firebase Admin`
+   - `Cloud Functions Admin`
+   - `Service Account User`
+   - `Cloud Build Editor`
+   - `Artifact Registry Administrator`
+4. Em **Chaves → Adicionar chave → Criar nova chave → JSON**, baixe o arquivo.
+5. No GitHub, em **Settings → Secrets and variables → Actions → New repository secret**, crie o secret `GCP_SA_KEY` com o **conteúdo inteiro do JSON**.
+
+O workflow já está preparado: assim que o secret existir, o passo de functions passa a usá-lo. Sem ele, continua tentando pelo token antigo (e falhando).
+
+> O deploy de functions roda num job separado, sem `continue-on-error`. Uma falha ali aparece vermelha no painel da Action, mas **não impede** a publicação do site — os dois jobs são independentes.
+
 ## Configuração obrigatória (feita uma vez, fora do repositório)
 
 As chaves são segredos: não ficam no Git e não entram no bundle do navegador. Precisam ser definidas na configuração do Firebase Functions, direto da sua máquina, logado como dono do projeto:

@@ -4,14 +4,12 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore"
 import { Sparkles, Save, Loader2, AlertCircle, PenLine, Wand2 } from "lucide-react"
 import { db } from "@/lib/firebase"
 import { useAuth } from "@/lib/auth-context"
-import { isProUser } from "@/lib/roles"
+import { isProUser, remainingFreeGenerations, FREE_AI_GENERATIONS } from "@/lib/roles"
 import { askAI, getStoredApiKey } from "@/lib/ai"
-import { useProjects } from "@/lib/use-projects"
 import { PageHeader } from "@/components/dashboard/page-header"
 import { Markdown } from "@/components/dashboard/markdown"
 import { Button } from "@/components/ui/button"
 
-const FREE_PROJECT_LIMIT = 3
 const TOOL_OPTIONS = ["Scratch", "Arduino", "Micro:bit", "Tinkercad", "Python", "Desplugado"]
 
 const GRADES = [
@@ -25,9 +23,16 @@ const GRADES = [
 
 export function ConteudoPage() {
   const { user, userData } = useAuth()
-  const { projects } = useProjects()
   const navigate = useNavigate()
   const pro = isProUser(userData)
+
+  // O limite do plano gratuito é de GERAÇÕES de IA (o que de fato tem
+  // custo) e quem aplica é a Cloud Function. Escrever e salvar no modo
+  // manual não consome nada, então não é limitado — antes o limite era
+  // por projetos salvos, o que só existia no navegador, dava para burlar
+  // apagando um projeto e ainda atrapalhava quem escrevia à mão.
+  const restantes = remainingFreeGenerations(userData)
+  const semSaldoIA = !pro && restantes === 0
 
   const [mode, setMode] = useState<"ai" | "manual">("ai")
   const [title, setTitle] = useState("")
@@ -45,8 +50,6 @@ export function ConteudoPage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const atLimit = !pro && projects.length >= FREE_PROJECT_LIMIT
-
   function toggleTool(tool: string) {
     setTools((prev) => (prev.includes(tool) ? prev.filter((t) => t !== tool) : [...prev, tool]))
   }
@@ -55,6 +58,14 @@ export function ConteudoPage() {
     setError(null)
     if (!title.trim() || !grade) {
       setError("Informe pelo menos o título e a série para a IA ter contexto.")
+      return
+    }
+
+    if (semSaldoIA) {
+      setError(
+        `Você usou as ${FREE_AI_GENERATIONS} gerações de IA do plano gratuito. ` +
+        "Faça upgrade para o PRO, ou escreva no modo manual (sem limite)."
+      )
       return
     }
 
@@ -92,13 +103,6 @@ export function ConteudoPage() {
       setError("Dê um título e gere (ou escreva) o conteúdo antes de salvar.")
       return
     }
-    if (atLimit) {
-      setError(
-        `Você atingiu o limite de ${FREE_PROJECT_LIMIT} projetos do plano gratuito. Faça upgrade para o PRO e salve sem limite.`
-      )
-      return
-    }
-
     setSaving(true)
     setError(null)
     try {
@@ -155,11 +159,12 @@ export function ConteudoPage() {
         }
       />
 
-      {atLimit && (
+      {!pro && (
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
           <span>
-            Você já tem {projects.length} projetos salvos — o limite do plano gratuito é{" "}
-            {FREE_PROJECT_LIMIT}.
+            {semSaldoIA
+              ? "Você usou todas as gerações de IA do plano gratuito. O modo manual continua liberado, sem limite."
+              : `Plano gratuito: ${restantes} de ${FREE_AI_GENERATIONS} gerações de IA restantes. O modo manual é ilimitado.`}
           </span>
           <Button size="sm" variant="outline" className="bg-white" asChild>
             <a href="/pricing.html">Ver planos</a>
@@ -269,7 +274,7 @@ export function ConteudoPage() {
                   />
                 </label>
 
-                <Button onClick={generate} disabled={busy} className="w-full">
+                <Button onClick={generate} disabled={busy || semSaldoIA} className="w-full">
                   {busy ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -309,7 +314,7 @@ export function ConteudoPage() {
           <div className="mb-4 flex items-center justify-between">
             <h2 className="font-display font-bold">Pré-visualização</h2>
             {(result || manualContent) && (
-              <Button size="sm" onClick={save} disabled={saving || atLimit}>
+              <Button size="sm" onClick={save} disabled={saving}>
                 {saving ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />

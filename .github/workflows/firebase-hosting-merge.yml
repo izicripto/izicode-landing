@@ -68,10 +68,23 @@ jobs:
           cd functions
           npm install
 
+      # Duas credenciais de propósito, e a ação usa a que estiver preenchida.
+      #
+      # FIREBASE_TOKEN (gerado por `firebase login:ci`) ainda publica
+      # hosting, mas o Firebase descontinuou esse tipo de token para
+      # operações que tocam o Google Cloud — e deploy de functions é uma
+      # delas. Foi exatamente esse o sintoma aqui: o mesmo token publicava
+      # o site e falhava nas functions.
+      #
+      # O caminho suportado hoje é uma conta de serviço. Assim que o
+      # secret GCP_SA_KEY existir no repositório, este passo passa a usá-lo
+      # sozinho; sem ele, segue tentando pelo token antigo. Ver
+      # docs/DEPLOY-FUNCTIONS.md para como gerar a chave.
       - name: Deploy Cloud Functions
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only functions --force
         env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: izicodeedu-532ac
