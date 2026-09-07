@@ -5,30 +5,66 @@
 Todo push para `main` dispara o workflow `.github/workflows/firebase-hosting-merge.yml`, que publica, nesta ordem:
 
 1. **Hosting + Firestore Rules** — o site e as regras de segurança.
-2. **Cloud Functions** — em passo separado, com `continue-on-error: true`.
+2. **Cloud Functions** — num job separado, que roda em paralelo.
 
-O segundo passo é separado de propósito: se o deploy de functions falhar (cota, permissão do token, erro de build), o site já publicado no passo anterior continua no ar. A falha aparece no log da Action, sem derrubar o deploy inteiro.
+Os dois são jobs independentes de propósito: se o deploy de functions falhar (cota, permissão da credencial, erro de build), o site continua sendo publicado normalmente.
+
+O job de functions **não** usa `continue-on-error`. A primeira versão usava, e isso marcava o passo como verde mesmo quando o deploy falhava — foi assim que `aiChat` ficou respondendo 404 em produção sem ninguém perceber. Hoje uma falha ali aparece vermelha no painel, sem derrubar a publicação do site.
 
 ## Credencial do CI para functions (pendente)
 
 O deploy de **hosting** funciona com o secret `FIREBASE_TOKEN` já configurado. O de **functions** falha com esse mesmo token: o Firebase descontinuou os tokens de `firebase login:ci` para operações que tocam o Google Cloud, e deploy de functions é uma delas. O sintoma é exatamente esse — o site publica, as functions não.
 
-O caminho suportado hoje é uma conta de serviço. Passo a passo (precisa ser feito por quem é dono do projeto):
+O caminho suportado hoje é uma conta de serviço.
 
-1. No Console do Google Cloud, com o projeto `izicodeedu-532ac` selecionado, vá em **IAM e Admin → Contas de serviço → Criar conta de serviço**.
-2. Dê um nome como `github-actions-deploy`.
+### Jeito rápido: o script
+
+Existe um script que faz tudo — habilita as APIs, cria a conta de serviço, concede os papéis, libera a assinatura de token dos alunos e gera o JSON:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\criar-gcp-sa-key.ps1
+```
+
+Ele confere primeiro qual conta está ativa no `gcloud`. **Precisa ser a conta dona do projeto** (`izicripto@gmail.com`) — se for outra, ele abre o navegador para você trocar, e para com uma mensagem clara caso a conta escolhida não enxergue o projeto.
+
+> Esse detalhe já custou tempo: o `gcloud` desta máquina estava autenticado como `r.berlanda04@gmail.com`, que **não tem acesso** a `izicodeedu-532ac`. Qualquer comando contra o projeto responde 403 sem dizer que o problema é a conta.
+
+No fim, o script imprime o caminho do JSON e o que fazer no GitHub. A chave é gravada **fora do repositório** (na pasta do usuário), de propósito: um JSON de conta de serviço dentro do projeto é candidato a entrar num `git add -A` distraído.
+
+### Jeito manual: pelo Console
+
+1. No Console do Google Cloud, logado como o **dono do projeto**, com `izicodeedu-532ac` selecionado, vá em **IAM e Admin → Contas de serviço → Criar conta de serviço**.
+2. Nome: `github-actions-deploy`.
 3. Conceda estes papéis:
-   - `Firebase Admin`
-   - `Cloud Functions Admin`
-   - `Service Account User`
-   - `Cloud Build Editor`
-   - `Artifact Registry Administrator`
+   - `Firebase Admin` (`roles/firebase.admin`)
+   - `Cloud Functions Admin` (`roles/cloudfunctions.admin`)
+   - `Service Account User` (`roles/iam.serviceAccountUser`)
+   - `Cloud Build Editor` (`roles/cloudbuild.builds.editor`)
+   - `Artifact Registry Administrator` (`roles/artifactregistry.admin`)
+   - `Service Usage Consumer` (`roles/serviceusage.serviceUsageConsumer`)
 4. Em **Chaves → Adicionar chave → Criar nova chave → JSON**, baixe o arquivo.
-5. No GitHub, em **Settings → Secrets and variables → Actions → New repository secret**, crie o secret `GCP_SA_KEY` com o **conteúdo inteiro do JSON**.
+5. No GitHub, em **Settings → Secrets and variables → Actions → New repository secret**, crie `GCP_SA_KEY` com o **conteúdo inteiro do JSON**.
 
-O workflow já está preparado: assim que o secret existir, o passo de functions passa a usá-lo. Sem ele, continua tentando pelo token antigo (e falhando).
+O `Service Usage Consumer` costuma ser esquecido e é justamente o que falta quando o deploy morre em `serviceusage.googleapis.com ... HTTP Error: 403`.
 
-> O deploy de functions roda num job separado, sem `continue-on-error`. Uma falha ali aparece vermelha no painel da Action, mas **não impede** a publicação do site — os dois jobs são independentes.
+### Depois de salvar o secret
+
+O workflow já está preparado: assim que o secret existir, o passo de functions passa a usá-lo. Sem ele, continua tentando pelo token antigo (e falhando). Para disparar o deploy sem precisar de uma mudança de código:
+
+```bash
+git commit --allow-empty -m "ci: publicar functions"
+git push
+```
+
+E para conferir se funcionou, sem abrir o painel do GitHub:
+
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" -X POST \
+  -H "Content-Type: application/json" -d '{"data":{}}' \
+  https://us-central1-izicodeedu-532ac.cloudfunctions.net/lookupClass
+```
+
+`404` significa que a função continua não publicada. Qualquer outra coisa (`400`, `401`, `500`) significa que ela existe e respondeu.
 
 ## Configuração obrigatória (feita uma vez, fora do repositório)
 
@@ -63,7 +99,10 @@ firebase functions:config:get --project izicodeedu-532ac
 A chave de produção atual é `key_J2bM6PLWN2whTmWgbFHpsbhd`. Ela **não está neste repositório e não deve entrar nele**: chave em arquivo versionado vaza no primeiro clone, e quem tiver acesso a ela emite e consulta cobranças na conta da Izicode. Rode:
 
 ```bash
-firebase functions:config:set   abacatepay.api_key="key_J2bM6PLWN2whTmWgbFHpsbhd"   abacatepay.webhook_secret="UM_SEGREDO_LONGO_E_ALEATORIO_QUE_VOCE_ESCOLHE"   --project izicodeedu-532ac
+firebase functions:config:set \
+  abacatepay.api_key="key_J2bM6PLWN2whTmWgbFHpsbhd" \
+  abacatepay.webhook_secret="UM_SEGREDO_LONGO_E_ALEATORIO_QUE_VOCE_ESCOLHE" \
+  --project izicodeedu-532ac
 ```
 
 O `webhook_secret` é inventado por você — qualquer string longa serve. Depois, no painel da AbacatePay, cadastre o webhook apontando para:
