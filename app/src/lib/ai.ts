@@ -8,8 +8,16 @@ export interface ChatTurn {
 
 export const API_KEY_STORAGE = "gemini_api_key"
 
-/** Mesmos modelos e ordem de fallback usados na Cloud Function. */
-const MODELS = ["gemini-2.0-flash", "gemini-flash-latest", "gemini-1.5-flash"]
+/**
+ * Ordem de fallback dos modelos.
+ *
+ * 'gemini-flash-latest' vem primeiro de propósito: é um alias que o Google
+ * mantém apontando para o flash atual, então não envelhece. Os nomes fixos
+ * abaixo são só rede de segurança — e essa lista já esteve quebrada:
+ * gemini-2.0-flash e gemini-1.5-flash foram descontinuados e respondiam
+ * 404, o que derrubaria toda a IA da plataforma mesmo com chave válida.
+ */
+const MODELS = ["gemini-flash-latest", "gemini-3.8-flash", "gemini-3.6-flash"]
 
 export type Persona = "professor" | "aluno" | "gestao"
 

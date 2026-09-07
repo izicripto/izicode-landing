@@ -4,6 +4,10 @@ const axios = require("axios");
 
 admin.initializeApp();
 
+/** Precisa ser a mesma string de isPlatformOwner() em firestore.rules e de
+ *  PLATFORM_OWNER_EMAIL no app. */
+const PLATFORM_OWNER_EMAIL = 'izicripto@gmail.com';
+
 exports.newLeadNotification = functions.firestore.document('leads/{leadId}').onCreate(async (snap, context) => {
     const lead = snap.data();
     const config = functions.config().telegram;
@@ -127,14 +131,17 @@ exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
  * cliente. Configure com:
  *   firebase functions:config:set abacatepay.api_key="abc_..." abacatepay.webhook_secret="..."
  *
- * Valores de referência (ajustar depois com o time comercial):
- *   professor_pro: R$ 29,90/mês | escola: R$ 199,90/mês (base, cobrado por
- *   professor+aluno em cima disso — ajustar quando o modelo de preço por
- *   assento estiver definido).
+ * Os valores precisam bater com app/src/lib/planos.ts, que é o que a
+ * página de planos mostra ao cliente — cobrar diferente do anunciado é
+ * problema comercial e jurídico, não só inconsistência de código.
+ * Ver docs/MODELO-NEGOCIO.md para o raciocínio de cada preço.
  */
 const ABACATEPAY_PLANS = {
-    professor_pro: { name: 'Izicode Edu - Professor PRO', priceCents: 2990 },
-    escola: { name: 'Izicode Edu - Plano Escola', priceCents: 19990 }
+    professor_pro: { name: 'Izicode Edu - Professor PRO', priceCents: 3990 },
+    pro_anual: { name: 'Izicode Edu - PRO Anual + Kit Arduino', priceCents: 39700 },
+    escola: { name: 'Izicode Edu - Plano Escola (base)', priceCents: 24900 },
+    aulas_turma: { name: 'Izicode Edu - Turma Online', priceCents: 14900 },
+    aulas_individual: { name: 'Izicode Edu - Aula Individual', priceCents: 39900 }
 };
 
 exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) => {
@@ -199,7 +206,16 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
  * Contas gratuitas continuam usando a chave pessoal do próprio professor
  * direto do navegador (BYOK), sem passar por aqui.
  */
-const CHAT_MODELS = ["gemini-2.0-flash", "gemini-flash-latest", "gemini-1.5-flash"];
+/*
+ * Ordem de fallback dos modelos.
+ *
+ * 'gemini-flash-latest' vem primeiro de propósito: é um alias que o Google
+ * mantém apontando para o flash atual, então não envelhece. Os nomes fixos
+ * abaixo são só rede de segurança — e essa lista já esteve quebrada:
+ * gemini-2.0-flash e gemini-1.5-flash foram descontinuados e respondiam
+ * 404, o que derrubaria toda a IA da plataforma mesmo com chave válida.
+ */
+const CHAT_MODELS = ["gemini-flash-latest", "gemini-3.8-flash", "gemini-3.6-flash"];
 
 /**
  * As personas ficam NO SERVIDOR e o cliente só escolhe uma pela chave.
@@ -252,7 +268,12 @@ exports.aiChat = functions.https.onCall(async (data, context) => {
 
     const userDoc = await admin.firestore().collection('users').doc(context.auth.uid).get();
     const userData = userDoc.exists ? userDoc.data() : {};
-    const isPro = userData.role === 'professor-pro' || userData.role === 'admin' ||
+
+    // O e-mail vem do token verificado pelo Firebase Auth, não do
+    // documento — a conta dona da plataforma continua tendo IA mesmo que
+    // o doc dela esteja incompleto ou tenha sido alterado.
+    const ehDono = (context.auth.token.email || '').toLowerCase() === PLATFORM_OWNER_EMAIL;
+    const isPro = ehDono || userData.role === 'professor-pro' || userData.role === 'admin' ||
         userData.role === 'dev' || userData.subscription?.plan === 'pro';
 
     if (!isPro) {
@@ -370,7 +391,10 @@ exports.generateAIProject = functions.https.onCall(async (data, context) => {
     `;
 
     try {
-        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`;
+        // Mesma lista de fallback do chat: modelo fixo aqui já quebrou a
+        // geração inteira quando o Google descontinuou o gemini-2.0-flash.
+        const modelo = CHAT_MODELS[0];
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`;
 
         const response = await axios.post(
             url,
