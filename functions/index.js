@@ -875,3 +875,83 @@ exports.studentLogin = functions.https.onCall(async (data) => {
         className: (turma.data() || {}).name || "Turma",
     };
 });
+
+/* ==================================================================== */
+/* Reconciliação de pagamentos                                          */
+/* ==================================================================== */
+
+/**
+ * Rede de segurança para pagamentos que ficaram pendentes.
+ *
+ * Existem três caminhos para liberar um acesso pago, e os dois primeiros
+ * podem falhar de formas que a gente não controla:
+ *
+ *  1. O webhook da AbacatePay — pode não estar cadastrado, estar no
+ *     ambiente errado, ou simplesmente não chegar.
+ *  2. A conferência que a própria tela faz — só funciona enquanto a pessoa
+ *     estiver com a aba aberta. Quem paga e fecha o navegador não tem quem
+ *     confira por ela.
+ *  3. Esta função, que roda sozinha e não depende de nenhum dos dois.
+ *
+ * Sem o item 3, o pior cenário do produto é possível: alguém paga, fecha a
+ * aba, e nunca recebe o que comprou — sem nem saber a quem reclamar.
+ */
+exports.reconciliarPagamentos = functions.pubsub
+    .schedule('every 10 minutes')
+    .timeZone('America/Sao_Paulo')
+    .onRun(async () => {
+        const apiKey = functions.config().abacatepay?.api_key;
+        if (!apiKey) {
+            console.warn('Reconciliação: abacatepay.api_key não configurada. Nada a fazer.');
+            return null;
+        }
+
+        const db = admin.firestore();
+
+        // Janela: nada recém-criado (o fluxo normal ainda está em curso) e
+        // nada velho demais (o Pix expira em uma hora; depois disso não vai
+        // ser pago). Isso mantém a consulta pequena e evita reprocessar
+        // cobranças mortas para sempre.
+        const agora = Date.now();
+        const doisMinutosAtras = new Date(agora - 2 * 60 * 1000);
+        const seisHorasAtras = new Date(agora - 6 * 60 * 60 * 1000);
+
+        const pendentes = await db.collection('payments')
+            .where('status', '==', 'pending')
+            .where('createdAt', '<', doisMinutosAtras)
+            .where('createdAt', '>', seisHorasAtras)
+            .limit(50)
+            .get();
+
+        if (pendentes.empty) return null;
+
+        let liberados = 0;
+        for (const doc of pendentes.docs) {
+            const pagamento = doc.data() || {};
+            if (!pagamento.billingId) continue;
+
+            try {
+                const resposta = await axios.get(`${ABACATEPAY_API}/transparents/check`, {
+                    params: { id: pagamento.billingId },
+                    headers: { Authorization: `Bearer ${apiKey}` }
+                });
+                const status = String(resposta.data?.data?.status || '').toUpperCase();
+                if (status !== 'PAID') continue;
+
+                await aplicarPagamento(doc.ref, pagamento);
+                liberados += 1;
+                console.log(
+                    `Reconciliação: pagamento ${doc.id} estava pago e não havia sido aplicado ` +
+                    `(${pagamento.tipo}, uid ${pagamento.uid}).`
+                );
+            } catch (error) {
+                // Uma cobrança com problema não pode impedir as outras.
+                console.error(`Reconciliação: falha ao conferir ${doc.id}:`, error.message);
+            }
+        }
+
+        if (liberados > 0) {
+            console.log(`Reconciliação: ${liberados} pagamento(s) liberado(s) fora do webhook.`);
+        }
+        return null;
+    });

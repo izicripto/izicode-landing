@@ -126,7 +126,8 @@ $apis = @(
     'artifactregistry.googleapis.com',
     'iam.googleapis.com',
     'run.googleapis.com',
-    'eventarc.googleapis.com'
+    'eventarc.googleapis.com',
+    'cloudscheduler.googleapis.com'
 )
 foreach ($api in $apis) {
     Write-Host "   habilitando $api ..."
@@ -163,7 +164,13 @@ $papeis = @(
     'roles/iam.serviceAccountUser',
     'roles/cloudbuild.builds.editor',
     'roles/artifactregistry.admin',
-    'roles/serviceusage.serviceUsageConsumer'
+    'roles/serviceusage.serviceUsageConsumer',
+    # Funcoes agendadas (reconciliarPagamentos) criam um job no Cloud
+    # Scheduler e um topico no Pub/Sub. Sem estes dois o deploy dessa
+    # funcao falha, e so dela — as outras publicam normalmente, o que
+    # torna a causa dificil de enxergar.
+    'roles/cloudscheduler.admin',
+    'roles/pubsub.admin'
 )
 foreach ($papel in $papeis) {
     Write-Host "   concedendo $papel ..."
