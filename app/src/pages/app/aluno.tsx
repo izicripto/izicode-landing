@@ -23,8 +23,7 @@ function levelFor(xp: number) {
 }
 
 const QUICK_LINKS = [
-  // Quiz Arena ainda é página legada: navegação normal, não rota do SPA.
-  { href: "/quiz-arena.html", label: "Quiz Arena", icon: Gamepad2, color: "bg-violet-600", external: true },
+  { href: "/app/quiz", label: "Quiz Arena", icon: Gamepad2, color: "bg-violet-600" },
   { href: "/app/tutor", label: "Tutor IA", icon: Bot, color: "bg-teal-600" },
   { href: "/app/ranking", label: "Ranking", icon: Trophy, color: "bg-amber-500" },
   { href: "/app/biblioteca", label: "Biblioteca", icon: Library, color: "bg-sky-500" },
@@ -108,23 +107,16 @@ export function AlunoPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {QUICK_LINKS.map((link) => {
             const Icon = link.icon
-            const className =
-              "group flex flex-col items-center gap-3 rounded-2xl border bg-card p-6 text-center shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
-            const inner = (
-              <>
+            return (
+              <Link
+                key={link.href}
+                to={link.href}
+                className="group flex flex-col items-center gap-3 rounded-2xl border bg-card p-6 text-center shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
+              >
                 <div className={`flex h-12 w-12 items-center justify-center rounded-2xl text-white ${link.color}`}>
                   <Icon className="h-6 w-6" />
                 </div>
                 <strong className="text-sm">{link.label}</strong>
-              </>
-            )
-            return link.external ? (
-              <a key={link.href} href={link.href} className={className}>
-                {inner}
-              </a>
-            ) : (
-              <Link key={link.href} to={link.href} className={className}>
-                {inner}
               </Link>
             )
           })}

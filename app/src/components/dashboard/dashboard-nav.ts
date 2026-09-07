@@ -86,7 +86,7 @@ const STUDENT_NAV: NavGroup[] = [
     group: "Aprender",
     items: [
       { to: "/app/aluno", label: "Meu Painel", icon: Home },
-      { to: "/quiz-arena.html", label: "Arena de Quiz", icon: Gamepad2, external: true },
+      { to: "/app/quiz", label: "Arena de Quiz", icon: Gamepad2 },
       { to: "/app/tutor", label: "Tutor IA", icon: Bot },
       { to: "/app/ranking", label: "Ranking", icon: Trophy },
     ],

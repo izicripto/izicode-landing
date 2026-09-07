@@ -37,8 +37,20 @@ export interface LegacyProject {
   duration?: string
 }
 
+export interface QuizQuestion {
+  id: string
+  category?: string
+  difficulty?: string
+  question: string
+  options: string[]
+  correct: number
+  explanation?: string
+  xp?: number
+}
+
 let coursesPromise: Promise<Course[]> | null = null
 let projectsPromise: Promise<LegacyProject[]> | null = null
+let quizPromise: Promise<QuizQuestion[]> | null = null
 
 /**
  * O caminho vai numa variável de propósito: são módulos que só existem em
@@ -73,4 +85,14 @@ export function loadProjects(): Promise<LegacyProject[]> {
       return [] as LegacyProject[]
     })
   return projectsPromise
+}
+
+export function loadQuizQuestions(): Promise<QuizQuestion[]> {
+  quizPromise ??= importLegacy("/js/quiz-data.js")
+    .then((mod) => (mod.quizData as QuizQuestion[]) ?? [])
+    .catch((error) => {
+      console.error("Não foi possível carregar as perguntas do quiz:", error)
+      return [] as QuizQuestion[]
+    })
+  return quizPromise
 }
