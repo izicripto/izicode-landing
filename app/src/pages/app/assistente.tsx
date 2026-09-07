@@ -108,12 +108,10 @@ export function AssistentePage() {
         subtitle="Tire dúvidas pedagógicas e técnicas, sem sair do painel."
         action={
           <div className="flex gap-2">
-            {!pro && (
-              <Button variant="outline" size="sm" onClick={() => setShowKeyForm((v) => !v)}>
-                <KeyRound className="h-4 w-4" />
-                {chat.apiKey ? "Trocar chave" : "Configurar chave"}
-              </Button>
-            )}
+            <Button variant="outline" size="sm" onClick={() => setShowKeyForm((v) => !v)}>
+              <KeyRound className="h-4 w-4" />
+              {chat.apiKey ? "Trocar chave" : "Configurar chave"}
+            </Button>
             <Button variant="outline" size="sm" onClick={chat.newChat}>
               <Plus className="h-4 w-4" />
               Nova conversa
@@ -122,13 +120,38 @@ export function AssistentePage() {
         }
       />
 
-      {showKeyForm && !pro && (
+      {/* Deixa explícito de onde vem a IA: sem isso, um professor PRO só
+          descobria que a chave gerenciada não estava disponível quando a
+          conversa falhava. */}
+      <div className="mb-5 flex flex-wrap items-center gap-2 text-xs">
+        {pro ? (
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1.5 font-bold uppercase tracking-wider text-amber-800">
+            <Sparkles className="h-3.5 w-3.5" />
+            Plano PRO — chave da Izicode
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1.5 font-bold uppercase tracking-wider text-muted-foreground">
+            Plano gratuito
+          </span>
+        )}
+        <span className="text-muted-foreground">
+          {pro
+            ? chat.apiKey
+              ? "Sua chave pessoal fica como reserva se o serviço estiver indisponível."
+              : "Sem chave pessoal configurada — se o serviço falhar, a conversa fica indisponível."
+            : chat.apiKey
+              ? "Usando sua chave pessoal, salva apenas neste navegador."
+              : "Configure sua chave do Gemini para começar."}
+        </span>
+      </div>
+
+      {showKeyForm && (
         <div className="mb-5 rounded-2xl border bg-card p-5 shadow-sm">
           <h2 className="font-display font-bold">Sua chave do Google Gemini</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            No plano gratuito a conversa usa sua própria chave, guardada apenas neste navegador —
-            ela nunca é enviada aos nossos servidores. No plano PRO, a chave da Izicode já vem
-            inclusa.
+            {pro
+              ? "No PRO a conversa usa a chave da Izicode. Configurar uma chave pessoal aqui é opcional: ela entra como reserva caso o serviço fique indisponível."
+              : "No plano gratuito a conversa usa sua própria chave. Ela fica guardada apenas neste navegador e nunca é enviada aos nossos servidores."}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <input

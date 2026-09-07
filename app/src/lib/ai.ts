@@ -128,15 +128,10 @@ export async function askAI({
       if (result.data?.text) return result.data.text
       throw new Error("A IA não retornou resposta.")
     } catch (error) {
-      const raw = error instanceof Error ? error.message : String(error)
-      // Se a conta perdeu o PRO (ou a function não está publicada) e o
-      // professor tem chave própria, seguimos por ela em vez de travar.
+      // Se a conta perdeu o PRO (ou a função ainda não está publicada) e o
+      // usuário tem chave própria, seguimos por ela em vez de travar.
       if (apiKey) return askWithOwnKey(apiKey, history, message, persona)
-      throw new Error(
-        raw.includes("permission-denied")
-          ? "O assistente com a chave da Izicode é exclusivo do plano PRO. Configure sua chave pessoal para usar no gratuito."
-          : raw
-      )
+      throw new Error(describeManagedFailure(error))
     }
   }
 
@@ -144,4 +139,34 @@ export async function askAI({
     throw new Error("Configure sua chave do Gemini para usar a IA no plano gratuito.")
   }
   return askWithOwnKey(apiKey, history, message, persona)
+}
+
+/**
+ * Traduz a falha da chamada gerenciada para algo acionável. Sem isso, um
+ * professor PRO via mensagens como "not-found" ou a sugestão errada de
+ * "assine o PRO" — sendo que ele já é PRO e o problema é de infra.
+ */
+function describeManagedFailure(error: unknown): string {
+  const code = (error as { code?: string })?.code ?? ""
+  const raw = error instanceof Error ? error.message : String(error)
+
+  if (code.includes("not-found") || raw.includes("not-found") || raw.includes("NOT_FOUND")) {
+    return (
+      "O assistente com a chave da Izicode ainda não está publicado no servidor. " +
+      "Enquanto isso, configure sua chave pessoal do Gemini para continuar usando."
+    )
+  }
+  if (code.includes("permission-denied") || raw.includes("permission-denied")) {
+    return (
+      "O assistente com a chave da Izicode é exclusivo do plano PRO. " +
+      "Configure sua chave pessoal para usar no plano gratuito."
+    )
+  }
+  if (code.includes("failed-precondition") || raw.includes("failed-precondition")) {
+    return "O assistente está temporariamente indisponível (chave de IA não configurada no servidor)."
+  }
+  if (code.includes("unauthenticated")) {
+    return "Sua sessão expirou. Entre novamente para continuar usando o assistente."
+  }
+  return raw
 }

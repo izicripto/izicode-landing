@@ -42,3 +42,22 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: izicodeedu-532ac
+
+      # As Cloud Functions ficavam de fora do deploy automático, então
+      # qualquer função nova (aiChat, createAbacatePayCheckout,
+      # abacatePayWebhook) existia no repositório mas respondia 404 em
+      # produção — o plano PRO não conseguia usar a IA pela chave
+      # gerenciada porque o endpoint simplesmente não estava publicado.
+      #
+      # Fica num passo separado e com continue-on-error de propósito: se o
+      # deploy de functions falhar (cota, permissão do token, erro de
+      # build), o site e as regras já publicados no passo anterior seguem
+      # no ar. A falha aparece no log da Action em vez de derrubar tudo.
+      - name: Deploy Cloud Functions
+        continue-on-error: true
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: izicodeedu-532ac
