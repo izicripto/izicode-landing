@@ -70,7 +70,7 @@ export function EscolaPage() {
             onboarding, ou fale com a gente para criar o acesso institucional.
           </p>
           <Button className="mt-5" asChild>
-            <a href="/contact.html">Falar com a equipe</a>
+            <a href="/contato">Falar com a equipe</a>
           </Button>
         </div>
       </>
@@ -128,7 +128,7 @@ export function EscolaPage() {
             gerenciamento de turmas é liberado automaticamente.
           </p>
           <Button className="mt-4" asChild>
-            <a href="/contact.html">Contratar plano Escola</a>
+            <a href="/contato">Contratar plano Escola</a>
           </Button>
         </div>
       )}

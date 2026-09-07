@@ -148,7 +148,7 @@ function SimuladorEscola() {
       </div>
 
       <Button className="mt-5 w-full" asChild>
-        <a href="/contact.html?plano=escola">
+        <a href="/contato?plano=escola">
           Falar com a equipe
           <ArrowRight className="h-4 w-4" />
         </a>
@@ -305,7 +305,7 @@ export function PlanosPage() {
               <a href="/login.html">Criar conta grátis</a>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <a href="/contact.html">Falar com a equipe</a>
+              <a href="/contato">Falar com a equipe</a>
             </Button>
           </div>
         </div>

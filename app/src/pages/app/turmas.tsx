@@ -99,7 +99,7 @@ export function TurmasPage() {
           description="Sua conta ainda não está ligada a uma instituição. Use o código da escola no onboarding ou fale com a equipe para criar o acesso institucional."
           action={
             <Button asChild>
-              <a href="/contact.html">Falar com a equipe</a>
+              <a href="/contato">Falar com a equipe</a>
             </Button>
           }
         />
@@ -151,7 +151,7 @@ export function TurmasPage() {
             pacote Escola (cobrado por professores + alunos). O bloqueio vale também no servidor.
           </p>
           <Button className="mt-4" asChild>
-            <a href="/contact.html">Contratar plano Escola</a>
+            <a href="/contato">Contratar plano Escola</a>
           </Button>
         </div>
       )}

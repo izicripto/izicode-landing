@@ -18,6 +18,7 @@ import {
 import { useAuth } from "@/lib/auth-context"
 import { isPlatformOwner, ROLE_LABELS } from "@/lib/roles"
 import { useAdminData, type AdminUser } from "@/lib/use-admin"
+import { PLANOS_PROFESSOR, PLANOS_AULAS } from "@/lib/planos"
 import { PageHeader, StatCard, EmptyState } from "@/components/dashboard/page-header"
 import { Button } from "@/components/ui/button"
 
@@ -41,6 +42,13 @@ const PAPEIS = [
   "consultant",
   "admin",
 ]
+
+/** Mesmo catálogo da página de planos: o painel mostra o nome comercial
+ *  em vez do id cru gravado no lead. */
+const NOMES_PLANO: Record<string, string> = {
+  ...Object.fromEntries([...PLANOS_PROFESSOR, ...PLANOS_AULAS].map((p) => [p.id, p.nome])),
+  escola: "Pacote Escola",
+}
 
 const inputClass =
   "w-full rounded-xl border bg-background px-3.5 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
@@ -473,6 +481,24 @@ export function AdminPage() {
                               {l.createdAt?.toDate &&
                                 ` · ${l.createdAt.toDate().toLocaleDateString("pt-BR")}`}
                             </p>
+                            {/* Origem do lead: sem isso, um pedido vindo da
+                                página de planos chegava aqui sem dizer de
+                                qual plano a pessoa veio — que é justamente
+                                a informação que orienta a resposta. */}
+                            {(l.plano || l.source) && (
+                              <p className="mt-1.5 flex flex-wrap gap-1.5">
+                                {l.plano && (
+                                  <span className="rounded-md bg-primary/10 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-primary">
+                                    {NOMES_PLANO[l.plano] ?? l.plano}
+                                  </span>
+                                )}
+                                {l.source && (
+                                  <span className="rounded-md bg-muted px-2 py-0.5 text-[0.65rem] text-muted-foreground">
+                                    {l.source}
+                                  </span>
+                                )}
+                              </p>
+                            )}
                             {(l.goal || l.message) && (
                               <p className="mt-2 text-sm text-muted-foreground">
                                 {l.goal}

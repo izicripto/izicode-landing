@@ -19,7 +19,7 @@ export function Hero() {
           </p>
           <div className="mt-12 flex flex-col justify-center gap-6 sm:flex-row lg:justify-start">
             <Button asChild size="lg" className="h-16 rounded-3xl px-10 text-lg font-bold shadow-xl shadow-primary/30">
-              <a href="/contact.html">Contratar Consultoria</a>
+              <a href="/contato">Contratar Consultoria</a>
             </Button>
           </div>
         </div>

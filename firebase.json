@@ -9,6 +9,10 @@
     ],
     "rewrites": [
       {
+        "source": "/contato",
+        "destination": "/index.html"
+      },
+      {
         "source": "/planos",
         "destination": "/index.html"
       },

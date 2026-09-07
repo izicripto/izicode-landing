@@ -42,6 +42,8 @@ export interface AdminLead {
   goal?: string
   message?: string
   source?: string
+  /** Plano que a pessoa estava vendo ao pedir contato (vem de /planos). */
+  plano?: string | null
   status?: string
   schoolName?: string
   createdAt?: { toDate: () => Date }

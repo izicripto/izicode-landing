@@ -16,7 +16,7 @@ export function ContactCta() {
           variant="secondary"
           className="mt-12 h-16 rounded-3xl bg-white px-12 text-lg font-black text-primary hover:bg-white/90"
         >
-          <a href="/contact.html">Falar com Especialista</a>
+          <a href="/contato">Falar com Especialista</a>
         </Button>
       </div>
     </section>
