@@ -85,15 +85,20 @@ git commit --allow-empty -m "ci: publicar functions"
 git push
 ```
 
-E para conferir se funcionou, sem abrir o painel do GitHub:
+E para conferir se funcionou:
 
 ```bash
-curl -s -o /dev/null -w "%{http_code}\n" -X POST \
-  -H "Content-Type: application/json" -d '{"data":{}}' \
-  https://us-central1-izicodeedu-532ac.cloudfunctions.net/lookupClass
+gcloud functions list --project izicodeedu-532ac
 ```
 
-`404` significa que a função continua não publicada. Qualquer outra coisa (`400`, `401`, `500`) significa que ela existe e respondeu.
+Uma função publicada aparece com `status: ACTIVE` em `gcloud functions describe <nome> --region us-central1`.
+
+**Não use o código HTTP para decidir isso.** Uma tentativa anterior usava `curl` e a regra "404 = não publicada", e a conclusão foi ao contrário da realidade, por dois motivos:
+
+- `404` é também o que uma função **publicada e funcionando** devolve quando o código lança `HttpsError('not-found')`. O `lookupClass` responde 404 com `{"error":{"message":"Turma não encontrada..."}}` — que é o comportamento correto, não ausência.
+- Depois de habilitar o Cloud Run no projeto, o domínio `cloudfunctions.net` passou a devolver `401` para caminhos desconhecidos, em vez de `404`. Ou seja: os dois códigos mudaram de significado no meio do caminho.
+
+Se quiser mesmo usar `curl`, olhe o **corpo** da resposta, não o status: uma função publicada devolve um JSON com `error.message` em português; uma inexistente devolve HTML ou uma mensagem genérica do Google.
 
 ## Configuração obrigatória (feita uma vez, fora do repositório)
 
