@@ -97,8 +97,24 @@ const STUDENT_NAV: NavGroup[] = [
   },
 ]
 
+/**
+ * O responsável usa o mesmo painel do aluno, mas precisa de um item a
+ * mais: a gestão dos perfis das crianças. É ali que ele troca de filho e
+ * exerce a exclusão dos dados de quem representa (LGPD) — coisas que não
+ * fazem sentido para um aluno vinculado a uma escola.
+ */
+const PARENT_NAV: NavGroup[] = [
+  STUDENT_NAV[0],
+  {
+    group: "Responsável",
+    items: [{ to: "/app/filhos", label: "Perfis das crianças", icon: Users }],
+  },
+  ...STUDENT_NAV.slice(1),
+]
+
 export function navForRole(role: string): NavGroup[] {
   if (SCHOOL_ROLES.includes(role)) return SCHOOL_NAV
+  if (role === "parent") return PARENT_NAV
   if (STUDENT_ROLES.includes(role)) return STUDENT_NAV
   return TEACHER_NAV
 }

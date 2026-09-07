@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { collection, getDocs } from "firebase/firestore"
-import { Trophy, Flame, Award, Gamepad2, Library, Bot, Cpu } from "lucide-react"
-import { db } from "@/lib/firebase"
+import { Trophy, Flame, Award, Gamepad2, Library, Bot, Cpu, Users } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
+import { useChildren } from "@/lib/use-children"
 import { PageHeader, StatCard } from "@/components/dashboard/page-header"
+import { Button } from "@/components/ui/button"
 
 const LEVELS = [
   { level: 1, name: "Explorador Iniciante", minXP: 0 },
@@ -31,49 +30,69 @@ const QUICK_LINKS = [
 ]
 
 export function AlunoPage() {
-  const { user, userData, role } = useAuth()
-  const [childName, setChildName] = useState<string | null>(null)
-  const [stats, setStats] = useState({ xp: 0, badges: 0, challenges: 0 })
+  const { user, userData } = useAuth()
+  const kids = useChildren()
 
-  useEffect(() => {
-    async function load() {
-      if (!user) return
+  // Conta de responsável: o progresso não fica no doc do titular, e sim
+  // no perfil da criança escolhida como ativa (LGPD — o responsável é o
+  // titular, a criança não tem login próprio). Antes o painel mostrava
+  // sempre o primeiro filho, então quem tinha dois ficava preso no
+  // primeiro sem nenhuma forma de trocar.
+  const child = kids.isParent ? kids.activeChild : null
 
-      // Conta de responsável: o progresso não fica no doc do titular, e
-      // sim no perfil da criança vinculado (LGPD — o responsável é o
-      // titular dos dados, a criança não tem login próprio).
-      if (role === "parent") {
-        const snap = await getDocs(collection(db, "users", user.uid, "children"))
-        if (!snap.empty) {
-          const child = snap.docs[0].data()
-          setChildName((child.name as string) ?? null)
-          setStats({
-            xp: (child.xp as number) ?? 0,
-            badges: ((child.badges as string[]) ?? []).length,
-            challenges: (child.challengesCompleted as number) ?? 0,
-          })
-          return
-        }
+  const stats = child
+    ? {
+        xp: child.xp ?? 0,
+        badges: (child.badges ?? []).length,
+        challenges: child.challengesCompleted ?? 0,
       }
-
-      setStats({
+    : {
         xp: userData?.xp ?? 0,
         badges: (userData?.badges ?? []).length,
         challenges: userData?.challengesCompleted ?? 0,
-      })
-    }
-    load().catch((error) => console.error("Erro ao carregar progresso:", error))
-  }, [user, userData, role])
+      }
 
   const { current, next, progress } = levelFor(stats.xp)
-  const displayName = childName || userData?.displayName || user?.displayName || "Explorador"
+  const displayName = child?.name || userData?.displayName || user?.displayName || "Explorador"
 
   return (
     <>
       <PageHeader
         title={`Olá, ${displayName.split(" ")[0]}!`}
         subtitle="Sua jornada de aprendizado continua."
+        action={
+          kids.isParent ? (
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/app/filhos">
+                <Users className="h-4 w-4" />
+                Perfis
+              </Link>
+            </Button>
+          ) : undefined
+        }
       />
+
+      {kids.isParent && kids.children.length > 1 && (
+        <div className="mb-6 flex flex-wrap items-center gap-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            Perfil
+          </span>
+          {kids.children.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              onClick={() => kids.selectChild(c.id)}
+              className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
+                c.id === kids.activeId
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-muted/70"
+              }`}
+            >
+              {c.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       <section className="mb-8 rounded-3xl bg-gradient-to-br from-sky-500 via-violet-600 to-fuchsia-600 p-7 text-white shadow-lg">
         <p className="text-sm text-white/75">Nível {current.level}</p>
