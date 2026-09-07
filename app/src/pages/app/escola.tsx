@@ -136,21 +136,21 @@ export function EscolaPage() {
       <section>
         <h2 className="mb-4 font-display text-xl font-bold">Ferramentas da escola</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <a
-            href="/school-management.html"
+          <Link
+            to="/app/turmas"
             className="group flex flex-col rounded-2xl border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
           >
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-500 text-white">
               <School className="h-6 w-6" />
             </div>
-            <h3 className="font-display text-lg font-bold">Gestão Escolar</h3>
+            <h3 className="font-display text-lg font-bold">Turmas e Pessoas</h3>
             <p className="mt-1 mb-4 flex-1 text-sm text-muted-foreground">
               Turmas, códigos de acesso e vínculo de professores e alunos.
             </p>
             <span className="inline-flex items-center gap-1.5 text-[0.7rem] font-extrabold uppercase tracking-wider text-primary group-hover:gap-2.5">
               Abrir <ArrowRight className="h-3.5 w-3.5" />
             </span>
-          </a>
+          </Link>
 
           <Link
             to="/app/estudio"

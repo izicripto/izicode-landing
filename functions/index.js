@@ -200,11 +200,33 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
  * direto do navegador (BYOK), sem passar por aqui.
  */
 const CHAT_MODELS = ["gemini-2.0-flash", "gemini-flash-latest", "gemini-1.5-flash"];
-const CHAT_SYSTEM_PROMPT =
-    "Você é o assistente pedagógico da Izicode Edu, especialista em robótica " +
-    "educacional, cultura maker, BNCC e ensino de programação para crianças e " +
-    "adolescentes. Responda em português do Brasil, de forma prática e direta, " +
-    "sempre pensando em como o professor vai aplicar aquilo em sala de aula.";
+
+/**
+ * As personas ficam NO SERVIDOR e o cliente só escolhe uma pela chave.
+ * Aceitar um system prompt vindo do navegador deixaria qualquer usuário
+ * reescrever as regras — inclusive as de segurança infantil do tutor —
+ * usando a chave de IA que a Izicode paga.
+ */
+const CHAT_PERSONAS = {
+    professor:
+        "Você é o assistente pedagógico da Izicode Edu, especialista em robótica " +
+        "educacional, cultura maker, BNCC e ensino de programação para crianças e " +
+        "adolescentes. Responda em português do Brasil, de forma prática e direta, " +
+        "sempre pensando em como o professor vai aplicar aquilo em sala de aula.",
+    aluno:
+        "Você é o 'Tutor Izicode', um assistente amigável para crianças e adolescentes. " +
+        "REGRAS: 1) Você SÓ responde sobre Programação, Robótica, Lógica, Matemática e " +
+        "Ciências. 2) Se perguntarem sobre qualquer outro assunto (violência, política, " +
+        "relacionamentos, conteúdo adulto, fofoca), recuse gentilmente e convide de volta: " +
+        "'Eu sou um robô de programação, só sei falar de código! Que tal criarmos um jogo?'. " +
+        "3) Use linguagem simples, exemplos divertidos e emojis com moderação. " +
+        "4) Nunca entregue a resposta pronta do dever de casa — dê pistas para o aluno chegar lá. " +
+        "5) Seja sempre encorajador e nunca peça dados pessoais da criança."
+};
+
+function resolvePersona(value) {
+    return CHAT_PERSONAS[value] ? value : "professor";
+}
 
 exports.aiChat = functions.https.onCall(async (data, context) => {
     if (!context.auth) {
@@ -239,9 +261,10 @@ exports.aiChat = functions.https.onCall(async (data, context) => {
 
     // Só as últimas trocas vão para a API: além de baratear a chamada, evita
     // estourar o limite de contexto numa conversa longa.
+    const persona = resolvePersona(data.persona);
     const contents = [
-        { role: 'user', parts: [{ text: CHAT_SYSTEM_PROMPT }] },
-        { role: 'model', parts: [{ text: 'Entendido. Como posso ajudar na sua aula?' }] },
+        { role: 'user', parts: [{ text: CHAT_PERSONAS[persona] }] },
+        { role: 'model', parts: [{ text: 'Entendido. Como posso ajudar?' }] },
         ...history.slice(-12).map((m) => ({
             role: m.role === 'ai' || m.role === 'model' ? 'model' : 'user',
             parts: [{ text: String(m.text || '').slice(0, 8000) }]

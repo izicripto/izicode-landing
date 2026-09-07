@@ -60,7 +60,7 @@ const SCHOOL_NAV: NavGroup[] = [
     group: "Gestão",
     items: [
       { to: "/app/escola", label: "Visão Geral", icon: Home },
-      { to: "/school-management.html", label: "Gestão Escolar", icon: School, external: true },
+      { to: "/app/turmas", label: "Turmas e Pessoas", icon: School },
       { to: "/app/biblioteca", label: "Biblioteca", icon: Library },
     ],
   },
@@ -87,7 +87,8 @@ const STUDENT_NAV: NavGroup[] = [
     items: [
       { to: "/app/aluno", label: "Meu Painel", icon: Home },
       { to: "/quiz-arena.html", label: "Arena de Quiz", icon: Gamepad2, external: true },
-      { to: "/ranking.html", label: "Ranking", icon: Trophy, external: true },
+      { to: "/app/tutor", label: "Tutor IA", icon: Bot },
+      { to: "/app/ranking", label: "Ranking", icon: Trophy },
     ],
   },
   {

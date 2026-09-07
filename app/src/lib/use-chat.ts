@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { askAI, getStoredApiKey, API_KEY_STORAGE, type ChatTurn } from "@/lib/ai"
+import { askAI, getStoredApiKey, API_KEY_STORAGE, type ChatTurn, type Persona } from "@/lib/ai"
 
 export type ChatMessage = ChatTurn
 
@@ -9,28 +9,34 @@ export interface ChatSession {
   messages: ChatMessage[]
 }
 
-/** Mesma chave do assistente legado: quem já tinha histórico não perde nada. */
-const HISTORY_KEY = "izicode_chat_history"
+/** Mesma chave do assistente legado: quem já tinha histórico não perde
+ *  nada. O tutor do aluno guarda em chave separada — são conversas de
+ *  pessoas diferentes no mesmo dispositivo e não devem se misturar. */
+const HISTORY_KEYS: Record<Persona, string> = {
+  professor: "izicode_chat_history",
+  aluno: "izicode_tutor_history",
+}
 const MAX_SESSIONS = 10
 
-function readSessions(): ChatSession[] {
+function readSessions(storageKey: string): ChatSession[] {
   try {
-    const raw = localStorage.getItem(HISTORY_KEY)
+    const raw = localStorage.getItem(storageKey)
     return raw ? (JSON.parse(raw) as ChatSession[]) : []
   } catch {
     return []
   }
 }
 
-function writeSessions(sessions: ChatSession[]) {
+function writeSessions(storageKey: string, sessions: ChatSession[]) {
   try {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(sessions.slice(0, MAX_SESSIONS)))
+    localStorage.setItem(storageKey, JSON.stringify(sessions.slice(0, MAX_SESSIONS)))
   } catch (error) {
     console.warn("Não foi possível salvar o histórico do chat:", error)
   }
 }
 
-export function useChat(isPro: boolean) {
+export function useChat(isPro: boolean, persona: Persona = "professor") {
+  const storageKey = HISTORY_KEYS[persona]
   const [sessions, setSessions] = useState<ChatSession[]>([])
   const [currentId, setCurrentId] = useState<string | null>(null)
   const [sending, setSending] = useState(false)
@@ -39,20 +45,23 @@ export function useChat(isPro: boolean) {
   const sessionsRef = useRef<ChatSession[]>([])
 
   useEffect(() => {
-    const stored = readSessions()
+    const stored = readSessions(storageKey)
     sessionsRef.current = stored
     setSessions(stored)
     setCurrentId(stored[0]?.id ?? null)
     setApiKeyState(getStoredApiKey())
-  }, [])
+  }, [storageKey])
 
   const current = sessions.find((s) => s.id === currentId) ?? null
 
-  const persist = useCallback((next: ChatSession[]) => {
-    sessionsRef.current = next
-    setSessions(next)
-    writeSessions(next)
-  }, [])
+  const persist = useCallback(
+    (next: ChatSession[]) => {
+      sessionsRef.current = next
+      setSessions(next)
+      writeSessions(storageKey, next)
+    },
+    [storageKey]
+  )
 
   const setApiKey = useCallback((key: string) => {
     const trimmed = key.trim()
@@ -115,7 +124,7 @@ export function useChat(isPro: boolean) {
 
       setSending(true)
       try {
-        const reply = await askAI({ isPro, apiKey, history, message })
+        const reply = await askAI({ isPro, apiKey, history, message, persona })
         persist(
           sessionsRef.current.map((s) =>
             s.id === sessionId ? { ...s, messages: [...s.messages, { role: "ai" as const, text: reply }] } : s
@@ -127,7 +136,7 @@ export function useChat(isPro: boolean) {
         setSending(false)
       }
     },
-    [apiKey, currentId, isPro, persist, sending]
+    [apiKey, currentId, isPro, persist, persona, sending]
   )
 
   return {
