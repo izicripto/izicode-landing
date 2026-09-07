@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
+import { Link } from "react-router-dom"
 import { Library, Search } from "lucide-react"
 import { loadProjects, type LegacyProject } from "@/lib/legacy-data"
 import { PageHeader, EmptyState } from "@/components/dashboard/page-header"
@@ -82,9 +83,9 @@ export function BibliotecaPage() {
           </p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {visible.map((project) => (
-              <a
+              <Link
                 key={project.id}
-                href={`/project-view.html?id=${project.id}`}
+                to={`/app/projeto/${project.id}`}
                 className="group flex flex-col rounded-2xl border bg-card p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
               >
                 <div className="mb-3 flex flex-wrap gap-1.5">
@@ -106,7 +107,7 @@ export function BibliotecaPage() {
                     {project.difficulty}
                   </p>
                 )}
-              </a>
+              </Link>
             ))}
           </div>
         </>

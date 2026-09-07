@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { BookOpen, Lock, CheckCircle2 } from "lucide-react"
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "@/lib/firebase"
@@ -87,9 +88,9 @@ export function AcademiaPage() {
             }
 
             return (
-              <a
+              <Link
                 key={course.id}
-                href={`/curso.html?id=${course.id}`}
+                to={`/app/academia/${course.id}`}
                 className="group flex flex-col rounded-2xl border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
               >
                 <div className="mb-4 flex items-center justify-between">
@@ -135,7 +136,7 @@ export function AcademiaPage() {
                     )}
                   </span>
                 </div>
-              </a>
+              </Link>
             )
           })}
         </div>

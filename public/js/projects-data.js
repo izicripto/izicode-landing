@@ -528,9 +528,53 @@ Um projeto avançado de mecânica e eletrônica onde os alunos montam um braço 
         difficulty: "Intermediário",
         duration: "3 aulas",
         grade: "Ensino Fundamental I (3º ao 5º ano)",
-        image: "scratch-story",
+        image: "images/scratch.png",
         ods: "ODS 4 - Educação de Qualidade",
-        bncc: ["EF15LP05", "EF15AR26"]
+        bncc: ["EF15LP05", "EF15AR26"],
+        content: `
+# História Interativa no Scratch
+
+## Visão Geral
+Crie uma história em que o leitor decide o que acontece: em momentos-chave, dois botões aparecem na tela e cada escolha leva a um final diferente. É o formato dos livros "escolha sua aventura", programado com cenários, diálogos e mensagens entre atores.
+
+## Objetivos de Aprendizagem
+- Estruturar uma narrativa com começo, conflito, escolhas e múltiplos finais.
+- Usar transmissão de mensagens para coordenar cenas entre atores e cenários.
+- Personalizar a história com uma variável (o nome do herói, digitado pelo leitor).
+
+## Passo a passo
+1. **Roteiro no papel:** desenhe a árvore da história antes de abrir o Scratch — cena 1 leva às cenas 2A ou 2B; cada uma leva a um final. Três cenas e dois finais já são suficientes.
+2. **Cenários:** crie ou importe um pano de fundo por cena (floresta, caverna, castelo). Cada escolha transmite uma mensagem que troca o cenário.
+3. **Herói com nome:** no início, use o bloco "pergunte ... e espere" para pedir o nome do leitor e guarde a resposta numa variável "herói". Use "junte ... com ..." para colocar o nome dentro dos diálogos.
+4. **Botões de escolha:** crie dois atores-botão ("Entrar na caverna" e "Seguir pela floresta"). Quando clicados, cada um transmite a mensagem da sua cena.
+5. **Finais:** cada final mostra o último cenário, um diálogo de encerramento e o botão "Recomeçar" (que transmite a mensagem da cena 1).
+
+## Estrutura de mensagens (exemplo)
+\`\`\`scratch
+quando bandeira verde clicada
+  pergunte [Qual é o nome do herói?] e espere
+  defina [herói] para (resposta)
+  transmita [cena1]
+
+quando eu receber [cena1]
+  mude cenário para [floresta]
+  diga (junte [herói] encontrou uma bifurcação... ) por 3 segundos
+
+quando este ator for clicado  // botão "Caverna"
+  transmita [cenaCaverna]
+
+quando eu receber [finalBom]
+  mude cenário para [tesouro]
+  diga (junte [Parabéns, ] (junte (herói) [! Você achou o tesouro!])) por 4 segundos
+\`\`\`
+
+## Avaliação
+Cada dupla apresenta sua história para outra dupla jogar. A turma avalia: as duas escolhas levam a lugares diferentes? O nome do herói aparece nos diálogos? Existe pelo menos um final bom e um final surpreendente?
+
+## Desafios Extras
+- **Trilha sonora:** adicione um som diferente por cena (suspense na caverna, alegria no tesouro).
+- **Placar de coragem:** crie uma variável "coragem" que sobe ou desce conforme as escolhas, e mude o final de acordo com o valor dela.
+`
     },
     {
         id: "sensor-umidade-solo",
@@ -540,9 +584,94 @@ Um projeto avançado de mecânica e eletrônica onde os alunos montam um braço 
         difficulty: "Intermediário",
         duration: "4 aulas",
         grade: "Ensino Fundamental II (7º e 8º ano)",
-        image: "arduino-sensor",
+        image: "images/arduino.png",
         ods: "ODS 2 - Fome Zero e Agricultura Sustentável",
-        bncc: ["EF07CI08"]
+        bncc: ["EF07CI08"],
+        teacherGuide: {
+            objective: "Ensinar leitura analógica, calibração de sensores e automação aplicada à agricultura sustentável.",
+            skills: ["Investigação científica", "Pensamento Algorítmico", "Sustentabilidade"],
+            assessment: "O sistema distingue solo seco de solo úmido e aciona o alerta/irrigação no limite calibrado pela turma?"
+        },
+        content: `
+# Sensor de Umidade do Solo com Arduino
+
+## Visão Geral
+Monte um monitor de horta: um sensor de umidade espetado na terra lê o quanto o solo está seco ou molhado, o Arduino decide se a planta precisa de água e acende um alerta (ou liga uma minibomba). É o projeto-ponte entre eletrônica e ciências da natureza — e a base do projeto "Sistema de Irrigação Inteligente" da Biblioteca.
+
+## Objetivos de Aprendizagem
+- **Eletrônica analógica:** ler valores contínuos (0–1023) com \`analogRead\` e converter em porcentagem com \`map\`.
+- **Método científico:** calibrar o sensor medindo dois extremos conhecidos (ar seco e água) antes de programar os limites.
+- **Automação:** transformar uma medida em decisão automática com histerese simples (liga num limite, desliga em outro).
+
+## Materiais
+- 1x Arduino Uno + cabo USB
+- 1x Sensor de umidade do solo (higrômetro com módulo comparador)
+- 1x LED vermelho + resistor 220Ω (alerta "precisa de água")
+- 1x LED verde + resistor 220Ω (solo ok)
+- Jumpers, protoboard e um vaso com terra
+
+## Montagem Passo a Passo
+1. **Sensor:** VCC → 5V, GND → GND, saída analógica (A0 do módulo) → pino A0 do Arduino.
+2. **LEDs:** LED verde → pino digital 8 (com resistor), LED vermelho → pino digital 9 (com resistor), catodos → GND.
+3. **Instalação:** espete a sonda na terra do vaso até metade. Não enterre o módulo eletrônico — só a sonda.
+
+## Calibração (antes de programar!)
+Com este sketch temporário, anote os valores do Monitor Serial:
+\`\`\`cpp
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  Serial.println(analogRead(A0));
+  delay(500);
+}
+\`\`\`
+1. Segure a sonda **no ar** e anote o valor (ex: ~950) — esse é o "100% seco".
+2. Mergulhe só a ponta da sonda **num copo d'água** e anote (ex: ~350) — esse é o "100% molhado".
+3. Use esses dois números no \`map\` do código final — cada sensor e cada solo têm valores próprios, copiar número pronto da internet dá leitura errada.
+
+## Código base
+\`\`\`cpp
+const int SENSOR_PIN = A0;
+const int LED_OK = 8;
+const int LED_SECO = 9;
+
+// Troque pelos valores medidos na calibração da sua turma:
+const int VALOR_NO_AR = 950;   // solo totalmente seco
+const int VALOR_NA_AGUA = 350; // solo encharcado
+
+void setup() {
+  pinMode(LED_OK, OUTPUT);
+  pinMode(LED_SECO, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int leitura = analogRead(SENSOR_PIN);
+  // Converte para porcentagem (note a ordem invertida: valor alto = seco)
+  int umidade = map(leitura, VALOR_NO_AR, VALOR_NA_AGUA, 0, 100);
+  umidade = constrain(umidade, 0, 100);
+  Serial.println(umidade);
+
+  if (umidade < 30) {
+    digitalWrite(LED_SECO, HIGH); // precisa de água!
+    digitalWrite(LED_OK, LOW);
+  } else {
+    digitalWrite(LED_SECO, LOW);
+    digitalWrite(LED_OK, HIGH);
+  }
+  delay(1000);
+}
+\`\`\`
+
+## Avaliação
+Cada grupo apresenta sua tabela de calibração (valor no ar, valor na água) e demonstra os dois LEDs trocando ao regar o vaso de verdade. Pergunta oral: por que cada grupo tem números de calibração diferentes?
+
+## Desafios Extras
+- **Irrigação automática:** troque o LED vermelho por um módulo relé + minibomba 5V — quando a umidade cai, a bomba rega sozinha por 5 segundos.
+- **Diário da horta:** anote a umidade todo dia durante uma semana e faça um gráfico — vira dado real de ciências.
+`
     },
     {
         id: "pedometro-microbit",
@@ -552,9 +681,58 @@ Um projeto avançado de mecânica e eletrônica onde os alunos montam um braço 
         difficulty: "Intermediário",
         duration: "2 aulas",
         grade: "Ensino Fundamental II (6º e 7º ano)",
-        image: "microbit-step",
+        image: "images/microbit.png",
         ods: "ODS 3 - Saúde e Bem-Estar",
-        bncc: ["EF06CI06"]
+        bncc: ["EF06CI06"],
+        content: `
+# Pedômetro com Micro:bit (MicroPython)
+
+## Visão Geral
+Transforme o Micro:bit num contador de passos de verdade: o acelerômetro embutido detecta o "balanço" de cada passo, o programa soma 1 a cada detecção e mostra o total na matriz de LEDs. Prenda a placa no bolso ou no tênis e faça um desafio de caminhada com a turma — saúde e dados reais na mesma aula.
+
+## Objetivos de Aprendizagem
+- **Sensores:** entender que o acelerômetro mede a força em 3 eixos (X, Y, Z), incluindo a gravidade.
+- **Detecção de eventos:** transformar um sinal contínuo (balanço) num evento discreto (1 passo) com um limiar.
+- **Python real:** escrever o projeto em MicroPython, a mesma linguagem usada em ciência de dados e automação.
+
+## Passo a passo
+1. **Editor Python:** abra o editor Python do Micro:bit (python.microbit.org), que também tem simulador para testar sem a placa.
+2. **Entenda o gesto pronto:** o MicroPython tem \`accelerometer.was_gesture('shake')\`, que detecta um balanço — cada passo com a placa no bolso gera um balanço detectável.
+3. **Contador:** crie a variável \`passos\`, some 1 a cada gesto detectado e mostre o valor na tela.
+4. **Zerar:** use o botão B para zerar o contador (com confirmação visual) e o botão A para mostrar o total atual.
+5. **Na placa:** grave o arquivo .hex, prenda o Micro:bit no cadarço ou no bolso com fita, e caminhe 20 passos contando mentalmente para comparar com o número da placa.
+
+## Código base (MicroPython)
+\`\`\`python
+from microbit import *
+
+passos = 0
+display.show(passos)
+
+while True:
+    # Cada balanço detectado = 1 passo
+    if accelerometer.was_gesture('shake'):
+        passos += 1
+        display.show(passos)
+    # Botão A: mostra o total atual
+    if button_a.was_pressed():
+        display.scroll(passos)
+    # Botão B: zera o contador
+    if button_b.was_pressed():
+        passos = 0
+        display.show(passos)
+    sleep(100)
+\`\`\`
+
+> **Calibração com o corpo:** caminhe 20 passos contando de verdade e compare com a placa. Se contar a mais (balanço do braço conta duplo), prenda a placa mais firme; se contar a menos, caminhe marcando mais o passo. Discutir esse erro de medição faz parte da aula.
+
+## Avaliação
+Desafio da turma: volta completa no pátio — cada aluno anota os passos da placa e estima o comprimento médio do próprio passo (distância total ÷ passos). Quem chega mais perto da distância real medida com trena?
+
+## Desafios Extras
+- **Meta diária:** adicione uma meta (ex: 100 passos) — quando atingir, o Micro:bit mostra um ícone de troféu e toca uma melodia.
+- **Detector de sedentarismo:** se passar 60 segundos sem nenhum passo, mostre um ícone "levante-se" como lembrete.
+`
     },
     {
         id: "calculadora-scratch",
@@ -564,9 +742,61 @@ Um projeto avançado de mecânica e eletrônica onde os alunos montam um braço 
         difficulty: "Básico",
         duration: "2 aulas",
         grade: "Ensino Fundamental II (6º ano)",
-        image: "scratch-calc",
+        image: "images/scratch.png",
         ods: "ODS 4 - Educação de Qualidade",
-        bncc: ["EF06MA03"]
+        bncc: ["EF06MA03"],
+        content: `
+# Calculadora Interativa no Scratch
+
+## Visão Geral
+Desenvolva uma calculadora que pergunta dois números e a operação desejada, calcula o resultado e o exibe na tela. No caminho, a turma pratica variáveis, operadores matemáticos e condicionais encadeadas — os mesmos blocos usados depois em jogos com placar e vidas.
+
+## Objetivos de Aprendizagem
+- Guardar valores digitados pelo usuário em variáveis ("número 1", "número 2", "resultado").
+- Usar os operadores de soma, subtração, multiplicação e divisão da categoria Operadores.
+- Tratar um caso de erro real: divisão por zero.
+
+## Passo a passo
+1. **Variáveis:** crie três variáveis — "número 1", "número 2" e "resultado". Deixe-as visíveis no palco durante os testes.
+2. **Entrada de dados:** com "pergunte ... e espere", peça o primeiro número e guarde a resposta em "número 1"; repita para o segundo número.
+3. **Escolha da operação:** pergunte "Qual operação? (+, -, x, /)" e guarde em uma variável "operação".
+4. **Condicionais encadeadas:** use blocos "se ... então, senão" aninhados para comparar a operação digitada e calcular o resultado correspondente.
+5. **Exibição:** mostre o resultado com o bloco "diga ... por 2 segundos", montando a frase com "junte" (ex: "7 + 5 = 12").
+
+## Estrutura dos blocos
+\`\`\`scratch
+quando bandeira verde clicada
+  pergunte [Digite o primeiro número:] e espere
+  defina [número 1] para (resposta)
+  pergunte [Digite o segundo número:] e espere
+  defina [número 2] para (resposta)
+  pergunte [Operação? (+, -, x, /)] e espere
+  defina [operação] para (resposta)
+  se <(operação) = [+]> então
+    defina [resultado] para ((número 1) + (número 2))
+  senão
+    se <(operação) = [-]> então
+      defina [resultado] para ((número 1) - (número 2))
+    senão
+      se <(operação) = [x]> então
+        defina [resultado] para ((número 1) * (número 2))
+      senão
+        se <(operação) = [/]> então
+          se <(número 2) = [0]> então
+            diga [Não é possível dividir por zero!] por 2 segundos
+            pare [este script]
+          fim
+          defina [resultado] para ((número 1) / (número 2))
+  diga (junte (junte (junte (junte (número 1) [ ] ) (operação)) [ = ]) (resultado)) por 3 segundos
+\`\`\`
+
+## Avaliação
+Teste em duplas: cada aluno digita 5 contas (incluindo uma divisão por zero de propósito) e confere se o resultado bate com o cálculo mental ou com a calculadora do celular. Vale ponto extra explicar por que a divisão por zero precisa de um tratamento especial.
+
+## Desafios Extras
+- **Potência e resto:** adicione as operações de potência e resto da divisão usando os blocos de Operadores.
+- **Modo prova:** crie uma variável "pontos" — a calculadora sorteia uma conta, o usuário responde, e ganha 1 ponto por acerto em 10 rodadas.
+`
     },
     {
         id: "alarme-distancia",
@@ -576,9 +806,93 @@ Um projeto avançado de mecânica e eletrônica onde os alunos montam um braço 
         difficulty: "Básico",
         duration: "2 aulas",
         grade: "Ensino Fundamental II (7º ano)",
-        image: "arduino-alarm",
+        image: "images/arduino.png",
         ods: "ODS 9 - Inovação",
-        bncc: ["EF07TEC01"]
+        bncc: ["EF07TEC01"],
+        teacherGuide: {
+            objective: "Ensinar medição de distância com sensor ultrassônico e resposta proporcional com tons de buzzer.",
+            skills: ["Pensamento Algorítmico", "Resolução de problemas", "Medidas e grandezas"],
+            assessment: "O alarme muda de comportamento em pelo menos 3 faixas de distância diferentes?"
+        },
+        content: `
+# Alarme de Proximidade com Arduino
+
+## Visão Geral
+Monte um "radar de estacionamento" de brinquedo: um sensor ultrassônico HC-SR04 mede a distância até o objeto mais próximo e um buzzer apita cada vez mais rápido conforme algo se aproxima — igual ao sensor de ré dos carros. É a primeira vez que a turma vê um sensor que devolve um número contínuo, não só ligado/desligado.
+
+## Objetivos de Aprendizagem
+- **Eletrônica:** ligar o sensor HC-SR04 (VCC, GND, Trig, Echo) e um buzzer ativo ao Arduino.
+- **Física aplicada:** entender que o sensor mede o tempo de ida e volta do som e converte em distância.
+- **Lógica proporcional:** transformar uma medida contínua em faixas de comportamento (longe, perto, muito perto).
+
+## Materiais
+- 1x Arduino Uno + cabo USB
+- 1x Sensor ultrassônico HC-SR04
+- 1x Buzzer ativo 5V
+- Jumpers e protoboard
+
+## Montagem Passo a Passo
+1. **Sensor:** VCC → 5V, GND → GND, Trig → pino digital 9, Echo → pino digital 10.
+2. **Buzzer:** pino positivo (+) → pino digital 8, pino negativo (−) → GND.
+3. **Posicionamento:** aponte o sensor para uma área livre da mesa — ele enxerga num cone de cerca de 15° e mede de 2 cm até 4 m.
+
+## Código base
+\`\`\`cpp
+const int TRIG_PIN = 9;
+const int ECHO_PIN = 10;
+const int BUZZER_PIN = 8;
+
+void setup() {
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Dispara o pulso ultrassônico
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  // Mede o tempo de eco e converte em cm (velocidade do som ~0,034 cm/us, ida e volta)
+  long duracao = pulseIn(ECHO_PIN, HIGH);
+  float distancia = duracao * 0.034 / 2;
+  Serial.println(distancia);
+
+  if (distancia < 20) {
+    // Muito perto: apito contínuo e agudo
+    tone(BUZZER_PIN, 1200);
+  } else if (distancia < 50) {
+    // Perto: bipes rápidos
+    tone(BUZZER_PIN, 800);
+    delay(100);
+    noTone(BUZZER_PIN);
+    delay(100);
+  } else if (distancia < 100) {
+    // Longe: bipes espaçados
+    tone(BUZZER_PIN, 600);
+    delay(100);
+    noTone(BUZZER_PIN);
+    delay(400);
+  } else {
+    noTone(BUZZER_PIN);
+    delay(200);
+  }
+}
+\`\`\`
+
+> **Leitura do Monitor Serial:** abra o Monitor Serial e aproxime a mão do sensor. Os números caem em tempo real — é a depuração mais direta possível: o aluno vê o dado bruto antes de qualquer lógica.
+
+## Avaliação
+Cada grupo demonstra o alarme com a mão em 3 distâncias (ex: 80 cm, 40 cm, 10 cm) e explica qual faixa do código foi ativada em cada uma. Pergunta oral: por que dividimos o tempo por 2 no cálculo?
+
+## Desafios Extras
+- **Semáforo de distância:** troque o buzzer por 3 LEDs (verde/amarelo/vermelho), um por faixa — o mesmo circuito lógico, outra saída.
+- **Zona silenciosa:** adicione um botão que liga/desliga o alarme (modo "silencioso"), como os sensores de ré reais têm.
+`
     },
     {
         id: "jogo-memoria-microbit",
@@ -588,9 +902,67 @@ Um projeto avançado de mecânica e eletrônica onde os alunos montam um braço 
         difficulty: "Intermediário",
         duration: "3 aulas",
         grade: "Ensino Fundamental II (6º ao 8º ano)",
-        image: "microbit-game",
+        image: "images/microbit.png",
         ods: "ODS 4 - Educação de Qualidade",
-        bncc: ["EF06MA16"]
+        bncc: ["EF06MA16"],
+        content: `
+# Jogo da Memória LED (Genius) no Micro:bit
+
+## Visão Geral
+Recrie o clássico Genius/Simon: o Micro:bit mostra uma sequência de sinais que cresce a cada rodada, e o jogador precisa repetir a sequência exatamente. São 4 sinais possíveis — botão A, botão B, sacudir e inclinar — que combinam entrada física, memória e lógica de comparação, tudo sem nenhum componente externo.
+
+## Objetivos de Aprendizagem
+- **Listas:** guardar a sequência secreta numa lista e comparar posição por posição com a jogada do jogador.
+- **Aleatoriedade:** gerar cada novo passo da sequência com "escolher aleatório".
+- **Máquina de estados:** organizar o jogo em fases (mostrar sequência → aguardar jogada → verificar → próxima rodada ou fim de jogo).
+
+## Os 4 sinais
+| Número | Sinal | Como mostrar | Como o jogador responde |
+|---|---|---|---|
+| 1 | Botão A | Seta para esquerda | Aperta o botão A |
+| 2 | Botão B | Seta para direita | Aperta o botão B |
+| 3 | Sacudir | Ícone "surpreso" | Sacode a placa |
+| 4 | Inclinar | Seta para baixo | Inclina a placa |
+
+## Passo a passo (MakeCode, blocos)
+1. **Variáveis e lista:** crie a lista "sequência", a variável "rodada" (começa em 0) e a variável "posição".
+2. **Nova rodada:** ao iniciar e a cada acerto completo, some 1 à rodada, adicione "escolher aleatório 1 a 4" ao fim da lista e chame a função "mostrar sequência".
+3. **Mostrar sequência:** para cada item da lista, exiba o ícone correspondente por 500 ms com pausa de 300 ms entre eles — o jogador só observa.
+4. **Ler a jogada:** zere "posição"; a cada gesto do jogador (botão A, botão B, sacudir, inclinar), converta em número (1–4) e compare com o item da lista na "posição" atual.
+5. **Verificar:** se acertar a sequência inteira, toque melodia de vitória e comece a próxima rodada; se errar qualquer item, mostre "X", exiba a pontuação (rodada − 1) e reinicie.
+
+## Estrutura dos blocos (resumo)
+\`\`\`
+ao iniciar
+  definir rodada para 0
+  apagar lista [sequência]
+  chamar [nova rodada]
+
+função [nova rodada]
+  mudar rodada por 1
+  adicionar (escolher aleatório 1 a 4) à lista [sequência]
+  chamar [mostrar sequência]
+
+função [mostrar sequência]
+  para cada item da lista [sequência]
+    mostrar ícone do sinal (item)
+    pausar 500 ms
+    limpar tela
+    pausar 300 ms
+
+ao pressionar botão [A]  →  chamar [tentativa] com 1
+ao pressionar botão [B]  →  chamar [tentativa] com 2
+ao [sacudir]             →  chamar [tentativa] com 3
+ao [inclinar]            →  chamar [tentativa] com 4
+\`\`\`
+
+## Avaliação
+Torneio em duplas: um joga, o outro anota a rodada máxima alcançada. Depois trocam. A dupla registra as duas pontuações e explica para a turma onde o programa "decide" entre vitória e derrota (a comparação na função de tentativa).
+
+## Desafios Extras
+- **Modo rápido:** a cada 3 rodadas, diminua o tempo de exibição (500 → 350 → 250 ms) usando uma variável "velocidade".
+- **Recorde salvo:** guarde a maior pontuação numa variável e mostre o recorde ao ligar a placa, antes de começar.
+`
     },
     {
         id: "animacao-stop-motion",
@@ -600,9 +972,49 @@ Um projeto avançado de mecânica e eletrônica onde os alunos montam um braço 
         difficulty: "Intermediário",
         duration: "4 aulas",
         grade: "Ensino Fundamental I (4º e 5º ano)",
-        image: "scratch-animation",
+        image: "images/scratch.png",
         ods: "ODS 4 - Educação de Qualidade",
-        bncc: ["EF15AR04", "EF15AR26"]
+        bncc: ["EF15AR04", "EF15AR26"],
+        content: `
+# Animação Stop Motion no Scratch
+
+## Visão Geral
+Stop motion é a técnica de animar fotografando pequenos movimentos quadro a quadro — a mesma usada em filmes como "A Fuga das Galinhas". No Scratch, cada "foto" é uma fantasia do ator, e um loop com espera curta cria a ilusão de movimento. A turma aprende taxa de quadros, roteiro e sincronia entre imagem e som.
+
+## Objetivos de Aprendizagem
+- Entender taxa de quadros: quantos quadros por segundo criam um movimento suave.
+- Planejar uma cena com roteiro e storyboard antes de animar.
+- Sincronizar falas, efeitos sonoros e música com a animação.
+
+## Passo a passo
+1. **Storyboard no papel:** divida a história em 4 a 6 quadros e desenhe o que acontece em cada um. Defina também quem fala e que som toca.
+2. **Fantasias como quadros:** desenhe o personagem no editor de fantasias e duplique a fantasia várias vezes, mudando um pouquinho a posição em cada cópia (braço levantando, perna andando).
+3. **Loop de animação:** use "repita" ou "sempre" com "próxima fantasia" e "espere 0,1 segundos" — 0,1 s por quadro equivale a 10 quadros por segundo, um bom ponto de partida.
+4. **Cenário e falas:** troque o pano de fundo por cena e use "diga ... por ... segundos" combinado com o tempo da animação.
+5. **Som:** grave a narração com o microfone (aba Sons → gravar) ou escolha efeitos da biblioteca, e dispare cada som no quadro certo com "toque o som ... até o fim".
+
+## Estrutura dos blocos
+\`\`\`scratch
+quando bandeira verde clicada
+  mude cenário para [parque]
+  mostre-se
+  repita (10)
+    próxima fantasia
+    espere (0.1) segundos
+  fim
+  diga [E assim o robô aprendeu a andar!] por 2 segundos
+  toque o som [fanfarra] até o fim
+\`\`\`
+
+> **Taxa de quadros na prática:** peça para testarem "espere 0,5 segundos" (2 quadros por segundo — movimento travado) contra "espere 0,05 segundos" (20 quadros por segundo — suave, mas exige muito mais fantasias). A turma descobre sozinha o compromisso entre suavidade e trabalho.
+
+## Avaliação
+Festival de curtas: cada grupo exibe sua animação (30 a 60 segundos) e a turma avalia com três critérios — a história tem começo, meio e fim? O movimento parece contínuo? O som combina com a cena?
+
+## Desafios Extras
+- **Efeito de câmera:** mova o cenário (não o personagem) para simular uma câmera que acompanha a ação.
+- **Créditos finais:** crie uma cena de encerramento com os nomes da equipe subindo pela tela, usando "mude y em ..." em loop.
+`
     },
     {
         id: "termometro-digital",
@@ -612,9 +1024,81 @@ Um projeto avançado de mecânica e eletrônica onde os alunos montam um braço 
         difficulty: "Básico",
         duration: "2 aulas",
         grade: "Ensino Fundamental II (6º e 7º ano)",
-        image: "arduino-temp",
+        image: "images/arduino.png",
         ods: "ODS 13 - Ação Contra Mudança do Clima",
-        bncc: ["EF06CI13"]
+        bncc: ["EF06CI13"],
+        teacherGuide: {
+            objective: "Ensinar conversão de leitura analógica em grandeza física (temperatura) e exibição em faixas com LEDs.",
+            skills: ["Grandezas e medidas", "Pensamento Algorítmico", "Investigação científica"],
+            assessment: "O termômetro exibe a temperatura correta e os LEDs indicam a faixa certa (frio, agradável, quente)?"
+        },
+        content: `
+# Termômetro Digital com Arduino
+
+## Visão Geral
+Construa um termômetro eletrônico: um sensor LM35 mede a temperatura ambiente, o Arduino converte a leitura em graus Celsius e mostra o valor no Monitor Serial, enquanto 3 LEDs indicam a faixa (frio, agradável, quente). É um projeto de instrumentação real — o mesmo princípio dos termômetros digitais de farmácia.
+
+## Objetivos de Aprendizagem
+- **Conversão de unidades:** transformar o número bruto do conversor analógico-digital (0–1023) em graus Celsius com uma fórmula.
+- **Faixas e limites:** usar condicionais encadeadas para classificar uma medida contínua em categorias.
+- **Clima e dados:** relacionar a medição com discussões sobre temperatura, conforto térmico e mudanças climáticas.
+
+## Materiais
+- 1x Arduino Uno + cabo USB
+- 1x Sensor de temperatura LM35
+- 3x LEDs (azul, verde, vermelho) + 3x resistores 220Ω
+- Jumpers e protoboard
+
+## Montagem Passo a Passo
+1. **LM35 (olhando a face plana com as pernas para baixo, da esquerda para a direita):** perna 1 (VCC) → 5V, perna 2 (saída) → pino A0, perna 3 (GND) → GND.
+2. **LEDs:** azul → pino 8, verde → pino 9, vermelho → pino 10 (todos com resistor em série), catodos → GND.
+3. **Atenção:** confira as pernas do LM35 duas vezes antes de ligar — inverter VCC e GND danifica o sensor.
+
+## Código base
+\`\`\`cpp
+const int SENSOR_PIN = A0;
+const int LED_FRIO = 8;      // azul
+const int LED_OK = 9;        // verde
+const int LED_QUENTE = 10;   // vermelho
+
+void setup() {
+  pinMode(LED_FRIO, OUTPUT);
+  pinMode(LED_OK, OUTPUT);
+  pinMode(LED_QUENTE, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int leitura = analogRead(SENSOR_PIN);
+  // LM35 entrega 10mV por ºC: converte 0-1023 para 0-5V e depois para ºC
+  float tensao = leitura * 5.0 / 1023.0;
+  float temperatura = tensao * 100.0;
+  Serial.println(temperatura);
+
+  digitalWrite(LED_FRIO, LOW);
+  digitalWrite(LED_OK, LOW);
+  digitalWrite(LED_QUENTE, LOW);
+
+  if (temperatura < 18) {
+    digitalWrite(LED_FRIO, HIGH);   // frio
+  } else if (temperatura <= 28) {
+    digitalWrite(LED_OK, HIGH);     // agradável
+  } else {
+    digitalWrite(LED_QUENTE, HIGH); // quente
+  }
+  delay(1000);
+}
+\`\`\`
+
+> **Teste com o corpo:** segure o LM35 entre os dedos por 30 segundos e observe a temperatura subir no Monitor Serial até perto dos 36–37 °C. É a prova mais convincente de que o instrumento mede de verdade.
+
+## Avaliação
+Cada grupo registra a temperatura da sala, do pátio (sol e sombra) e da mão fechada, e apresenta os três valores com os LEDs correspondentes. Pergunta oral: de onde vem o "100.0" da fórmula? (Resposta: o LM35 entrega 10 mV por grau, então 1 V = 100 °C.)
+
+## Desafios Extras
+- **Display LCD:** troque o Monitor Serial por um display LCD 16x2 com módulo I2C (biblioteca LiquidCrystal_I2C) e mostre a temperatura com uma casa decimal.
+- **Alerta de calor:** adicione um buzzer que apita quando a temperatura passa de 35 °C, como os alertas de insolação.
+`
     },
     {
         id: "carro-autonomo-nepo",

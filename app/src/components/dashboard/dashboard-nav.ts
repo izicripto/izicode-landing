@@ -3,6 +3,7 @@ import {
   Library,
   Sparkles,
   Bot,
+  PenLine,
   FolderKanban,
   GraduationCap,
   Cpu,
@@ -40,7 +41,8 @@ const TEACHER_NAV: NavGroup[] = [
     group: "Estúdio IA",
     items: [
       { to: "/app/estudio", label: "Estúdio IA", icon: Sparkles },
-      { to: "/ia-assistant.html", label: "Assistente IA", icon: Bot, external: true },
+      { to: "/app/assistente", label: "Assistente IA", icon: Bot },
+      { to: "/app/conteudo", label: "Criação de Conteúdo", icon: PenLine },
     ],
   },
   {
@@ -66,7 +68,8 @@ const SCHOOL_NAV: NavGroup[] = [
     group: "Estúdio IA",
     items: [
       { to: "/app/estudio", label: "Estúdio IA", icon: Sparkles },
-      { to: "/ia-assistant.html", label: "Assistente IA", icon: Bot, external: true },
+      { to: "/app/assistente", label: "Assistente IA", icon: Bot },
+      { to: "/app/conteudo", label: "Criação de Conteúdo", icon: PenLine },
     ],
   },
   {

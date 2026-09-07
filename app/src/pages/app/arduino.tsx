@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
+import { Link } from "react-router-dom"
 import { Cpu, Clock, ExternalLink } from "lucide-react"
 import { loadProjects, type LegacyProject } from "@/lib/legacy-data"
 import { PageHeader, EmptyState } from "@/components/dashboard/page-header"
@@ -76,9 +77,9 @@ export function ArduinoPage() {
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((project) => (
-            <a
+            <Link
               key={project.id}
-              href={`/project-view.html?id=${project.id}`}
+              to={`/app/projeto/${project.id}`}
               className="group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
             >
               <div className="relative flex h-40 items-center justify-center overflow-hidden bg-muted">
@@ -138,7 +139,7 @@ export function ArduinoPage() {
                   </span>
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       )}

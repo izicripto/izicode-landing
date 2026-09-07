@@ -138,12 +138,12 @@ export function DashboardLayout() {
 
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-[280px_1fr]">
-      <aside className="sticky top-0 hidden h-screen border-r bg-card lg:block">
+      <aside className="sticky top-0 hidden h-screen border-r bg-card lg:block print:hidden">
         <SidebarContent />
       </aside>
 
       <div className="flex min-h-screen min-w-0 flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/90 px-4 backdrop-blur lg:hidden">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/90 px-4 backdrop-blur lg:hidden print:hidden">
           <Button variant="ghost" size="icon" onClick={() => setDrawerOpen(true)} aria-label="Abrir menu">
             <Menu className="h-5 w-5" />
           </Button>
@@ -155,7 +155,7 @@ export function DashboardLayout() {
         </header>
 
         {drawerOpen && (
-          <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="fixed inset-0 z-50 lg:hidden print:hidden">
             <button
               type="button"
               aria-label="Fechar menu"

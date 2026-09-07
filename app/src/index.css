@@ -128,3 +128,67 @@
     @apply font-sans;
     }
 }
+
+/* Impressão de roteiros: sai só o conteúdo — sem menus, botões ou
+ * fundos escuros. Tabelas e blocos de código ganham formato de papel. */
+@media print {
+  @page {
+    margin: 15mm 14mm;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  .print-area {
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    color: #000 !important;
+  }
+
+  .print-area .md-h,
+  .print-area h1,
+  .print-area h2,
+  .print-area h3,
+  .print-area h4 {
+    break-after: avoid;
+    color: #000 !important;
+  }
+
+  .print-area p,
+  .print-area li {
+    color: #111 !important;
+  }
+
+  .print-area pre,
+  .print-area ul,
+  .print-area ol,
+  .print-area table {
+    break-inside: avoid;
+  }
+
+  .print-area .md-code {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 1px solid #94a3b8;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 10px;
+  }
+
+  .print-area .md-table-wrap {
+    border-color: #64748b !important;
+  }
+
+  .print-area th {
+    background: #e2e8f0 !important;
+    color: #000 !important;
+  }
+
+  .print-area th,
+  .print-area td {
+    border-color: #94a3b8 !important;
+  }
+}

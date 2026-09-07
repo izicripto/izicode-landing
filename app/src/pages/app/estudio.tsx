@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { httpsCallable } from "firebase/functions"
 import { Sparkles, Bot, FileText, Loader2, Lock, AlertCircle } from "lucide-react"
 import { functions } from "@/lib/firebase"
@@ -142,8 +142,8 @@ export function EstudioPage() {
         </section>
 
         <aside className="space-y-4">
-          <a
-            href="/ia-assistant.html"
+          <Link
+            to="/app/assistente"
             className="group flex gap-4 rounded-2xl border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"
           >
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white">
@@ -155,10 +155,10 @@ export function EstudioPage() {
                 Converse livremente para tirar dúvidas pedagógicas ou técnicas.
               </p>
             </div>
-          </a>
+          </Link>
 
-          <a
-            href="/create-project.html"
+          <Link
+            to="/app/conteudo"
             className="group flex gap-4 rounded-2xl border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"
           >
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-500 text-white">
@@ -167,10 +167,10 @@ export function EstudioPage() {
             <div>
               <h3 className="font-display font-bold">Criação de Conteúdo</h3>
               <p className="mt-0.5 text-sm text-muted-foreground">
-                Editor completo com modo manual, BNCC detalhada e exportação em PDF.
+                Formulário completo com modo manual, BNCC detalhada e pré-visualização.
               </p>
             </div>
-          </a>
+          </Link>
 
           {!pro && (
             <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">

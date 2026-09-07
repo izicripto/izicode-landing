@@ -14,6 +14,10 @@ import { BibliotecaPage } from "@/pages/app/biblioteca"
 import { NetworkingPage } from "@/pages/app/networking"
 import { AlunoPage } from "@/pages/app/aluno"
 import { EscolaPage } from "@/pages/app/escola"
+import { AssistentePage } from "@/pages/app/assistente"
+import { ConteudoPage } from "@/pages/app/conteudo"
+import { CursoPage } from "@/pages/app/curso"
+import { ProjetoPage } from "@/pages/app/projeto"
 
 /** Site institucional público: header e footer da landing. */
 function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -46,9 +50,13 @@ function App() {
             <Route path="/app" element={<DashboardLayout />}>
               <Route index element={<RoleHome />} />
               <Route path="estudio" element={<EstudioPage />} />
+              <Route path="assistente" element={<AssistentePage />} />
+              <Route path="conteudo" element={<ConteudoPage />} />
               <Route path="projetos" element={<ProjetosPage />} />
               <Route path="academia" element={<AcademiaPage />} />
+              <Route path="academia/:courseId" element={<CursoPage />} />
               <Route path="arduino" element={<ArduinoPage />} />
+              <Route path="projeto/:projectId" element={<ProjetoPage />} />
               <Route path="biblioteca" element={<BibliotecaPage />} />
               <Route path="networking" element={<NetworkingPage />} />
               <Route path="aluno" element={<AlunoPage />} />

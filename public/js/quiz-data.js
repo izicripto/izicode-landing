@@ -178,5 +178,275 @@ export const quizData = [
         correct: 1,
         explanation: "Bug é o nome dado a falhas de software. O termo surgiu quando um inseto real causou curto num computador antigo!",
         xp: 20
+    },
+    {
+        id: "mic-001",
+        category: "Micro:bit",
+        difficulty: "easy",
+        question: "O que o Micro:bit já traz de fábrica, sem comprar nada extra?",
+        options: [
+            "Sensores embutidos (movimento, bússola, luz, temperatura), botões e 25 LEDs",
+            "Um motor e duas rodas",
+            "Tela sensível ao toque colorida",
+            "Caixa de som estéreo"
+        ],
+        correct: 0,
+        explanation: "O Micro:bit já vem com acelerômetro, bússola, sensores de luz e temperatura, 2 botões e matriz de 25 LEDs — dá para fazer os primeiros projetos sem nenhum componente extra.",
+        xp: 10
+    },
+    {
+        id: "mic-002",
+        category: "Micro:bit",
+        difficulty: "easy",
+        question: "No MakeCode, qual bloco roda UMA vez quando a placa liga?",
+        options: [
+            "sempre",
+            "ao iniciar",
+            "ao pressionar botão A",
+            "pausar (ms)"
+        ],
+        correct: 1,
+        explanation: "O bloco 'ao iniciar' roda uma única vez ao ligar — é o equivalente ao setup() do Arduino.",
+        xp: 10
+    },
+    {
+        id: "mic-003",
+        category: "Micro:bit",
+        difficulty: "medium",
+        question: "Para que serve 'rádio definir grupo' no Micro:bit?",
+        options: [
+            "Aumentar o brilho dos LEDs",
+            "Criar um canal para que só placas do mesmo grupo se ouçam",
+            "Conectar a placa à internet",
+            "Salvar o programa na placa"
+        ],
+        correct: 1,
+        explanation: "O grupo de rádio funciona como um canal: só placas com o mesmo número se ouvem, evitando que uma dupla interfira na outra na mesma sala.",
+        xp: 15
+    },
+    {
+        id: "mic-004",
+        category: "Micro:bit",
+        difficulty: "medium",
+        question: "O sensor de temperatura do Micro:bit mede o quê, exatamente?",
+        options: [
+            "A temperatura exata do ar da sala",
+            "A temperatura do próprio chip (costuma marcar 2 a 4°C acima do ar)",
+            "A umidade do ar",
+            "A pressão atmosférica"
+        ],
+        correct: 1,
+        explanation: "O sensor mede o chip, que esquenta um pouco ao funcionar — por isso marca acima do ambiente. Ótima discussão sobre fontes de erro em medições reais!",
+        xp: 15
+    },
+    {
+        id: "mic-005",
+        category: "Micro:bit",
+        difficulty: "hard",
+        question: "Os valores do acelerômetro do Micro:bit variam aproximadamente entre...",
+        options: [
+            "0 e 100",
+            "-1023 e 1023",
+            "0 e 255",
+            "1 e 10"
+        ],
+        correct: 1,
+        explanation: "Assim como o analogRead do Arduino (0–1023, 10 bits), o acelerômetro devolve uma faixa numérica — aqui negativa e positiva, porque mede inclinação para os dois lados.",
+        xp: 25
+    },
+    {
+        id: "pyt-001",
+        category: "Python",
+        difficulty: "easy",
+        question: "Em Python, o que o comando print(\"Olá\") faz?",
+        options: [
+            "Apaga a tela",
+            "Mostra o texto na saída",
+            "Salva um arquivo",
+            "Desliga o computador"
+        ],
+        correct: 1,
+        explanation: "print() exibe informações — é a primeira ferramenta de todo programador para ver o que o código está fazendo.",
+        xp: 10
+    },
+    {
+        id: "pyt-002",
+        category: "Python",
+        difficulty: "easy",
+        question: "Qual símbolo marca um comentário em Python?",
+        options: [
+            "//",
+            "#",
+            "<!-- -->",
+            "**"
+        ],
+        correct: 1,
+        explanation: "Tudo depois do # na linha é ignorado pelo computador — serve para documentar o código para humanos.",
+        xp: 10
+    },
+    {
+        id: "pyt-003",
+        category: "Python",
+        difficulty: "medium",
+        question: "O que a linha `pontos = pontos + 1` faz?",
+        options: [
+            "Compara dois valores",
+            "Soma 1 ao valor atual da variável",
+            "Cria uma variável nova zerada",
+            "Apaga a variável pontos"
+        ],
+        correct: 1,
+        explanation: "O Python primeiro lê o valor atual de pontos, soma 1 e guarda de volta — é assim que placares e contadores funcionam.",
+        xp: 15
+    },
+    {
+        id: "pyt-004",
+        category: "Python",
+        difficulty: "medium",
+        question: "No Micro:bit em MicroPython, o que `display.show(5)` faz?",
+        options: [
+            "Mostra o número 5 na matriz de LEDs",
+            "Acende 5 LEDs aleatórios",
+            "Espera 5 segundos",
+            "Toca 5 bipes"
+        ],
+        correct: 0,
+        explanation: "display.show() desenha na matriz de 25 LEDs — números, textos (letra por letra) e ícones prontos.",
+        xp: 15
+    },
+    {
+        id: "pyt-005",
+        category: "Python",
+        difficulty: "hard",
+        question: "O que é indentação em Python e por que ela importa?",
+        options: [
+            "Um enfeite visual opcional",
+            "Os espaços no início da linha, que definem o que está dentro de um if ou loop",
+            "Um tipo especial de variável",
+            "Um erro de digitação"
+        ],
+        correct: 1,
+        explanation: "Python não usa chaves: é a indentação que diz ao computador quais linhas pertencem ao if ou ao while. Indentar errado muda o programa!",
+        xp: 25
+    },
+    {
+        id: "cod-001",
+        category: "Code.org",
+        difficulty: "easy",
+        question: "O que é o Hour of Code?",
+        options: [
+            "Uma atividade de cerca de 1 hora que introduz programação com personagens famosos",
+            "Um campeonato mundial de robótica",
+            "Uma prova online obrigatória",
+            "Um curso pago de informática"
+        ],
+        correct: 0,
+        explanation: "O Hour of Code usa personagens como os de Minecraft e Frozen para dar a primeira experiência com lógica de programação em uma aula.",
+        xp: 10
+    },
+    {
+        id: "cod-002",
+        category: "Code.org",
+        difficulty: "easy",
+        question: "Como alunos sem e-mail entram na turma do Code.org?",
+        options: [
+            "Não conseguem entrar",
+            "Com código da turma ou imagem/palavra secreta",
+            "Só com CPF dos pais",
+            "Ligando para o suporte"
+        ],
+        correct: 1,
+        explanation: "Para o Fundamental I, cada aluno recebe uma sequência de imagens como senha — ninguém precisa digitar e-mail.",
+        xp: 10
+    },
+    {
+        id: "cod-003",
+        category: "Code.org",
+        difficulty: "medium",
+        question: "Qual a diferença entre Code.org e Scratch?",
+        options: [
+            "Não há diferença",
+            "Code.org é currículo guiado com correção automática; Scratch é ferramenta aberta de criação",
+            "Scratch é pago e Code.org é grátis",
+            "Code.org só funciona sem internet"
+        ],
+        correct: 1,
+        explanation: "No Code.org as atividades já vêm sequenciadas e o professor acompanha o progresso; no Scratch o aluno cria livremente do zero.",
+        xp: 15
+    },
+    {
+        id: "cod-004",
+        category: "Code.org",
+        difficulty: "hard",
+        question: "No painel do professor do Code.org, os relatórios de progresso servem para...",
+        options: [
+            "Ver em que fase cada aluno travou e intervir onde a turma precisa",
+            "Alterar as notas oficiais da escola",
+            "Enviar e-mails automáticos aos pais",
+            "Gerar provas impressas"
+        ],
+        correct: 0,
+        explanation: "O papel do professor muda: em vez de conduzir a criação, ele acompanha os relatórios e intervém exatamente onde cada aluno travou.",
+        xp: 25
+    },
+    {
+        id: "log-004",
+        category: "Lógica",
+        difficulty: "hard",
+        question: "Numa condição com 'E' (AND), o resultado é verdadeiro quando...",
+        options: [
+            "QUALQUER uma das partes for verdadeira",
+            "TODAS as partes forem verdadeiras",
+            "Nenhuma parte for verdadeira",
+            "O programa terminar"
+        ],
+        correct: 1,
+        explanation: "O 'E' exige tudo verdadeiro ao mesmo tempo (ex: ter pontos > 10 E tempo < 30). Com 'OU' (OR), basta uma parte ser verdadeira.",
+        xp: 25
+    },
+    {
+        id: "ard-004",
+        category: "Arduino",
+        difficulty: "easy",
+        question: "O que o comando delay(1000) faz no Arduino?",
+        options: [
+            "Apaga o programa da placa",
+            "Pausa por 1000 milissegundos, ou seja, 1 segundo",
+            "Acelera o processador",
+            "Reinicia a placa"
+        ],
+        correct: 1,
+        explanation: "O delay conta em milissegundos: delay(1000) = 1 segundo parado antes da próxima linha. É assim que controlamos o ritmo do semáforo e do pisca-LED.",
+        xp: 10
+    },
+    {
+        id: "scr-004",
+        category: "Scratch",
+        difficulty: "hard",
+        question: "Para que serve o par 'transmita [mensagem]' / 'quando eu receber [mensagem]'?",
+        options: [
+            "Aumentar o volume do projeto",
+            "Fazer dois scripts ou sprites diferentes se coordenarem",
+            "Salvar o projeto na nuvem",
+            "Trocar o cenário automaticamente"
+        ],
+        correct: 1,
+        explanation: "É como um ator avisar o outro: um sprite transmite 'comecar' e outro reage. Primeiro caso de coordenação entre scripts independentes.",
+        xp: 25
+    },
+    {
+        id: "maker-003",
+        category: "Maker",
+        difficulty: "medium",
+        question: "O que é prototipagem rápida?",
+        options: [
+            "Fazer a versão final perfeita de primeira",
+            "Montar uma versão simples e rápida para testar a ideia (papelão, cola quente) e melhorar depois",
+            "Comprar tudo pronto em vez de construir",
+            "Desenhar o projeto sem nunca construir"
+        ],
+        correct: 1,
+        explanation: "Protótipo não precisa ser bonito: precisa responder rápido se a ideia funciona. Testou, aprendeu, melhorou — esse é o ciclo maker.",
+        xp: 15
     }
 ];

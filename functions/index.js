@@ -168,8 +168,8 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
                     quantity: 1,
                     price: planConfig.priceCents
                 }],
-                returnUrl: 'https://izicodeedu-532ac.web.app/dashboard.html',
-                completionUrl: 'https://izicodeedu-532ac.web.app/dashboard.html?payment=success',
+                returnUrl: 'https://izicodeedu-532ac.web.app/app',
+                completionUrl: 'https://izicodeedu-532ac.web.app/app?payment=success',
                 customer: {
                     name: userRecord.displayName || 'Usuário Izicode',
                     email: userRecord.email,
@@ -190,6 +190,83 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
         console.error("AbacatePay: erro ao criar cobrança:", error.response?.data || error.message);
         throw new functions.https.HttpsError('internal', 'Erro ao iniciar o pagamento. Tente novamente.');
     }
+});
+
+/**
+ * Assistente pedagógico (chat) com a chave gerenciada da Izicode.
+ *
+ * Só o plano PRO usa esta rota — é a Izicode que paga o uso da API aqui.
+ * Contas gratuitas continuam usando a chave pessoal do próprio professor
+ * direto do navegador (BYOK), sem passar por aqui.
+ */
+const CHAT_MODELS = ["gemini-2.0-flash", "gemini-flash-latest", "gemini-1.5-flash"];
+const CHAT_SYSTEM_PROMPT =
+    "Você é o assistente pedagógico da Izicode Edu, especialista em robótica " +
+    "educacional, cultura maker, BNCC e ensino de programação para crianças e " +
+    "adolescentes. Responda em português do Brasil, de forma prática e direta, " +
+    "sempre pensando em como o professor vai aplicar aquilo em sala de aula.";
+
+exports.aiChat = functions.https.onCall(async (data, context) => {
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be logged in.');
+    }
+
+    const history = Array.isArray(data.history) ? data.history : [];
+    const message = typeof data.message === 'string' ? data.message.trim() : '';
+    if (!message) {
+        throw new functions.https.HttpsError('invalid-argument', 'Mensagem vazia.');
+    }
+
+    const userDoc = await admin.firestore().collection('users').doc(context.auth.uid).get();
+    const userData = userDoc.exists ? userDoc.data() : {};
+    const isPro = userData.role === 'professor-pro' || userData.role === 'admin' ||
+        userData.role === 'dev' || userData.subscription?.plan === 'pro';
+
+    if (!isPro) {
+        // Fail-closed: sem plano pago, o cliente deve usar a própria chave.
+        throw new functions.https.HttpsError(
+            'permission-denied',
+            'O assistente com a chave da Izicode é exclusivo do plano PRO. ' +
+            'Configure sua chave pessoal do Gemini para usar no plano gratuito.'
+        );
+    }
+
+    const GEMINI_API_KEY = functions.config().gemini?.key;
+    if (!GEMINI_API_KEY) {
+        console.error("Configuração 'gemini.key' ausente no Firebase Functions");
+        throw new functions.https.HttpsError('failed-precondition', 'Assistente indisponível no momento.');
+    }
+
+    // Só as últimas trocas vão para a API: além de baratear a chamada, evita
+    // estourar o limite de contexto numa conversa longa.
+    const contents = [
+        { role: 'user', parts: [{ text: CHAT_SYSTEM_PROMPT }] },
+        { role: 'model', parts: [{ text: 'Entendido. Como posso ajudar na sua aula?' }] },
+        ...history.slice(-12).map((m) => ({
+            role: m.role === 'ai' || m.role === 'model' ? 'model' : 'user',
+            parts: [{ text: String(m.text || '').slice(0, 8000) }]
+        })),
+        { role: 'user', parts: [{ text: message.slice(0, 8000) }] }
+    ];
+
+    let lastError = null;
+    for (const model of CHAT_MODELS) {
+        try {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(GEMINI_API_KEY)}`;
+            const response = await axios.post(url, { contents });
+            const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) return { success: true, text, model };
+            lastError = new Error(`Resposta vazia do modelo ${model}`);
+        } catch (error) {
+            // Modelo indisponível/renomeado: tenta o próximo da lista antes
+            // de desistir, já que os nomes do Gemini mudam com frequência.
+            lastError = error;
+            console.warn(`Modelo ${model} falhou:`, error.response?.data?.error?.message || error.message);
+        }
+    }
+
+    console.error('Todos os modelos falharam no aiChat:', lastError?.message);
+    throw new functions.https.HttpsError('internal', 'A IA não respondeu. Tente novamente em instantes.');
 });
 
 /**
