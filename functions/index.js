@@ -72,10 +72,20 @@ exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
         return;
     }
 
+    // Eventos de pagamento confirmado na API v2. 'billing.paid' era o nome
+    // na v1 e fica aqui só para nao quebrar caso alguma cobranca antiga
+    // ainda dispare o evento velho.
+    const EVENTOS_PAGOS = [
+        'transparent.completed',
+        'checkout.completed',
+        'subscription.completed',
+        'billing.paid'
+    ];
+
     const event = req.body?.event;
     const billing = req.body?.data?.billing || req.body?.data || {};
 
-    if (event !== 'billing.paid') {
+    if (!EVENTOS_PAGOS.includes(event)) {
         console.log("AbacatePay Webhook: evento ignorado:", event);
         res.status(200).send({ received: true, ignored: true });
         return;
@@ -166,6 +176,8 @@ exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
  * problema comercial e jurídico, não só inconsistência de código.
  * Ver docs/MODELO-NEGOCIO.md para o raciocínio de cada preço.
  */
+const ABACATEPAY_API = 'https://api.abacatepay.com/v2';
+
 const ABACATEPAY_PLANS = {
     professor_pro: { name: 'Izicode Edu - Professor PRO', priceCents: 3990, tipo: 'assinatura' },
     pro_mensal: { name: 'Izicode Edu - Professor PRO', priceCents: 3990, tipo: 'assinatura' },
@@ -280,49 +292,66 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
     });
 
     try {
+        // API v2, endpoint 'transparents' e não 'checkouts'.
+        //
+        // Os dois criam cobrança, mas 'checkouts/create' recebe
+        // `items: [{id, quantity}]` — ids de produtos que precisam existir
+        // no catálogo da AbacatePay. Isso não serve para a escola, cujo
+        // preço sai da contagem de assentos e muda a cada contratação:
+        // seria preciso cadastrar um produto por combinação possível.
+        // 'transparents/create' aceita um valor arbitrário, o que cobre
+        // tanto os planos fixos quanto a escola com o mesmo caminho.
         const response = await axios.post(
-            'https://api.abacatepay.com/v1/billing/create',
+            `${ABACATEPAY_API}/transparents/create`,
             {
-                frequency: 'ONE_TIME',
-                methods: ['PIX'],
-                products: [{
-                    externalId: plan,
-                    name: planConfig.name,
-                    quantity: 1,
-                    price: priceCents
-                }],
-                returnUrl: 'https://izicodeedu-532ac.web.app/app/assinatura',
-                completionUrl: `https://izicodeedu-532ac.web.app/app/assinatura?pagamento=${pagamentoRef.id}`,
-                customer: {
-                    name: userRecord.displayName || 'Usuário Izicode',
-                    email: userRecord.email,
-                    metadata: { email: userRecord.email }
-                },
-                // O uid é o que liga o pagamento à conta com segurança. O
-                // e-mail continua no payload só como reserva: ele pode ser
-                // trocado no checkout da AbacatePay, o uid não.
-                metadata: {
-                    uid: context.auth.uid,
-                    paymentId: pagamentoRef.id,
-                    plan,
-                    ...(escolaId ? { schoolId: escolaId } : {})
+                method: 'PIX',
+                data: {
+                    amount: priceCents,
+                    description: planConfig.name,
+                    // Uma hora é folgado para um Pix e evita que a pessoa
+                    // volte no dia seguinte com um QR code morto na tela.
+                    expiresIn: 3600,
+                    // 'customer' fica de fora de propósito. A API v2 exige o
+                    // objeto completo (com celular e CPF) quando ele é
+                    // enviado, e recusa um parcial com a mensagem opaca
+                    // "Value should be one of 'object', 'object'". Não temos
+                    // nem precisamos desses dados: quem identifica o
+                    // pagamento é a metadata abaixo, e pedir CPF só para
+                    // gerar um Pix seria coletar dado sem necessidade.
+                    //
+                    // O uid é o que liga o pagamento à conta com segurança;
+                    // o e-mail pode ser trocado no caminho, o uid não.
+                    metadata: {
+                        uid: context.auth.uid,
+                        email: userRecord.email || '',
+                        paymentId: pagamentoRef.id,
+                        plan,
+                        ...(escolaId ? { schoolId: escolaId } : {})
+                    }
                 }
             },
             { headers: { Authorization: `Bearer ${apiKey}` } }
         );
 
-        const billing = response.data?.data || {};
-        const checkoutUrl = billing.url;
-        if (!checkoutUrl) {
-            throw new Error('AbacatePay não retornou uma URL de checkout.');
+        const cobranca = response.data?.data || {};
+        if (!cobranca.id || !cobranca.brCode) {
+            throw new Error('AbacatePay não retornou o código Pix.');
         }
 
-        await pagamentoRef.set({ billingId: billing.id || null, checkoutUrl }, { merge: true });
+        await pagamentoRef.set({
+            billingId: cobranca.id,
+            expiresAt: cobranca.expiresAt || null
+        }, { merge: true });
 
         return {
             success: true,
-            checkoutUrl,
             paymentId: pagamentoRef.id,
+            billingId: cobranca.id,
+            // Código copia-e-cola e a imagem do QR, para a tela mostrar o
+            // pagamento sem tirar a pessoa do site.
+            brCode: cobranca.brCode,
+            brCodeBase64: cobranca.brCodeBase64 || null,
+            expiresAt: cobranca.expiresAt || null,
             amountCents: priceCents,
             tipo: planConfig.tipo
         };
@@ -465,12 +494,12 @@ exports.confirmPayment = functions.https.onCall(async (data, context) => {
     }
 
     try {
-        const resposta = await axios.get('https://api.abacatepay.com/v1/billing/list', {
+        const resposta = await axios.get(`${ABACATEPAY_API}/transparents/check`, {
+            params: { id: pagamento.billingId },
             headers: { Authorization: `Bearer ${apiKey}` }
         });
-        const lista = resposta.data?.data || [];
-        const cobranca = lista.find((b) => b.id === pagamento.billingId);
-        const pago = cobranca && String(cobranca.status).toUpperCase() === 'PAID';
+        const cobranca = resposta.data?.data || {};
+        const pago = String(cobranca.status).toUpperCase() === 'PAID';
 
         if (!pago) {
             return { status: 'pending', tipo: pagamento.tipo };

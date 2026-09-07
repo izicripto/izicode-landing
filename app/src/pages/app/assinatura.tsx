@@ -9,6 +9,9 @@ import {
   School,
   AlertCircle,
   RefreshCw,
+  Copy,
+  Check,
+  QrCode,
 } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import { isProUser } from "@/lib/roles"
@@ -20,6 +23,7 @@ import {
   calcularEscola,
   formatarPreco,
 } from "@/lib/planos"
+import type { CheckoutResposta } from "@/lib/checkout"
 import {
   criarCheckout,
   confirmarPagamento,
@@ -60,6 +64,11 @@ export function AssinaturaPage() {
   // Checkout fora do ar: um toast some em 7 segundos e leva a venda junto.
   // Este aviso fica na tela com um caminho alternativo até a pessoa sair.
   const [indisponivel, setIndisponivel] = useState(false)
+  // O Pix aberto agora. A v2 devolve codigo e QR em vez de uma pagina
+  // hospedada, entao o pagamento acontece aqui mesmo, sem tirar a pessoa
+  // do painel.
+  const [pix, setPix] = useState<CheckoutResposta | null>(null)
+  const [copiado, setCopiado] = useState(false)
 
   // O id vem da URL de retorno da AbacatePay; o localStorage é a reserva
   // para quando a pessoa volta pelo botão do navegador, sem a query.
@@ -116,8 +125,11 @@ export function AssinaturaPage() {
     try {
       const r = await criarCheckout({ plan: planId, ...assentos })
       guardarPagamentoPendente(r.paymentId)
-      // Sai da página; o retorno cai aqui de novo com ?pagamento=<id>.
-      window.location.href = r.checkoutUrl
+      setPix(r)
+      // O id entra na URL para a pessoa poder recarregar a página, ou
+      // voltar depois, sem perder o pagamento em aberto.
+      setParams({ pagamento: r.paymentId }, { replace: true })
+      setCriando(null)
     } catch (err) {
       const { titulo, detalhe } = descreverFalhaCheckout(err)
       toast.erro(titulo, detalhe)
@@ -173,6 +185,88 @@ export function AssinaturaPage() {
                 </Button>
               </div>
             </div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  /* ---------------- Pix aberto, esperando pagamento ---------------- */
+  if (pix && status?.status !== "paid") {
+    return (
+      <>
+        <PageHeader
+          title="Pague com Pix"
+          subtitle="Assim que o pagamento cair, seu acesso é liberado automaticamente — sem precisar avisar ninguém."
+        />
+
+        <div className="grid max-w-3xl gap-6 md:grid-cols-[auto_1fr]">
+          <div className="flex flex-col items-center gap-3">
+            {pix.brCodeBase64 ? (
+              <img
+                src={pix.brCodeBase64}
+                alt="QR Code do Pix para pagamento"
+                className="h-56 w-56 rounded-2xl border bg-white p-3"
+              />
+            ) : (
+              <div className="flex h-56 w-56 items-center justify-center rounded-2xl border bg-muted/40">
+                <QrCode className="h-10 w-10 text-muted-foreground" />
+              </div>
+            )}
+            <p className="text-center text-xs text-muted-foreground">
+              Abra o app do banco e<br />
+              aponte para o código
+            </p>
+          </div>
+
+          <div className="min-w-0">
+            <p className="text-[0.7rem] font-bold uppercase tracking-wider text-muted-foreground">
+              Valor
+            </p>
+            <p className="font-display text-3xl font-extrabold tabular-nums">
+              {formatarPreco(pix.amountCents)}
+            </p>
+
+            <p className="mt-5 text-sm font-semibold">Ou copie o código Pix</p>
+            <div className="mt-2 flex gap-2">
+              <code className="min-w-0 flex-1 truncate rounded-xl border bg-muted/50 px-3 py-2.5 font-mono text-xs">
+                {pix.brCode}
+              </code>
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(pix.brCode)
+                    setCopiado(true)
+                    setTimeout(() => setCopiado(false), 2500)
+                  } catch {
+                    // Alguns navegadores bloqueiam a área de transferência.
+                    // O código está visível ao lado para copiar à mão.
+                    toast.aviso("Copie manualmente", "Seu navegador bloqueou a cópia automática.")
+                  }
+                }}
+              >
+                {copiado ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {copiado ? "Copiado" : "Copiar"}
+              </Button>
+            </div>
+
+            <div className="mt-6 flex items-center gap-2.5 rounded-xl border bg-muted/40 p-4 text-sm">
+              <Loader2 className="h-4 w-4 shrink-0 animate-spin text-primary" />
+              <p className="text-muted-foreground">
+                Estamos conferindo o pagamento sozinhos. Pode deixar esta aba aberta.
+              </p>
+            </div>
+
+            <Button
+              variant="ghost"
+              className="mt-3"
+              onClick={() => pagamentoId && conferir(pagamentoId)}
+              disabled={conferindo}
+            >
+              <RefreshCw className="h-4 w-4" />
+              Já paguei, conferir agora
+            </Button>
           </div>
         </div>
       </>

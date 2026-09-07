@@ -143,21 +143,36 @@ firebase functions:config:set \
 >
 > Nunca escreva uma chave aqui, nem "só para não esquecer qual é". Se precisar registrar qual está em uso, anote só o prefixo (`key_J2bM6…`), que identifica sem permitir uso.
 
+### A integração usa a API v2
+
+O painel da AbacatePay mostra a **versão** de cada chave. As chaves atuais são **API v2**, e a base é `https://api.abacatepay.com/v2`. Chamar `/v1` com uma chave v2 devolve `API key version mismatch` — mensagem que não menciona endpoint e leva a procurar problema na chave, não no caminho.
+
+O que muda da v1 para a v2, e que motivou a reescrita:
+
+| | v1 | v2 |
+|---|---|---|
+| criar cobrança | `POST /v1/billing/create` | `POST /v2/transparents/create` |
+| produtos | definidos na própria chamada | `checkouts/create` exige ids de catálogo |
+| consultar | `GET /v1/billing/list` | `GET /v2/transparents/check?id=` |
+| evento pago | `billing.paid` | `transparent.completed` |
+
+Usamos `transparents/create` e não `checkouts/create` porque ele aceita **valor arbitrário**. O preço da escola sai da contagem de assentos e muda a cada contratação — com catálogo seria preciso cadastrar um produto por combinação possível.
+
+Um detalhe que custou uma rodada de depuração: **não envie `customer`** em `transparents/create`. A v2 exige o objeto completo (com celular e CPF) quando ele aparece, e recusa um parcial com `Value should be one of 'object', 'object'`. Quem identifica o pagamento é a `metadata`, e pedir CPF só para gerar um Pix seria coletar dado sem necessidade.
+
 ### Conferir se a chave funciona ANTES de um cliente descobrir
 
-A AbacatePay aceita uma consulta de leitura que não cria nada:
-
 ```bash
-curl -s -H "Authorization: Bearer SUA_CHAVE" https://api.abacatepay.com/v1/billing/list
+curl -s -X POST -H "Authorization: Bearer SUA_CHAVE" -H "Content-Type: application/json"   -d '{"method":"PIX","data":{"amount":100,"expiresIn":3600}}'   https://api.abacatepay.com/v2/transparents/create
 ```
-
-As respostas dizem coisas diferentes, e vale ler com atenção:
 
 | resposta | significado |
 |---|---|
-| `200` com uma lista | a chave funciona |
-| `Invalid or inactive API key` | a chave não existe ou está desativada — é a **mesma** resposta que uma chave inventada |
-| `API key version mismatch` | a chave é real, mas de uma versão antiga da API |
+| `200` com `brCode` | a chave funciona |
+| `Invalid or inactive API key` | a chave não existe ou está desativada — **mesma** resposta que uma chave inventada |
+| `API key version mismatch` | a chave é real, mas você chamou a versão errada da API |
+
+Em devMode dá para fechar o ciclo inteiro sem dinheiro real: `POST /v2/transparents/simulate-payment?id=<id>` marca a cobrança como paga, e o resto do fluxo segue igual ao de produção.
 
 Se a chave for recusada, `createAbacatePayCheckout` responde `failed-precondition` (não `internal`), e a tela mostra o aviso fixo de "pagamento indisponível" com o caminho para falar com a equipe — em vez de pedir para a pessoa tentar de novo, o que nunca funcionaria, já que o problema é nosso.
 

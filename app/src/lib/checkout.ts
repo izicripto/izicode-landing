@@ -12,8 +12,13 @@ import { functions } from "@/lib/firebase"
 
 export interface CheckoutResposta {
   success: boolean
-  checkoutUrl: string
   paymentId: string
+  billingId: string
+  /** Código Pix copia-e-cola. */
+  brCode: string
+  /** Imagem do QR já pronta como data: URI, ou null. */
+  brCodeBase64: string | null
+  expiresAt: string | null
   amountCents: number
   tipo: "assinatura" | "escola"
 }
@@ -24,7 +29,14 @@ export interface StatusPagamento {
   jaLiberado?: boolean
 }
 
-/** Onde o pagamento em andamento fica guardado entre um redirecionamento e outro. */
+/**
+ * Onde o pagamento em andamento fica guardado.
+ *
+ * A API v2 da AbacatePay devolve um Pix (código e QR) em vez de uma página
+ * de checkout hospedada, então a pessoa não sai mais do site. O registro
+ * continua útil: se ela fechar a aba e voltar depois, a tela reencontra o
+ * pagamento em aberto em vez de começar do zero.
+ */
 const CHAVE_PENDENTE = "izicode_pagamento_pendente"
 
 export function guardarPagamentoPendente(paymentId: string) {
