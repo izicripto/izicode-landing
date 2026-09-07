@@ -1108,7 +1108,6 @@ Cada grupo registra a temperatura da sala, do pátio (sol e sombra) e da mão fe
         difficulty: "Avançado",
         duration: "6 aulas",
         grade: "Ensino Fundamental II (8º e 9º ano)",
-        image: "arduino-robot",
         ods: "ODS 9 - Indústria e Inovação",
         bncc: ["EF08TEC04", "EF09TEC01"],
         content: `
@@ -1141,7 +1140,6 @@ Use o Open Roberta Lab (lab.open-roberta.org) para programar visualmente e expor
         difficulty: "Intermediário",
         duration: "3 aulas",
         grade: "Ensino Fundamental II (6º e 7º ano)",
-        image: "microbit-music",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF06CI04", "EF15AR13"],
         content: `
@@ -1167,7 +1165,6 @@ Quanto mais luz, mais aguda a nota. Cubra o sensor para tocar notas graves!
         difficulty: "Básico",
         duration: "1 aula",
         grade: "Ensino Fundamental I (4º e 5º ano)",
-        image: "microbit-dice",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF04MA27"],
         content: `
@@ -1193,7 +1190,6 @@ Adicione animação de "rolagem" antes de mostrar o número final!
         difficulty: "Avançado",
         duration: "8 aulas",
         grade: "Ensino Médio",
-        image: "arduino-plotter",
         ods: "ODS 9 - Inovação",
         bncc: ["EM13TEC03", "EM13MAT307"],
         content: `
@@ -1221,7 +1217,6 @@ Inspirado em projetos do Open Roberta. Crie um plotter XY que desenha usando ser
         difficulty: "Intermediário",
         duration: "5 aulas",
         grade: "Ensino Fundamental II (7º e 8º ano)",
-        image: "arduino-plant",
         ods: "ODS 2 - Fome Zero",
         bncc: ["EF07CI08", "EF08TEC04"],
         content: `
@@ -1251,7 +1246,6 @@ Projeto do Open Roberta adaptado. Use sensor de umidade para automatizar irriga�
         difficulty: "Intermediário",
         duration: "4 aulas",
         grade: "Ensino Fundamental II (8º e 9º ano)",
-        image: "arduino-counter",
         ods: "ODS 11 - Cidades Inteligentes",
         bncc: ["EF08TEC04"],
         content: `
@@ -1277,7 +1271,6 @@ Usado em lojas, ônibus e controle de lotação.
         difficulty: "Básico",
         duration: "2 aulas",
         grade: "Ensino Fundamental II (6º ano)",
-        image: "microbit-game",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF06MA16"],
         content: `
@@ -1305,7 +1298,6 @@ Projeto do Open Roberta. Crie um jogo que testa tempo de reação.
         difficulty: "Avançado",
         duration: "6 aulas",
         grade: "Ensino Médio",
-        image: "arduino-air",
         ods: "ODS 13 - Ação Climática",
         bncc: ["EM13TEC04", "EM13CNT301"],
         content: `
@@ -1333,7 +1325,6 @@ Inspirado em projetos do Open Roberta. Monitore múltiplos sensores ambientais.
         difficulty: "Avançado",
         duration: "7 aulas",
         grade: "Ensino Médio",
-        image: "arduino-sound",
         ods: "ODS 9 - Inovação",
         bncc: ["EM13TEC03"],
         content: `
@@ -1362,7 +1353,6 @@ Projeto avançado do Open Roberta. Robô localiza fonte sonora por triangulaçã
         difficulty: "Intermediário",
         duration: "3 aulas",
         grade: "Ensino Fundamental II (7º ano)",
-        image: "microbit-morse",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF07LP01"],
         content: `
@@ -1388,7 +1378,6 @@ Envie mensagens entre dois Micro:bits usando rádio!
         difficulty: "Intermediário",
         duration: "4 aulas",
         grade: "Ensino Fundamental II (9º ano)",
-        image: "arduino-speed",
         ods: "ODS 9 - Inovação",
         bncc: ["EF09CI03"],
         content: `
@@ -1589,7 +1578,6 @@ void onBombaStatusChange()  {
         difficulty: "Intermediário",
         duration: "3 aulas",
         grade: "Ensino Médio",
-        image: "arduino-alarm",
         ods: "ODS 11 - Cidades Inteligentes",
         bncc: ["EM13TEC05"],
         content: `
@@ -1620,7 +1608,6 @@ Use o método \`ArduinoCloud.update()\` com frequência no loop para garantir qu
         difficulty: "Avançado",
         duration: "5 aulas",
         grade: "Ensino Médio e Técnico",
-        image: "python",
         ods: "ODS 9 - Inovação",
         bncc: ["EM13TEC04"],
         content: `
@@ -1747,7 +1734,6 @@ void loop() {
         difficulty: "Básico",
         duration: "2 aulas",
         grade: "Ensino Fundamental II (6º e 7º ano)",
-        image: "arduino-temp",
         ods: "ODS 13 - Ação Climática",
         bncc: ["EF06CI13", "EF07TEC02"],
         content: `
@@ -1778,7 +1764,6 @@ Use caracteres especiais! A biblioteca LCD permite criar o símbolo de grau (°)
         difficulty: "Avançado",
         duration: "5 aulas",
         grade: "Ensino Médio e Técnico",
-        image: "arduino-robot",
         ods: "ODS 16 - Paz, Justiça e Instituições Eficazes",
         bncc: ["EM13TEC05"],
         content: `

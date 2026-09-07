@@ -18,6 +18,7 @@ import { AssistentePage } from "@/pages/app/assistente"
 import { ConteudoPage } from "@/pages/app/conteudo"
 import { CursoPage } from "@/pages/app/curso"
 import { ProjetoPage } from "@/pages/app/projeto"
+import { NaoEncontradaPage } from "@/pages/app/nao-encontrada"
 
 /** Site institucional público: header e footer da landing. */
 function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -61,6 +62,8 @@ function App() {
               <Route path="networking" element={<NetworkingPage />} />
               <Route path="aluno" element={<AlunoPage />} />
               <Route path="escola" element={<EscolaPage />} />
+              {/* Qualquer /app/* desconhecido cai aqui, mantendo a sidebar. */}
+              <Route path="*" element={<NaoEncontradaPage />} />
             </Route>
           </Route>
         </Routes>

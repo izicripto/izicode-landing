@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { Library, Search } from "lucide-react"
 import { loadProjects, type LegacyProject } from "@/lib/legacy-data"
 import { PageHeader, EmptyState } from "@/components/dashboard/page-header"
+import { ProjectVisual } from "@/components/dashboard/project-visual"
 
 export function BibliotecaPage() {
   const [projects, setProjects] = useState<LegacyProject[]>([])
@@ -86,8 +87,15 @@ export function BibliotecaPage() {
               <Link
                 key={project.id}
                 to={`/app/projeto/${project.id}`}
-                className="group flex flex-col rounded-2xl border bg-card p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
+                className="group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
               >
+                <ProjectVisual
+                  id={project.id}
+                  title={project.title}
+                  tools={project.tools}
+                  className="h-28 w-full transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="flex flex-1 flex-col p-5">
                 <div className="mb-3 flex flex-wrap gap-1.5">
                   {project.tools?.slice(0, 3).map((t) => (
                     <span
@@ -107,6 +115,7 @@ export function BibliotecaPage() {
                     {project.difficulty}
                   </p>
                 )}
+                </div>
               </Link>
             ))}
           </div>

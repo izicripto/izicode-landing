@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom"
 import { ArrowLeft, Clock, GraduationCap, Target, Loader2, ExternalLink, Printer } from "lucide-react"
 import { loadProjects, type LegacyProject } from "@/lib/legacy-data"
 import { Markdown } from "@/components/dashboard/markdown"
+import { ProjectVisual } from "@/components/dashboard/project-visual"
 import { Button } from "@/components/ui/button"
 
 interface FullProject extends LegacyProject {
@@ -62,6 +63,14 @@ export function ProjetoPage() {
         <ArrowLeft className="h-4 w-4" />
         Voltar
       </Button>
+
+      <ProjectVisual
+        id={project.id}
+        title={project.title}
+        tools={project.tools}
+        className="mb-6 h-44 w-full rounded-2xl sm:h-52"
+        size="hero"
+      />
 
       <header className="mb-7">
         <div className="mb-3 flex flex-wrap gap-1.5">

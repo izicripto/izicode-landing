@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { Cpu, Clock, ExternalLink } from "lucide-react"
 import { loadProjects, type LegacyProject } from "@/lib/legacy-data"
 import { PageHeader, EmptyState } from "@/components/dashboard/page-header"
+import { ProjectVisual } from "@/components/dashboard/project-visual"
 
 const DIFFICULTY_TONE: Record<string, string> = {
   "Básico": "bg-emerald-100 text-emerald-800",
@@ -82,21 +83,13 @@ export function ArduinoPage() {
               to={`/app/projeto/${project.id}`}
               className="group flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
             >
-              <div className="relative flex h-40 items-center justify-center overflow-hidden bg-muted">
-                {project.image ? (
-                  <img
-                    src={project.image.startsWith("http") ? project.image : `/images/${project.image.replace(/^\/?images\//, "")}`}
-                    alt=""
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    onError={(e) => {
-                      // Alguns roteiros ainda não têm foto própria: cai no
-                      // ícone do Arduino em vez de mostrar imagem quebrada.
-                      e.currentTarget.style.display = "none"
-                    }}
-                  />
-                ) : (
-                  <Cpu className="h-10 w-10 text-muted-foreground/40" />
-                )}
+              <div className="relative h-40 overflow-hidden">
+                <ProjectVisual
+                  id={project.id}
+                  title={project.title}
+                  tools={project.tools}
+                  className="h-full w-full transition-transform duration-500 group-hover:scale-105"
+                />
                 {project.difficulty && (
                   <span
                     className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-wider ${
