@@ -32,8 +32,20 @@ service cloud.firestore {
       return hasRole('school_admin');
     }
     
+    // Dono da plataforma: uma única conta, verificada pelo e-mail que vem
+    // dentro do token de autenticação. Esse campo é assinado pelo Firebase
+    // Auth, então o navegador não tem como forjá-lo — diferente do papel
+    // gravado no documento do usuário, que é dado comum.
+    //
+    // Ancorar aqui também evita o pior cenário de painel administrativo:
+    // alguém alterar o próprio documento e se promover. E garante que o
+    // dono nunca se tranque para fora por um doc mal gravado.
+    function isPlatformOwner() {
+      return isAuthenticated() && request.auth.token.email == 'izicripto@gmail.com';
+    }
+
     function isAdmin() {
-      return hasRole('admin');
+      return isPlatformOwner() || hasRole('admin');
     }
     
     // Users collection
@@ -85,16 +97,23 @@ service cloud.firestore {
       allow create: if isAuthenticated() && request.auth.uid == userId &&
                        isSafeSelfRole() && isSafeSelfSubscription();
 
-      allow update: if isAuthenticated() && request.auth.uid == userId &&
+      // Duas portas distintas, de propósito:
+      //
+      // 1. O admin edita qualquer usuário — é o que permite promover a
+      //    PRO, mudar papel e vincular escola pelo painel de gestão. Antes
+      //    a condição exigia `request.auth.uid == userId` para todo mundo,
+      //    então nem o admin conseguia alterar a conta de outra pessoa.
+      // 2. O usuário comum edita só o próprio documento, e ainda assim
+      //    sem conseguir se promover a admin/professor-pro nem se dar um
+      //    plano pago (essas mudanças passam por admin ou Cloud Function).
+      allow update: if isAdmin() ||
                        (
-                         isAdmin() ||
-                         (
-                           (isSafeSelfRole() || request.resource.data.role == resource.data.role) &&
-                           (isSafeSelfSubscription() ||
-                             (('subscription' in request.resource.data) &&
-                              request.resource.data.subscription.plan == resource.data.subscription.plan)) &&
-                           isSafeUsageIncrement()
-                         )
+                         isAuthenticated() && request.auth.uid == userId &&
+                         (isSafeSelfRole() || request.resource.data.role == resource.data.role) &&
+                         (isSafeSelfSubscription() ||
+                           (('subscription' in request.resource.data) &&
+                            request.resource.data.subscription.plan == resource.data.subscription.plan)) &&
+                         isSafeUsageIncrement()
                        );
 
       allow delete: if isAdmin();

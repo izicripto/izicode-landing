@@ -72,6 +72,20 @@ export function isProUser(userData: UserData | null): boolean {
   )
 }
 
+/**
+ * Conta dona da plataforma. Precisa ser exatamente a mesma string do
+ * `isPlatformOwner()` em firestore.rules — lá é onde o acesso realmente
+ * é concedido; aqui só decidimos se vale a pena desenhar o painel.
+ *
+ * Esconder o menu não protege nada: quem digitar a URL chega na tela.
+ * O que impede de ver ou mudar qualquer coisa é a regra do servidor.
+ */
+export const PLATFORM_OWNER_EMAIL = "izicripto@gmail.com"
+
+export function isPlatformOwner(email?: string | null): boolean {
+  return !!email && email.toLowerCase().trim() === PLATFORM_OWNER_EMAIL
+}
+
 export function homeForRole(role?: string): string {
   if (!role) return "/app"
   if (SCHOOL_ROLES.includes(role)) return "/app/escola"

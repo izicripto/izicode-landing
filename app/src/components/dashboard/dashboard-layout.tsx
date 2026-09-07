@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { LogOut, Menu, X } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import { navForRole } from "@/components/dashboard/dashboard-nav"
-import { ROLE_LABELS, isProUser, homeForRole } from "@/lib/roles"
+import { ROLE_LABELS, isProUser, homeForRole, isPlatformOwner } from "@/lib/roles"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
@@ -24,7 +24,7 @@ function Initials({ name }: { name: string }) {
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const { user, userData, role, signOut } = useAuth()
-  const groups = navForRole(role)
+  const groups = navForRole(role, isPlatformOwner(user?.email))
   const displayName = userData?.displayName || user?.displayName || user?.email || "Usuário"
   const planLabel = isProUser(userData) ? "Plano PRO" : ROLE_LABELS[role] || "Plano Gratuito"
 

@@ -25,6 +25,7 @@ import { RankingPage } from "@/pages/app/ranking"
 import { TurmasPage } from "@/pages/app/turmas"
 import { QuizPage } from "@/pages/app/quiz"
 import { FilhosPage } from "@/pages/app/filhos"
+import { AdminPage } from "@/pages/app/admin"
 
 /** Site institucional público: header e footer da landing. */
 function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -80,6 +81,7 @@ function App() {
               <Route path="ranking" element={<RankingPage />} />
               <Route path="quiz" element={<QuizPage />} />
               <Route path="filhos" element={<FilhosPage />} />
+              <Route path="admin" element={<AdminPage />} />
               <Route path="escola" element={<EscolaPage />} />
               <Route path="turmas" element={<TurmasPage />} />
               {/* Qualquer /app/* desconhecido cai aqui, mantendo a sidebar. */}
