@@ -1,26 +1,24 @@
 import { useState } from "react"
 import { LifeBuoy, Check, Trash2 } from "lucide-react"
 import { useAdmin } from "@/components/dashboard/admin-layout"
-import { PLANOS_PROFESSOR, PLANOS_AULAS } from "@/lib/planos"
+import { NOMES_PLANO } from "@/lib/planos"
 import { PageHeader, EmptyState } from "@/components/dashboard/page-header"
 import { Button } from "@/components/ui/button"
-
-/** Mostra o nome comercial em vez do id cru gravado no lead. */
-const NOMES_PLANO: Record<string, string> = {
-  ...Object.fromEntries([...PLANOS_PROFESSOR, ...PLANOS_AULAS].map((p) => [p.id, p.nome])),
-  escola: "Pacote Escola",
-}
+import { useToast } from "@/components/ui/toast"
 
 export function AdminSuportePage() {
   const admin = useAdmin()
+  const toast = useToast()
   const [salvando, setSalvando] = useState<string | null>(null)
 
-  async function comSalvamento(chave: string, acao: () => Promise<void>) {
+  async function comSalvamento(chave: string, acao: () => Promise<void>, sucesso: string) {
     setSalvando(chave)
     try {
       await acao()
+      toast.sucesso(sucesso)
     } catch (err) {
       console.error("Ação de suporte falhou:", err)
+      toast.erro("Não foi possível concluir a ação", "Tente novamente em instantes.")
     } finally {
       setSalvando(null)
     }
@@ -97,7 +95,9 @@ export function AdminSuportePage() {
                         size="sm"
                         variant="outline"
                         disabled={salvando === `lead-${l.id}`}
-                        onClick={() => comSalvamento(`lead-${l.id}`, () => admin.setLeadStatus(l.id, "done"))}
+                        onClick={() =>
+                          comSalvamento(`lead-${l.id}`, () => admin.setLeadStatus(l.id, "done"), "Solicitação resolvida")
+                        }
                       >
                         <Check className="h-4 w-4" />
                         Resolver
@@ -108,7 +108,7 @@ export function AdminSuportePage() {
                       variant="ghost"
                       className="text-muted-foreground hover:text-destructive"
                       disabled={salvando === `del-${l.id}`}
-                      onClick={() => comSalvamento(`del-${l.id}`, () => admin.removeLead(l.id))}
+                      onClick={() => comSalvamento(`del-${l.id}`, () => admin.removeLead(l.id), "Solicitação excluída")}
                       aria-label="Excluir solicitação"
                     >
                       <Trash2 className="h-4 w-4" />

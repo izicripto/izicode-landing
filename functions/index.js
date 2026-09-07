@@ -81,41 +81,71 @@ exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
         return;
     }
 
+    const metadata = billing?.metadata || billing?.frequency?.metadata || {};
     const email = billing?.customer?.metadata?.email || billing?.customer?.email;
-    const targetSchoolId = billing?.metadata?.schoolId || billing?.frequency?.metadata?.schoolId;
-
-    if (!email && !targetSchoolId) {
-        console.error("AbacatePay Webhook: nenhum email de cliente ou schoolId no payload.");
-        res.status(400).send({ error: 'Missing customer email or schoolId' });
-        return;
-    }
+    const paymentId = metadata.paymentId;
 
     try {
-        if (targetSchoolId) {
-            // Pagamento do pacote Escola: ativa o plano da escola (turmas liberadas).
-            await admin.firestore().collection('schools').doc(targetSchoolId).set({
-                plan: 'active',
-                activatedAt: admin.firestore.FieldValue.serverTimestamp(),
-                paymentProvider: 'abacatepay'
-            }, { merge: true });
-            console.log(`AbacatePay: escola ${targetSchoolId} ativada (plan=active).`);
-        } else {
-            // Pagamento do professor autônomo: libera o plano PRO da conta.
-            const usersSnap = await admin.firestore().collection('users').where('email', '==', email).limit(1).get();
+        const db = admin.firestore();
+
+        // Caminho normal: a cobrança foi criada por createAbacatePayCheckout,
+        // então existe um documento em /payments com uid, plano e valor já
+        // registrados. Nada aqui depende do que o payload do webhook diz
+        // sobre preço ou plano — só de qual pagamento ele identifica.
+        let ref = paymentId ? db.collection('payments').doc(paymentId) : null;
+        let snap = ref ? await ref.get() : null;
+
+        if (!snap || !snap.exists) {
+            // Reserva: cobrança feita fora do fluxo (link manual, cobrança
+            // recriada no painel da AbacatePay). Reconstrói pelo billingId
+            // e, em último caso, pelo e-mail do cliente.
+            const billingId = billing?.id;
+            if (billingId) {
+                const porBilling = await db.collection('payments').where('billingId', '==', billingId).limit(1).get();
+                if (!porBilling.empty) {
+                    ref = porBilling.docs[0].ref;
+                    snap = porBilling.docs[0];
+                }
+            }
+        }
+
+        if (!snap || !snap.exists) {
+            if (!email) {
+                console.error('AbacatePay Webhook: pagamento não identificado e sem e-mail.');
+                res.status(400).send({ error: 'Unidentified payment' });
+                return;
+            }
+            const usersSnap = await db.collection('users').where('email', '==', email).limit(1).get();
             if (usersSnap.empty) {
-                console.error(`AbacatePay Webhook: nenhum usuário encontrado para o email ${email}.`);
+                console.error(`AbacatePay Webhook: nenhum usuário para o email ${email}.`);
                 res.status(404).send({ error: 'User not found' });
                 return;
             }
-            await usersSnap.docs[0].ref.set({
-                subscription: {
-                    plan: 'pro',
-                    provider: 'abacatepay',
-                    activatedAt: admin.firestore.FieldValue.serverTimestamp()
-                }
-            }, { merge: true });
-            console.log(`AbacatePay: usuário ${email} promovido a plano PRO.`);
+            ref = db.collection('payments').doc();
+            const reconstruido = {
+                uid: usersSnap.docs[0].id,
+                email,
+                plan: metadata.plan || 'pro_mensal',
+                tipo: metadata.schoolId ? 'escola' : 'assinatura',
+                schoolId: metadata.schoolId || null,
+                billingId: billing?.id || null,
+                status: 'pending',
+                origem: 'webhook-sem-checkout',
+                createdAt: admin.firestore.FieldValue.serverTimestamp()
+            };
+            await ref.set(reconstruido);
+            await aplicarPagamento(ref, reconstruido);
+            console.log(`AbacatePay: pagamento reconstruído e aplicado para ${email}.`);
+            res.status(200).send({ received: true });
+            return;
         }
+
+        const resultado = await aplicarPagamento(ref, snap.data() || {});
+        console.log(
+            resultado.jaAplicado
+                ? `AbacatePay: pagamento ${ref.id} já estava aplicado (webhook repetido).`
+                : `AbacatePay: pagamento ${ref.id} aplicado (${resultado.tipo}).`
+        );
 
         res.status(200).send({ received: true });
     } catch (error) {
@@ -137,19 +167,50 @@ exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
  * Ver docs/MODELO-NEGOCIO.md para o raciocínio de cada preço.
  */
 const ABACATEPAY_PLANS = {
-    professor_pro: { name: 'Izicode Edu - Professor PRO', priceCents: 3990 },
-    pro_anual: { name: 'Izicode Edu - PRO Anual + Kit Arduino', priceCents: 39700 },
-    escola: { name: 'Izicode Edu - Plano Escola (base)', priceCents: 24900 },
-    aulas_turma: { name: 'Izicode Edu - Turma Online', priceCents: 14900 },
-    aulas_individual: { name: 'Izicode Edu - Aula Individual', priceCents: 39900 }
+    professor_pro: { name: 'Izicode Edu - Professor PRO', priceCents: 3990, tipo: 'assinatura' },
+    pro_mensal: { name: 'Izicode Edu - Professor PRO', priceCents: 3990, tipo: 'assinatura' },
+    pro_anual: { name: 'Izicode Edu - PRO Anual + Kit Arduino', priceCents: 39700, tipo: 'assinatura' },
+    aulas_turma: { name: 'Izicode Edu - Turma Online', priceCents: 14900, tipo: 'assinatura' },
+    aulas_individual: { name: 'Izicode Edu - Aula Individual', priceCents: 39900, tipo: 'assinatura' },
+    // A escola não tem preço fixo: o valor sai da contagem de assentos, e a
+    // liberação depende de conferência humana. Ver calcularEscola abaixo.
+    escola: { name: 'Izicode Edu - Pacote Escola', priceCents: null, tipo: 'escola' }
 };
+
+/**
+ * Preço da escola — precisa ser idêntico a PLANO_ESCOLA em
+ * app/src/lib/planos.ts, que é o que o simulador mostra na tela.
+ * Se os dois divergirem, a escola vê um número e recebe outro na cobrança.
+ */
+const PRECO_ESCOLA = {
+    baseCentavos: 24900,
+    professoresInclusos: 3,
+    alunosInclusos: 60,
+    professorExtraCentavos: 1900,
+    alunoExtraCentavos: 250
+};
+
+function calcularEscola(professores, alunos) {
+    const p = Math.max(1, Math.min(500, Math.floor(Number(professores) || 0)));
+    const a = Math.max(1, Math.min(20000, Math.floor(Number(alunos) || 0)));
+    const extraProf = Math.max(0, p - PRECO_ESCOLA.professoresInclusos);
+    const extraAlunos = Math.max(0, a - PRECO_ESCOLA.alunosInclusos);
+    return {
+        professores: p,
+        alunos: a,
+        totalCentavos:
+            PRECO_ESCOLA.baseCentavos +
+            extraProf * PRECO_ESCOLA.professorExtraCentavos +
+            extraAlunos * PRECO_ESCOLA.alunoExtraCentavos
+    };
+}
 
 exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) => {
     if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be logged in.');
+        throw new functions.https.HttpsError('unauthenticated', 'Entre na sua conta para continuar.');
     }
 
-    const { plan, schoolId } = data;
+    const { plan, schoolId } = data || {};
     const planConfig = ABACATEPAY_PLANS[plan];
     if (!planConfig) {
         throw new functions.https.HttpsError('invalid-argument', `Plano desconhecido: ${plan}`);
@@ -161,7 +222,62 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
         throw new functions.https.HttpsError('failed-precondition', 'Pagamentos temporariamente indisponíveis.');
     }
 
+    // O preço vem SEMPRE daqui, nunca do que o navegador mandou: aceitar
+    // um valor do cliente seria deixar qualquer pessoa assinar por R$ 0,01.
+    let priceCents = planConfig.priceCents;
+    let contagem = null;
+    let escolaId = schoolId || null;
+    let nomeEscola = null;
+
+    if (planConfig.tipo === 'escola') {
+        contagem = calcularEscola(data.professores, data.alunos);
+        priceCents = contagem.totalCentavos;
+
+        // A qual escola este pagamento pertence sai do perfil de quem está
+        // pagando, não do que o navegador mandou — senão daria para pagar
+        // uma cobrança e apontá-la para a escola de outra pessoa. Sem isso,
+        // o pagamento também ficaria órfão e a equipe não saberia qual
+        // instituição validar.
+        const perfil = await admin.firestore().collection('users').doc(context.auth.uid).get();
+        const doPerfil = perfil.exists ? (perfil.data() || {}).schoolId : null;
+        if (doPerfil) {
+            escolaId = doPerfil;
+            const escola = await admin.firestore().collection('schools').doc(escolaId).get();
+            nomeEscola = escola.exists ? (escola.data() || {}).name || null : null;
+        } else if (escolaId) {
+            // schoolId veio só do cliente: aceita apenas se a escola existir
+            // e a pessoa for a administradora cadastrada nela.
+            const escola = await admin.firestore().collection('schools').doc(escolaId).get();
+            if (!escola.exists || (escola.data() || {}).adminId !== context.auth.uid) {
+                escolaId = null;
+            } else {
+                nomeEscola = (escola.data() || {}).name || null;
+            }
+        }
+    }
+
+    if (!priceCents || priceCents < 100) {
+        throw new functions.https.HttpsError('invalid-argument', 'Valor da cobrança inválido.');
+    }
+
     const userRecord = await admin.auth().getUser(context.auth.uid);
+
+    // Registra a intenção de compra ANTES de chamar a AbacatePay. Se o
+    // webhook chegar antes da resposta, ou se a pessoa fechar o navegador
+    // no meio, ainda existe um documento para reconciliar o pagamento.
+    const pagamentoRef = admin.firestore().collection('payments').doc();
+    await pagamentoRef.set({
+        uid: context.auth.uid,
+        email: userRecord.email || null,
+        plan,
+        tipo: planConfig.tipo,
+        amountCents: priceCents,
+        schoolId: escolaId,
+        schoolName: nomeEscola,
+        seats: contagem,
+        status: 'pending',
+        createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
 
     try {
         const response = await axios.post(
@@ -173,29 +289,179 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
                     externalId: plan,
                     name: planConfig.name,
                     quantity: 1,
-                    price: planConfig.priceCents
+                    price: priceCents
                 }],
-                returnUrl: 'https://izicodeedu-532ac.web.app/app',
-                completionUrl: 'https://izicodeedu-532ac.web.app/app?payment=success',
+                returnUrl: 'https://izicodeedu-532ac.web.app/app/assinatura',
+                completionUrl: `https://izicodeedu-532ac.web.app/app/assinatura?pagamento=${pagamentoRef.id}`,
                 customer: {
                     name: userRecord.displayName || 'Usuário Izicode',
                     email: userRecord.email,
                     metadata: { email: userRecord.email }
                 },
-                metadata: schoolId ? { schoolId } : undefined
+                // O uid é o que liga o pagamento à conta com segurança. O
+                // e-mail continua no payload só como reserva: ele pode ser
+                // trocado no checkout da AbacatePay, o uid não.
+                metadata: {
+                    uid: context.auth.uid,
+                    paymentId: pagamentoRef.id,
+                    plan,
+                    ...(escolaId ? { schoolId: escolaId } : {})
+                }
             },
             { headers: { Authorization: `Bearer ${apiKey}` } }
         );
 
-        const checkoutUrl = response.data?.data?.url;
+        const billing = response.data?.data || {};
+        const checkoutUrl = billing.url;
         if (!checkoutUrl) {
             throw new Error('AbacatePay não retornou uma URL de checkout.');
         }
 
-        return { success: true, checkoutUrl };
+        await pagamentoRef.set({ billingId: billing.id || null, checkoutUrl }, { merge: true });
+
+        return {
+            success: true,
+            checkoutUrl,
+            paymentId: pagamentoRef.id,
+            amountCents: priceCents,
+            tipo: planConfig.tipo
+        };
     } catch (error) {
         console.error("AbacatePay: erro ao criar cobrança:", error.response?.data || error.message);
+        await pagamentoRef.set({ status: 'failed', error: error.message }, { merge: true });
         throw new functions.https.HttpsError('internal', 'Erro ao iniciar o pagamento. Tente novamente.');
+    }
+});
+
+/**
+ * Aplica o que um pagamento confirmado libera.
+ *
+ * Fica separado porque dois caminhos precisam dele: o webhook da AbacatePay
+ * e a conferência que a própria tela faz ao voltar do checkout. Webhook
+ * atrasa, se perde e chega repetido — então esta função é idempotente e
+ * pode rodar duas vezes sem efeito colateral.
+ *
+ * A diferença de tratamento entre professor/família e escola é regra de
+ * negócio, não detalhe técnico:
+ *
+ *  - professor e família: pagou, liberou. É autoatendimento de ponta a ponta.
+ *  - escola: pagou, NÃO liberou. O acesso à gestão de turmas depende de a
+ *    equipe conferir a instituição e validar a chave da escola. Contrato
+ *    com instituição envolve nota, dados de alunos menores de idade e
+ *    quantidade de assentos combinada — coisas que ninguém confere sozinho.
+ */
+async function aplicarPagamento(pagamentoRef, dadosPagamento) {
+    const db = admin.firestore();
+    const agora = admin.firestore.FieldValue.serverTimestamp();
+
+    if (dadosPagamento.status === 'paid') {
+        return { jaAplicado: true, tipo: dadosPagamento.tipo };
+    }
+
+    if (dadosPagamento.tipo === 'escola') {
+        if (dadosPagamento.schoolId) {
+            await db.collection('schools').doc(dadosPagamento.schoolId).set({
+                // 'paid_pending_activation', e não 'active': quem libera a
+                // gestão de turmas é a equipe, depois de validar a escola.
+                plan: 'paid_pending_activation',
+                paidAt: agora,
+                paymentProvider: 'abacatepay',
+                contractedSeats: dadosPagamento.seats || null
+            }, { merge: true });
+        }
+
+        // Entra na fila de suporte para alguém entrar em contato. Sem isso o
+        // pagamento da escola ficaria esperando um telefonema que ninguém
+        // sabe que precisa dar.
+        await db.collection('leads').add({
+            name: dadosPagamento.schoolName || dadosPagamento.email || 'Escola',
+            email: dadosPagamento.email || null,
+            schoolId: dadosPagamento.schoolId || null,
+            role: 'school',
+            goal: 'activation',
+            plano: 'escola',
+            source: 'pagamento:escola',
+            message:
+                'Pagamento do Pacote Escola confirmado. Validar a instituição e ' +
+                'liberar a chave de acesso da escola.',
+            status: 'new',
+            priority: 'high',
+            createdAt: agora
+        });
+    } else if (dadosPagamento.uid) {
+        // Pelo uid, não pelo e-mail: o e-mail no checkout pode ser outro.
+        await db.collection('users').doc(dadosPagamento.uid).set({
+            subscription: {
+                plan: 'pro',
+                planId: dadosPagamento.plan || null,
+                provider: 'abacatepay',
+                activatedAt: agora
+            }
+        }, { merge: true });
+    } else {
+        throw new Error('Pagamento sem uid e sem schoolId — nada a liberar.');
+    }
+
+    await pagamentoRef.set({ status: 'paid', paidAt: agora }, { merge: true });
+    return { jaAplicado: false, tipo: dadosPagamento.tipo };
+}
+
+/**
+ * Conferência do pagamento a pedido da tela.
+ *
+ * O webhook é o caminho principal, mas ele pode atrasar ou se perder — e a
+ * pessoa está parada na tela esperando o acesso que acabou de pagar. Aqui a
+ * própria página pergunta à AbacatePay se a cobrança foi paga e, se foi,
+ * libera na hora. Quem decide continua sendo o servidor: o navegador só
+ * informa qual pagamento conferir.
+ */
+exports.confirmPayment = functions.https.onCall(async (data, context) => {
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'Entre na sua conta para continuar.');
+    }
+
+    const paymentId = String((data && data.paymentId) || '').trim();
+    if (!paymentId) {
+        throw new functions.https.HttpsError('invalid-argument', 'Informe qual pagamento conferir.');
+    }
+
+    const ref = admin.firestore().collection('payments').doc(paymentId);
+    const snap = await ref.get();
+    if (!snap.exists) {
+        throw new functions.https.HttpsError('not-found', 'Pagamento não encontrado.');
+    }
+
+    const pagamento = snap.data() || {};
+    if (pagamento.uid !== context.auth.uid) {
+        throw new functions.https.HttpsError('permission-denied', 'Este pagamento não é da sua conta.');
+    }
+
+    if (pagamento.status === 'paid') {
+        return { status: 'paid', tipo: pagamento.tipo, jaLiberado: true };
+    }
+
+    const apiKey = functions.config().abacatepay?.api_key;
+    if (!apiKey || !pagamento.billingId) {
+        return { status: pagamento.status || 'pending', tipo: pagamento.tipo };
+    }
+
+    try {
+        const resposta = await axios.get('https://api.abacatepay.com/v1/billing/list', {
+            headers: { Authorization: `Bearer ${apiKey}` }
+        });
+        const lista = resposta.data?.data || [];
+        const cobranca = lista.find((b) => b.id === pagamento.billingId);
+        const pago = cobranca && String(cobranca.status).toUpperCase() === 'PAID';
+
+        if (!pago) {
+            return { status: 'pending', tipo: pagamento.tipo };
+        }
+
+        await aplicarPagamento(ref, pagamento);
+        return { status: 'paid', tipo: pagamento.tipo, jaLiberado: false };
+    } catch (error) {
+        console.error('AbacatePay: erro ao conferir pagamento:', error.response?.data || error.message);
+        throw new functions.https.HttpsError('internal', 'Não foi possível conferir o pagamento agora.');
     }
 });
 
@@ -442,4 +708,122 @@ exports.generateAIProject = functions.https.onCall(async (data, context) => {
 
         throw new functions.https.HttpsError('internal', `Erro no processamento da IA: ${error.message}. Detalhes: ${JSON.stringify(errorData)}`);
     }
+});
+
+/* ==================================================================== */
+/* Entrada do aluno pelo código da turma                                */
+/* ==================================================================== */
+
+/**
+ * O aluno entra pelo código impresso no cartaz da turma, sem e-mail e sem
+ * senha — ele não tem conta própria (é criança, e a conta é da escola).
+ *
+ * Antes, a página buscava a turma direto no Firestore. Isso tinha dois
+ * problemas: a regra de /classes exige usuário autenticado, então a busca
+ * nunca funcionava de verdade; e o documento dos alunos vinha inteiro para
+ * o navegador — inclusive a palavra secreta de cada colega. Quem tivesse o
+ * código da turma lia a senha de todo mundo no painel do navegador.
+ *
+ * Estas duas funções resolvem os dois pontos: a consulta acontece aqui,
+ * com credencial de servidor, e a palavra secreta nunca sai daqui.
+ */
+
+/** Só o que a tela de escolha do aluno precisa desenhar. Nada além disso. */
+function alunoPublico(doc) {
+    const d = doc.data() || {};
+    return { id: doc.id, name: d.name || "Aluno", avatar: d.avatar || "🎓" };
+}
+
+async function buscarTurmaPorCodigo(code) {
+    const codigo = String(code || "").trim().toUpperCase();
+    if (codigo.length < 4) return null;
+
+    const snap = await admin.firestore()
+        .collection("classes")
+        .where("sectionCode", "==", codigo)
+        .limit(1)
+        .get();
+
+    return snap.empty ? null : snap.docs[0];
+}
+
+/**
+ * Devolve a turma e a lista de alunos SEM as palavras secretas.
+ * Aberta a quem não está autenticado, porque é exatamente esse o caso de
+ * uso: a criança ainda não entrou.
+ */
+exports.lookupClass = functions.https.onCall(async (data) => {
+    const turma = await buscarTurmaPorCodigo(data && data.code);
+    if (!turma) {
+        // Código errado é o caso comum (criança copiando do quadro), não um
+        // erro de sistema — e a mensagem precisa dizer isso.
+        throw new functions.https.HttpsError(
+            "not-found",
+            "Turma não encontrada. Confira o código com seu professor."
+        );
+    }
+
+    const alunosSnap = await admin.firestore()
+        .collection(`classes/${turma.id}/students`)
+        .get();
+
+    const dados = turma.data() || {};
+    return {
+        id: turma.id,
+        name: dados.name || "Turma",
+        gradeName: dados.gradeName || null,
+        students: alunosSnap.docs.map(alunoPublico),
+    };
+});
+
+/**
+ * Confere a palavra secreta no servidor e devolve um token de acesso.
+ *
+ * Antes, a conferência era feita no navegador e o "login" era só uma
+ * gravação em localStorage — dava para digitar no console e virar
+ * qualquer colega. Com o token assinado, a sessão do aluno passa a valer
+ * para as regras do Firestore como qualquer outra.
+ *
+ * O uid é derivado da turma e do aluno, sem e-mail e sem dado pessoal
+ * novo: a criança continua sem conta própria fora da turma.
+ */
+exports.studentLogin = functions.https.onCall(async (data) => {
+    const turma = await buscarTurmaPorCodigo(data && data.code);
+    if (!turma) {
+        throw new functions.https.HttpsError("not-found", "Turma não encontrada.");
+    }
+
+    const studentId = String((data && data.studentId) || "").trim();
+    const secret = String((data && data.secret) || "").trim().toLowerCase();
+    if (!studentId || !secret) {
+        throw new functions.https.HttpsError("invalid-argument", "Informe o aluno e a palavra secreta.");
+    }
+
+    const alunoRef = admin.firestore().doc(`classes/${turma.id}/students/${studentId}`);
+    const alunoSnap = await alunoRef.get();
+    if (!alunoSnap.exists) {
+        throw new functions.https.HttpsError("not-found", "Aluno não encontrado nesta turma.");
+    }
+
+    const aluno = alunoSnap.data() || {};
+    const esperado = String(aluno.secret || "").trim().toLowerCase();
+    if (!esperado || esperado !== secret) {
+        // Mesma resposta para palavra errada e aluno sem palavra cadastrada:
+        // dizer qual dos dois foi ajudaria quem está tentando adivinhar.
+        throw new functions.https.HttpsError("permission-denied", "Palavra secreta incorreta.");
+    }
+
+    const uid = `student_${turma.id}_${studentId}`;
+    const token = await admin.auth().createCustomToken(uid, {
+        role: "student",
+        classId: turma.id,
+        studentId,
+    });
+
+    return {
+        token,
+        student: alunoPublico(alunoSnap),
+        classId: turma.id,
+        className: (turma.data() || {}).name || "Turma",
+    };
 });

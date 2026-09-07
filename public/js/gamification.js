@@ -278,28 +278,6 @@ export const gamificationSystem = {
     }
 };
 
-// Dados de exemplo de usuário
-export const mockUserData = {
-    id: "student-001",
-    name: "João Silva",
-    email: "joao@escola.com",
-    role: "aluno",
-    xp: 245,
-    level: 3,
-    badges: ["first-steps", "early-bird", "scratch-novice"],
-    challengesCompleted: 8,
-    scratchChallenges: 4,
-    arduinoChallenges: 2,
-    microbitChallenges: 2,
-    firstTryWins: 2,
-    helpCount: 1,
-    loginStreak: 5,
-    fastestCompletion: 420,
-    weekendSessions: 1,
-    lateNightCompletions: 0,
-    joinedAt: "2024-01-15"
-};
-
 // Exportar funções auxiliares
 export function getUserLevel(xp) {
     return gamificationSystem.calculateLevel(xp);

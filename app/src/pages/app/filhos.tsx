@@ -12,6 +12,7 @@ import {
 import { useChildren, type ChildProfile } from "@/lib/use-children"
 import { PageHeader, EmptyState } from "@/components/dashboard/page-header"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/toast"
 
 const inputClass =
   "w-full rounded-xl border bg-background px-3.5 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
@@ -99,6 +100,7 @@ function ChildForm({
 
 export function FilhosPage() {
   const kids = useChildren()
+  const toast = useToast()
   const [adding, setAdding] = useState(false)
   const [editing, setEditing] = useState<string | null>(null)
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
@@ -156,6 +158,7 @@ export function FilhosPage() {
             onCancel={() => setAdding(false)}
             onSubmit={async (data) => {
               await kids.addChild(data)
+              toast.sucesso("Perfil criado", `${data.name} já pode usar a plataforma.`)
               setAdding(false)
             }}
           />
@@ -196,6 +199,7 @@ export function FilhosPage() {
                     onCancel={() => setEditing(null)}
                     onSubmit={async (data) => {
                       await kids.renameChild(child.id, data)
+                      toast.sucesso("Perfil atualizado")
                       setEditing(null)
                     }}
                   />
@@ -277,7 +281,10 @@ export function FilhosPage() {
                           setDeleting(true)
                           try {
                             await kids.removeChild(child.id)
+                            toast.sucesso("Perfil excluído", "Os dados da criança foram removidos.")
                             setConfirmDelete(null)
+                          } catch {
+                            toast.erro("Não foi possível excluir", "Tente novamente em instantes.")
                           } finally {
                             setDeleting(false)
                           }

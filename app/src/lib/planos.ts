@@ -59,6 +59,8 @@ export const PLANOS_PROFESSOR: Plano[] = [
       { texto: "Assistente IA com sua própria chave do Gemini" },
     ],
     cta: "Criar conta grátis",
+    // O login é só com Google e não tem modo separado de cadastro: a
+    // primeira entrada já cria a conta e cai no onboarding.
     ctaHref: "/login.html",
   },
   {
@@ -77,8 +79,8 @@ export const PLANOS_PROFESSOR: Plano[] = [
       { texto: "Exportação dos roteiros para impressão" },
       { texto: "Comunidade de professores makers" },
     ],
-    cta: "Assinar o PRO",
-    ctaHref: "/contact.html?plano=pro_mensal",
+    cta: "Assinar com Pix",
+    ctaHref: "/app/assinatura?plano=pro_mensal",
   },
   {
     id: "pro_anual",
@@ -94,8 +96,8 @@ export const PLANOS_PROFESSOR: Plano[] = [
       { texto: "Trilha Arduino do Zero com o kit em mãos" },
       { texto: "Frete incluso para todo o Brasil" },
     ],
-    cta: "Assinar o anual",
-    ctaHref: "/contact.html?plano=pro_anual",
+    cta: "Assinar o anual com Pix",
+    ctaHref: "/app/assinatura?plano=pro_anual",
     nota: "O kit é enviado após a confirmação do pagamento.",
   },
 ]
@@ -162,8 +164,9 @@ export const PLANOS_AULAS: Plano[] = [
       { texto: "Relatório de evolução para os responsáveis" },
       { texto: "Aulas gravadas para rever depois" },
     ],
-    cta: "Agendar aula experimental",
-    ctaHref: "/contact.html?plano=aulas_turma",
+    cta: "Contratar com Pix",
+    ctaHref: "/app/assinatura?plano=aulas_turma",
+    nota: "Depois do pagamento combinamos com você o dia e o horário da turma.",
   },
   {
     id: "aulas_individual",
@@ -179,10 +182,103 @@ export const PLANOS_AULAS: Plano[] = [
       { texto: "Acesso à plataforma incluso" },
       { texto: "Acompanhamento direto com o professor" },
     ],
-    cta: "Falar sobre horários",
-    ctaHref: "/contact.html?plano=aulas_individual",
+    cta: "Contratar com Pix",
+    ctaHref: "/app/assinatura?plano=aulas_individual",
+    nota: "Depois do pagamento entramos em contato para combinar os horários.",
   },
 ]
+
+/* ------------------------------------------------------------------ */
+/* Comparativo Gratuito x PRO                                          */
+/* ------------------------------------------------------------------ */
+
+/**
+ * O que muda de fato ao assinar. Uma lista de vantagens em cada card diz
+ * o que o plano tem; esta tabela diz onde está o limite — que é a
+ * pergunta que a pessoa realmente faz antes de pagar.
+ *
+ * Os números aqui precisam bater com FREE_AI_GENERATIONS em lib/roles.ts
+ * e com o limite aplicado na Cloud Function: prometer na página o que o
+ * servidor não entrega é o pior tipo de erro de preço.
+ */
+export const COMPARATIVO: { recurso: string; free: string; pro: string }[] = [
+  { recurso: "Planos de aula gerados por IA", free: "3 no total", pro: "Ilimitados" },
+  { recurso: "Chave de IA", free: "Você configura a sua", pro: "Inclusa, já configurada" },
+  { recurso: "Trilhas da Academia", free: "Primeiro módulo", pro: "Todos os módulos" },
+  { recurso: "Assistente IA e Criação de Conteúdo", free: "Com a sua chave", pro: "Sem limite" },
+  { recurso: "Biblioteca de roteiros", free: "37 roteiros", pro: "37 roteiros" },
+  { recurso: "Área do aluno e Arena de Quiz", free: "Completa", pro: "Completa" },
+  { recurso: "Exportar roteiros para impressão", free: "—", pro: "Sim" },
+  { recurso: "Kit Arduino Básico", free: "—", pro: "No plano anual" },
+]
+
+/* ------------------------------------------------------------------ */
+/* Dúvidas antes de pagar                                              */
+/* ------------------------------------------------------------------ */
+
+export const FAQ_PLANOS: { pergunta: string; resposta: string }[] = [
+  {
+    pergunta: "O plano gratuito expira?",
+    resposta:
+      "Não. Ele é gratuito para sempre. O que é limitado são as gerações por IA (3 no total) e " +
+      "o acesso aos módulos avançados das trilhas. O resto da plataforma continua aberto sem prazo.",
+  },
+  {
+    pergunta: "Posso cancelar quando quiser?",
+    resposta:
+      "Pode. A assinatura mensal é cancelada a qualquer momento e vale até o fim do período já " +
+      "pago. No plano anual com kit, o cancelamento antes de 12 meses desconta o valor do kit já enviado.",
+  },
+  {
+    pergunta: "Como funciona o pagamento?",
+    resposta:
+      "O pagamento é processado pela AbacatePay, com Pix e cartão de crédito. A liberação do " +
+      "plano é automática assim que o pagamento é confirmado — você não precisa avisar ninguém.",
+  },
+  {
+    pergunta: "Preciso saber programar para usar?",
+    resposta:
+      "Não. A Academia do Professor começa do zero, e os roteiros de projeto trazem o código " +
+      "pronto e comentado. A ideia é justamente dar segurança para quem nunca mexeu com robótica.",
+  },
+  {
+    pergunta: "Sou professor de uma escola. Quem contrata?",
+    resposta:
+      "Depende de como você vai usar. Para planejar as suas aulas, o plano de professor autônomo " +
+      "resolve e é você quem assina. Quando a escola quer acompanhar turmas e alunos, aí é o " +
+      "Pacote Escola — e nesse caso a escola contrata e libera acesso para a equipe.",
+  },
+  {
+    pergunta: "Como a escola testa antes de contratar?",
+    resposta:
+      "A escola recebe um código de demonstração e navega por toda a plataforma sem pagar nada. " +
+      "A gestão de turmas — criar turmas, cadastrar alunos e acompanhar o progresso — é o que " +
+      "fica liberado na contratação.",
+  },
+  {
+    pergunta: "As aulas online substituem a escola?",
+    resposta:
+      "Não. São aulas complementares, no contraturno, para famílias que querem robótica e " +
+      "programação para os filhos sem depender da escola oferecer.",
+  },
+  {
+    pergunta: "Preciso comprar o kit para acompanhar as trilhas?",
+    resposta:
+      "Não para começar: os primeiros módulos usam simulador. O kit vem incluído no plano anual " +
+      "e pode ser comprado à parte por quem está no mensal.",
+  },
+]
+
+/**
+ * Nome comercial de cada coisa que pode originar um lead — inclusive o que
+ * não é plano, como o kit avulso. Sem isso o painel de suporte mostra o id
+ * cru e quem atende precisa adivinhar de onde a pessoa veio.
+ */
+export const NOMES_PLANO: Record<string, string> = {
+  ...Object.fromEntries([...PLANOS_PROFESSOR, ...PLANOS_AULAS].map((p) => [p.id, p.nome])),
+  escola: "Pacote Escola",
+  kit_arduino: "Kit Missão Maker (avulso)",
+}
 
 export const AULAS_NOTA =
   "As aulas usam materiais que a família já tem em casa ou o Kit Arduino Básico, " +

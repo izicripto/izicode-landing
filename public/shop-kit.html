@@ -9,6 +9,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/tw/71ce27d9.css">
+  <script src="/js/toast.js"></script>
 </head>
 
 <body class="bg-slate-50 text-slate-800">
@@ -65,26 +66,10 @@
                     </div>
 
                     <div class="flex items-center gap-4">
-                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mb-6">
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Possui um cupom?</label>
-                            <div class="flex gap-2">
-                                <input type="text" id="coupon" placeholder="IZICODE10"
-                                    class="flex-1 px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 outline-none uppercase">
-                                <button onclick="checkCoupon()"
-                                    class="bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition">
-                                    Aplicar
-                                </button>
-                            </div>
-                            <p id="coupon-msg" class="text-xs mt-2 hidden"></p>
-                        </div>
 
                         <div class="flex items-center gap-4 mb-2">
-                            <div>
-                                <span class="text-xs text-slate-400 line-through block" id="old-price"></span>
-                                <span class="text-3xl font-bold text-slate-900" id="current-price">R$ 297,00</span>
-                            </div>
-                            <span class="text-sm text-slate-500">ou 12x de <span id="installment-price">R$
-                                    29,70</span></span>
+                            <span class="text-3xl font-bold text-slate-900">R$ 297,00</span>
+                            <span class="text-sm text-slate-500">ou 12x de R$ 24,75</span>
                         </div>
 
                         <button onclick="goToCheckout()"
@@ -98,75 +83,27 @@
                         </button>
 
                         <script>
-                            const BASE_PRICE = 297.00;
-                            let activeDiscount = 0;
-
-                            function checkCoupon() {
-                                const code = document.getElementById('coupon').value.toUpperCase();
-                                const msgEl = document.getElementById('coupon-msg');
-
-                                // Lógica simples de cupom (mock)
-                                // Na produção, validar via API ou lista segura
-                                const coupons = {
-                                    'IZICODE10': 0.10, // 10% off
-                                    'PROFESSOR20': 0.20 // 20% off
-                                };
-
-                                if (coupons[code]) {
-                                    activeDiscount = coupons[code];
-                                    updatePrice();
-                                    showMsg('Cupom aplicado com sucesso! 🎉', 'text-green-600');
-                                } else {
-                                    activeDiscount = 0;
-                                    updatePrice();
-                                    showMsg('Cupom inválido 😢', 'text-red-500');
-                                }
-                            }
-
-                            function showMsg(text, colorClass) {
-                                const el = document.getElementById('coupon-msg');
-                                el.textContent = text;
-                                el.className = `text-xs mt-2 font-bold ${colorClass}`;
-                                el.classList.remove('hidden');
-                            }
-
-                            function updatePrice() {
-                                const newPrice = BASE_PRICE * (1 - activeDiscount);
-                                const oldPriceEl = document.getElementById('old-price');
-
-                                if (activeDiscount > 0) {
-                                    oldPriceEl.textContent = `R$ ${BASE_PRICE.toFixed(2).replace('.', ',')}`;
-                                    document.getElementById('current-price').classList.add('text-green-600');
-                                } else {
-                                    oldPriceEl.textContent = '';
-                                    document.getElementById('current-price').classList.remove('text-green-600');
-                                }
-
-                                document.getElementById('current-price').textContent = `R$ ${newPrice.toFixed(2).replace('.', ',')}`;
-                                document.getElementById('installment-price').textContent = `R$ ${(newPrice / 12).toFixed(2).replace('.', ',')}`;
-                            }
-
+                            // O campo de cupom foi retirado: os códigos eram validados só
+                            // aqui no navegador, então o desconto aparecia na tela e sumia
+                            // no fechamento do pedido. Quando existir validação no servidor,
+                            // o campo volta com o desconto que a pessoa realmente vai pagar.
+                            // Com isso o preço virou texto fixo no HTML — não há mais nada
+                            // para o JavaScript recalcular.
                             function goToCheckout() {
-                                // TODO: produto físico (Kit Missão Maker) ainda não tem
-                                // Cloud Function de checkout própria — precisa de um endpoint
-                                // AbacatePay separado do de assinaturas (com endereço de
-                                // entrega). Por ora, encaminha para contato comercial.
-                                alert('Em breve: checkout via AbacatePay. Por enquanto, fale com nossa equipe pelo formulário de contato.');
-                                window.location.href = 'contact.html';
+                                // O kit é produto físico e precisa de endereço de entrega,
+                                // o que o checkout de assinaturas da AbacatePay não cobre.
+                                // Até existir esse endpoint, o pedido passa pelo comercial —
+                                // e o formulário já chega sabendo qual produto é.
+                                window.location.href = '/contato?plano=kit_arduino';
                             }
                         </script>
                     </div>
                     <div class="bg-slate-100 rounded-3xl p-8 flex items-center justify-center min-h-[400px]">
-                        <!-- Placeholder para Foto do Kit -->
                         <div class="text-center">
-                            <svg class="w-24 h-24 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                            </svg>
-                            <p class="text-slate-500 font-medium">Foto do Kit Missão Maker</p>
-                            <p class="text-xs text-slate-400">(Adicione uma foto real aqui: public/images/kit-maker.jpg)
-                            </p>
+                            <img src="/images/arduino.png" alt="Placa Arduino que acompanha o Kit Missão Maker"
+                                class="w-48 h-48 mx-auto object-contain mb-4">
+                            <p class="text-slate-600 font-medium">Kit Missão Maker</p>
+                            <p class="text-xs text-slate-400 mt-1">Placa, sensores, componentes e guia de montagem</p>
                         </div>
                     </div>
                 </div>

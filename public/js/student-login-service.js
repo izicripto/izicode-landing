@@ -1,95 +1,111 @@
-import { db, collection, query, where, getDocs, doc, getDoc } from './firebase-config.js';
+import { app, auth } from './firebase-config.js';
+import {
+    getFunctions,
+    httpsCallable,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-functions.js";
+import {
+    signInWithCustomToken,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+/**
+ * Entrada do aluno pelo código da turma.
+ *
+ * Toda a consulta acontece em Cloud Functions, por dois motivos que não
+ * dá para resolver no navegador:
+ *
+ * 1. A regra de /classes no Firestore exige usuário autenticado, e aqui o
+ *    aluno ainda não entrou — a busca direta nunca funcionaria.
+ * 2. Buscar a turma pelo cliente trazia o documento de cada aluno inteiro,
+ *    palavra secreta incluída. Quem tivesse o código da turma — que fica
+ *    num cartaz na parede — lia a senha de todos os colegas no painel do
+ *    navegador. A palavra secreta agora só existe no servidor.
+ *
+ * O login devolve um token assinado e chama signInWithCustomToken, então a
+ * sessão do aluno vale para as regras do Firestore como qualquer outra. A
+ * versão anterior apenas gravava em localStorage, o que qualquer pessoa
+ * podia escrever no console para virar outro aluno.
+ */
+const fns = getFunctions(app);
+const lookupClassFn = httpsCallable(fns, 'lookupClass');
+const studentLoginFn = httpsCallable(fns, 'studentLogin');
+
+/** Mensagem para a criança, não para o desenvolvedor. */
+function mensagemDe(error, padrao) {
+    const codigo = (error && error.code) || '';
+    if (codigo.includes('not-found')) return error.message || 'Turma não encontrada.';
+    if (codigo.includes('permission-denied')) return error.message || 'Palavra secreta incorreta.';
+    if (codigo.includes('invalid-argument')) return error.message || 'Confira os dados e tente de novo.';
+    return padrao;
+}
 
 export const studentLoginService = {
     /**
-     * Finds a class by its 6-character section code.
-     * @param {string} code - The 6-character code (e.g., 'ABCDEF').
-     * @returns {Promise<Object|null>} - The class data or null if not found.
+     * Busca a turma pelo código de acesso.
+     * @param {string} code Código de 6 caracteres do cartaz da turma.
+     * @returns {Promise<Object|null>} Turma com os alunos (sem palavras
+     *          secretas), ou null quando o código não existe.
      */
     async findClassByCode(code) {
         try {
-            // Note: In production, ensure 'sectionCode' index exists.
-            const q = query(collection(db, "classes"), where("sectionCode", "==", code));
-            const querySnapshot = await getDocs(q);
-
-            if (querySnapshot.empty) {
-                return null;
-            }
-
-            const classDoc = querySnapshot.docs[0];
-            const classData = classDoc.data();
-
-            // Also fetch students subcollection if it exists, or array from doc
-            // Assuming for now students might be stored in a 'students' subcollection
-            // or we might mock it if the schema isn't fully migrated yet.
-
-            let students = [];
-            try {
-                const studentsRef = collection(db, `classes/${classDoc.id}/students`);
-                const studentsSnap = await getDocs(studentsRef);
-                students = studentsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            } catch (e) {
-                console.warn("Could not fetch students subcollection", e);
-                // Fallback if students are in the class doc (deprecated approach but possible)
-                if (classData.students && Array.isArray(classData.students)) {
-                    students = classData.students;
-                }
-            }
-
-            return {
-                id: classDoc.id,
-                ...classData,
-                students: students
-            };
+            const resposta = await lookupClassFn({ code });
+            return resposta.data;
         } catch (error) {
-            console.error("Error finding class:", error);
-            throw error;
+            // Código inexistente é resposta esperada, não falha: devolve
+            // null para a tela poder dizer "confira o código" em vez de
+            // "erro ao carregar".
+            if (error && String(error.code).includes('not-found')) return null;
+            console.error('Erro ao buscar turma:', error);
+            throw new Error(mensagemDe(error, 'Não foi possível carregar a turma agora.'));
         }
     },
 
     /**
-     * Validates the student's secret word/icon.
-     * @param {string} studentId 
-     * @param {string} secretInput 
-     * @param {string} correctSecret (In a real app, this wouldn't be passed client-side ideally)
-     * @returns {boolean}
+     * Confere a palavra secreta no servidor e autentica o aluno.
+     * @returns {Promise<Object>} Dados da sessão já gravada.
      */
-    async validateSecret(studentId, secretInput, correctSecret) {
-        // Simple comparison for MVP
-        // In robust auth, we'd send this to a Cloud Function to verify hash
-        return secretInput.toLowerCase().trim() === correctSecret.toLowerCase().trim();
-    },
+    async login(code, studentId, secret) {
+        let dados;
+        try {
+            const resposta = await studentLoginFn({ code, studentId, secret });
+            dados = resposta.data;
+        } catch (error) {
+            throw new Error(mensagemDe(error, 'Não foi possível entrar agora. Tente novamente.'));
+        }
 
-    /**
-     * Logs the student in by saving session state.
-     * @param {Object} student 
-     * @param {Object} classData 
-     */
-    login(student, classData) {
+        await signInWithCustomToken(auth, dados.token);
+
         const sessionData = {
-            studentId: student.id,
-            name: student.name,
-            avatar: student.avatar || '🎓',
-            classId: classData.id,
-            className: classData.name,
-            loginTime: new Date().toISOString()
+            studentId: dados.student.id,
+            name: dados.student.name,
+            avatar: dados.student.avatar || '🎓',
+            classId: dados.classId,
+            className: dados.className,
+            loginTime: new Date().toISOString(),
         };
-
+        // Cache de exibição para a interface não piscar enquanto o Firebase
+        // restaura a sessão. Quem autoriza é o token, nunca este objeto.
         localStorage.setItem('izicode_student_session', JSON.stringify(sessionData));
-        return true;
+        return sessionData;
     },
 
-    /**
-     * Checks if a student is logged in.
-     * @returns {Object|null}
-     */
+    /** Sessão em cache, só para desenhar a tela. */
     getSession() {
         const data = localStorage.getItem('izicode_student_session');
-        return data ? JSON.parse(data) : null;
+        try {
+            return data ? JSON.parse(data) : null;
+        } catch {
+            localStorage.removeItem('izicode_student_session');
+            return null;
+        }
     },
 
-    logout() {
+    async logout() {
         localStorage.removeItem('izicode_student_session');
+        try {
+            await auth.signOut();
+        } catch (error) {
+            console.error('Erro ao encerrar a sessão:', error);
+        }
         window.location.href = 'join.html';
-    }
+    },
 };

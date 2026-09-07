@@ -5,6 +5,7 @@ import { ROLE_LABELS } from "@/lib/roles"
 import type { AdminUser } from "@/lib/use-admin"
 import { PageHeader } from "@/components/dashboard/page-header"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/toast"
 
 const PAPEIS = [
   "student",
@@ -27,6 +28,7 @@ function ehPago(u: AdminUser) {
 
 export function AdminUsuariosPage() {
   const admin = useAdmin()
+  const toast = useToast()
   const [busca, setBusca] = useState("")
   const [salvando, setSalvando] = useState<string | null>(null)
 
@@ -41,12 +43,17 @@ export function AdminUsuariosPage() {
     )
   }, [admin.users, busca])
 
-  async function comSalvamento(chave: string, acao: () => Promise<void>) {
+  async function comSalvamento(chave: string, acao: () => Promise<void>, sucesso: string) {
     setSalvando(chave)
     try {
       await acao()
+      toast.sucesso(sucesso)
     } catch (err) {
       console.error("Ação administrativa falhou:", err)
+      toast.erro(
+        "Não foi possível aplicar a mudança",
+        "Confirme que esta conta é a dona da plataforma e que as regras do Firestore estão publicadas."
+      )
     } finally {
       setSalvando(null)
     }
@@ -91,7 +98,13 @@ export function AdminUsuariosPage() {
                   <select
                     value={u.role ?? ""}
                     disabled={salvando === `role-${u.id}`}
-                    onChange={(e) => comSalvamento(`role-${u.id}`, () => admin.setUserRole(u.id, e.target.value))}
+                    onChange={(e) =>
+                      comSalvamento(
+                        `role-${u.id}`,
+                        () => admin.setUserRole(u.id, e.target.value),
+                        `Papel de ${nomeDe(u)} atualizado`
+                      )
+                    }
                     className="rounded-lg border bg-background px-2 py-1 text-xs outline-none focus:border-primary"
                   >
                     <option value="">sem papel</option>
@@ -108,7 +121,11 @@ export function AdminUsuariosPage() {
                     variant={ehPago(u) ? "default" : "outline"}
                     disabled={salvando === `plan-${u.id}`}
                     onClick={() =>
-                      comSalvamento(`plan-${u.id}`, () => admin.setUserPlan(u.id, ehPago(u) ? "free" : "pro"))
+                      comSalvamento(
+                        `plan-${u.id}`,
+                        () => admin.setUserPlan(u.id, ehPago(u) ? "free" : "pro"),
+                        ehPago(u) ? `${nomeDe(u)} voltou para o plano gratuito` : `${nomeDe(u)} agora é PRO`
+                      )
                     }
                   >
                     {salvando === `plan-${u.id}` ? (

@@ -16,6 +16,7 @@ import { useProjects, type Project } from "@/lib/use-projects"
 import { PageHeader, EmptyState } from "@/components/dashboard/page-header"
 import { Markdown, extractHeadings } from "@/components/dashboard/markdown"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/toast"
 
 function ProjectDetail({ project, onBack }: { project: Project; onBack: () => void }) {
   const headings = useMemo(() => extractHeadings(project.content ?? ""), [project.content])
@@ -167,6 +168,7 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
 
 export function ProjetosPage() {
   const { projects, loading, error, removeProject } = useProjects()
+  const toast = useToast()
   const [searchParams, setSearchParams] = useSearchParams()
   const selectedId = searchParams.get("id")
   const [pendingDelete, setPendingDelete] = useState<string | null>(null)
@@ -255,7 +257,12 @@ export function ProjetosPage() {
                     variant="destructive"
                     size="sm"
                     onClick={async () => {
-                      await removeProject(project.id)
+                      try {
+                        await removeProject(project.id)
+                        toast.sucesso("Projeto excluído", project.title)
+                      } catch {
+                        toast.erro("Não foi possível excluir", "Tente novamente em instantes.")
+                      }
                       setPendingDelete(null)
                     }}
                   >

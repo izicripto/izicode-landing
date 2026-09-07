@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth-context"
 import { isProUser, remainingFreeGenerations, FREE_AI_GENERATIONS } from "@/lib/roles"
 import { PageHeader } from "@/components/dashboard/page-header"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/toast"
 
 export function EstudioPage() {
   const { userData } = useAuth()
@@ -20,6 +21,7 @@ export function EstudioPage() {
   const [objective, setObjective] = useState("")
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const toast = useToast()
 
   async function handleGenerate(event: React.FormEvent) {
     event.preventDefault()
@@ -38,6 +40,7 @@ export function EstudioPage() {
       >(functions, "generateAIProject")
       const result = await generate({ target, subject, objective })
       if (result.data?.success) {
+        toast.sucesso("Projeto criado pela IA", "Revise e ajuste o que quiser antes de aplicar em aula.")
         navigate(`/app/projetos?id=${result.data.projectId}`)
       } else {
         setError("A IA não retornou um plano. Tente novamente.")

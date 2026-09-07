@@ -159,6 +159,15 @@ service cloud.firestore {
     // Criação/edição de turmas reais exige plano 'active' da escola; o
     // acesso 'demo' (via código de demonstração) só permite leitura, para
     // que a escola experimente a plataforma antes de contratar.
+    // Alunos de uma turma. O documento guarda a palavra secreta da criança,
+    // e regra de segurança não esconde campo — quem pode ler o documento lê
+    // a senha inteira. Por isso nenhum aluno lê esta coleção: a tela de
+    // entrada recebe nome e avatar pela Cloud Function lookupClass, que
+    // devolve só isso, e a conferência da palavra acontece em studentLogin.
+    match /classes/{classId}/students/{studentId} {
+      allow read, write: if isAdmin() || isSchoolAdmin() || isTeacher();
+    }
+
     match /classes/{classId} {
       allow read: if isAuthenticated();
       allow create: if isAdmin() ||
@@ -231,6 +240,16 @@ service cloud.firestore {
                              resource.data.userId == request.auth.uid;
       allow create: if isAuthenticated() &&
                       request.resource.data.userId == request.auth.uid;
+    }
+
+    // Pagamentos. Escritos SÓ pelas Cloud Functions (que usam o Admin SDK e
+    // passam por cima destas regras) — deixar o navegador escrever aqui
+    // seria deixar qualquer pessoa marcar o próprio pagamento como pago e
+    // liberar o plano sem pagar nada. O cliente só lê, para a tela poder
+    // acompanhar o status da própria compra.
+    match /payments/{paymentId} {
+      allow read: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid);
+      allow write: if false;
     }
 
     // Leads (Contact Form) - Protection against spam

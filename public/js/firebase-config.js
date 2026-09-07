@@ -25,6 +25,9 @@ const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 
 export {
+    // Exportado para quem precisa inicializar outro SDK sobre a mesma
+    // instância (Cloud Functions, por exemplo) em vez de criar um app novo.
+    app,
     auth,
     db,
     storage,

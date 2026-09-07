@@ -9,6 +9,7 @@ import { askAI, getStoredApiKey } from "@/lib/ai"
 import { PageHeader } from "@/components/dashboard/page-header"
 import { Markdown } from "@/components/dashboard/markdown"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/toast"
 
 const TOOL_OPTIONS = ["Scratch", "Arduino", "Micro:bit", "Tinkercad", "Python", "Desplugado"]
 
@@ -49,6 +50,7 @@ export function ConteudoPage() {
   const [busy, setBusy] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const toast = useToast()
 
   function toggleTool(tool: string) {
     setTools((prev) => (prev.includes(tool) ? prev.filter((t) => t !== tool) : [...prev, tool]))
@@ -116,6 +118,7 @@ export function ConteudoPage() {
         type: mode === "ai" ? "ai-lesson-plan" : "manual-lesson-plan",
         createdAt: serverTimestamp(),
       })
+      toast.sucesso("Plano de aula salvo", "Ele já está em Meus Projetos.")
       navigate(`/app/projetos?id=${ref.id}`)
     } catch (err) {
       console.error("Erro ao salvar projeto:", err)

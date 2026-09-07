@@ -15,7 +15,7 @@ import {
   ArrowLeft,
 } from "lucide-react"
 import { db } from "@/lib/firebase"
-import { PLANOS_PROFESSOR, PLANOS_AULAS } from "@/lib/planos"
+import { NOMES_PLANO } from "@/lib/planos"
 import { Button } from "@/components/ui/button"
 
 /** Mesmos valores gravados pelo formulário antigo: o painel de suporte e
@@ -33,14 +33,6 @@ const OBJETIVOS = [
   { valor: "support", rotulo: "Preciso de suporte" },
   { valor: "other", rotulo: "Outro assunto" },
 ]
-
-/** Um plano vindo da página de planos vira contexto do lead: qual plano
- *  a pessoa estava olhando quando decidiu falar com a equipe. */
-const PLANOS_CONHECIDOS = [...PLANOS_PROFESSOR, ...PLANOS_AULAS]
-const NOMES_PLANO: Record<string, string> = {
-  ...Object.fromEntries(PLANOS_CONHECIDOS.map((p) => [p.id, p.nome])),
-  escola: "Pacote Escola",
-}
 
 const inputClass =
   "w-full rounded-xl border bg-background px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"

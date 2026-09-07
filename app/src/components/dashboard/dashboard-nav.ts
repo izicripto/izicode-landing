@@ -16,6 +16,7 @@ import {
   TrendingUp,
   Bot as BotIcon,
   type LucideIcon,
+  CreditCard,
 } from "lucide-react"
 import { SCHOOL_ROLES, STUDENT_ROLES } from "@/lib/roles"
 
@@ -56,6 +57,10 @@ const TEACHER_NAV: NavGroup[] = [
       { to: "/app/arduino", label: "Arduino Hub", icon: Cpu },
       { to: "/app/networking", label: "Networking", icon: Users },
     ],
+  },
+  {
+    group: "Conta",
+    items: [{ to: "/app/assinatura", label: "Assinatura", icon: CreditCard }],
   },
 ]
 
@@ -111,7 +116,10 @@ const PARENT_NAV: NavGroup[] = [
   STUDENT_NAV[0],
   {
     group: "Responsável",
-    items: [{ to: "/app/filhos", label: "Perfis das crianças", icon: Users }],
+    items: [
+      { to: "/app/filhos", label: "Perfis das crianças", icon: Users },
+      { to: "/app/assinatura", label: "Assinatura", icon: CreditCard },
+    ],
   },
   ...STUDENT_NAV.slice(1),
 ]

@@ -55,8 +55,52 @@ firebase functions:config:get --project izicodeedu-532ac
 | Chave | Usada por | Se faltar |
 |---|---|---|
 | `gemini.key` | `aiChat`, `generateAIProject` | Plano PRO não usa a IA pela chave gerenciada. A função responde `failed-precondition` e o painel mostra "assistente temporariamente indisponível". Contas com chave pessoal continuam funcionando. |
-| `abacatepay.api_key` | `createAbacatePayCheckout` | O checkout não abre: a função responde `failed-precondition`. |
+| `abacatepay.api_key` | `createAbacatePayCheckout`, `confirmPayment` | O checkout não abre e a conferência de pagamento não acontece: as funções respondem `failed-precondition`. |
 | `abacatepay.webhook_secret` | `abacatePayWebhook` | O webhook rejeita tudo com 401 — nenhum pagamento libera plano automaticamente. |
+
+## Chave da AbacatePay em uso
+
+A chave de produção atual é `key_J2bM6PLWN2whTmWgbFHpsbhd`. Ela **não está neste repositório e não deve entrar nele**: chave em arquivo versionado vaza no primeiro clone, e quem tiver acesso a ela emite e consulta cobranças na conta da Izicode. Rode:
+
+```bash
+firebase functions:config:set   abacatepay.api_key="key_J2bM6PLWN2whTmWgbFHpsbhd"   abacatepay.webhook_secret="UM_SEGREDO_LONGO_E_ALEATORIO_QUE_VOCE_ESCOLHE"   --project izicodeedu-532ac
+```
+
+O `webhook_secret` é inventado por você — qualquer string longa serve. Depois, no painel da AbacatePay, cadastre o webhook apontando para:
+
+```
+https://us-central1-izicodeedu-532ac.cloudfunctions.net/abacatePayWebhook?webhookSecret=O_MESMO_SEGREDO
+```
+
+Sem esse parâmetro na URL, a função responde 401 e nenhum pagamento libera acesso.
+
+## O ciclo de compra, de ponta a ponta
+
+**Professor e família (autoatendimento completo):**
+
+1. A pessoa escolhe o plano em `/planos` e cai em `/app/assinatura` (o login é exigido aí — o plano é liberado para a conta que paga).
+2. `createAbacatePayCheckout` grava a intenção em `/payments`, cria a cobrança com o preço **calculado no servidor** e devolve a URL do Pix.
+3. Pagamento confirmado → `abacatePayWebhook` chama `aplicarPagamento`, que grava `subscription.plan = 'pro'` no documento do usuário. O acesso abre sozinho.
+4. Se o webhook atrasar, a própria tela pergunta pelo `confirmPayment` a cada 5 segundos. As duas rotas são idempotentes: rodar as duas não libera duas vezes nem cobra de novo.
+
+**Escola (pagamento automático, liberação manual):**
+
+1. A escola simula os assentos em `/planos#escola` e gera a cobrança em `/app/assinatura?plano=escola&professores=N&alunos=M`.
+2. O valor é recalculado no servidor por `calcularEscola` — o navegador nunca define preço.
+3. Pagamento confirmado → a escola vai para `plan = 'paid_pending_activation'`, **não** para `active`, e um lead de alta prioridade entra em `/leads`.
+4. A gestão de turmas continua bloqueada: `isSchoolPlanActive()` no `firestore.rules` exige `plan == 'active'`, então nem a interface nem uma chamada direta ao Firestore contornam isso.
+5. Alguém da equipe valida a instituição em **Admin → Escolas** e clica em "Validar e liberar". Só então as turmas abrem.
+
+Essa diferença é deliberada: contrato com escola envolve nota fiscal, dados de crianças e a quantidade de assentos combinada — coisas que não se conferem sozinhas.
+
+## Entrada do aluno pelo código da turma
+
+`lookupClass` e `studentLogin` existem porque esse fluxo não pode acontecer no navegador:
+
+- A regra de `/classes` exige usuário autenticado, e o aluno ainda não entrou quando digita o código.
+- O documento de cada aluno guarda a **palavra secreta**. Buscar a turma pelo cliente trazia a senha de todos os colegas para o navegador de qualquer um que tivesse o código da turma — que fica num cartaz na parede.
+
+`lookupClass` devolve apenas nome e avatar. `studentLogin` confere a palavra no servidor e devolve um token assinado, então a sessão do aluno vale para as regras do Firestore como qualquer outra. Antes, o "login" era só uma gravação em `localStorage`, que qualquer pessoa podia digitar no console para virar outro aluno.
 
 ## Webhook da AbacatePay
 

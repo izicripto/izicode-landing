@@ -278,12 +278,7 @@ async function loadClasses() {
                 </div>
                 
                 <div class="border-t border-slate-100 pt-3 flex items-center justify-between">
-                    <div class="flex -space-x-2">
-                        <!-- Mock Avatars (would be real students) -->
-                        <div class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white"></div>
-                        <div class="w-6 h-6 rounded-full bg-slate-300 border-2 border-white"></div>
-                        <span class="text-xs text-slate-400 pl-3">${c.studentCount || 0} Alunos</span>
-                    </div>
+                    <span class="text-xs text-slate-500">${c.studentCount || 0} ${c.studentCount === 1 ? 'aluno' : 'alunos'}</span>
                     <button onclick="manageClass('${c.id}')" class="text-brand-600 text-xs font-bold hover:underline">Gerenciar</button>
                 </div>
             </div>
@@ -541,7 +536,7 @@ window.sendInvite = async () => {
     // If just checking QR, they can close manually. 
     // If they typed email, we pretend to send.
     if (email) {
-        alert(`(Simulação) Convite enviado para ${email}`);
+        alert("O envio de convite por e-mail ainda não está disponível. Compartilhe o código de acesso da escola com o professor.");
     }
 
     // Optional copy link logic could go here

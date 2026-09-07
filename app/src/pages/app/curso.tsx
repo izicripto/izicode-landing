@@ -17,6 +17,7 @@ import { isProUser } from "@/lib/roles"
 import { loadCourses, type Course } from "@/lib/legacy-data"
 import { Markdown } from "@/components/dashboard/markdown"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/toast"
 
 export function CursoPage() {
   const { courseId } = useParams<{ courseId: string }>()
@@ -29,6 +30,7 @@ export function CursoPage() {
   const [completed, setCompleted] = useState<string[]>([])
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const toast = useToast()
 
   useEffect(() => {
     loadCourses().then((all) => {
@@ -76,7 +78,7 @@ export function CursoPage() {
   const progressPct = modules.length ? Math.round((completed.length / modules.length) * 100) : 0
 
   async function markComplete() {
-    if (!user || !active || !courseId) return
+    if (!user || !course || !active || !courseId) return
     setSaving(true)
     setSaveError(null)
     const next = completed.includes(active.id) ? completed : [...completed, active.id]
@@ -87,6 +89,12 @@ export function CursoPage() {
         { merge: true }
       )
       setCompleted(next)
+      const ultimo = next.length >= modules.length
+      if (ultimo) {
+        toast.sucesso("Curso concluído!", `Você terminou "${course.title}". O certificado fica no seu perfil.`)
+      } else {
+        toast.sucesso("Progresso salvo", `${next.length} de ${modules.length} módulos concluídos.`)
+      }
       if (moduleIndex < modules.length - 1 && canAccess(modules[moduleIndex + 1])) {
         setModuleIndex(moduleIndex + 1)
         window.scrollTo({ top: 0, behavior: "smooth" })

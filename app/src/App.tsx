@@ -6,6 +6,7 @@ import { PlanosPage } from "@/pages/planos"
 import { ContatoPage } from "@/pages/contato"
 import { OnboardingPage } from "@/pages/onboarding"
 import { AuthProvider } from "@/lib/auth-context"
+import { ToastProvider } from "@/components/ui/toast"
 import { RequireAuth } from "@/components/dashboard/require-auth"
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout"
 import { RoleHome } from "@/pages/app/role-home"
@@ -27,6 +28,7 @@ import { RankingPage } from "@/pages/app/ranking"
 import { TurmasPage } from "@/pages/app/turmas"
 import { QuizPage } from "@/pages/app/quiz"
 import { FilhosPage } from "@/pages/app/filhos"
+import { AssinaturaPage } from "@/pages/app/assinatura"
 import { AdminLayout } from "@/components/dashboard/admin-layout"
 import { AdminVisaoPage } from "@/pages/app/admin/visao"
 import { AdminUsuariosPage } from "@/pages/app/admin/usuarios"
@@ -49,6 +51,7 @@ function SiteLayout({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <AuthProvider>
+      <ToastProvider>
       <BrowserRouter>
         <Routes>
           <Route
@@ -102,6 +105,7 @@ function App() {
               <Route path="ranking" element={<RankingPage />} />
               <Route path="quiz" element={<QuizPage />} />
               <Route path="filhos" element={<FilhosPage />} />
+              <Route path="assinatura" element={<AssinaturaPage />} />
               <Route path="admin" element={<AdminLayout />}>
                 <Route index element={<AdminVisaoPage />} />
                 <Route path="usuarios" element={<AdminUsuariosPage />} />
@@ -118,6 +122,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      </ToastProvider>
     </AuthProvider>
   )
 }

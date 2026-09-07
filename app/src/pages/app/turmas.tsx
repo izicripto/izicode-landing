@@ -15,6 +15,7 @@ import {
 import { useSchool } from "@/lib/use-school"
 import { PageHeader, StatCard, EmptyState } from "@/components/dashboard/page-header"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/toast"
 
 function CodeBox({ label, code }: { label: string; code?: string }) {
   const [copied, setCopied] = useState(false)
@@ -52,6 +53,7 @@ function CodeBox({ label, code }: { label: string; code?: string }) {
 
 export function TurmasPage() {
   const school = useSchool()
+  const toast = useToast()
   const [showForm, setShowForm] = useState(false)
   const [name, setName] = useState("")
   const [grade, setGrade] = useState("")
@@ -73,6 +75,7 @@ export function TurmasPage() {
     setSaving(true)
     try {
       await school.createClass({ name, grade, teacherId })
+      toast.sucesso("Turma criada", `${name.trim()} já aparece na lista.`)
       setName("")
       setGrade("")
       setTeacherId("")
@@ -279,7 +282,12 @@ export function TurmasPage() {
                           variant="destructive"
                           size="sm"
                           onClick={async () => {
-                            await school.removeClass(turma.id)
+                            try {
+                              await school.removeClass(turma.id)
+                              toast.sucesso("Turma excluída", `${turma.name} foi removida.`)
+                            } catch {
+                              toast.erro("Não foi possível excluir", "Tente novamente em instantes.")
+                            }
                             setPendingDelete(null)
                           }}
                         >
