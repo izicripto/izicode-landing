@@ -43,6 +43,17 @@ export interface UserData {
   xp?: number
   badges?: string[]
   challengesCompleted?: number
+  /** Gerações de IA já consumidas. Quem manda é o servidor: a Cloud
+   *  Function incrementa e bloqueia; aqui o valor serve só para mostrar
+   *  o saldo antes do professor tentar. */
+  aiUsageCount?: number
+}
+
+/** Gerações de IA incluídas no plano gratuito (espelha generateAIProject). */
+export const FREE_AI_GENERATIONS = 3
+
+export function remainingFreeGenerations(userData: UserData | null): number {
+  return Math.max(0, FREE_AI_GENERATIONS - (userData?.aiUsageCount ?? 0))
 }
 
 /**

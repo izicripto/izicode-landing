@@ -4,17 +4,16 @@ import { httpsCallable } from "firebase/functions"
 import { Sparkles, Bot, FileText, Loader2, Lock, AlertCircle } from "lucide-react"
 import { functions } from "@/lib/firebase"
 import { useAuth } from "@/lib/auth-context"
-import { isProUser } from "@/lib/roles"
+import { isProUser, remainingFreeGenerations, FREE_AI_GENERATIONS } from "@/lib/roles"
 import { PageHeader } from "@/components/dashboard/page-header"
 import { Button } from "@/components/ui/button"
-
-/** Limite do plano gratuito, espelhando a checagem da Cloud Function. */
-const FREE_LIMIT = 3
 
 export function EstudioPage() {
   const { userData } = useAuth()
   const navigate = useNavigate()
   const pro = isProUser(userData)
+  const restantes = remainingFreeGenerations(userData)
+  const semSaldo = !pro && restantes === 0
 
   const [target, setTarget] = useState("")
   const [subject, setSubject] = useState("")
@@ -49,7 +48,7 @@ export function EstudioPage() {
       // estoura o limite — vale mostrar isso como upgrade, não como erro.
       setError(
         message.includes("resource-exhausted") || message.includes("Limite")
-          ? `Você atingiu o limite de ${FREE_LIMIT} gerações do plano gratuito. Faça upgrade para o PRO e gere sem limite.`
+          ? `Você usou as ${FREE_AI_GENERATIONS} gerações do plano gratuito. Faça upgrade para o PRO e gere sem limite.`
           : "Não foi possível gerar o plano agora. Tente novamente em instantes."
       )
     } finally {
@@ -119,7 +118,7 @@ export function EstudioPage() {
             )}
 
             <div className="flex flex-wrap items-center gap-3">
-              <Button type="submit" disabled={generating}>
+              <Button type="submit" disabled={generating || semSaldo}>
                 {generating ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -134,7 +133,9 @@ export function EstudioPage() {
               </Button>
               {!pro && (
                 <span className="text-xs text-muted-foreground">
-                  Plano gratuito: até {FREE_LIMIT} gerações.
+                  {semSaldo
+                    ? "Você usou todas as gerações do plano gratuito."
+                    : `Plano gratuito: ${restantes} de ${FREE_AI_GENERATIONS} gerações restantes.`}
                 </span>
               )}
             </div>

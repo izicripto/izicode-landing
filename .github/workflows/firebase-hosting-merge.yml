@@ -43,21 +43,35 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: izicodeedu-532ac
 
-      # As Cloud Functions ficavam de fora do deploy automático, então
-      # qualquer função nova (aiChat, createAbacatePayCheckout,
-      # abacatePayWebhook) existia no repositório mas respondia 404 em
-      # produção — o plano PRO não conseguia usar a IA pela chave
-      # gerenciada porque o endpoint simplesmente não estava publicado.
-      #
-      # Fica num passo separado e com continue-on-error de propósito: se o
-      # deploy de functions falhar (cota, permissão do token, erro de
-      # build), o site e as regras já publicados no passo anterior seguem
-      # no ar. A falha aparece no log da Action em vez de derrubar tudo.
+  # Job separado de propósito, e SEM continue-on-error.
+  #
+  # Como não declara `needs`, roda em paralelo e uma falha aqui não impede
+  # a publicação do site acima. E como pode falhar de verdade, o erro
+  # aparece vermelho no painel da Action — a primeira tentativa usava
+  # `continue-on-error` dentro do job principal, o que marcava o passo
+  # como "success" mesmo quando o deploy falhava e escondeu por completo
+  # o motivo de aiChat continuar respondendo 404 em produção.
+  deploy_functions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Instala as dependências antes de empacotar: erro de dependência
+      # aparece aqui, com mensagem clara, em vez de dentro do build remoto.
+      - name: Install functions dependencies
+        run: |
+          cd functions
+          npm install
+
       - name: Deploy Cloud Functions
-        continue-on-error: true
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only functions
+          args: deploy --only functions --force
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: izicodeedu-532ac

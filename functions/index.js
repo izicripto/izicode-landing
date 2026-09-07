@@ -310,11 +310,11 @@ exports.generateAIProject = functions.https.onCall(async (data, context) => {
     const userRef = admin.firestore().collection('users').doc(userId);
     const userDoc = await userRef.get();
 
-    if (!userDoc.exists) {
-        throw new functions.https.HttpsError('not-found', 'Usuário não encontrado no banco de dados.');
-    }
-
-    const userData = userDoc.data();
+    // Conta autenticada sem doc no Firestore (cadastro recém-criado, ou
+    // perfil ainda não gravado) vale como plano gratuito zerado. Antes
+    // isso virava 'not-found' e o professor batia num beco sem saída,
+    // sem entender que bastava completar o cadastro.
+    const userData = userDoc.exists ? userDoc.data() : {};
     const isPro = userData.role === 'professor-pro' || userData.role === 'admin' || userData.subscription?.plan === 'pro';
     const usageCount = userData.aiUsageCount || 0;
 
@@ -387,10 +387,12 @@ exports.generateAIProject = functions.https.onCall(async (data, context) => {
             type: 'ai_generated'
         });
 
-        // Incrementar contador de uso
-        await userRef.update({
+        // Incrementar contador de uso. set/merge em vez de update porque
+        // o doc do usuário pode ainda não existir (ver acima) — update
+        // falharia e o professor perderia o plano recém-gerado.
+        await userRef.set({
             aiUsageCount: admin.firestore.FieldValue.increment(1)
-        });
+        }, { merge: true });
 
         return {
             success: true,
