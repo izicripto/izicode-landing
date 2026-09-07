@@ -128,16 +128,20 @@ firebase functions:config:get --project izicodeedu-532ac
 | `abacatepay.api_key` | `createAbacatePayCheckout`, `confirmPayment` | O checkout não abre e a conferência de pagamento não acontece: as funções respondem `failed-precondition`. |
 | `abacatepay.webhook_secret` | `abacatePayWebhook` | O webhook rejeita tudo com 401 — nenhum pagamento libera plano automaticamente. |
 
-## Chave da AbacatePay em uso
+## Chave da AbacatePay
 
-A chave de produção atual é `key_J2bM6PLWN2whTmWgbFHpsbhd`. Ela **não está neste repositório e não deve entrar nele**: chave em arquivo versionado vaza no primeiro clone, e quem tiver acesso a ela emite e consulta cobranças na conta da Izicode. Rode:
+A chave fica **apenas** na configuração do Firebase Functions, nunca em arquivo versionado. Pegue-a no painel da AbacatePay e rode:
 
 ```bash
 firebase functions:config:set \
-  abacatepay.api_key="key_J2bM6PLWN2whTmWgbFHpsbhd" \
+  abacatepay.api_key="COLE_A_CHAVE_AQUI" \
   abacatepay.webhook_secret="UM_SEGREDO_LONGO_E_ALEATORIO_QUE_VOCE_ESCOLHE" \
   --project izicodeedu-532ac
 ```
+
+> **Aviso de vazamento.** Uma versão anterior deste arquivo trazia a chave de produção escrita por extenso — e este repositório é **público**. A chave começada por `key_J2bM6…` foi exposta no histórico do Git e **precisa ser revogada no painel da AbacatePay**: apagar do arquivo não a remove dos commits anteriores, e chaves em repositório público costumam ser coletadas por varredores automáticos em minutos.
+>
+> Nunca escreva uma chave aqui, nem "só para não esquecer qual é". Se precisar registrar qual está em uso, anote só o prefixo (`key_J2bM6…`), que identifica sem permitir uso.
 
 O `webhook_secret` é inventado por você — qualquer string longa serve. Depois, no painel da AbacatePay, cadastre o webhook apontando para:
 
