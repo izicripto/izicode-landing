@@ -327,8 +327,27 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
             tipo: planConfig.tipo
         };
     } catch (error) {
-        console.error("AbacatePay: erro ao criar cobrança:", error.response?.data || error.message);
+        const status = error.response?.status;
+        const detalhe = error.response?.data;
+        console.error("AbacatePay: erro ao criar cobrança:", detalhe || error.message);
         await pagamentoRef.set({ status: 'failed', error: error.message }, { merge: true });
+
+        // Chave recusada é problema NOSSO, não da pessoa que está comprando.
+        // Devolver 'internal' faria a tela dizer "tente novamente", e tentar
+        // de novo nunca vai funcionar — a pessoa ficaria repetindo até
+        // desistir. Com 'failed-precondition' a tela mostra o aviso fixo de
+        // pagamento indisponível, com o caminho para falar com a equipe.
+        if (status === 401 || status === 403) {
+            console.error(
+                "AbacatePay: a chave em abacatepay.api_key foi recusada. " +
+                "Confira a chave no painel da AbacatePay e rode functions:config:set de novo."
+            );
+            throw new functions.https.HttpsError(
+                'failed-precondition',
+                'Pagamentos temporariamente indisponíveis.'
+            );
+        }
+
         throw new functions.https.HttpsError('internal', 'Erro ao iniciar o pagamento. Tente novamente.');
     }
 });

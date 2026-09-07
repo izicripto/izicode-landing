@@ -143,6 +143,24 @@ firebase functions:config:set \
 >
 > Nunca escreva uma chave aqui, nem "só para não esquecer qual é". Se precisar registrar qual está em uso, anote só o prefixo (`key_J2bM6…`), que identifica sem permitir uso.
 
+### Conferir se a chave funciona ANTES de um cliente descobrir
+
+A AbacatePay aceita uma consulta de leitura que não cria nada:
+
+```bash
+curl -s -H "Authorization: Bearer SUA_CHAVE" https://api.abacatepay.com/v1/billing/list
+```
+
+As respostas dizem coisas diferentes, e vale ler com atenção:
+
+| resposta | significado |
+|---|---|
+| `200` com uma lista | a chave funciona |
+| `Invalid or inactive API key` | a chave não existe ou está desativada — é a **mesma** resposta que uma chave inventada |
+| `API key version mismatch` | a chave é real, mas de uma versão antiga da API |
+
+Se a chave for recusada, `createAbacatePayCheckout` responde `failed-precondition` (não `internal`), e a tela mostra o aviso fixo de "pagamento indisponível" com o caminho para falar com a equipe — em vez de pedir para a pessoa tentar de novo, o que nunca funcionaria, já que o problema é nosso.
+
 O `webhook_secret` é inventado por você — qualquer string longa serve. Depois, no painel da AbacatePay, cadastre o webhook apontando para:
 
 ```
