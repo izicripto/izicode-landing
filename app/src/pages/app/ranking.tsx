@@ -72,7 +72,7 @@ export function RankingPage() {
           description="O ranking compara o XP entre colegas da mesma escola. Assim que sua conta estiver vinculada a uma turma, ele aparece aqui."
           action={
             <Button variant="outline" asChild>
-              <a href="/onboarding.html">Usar código da escola</a>
+              <a href="/onboarding">Usar código da escola</a>
             </Button>
           }
         />

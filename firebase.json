@@ -9,6 +9,10 @@
     ],
     "rewrites": [
       {
+        "source": "/onboarding",
+        "destination": "/index.html"
+      },
+      {
         "source": "/contato",
         "destination": "/index.html"
       },

@@ -525,7 +525,7 @@ function generateInviteQr() {
     const linkText = document.getElementById('inviteLinkText');
 
     // 1. Generate Link
-    const inviteUrl = `${window.location.origin}/onboarding.html?role=teacher&schoolId=${currentSchoolId}`;
+    const inviteUrl = `${window.location.origin}/onboarding?role=teacher&schoolId=${currentSchoolId}`;
 
     // 2. Generate QR
     const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(inviteUrl)}`;

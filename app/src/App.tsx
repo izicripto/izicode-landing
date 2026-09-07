@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/layout/site-footer"
 import { HomePage } from "@/pages/home"
 import { PlanosPage } from "@/pages/planos"
 import { ContatoPage } from "@/pages/contato"
+import { OnboardingPage } from "@/pages/onboarding"
 import { AuthProvider } from "@/lib/auth-context"
 import { RequireAuth } from "@/components/dashboard/require-auth"
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout"
@@ -76,6 +77,10 @@ function App() {
               </SiteLayout>
             }
           />
+
+          {/* Sem header/footer do site: a pessoa acabou de entrar e a única
+              coisa a fazer aqui é concluir a configuração. */}
+          <Route path="/onboarding" element={<OnboardingPage />} />
 
           {/* Painel logado: a sidebar fica montada e só o <Outlet/> troca,
               sem recarregar a página a cada item do menu. */}

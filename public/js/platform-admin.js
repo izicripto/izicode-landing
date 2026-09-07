@@ -150,7 +150,7 @@ window.openConsultantModal = () => {
     const modal = document.getElementById('consultantModal');
     const linkDisplay = document.getElementById('inviteLinkDisplay');
     // Generate simple link for now (User ID not needed, just the role param which is protected or hidden)
-    const baseUrl = window.location.origin + window.location.pathname.replace('platform-admin.html', 'onboarding.html');
+    const baseUrl = window.location.origin + window.location.pathname.replace('platform-admin.html', 'onboarding');
     linkDisplay.textContent = `${baseUrl}?role=consultant`; // Simplest approach.
     modal.classList.remove('hidden');
     modal.classList.add('flex');
