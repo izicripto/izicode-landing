@@ -12,7 +12,10 @@ export interface ChatSession {
 /** Mesma chave do assistente legado: quem já tinha histórico não perde
  *  nada. O tutor do aluno guarda em chave separada — são conversas de
  *  pessoas diferentes no mesmo dispositivo e não devem se misturar. */
-const HISTORY_KEYS: Record<Persona, string> = {
+/** Só as personas com conversa persistida entram aqui. O copiloto de
+ *  gestão não guarda histórico: cada análise parte dos números do momento,
+ *  e conversa antiga sobre números velhos confunde mais do que ajuda. */
+const HISTORY_KEYS: Partial<Record<Persona, string>> = {
   professor: "izicode_chat_history",
   aluno: "izicode_tutor_history",
 }
@@ -36,7 +39,7 @@ function writeSessions(storageKey: string, sessions: ChatSession[]) {
 }
 
 export function useChat(isPro: boolean, persona: Persona = "professor") {
-  const storageKey = HISTORY_KEYS[persona]
+  const storageKey = HISTORY_KEYS[persona] ?? HISTORY_KEYS.professor!
   const [sessions, setSessions] = useState<ChatSession[]>([])
   const [currentId, setCurrentId] = useState<string | null>(null)
   const [sending, setSending] = useState(false)

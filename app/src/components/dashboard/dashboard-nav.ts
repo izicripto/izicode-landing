@@ -11,7 +11,10 @@ import {
   Gamepad2,
   Trophy,
   School,
-  ShieldCheck,
+  Wallet,
+  LifeBuoy,
+  TrendingUp,
+  Bot as BotIcon,
   type LucideIcon,
 } from "lucide-react"
 import { SCHOOL_ROLES, STUDENT_ROLES } from "@/lib/roles"
@@ -114,25 +117,41 @@ const PARENT_NAV: NavGroup[] = [
 ]
 
 /**
- * O item de administração é anexado ao menu de quem for dono da
- * plataforma, qualquer que seja o papel da conta. Esconder o item não
- * protege nada — quem digitar /app/admin chega na tela de qualquer jeito;
- * o que protege é a regra do Firestore. Isto é só para não poluir o menu
- * de todo mundo com uma área que ninguém mais consegue usar.
+ * Console do dono da plataforma.
+ *
+ * Substitui o menu inteiro em vez de acrescentar um item: essa conta
+ * existe para configurar, analisar e administrar — não para planejar aula
+ * nem fazer trilha. Deixar Estúdio IA e Aprender ali só competiria com o
+ * que a conta realmente faz. As telas continuam existindo por URL, caso
+ * seja preciso conferir alguma coisa como um professor veria.
  */
-const ADMIN_GROUP: NavGroup = {
-  group: "Plataforma",
-  items: [{ to: "/app/admin", label: "Administração", icon: ShieldCheck }],
-}
+const OWNER_NAV: NavGroup[] = [
+  {
+    group: "Plataforma",
+    items: [
+      { to: "/app/admin", label: "Visão geral", icon: TrendingUp },
+      { to: "/app/admin/usuarios", label: "Usuários", icon: Users },
+      { to: "/app/admin/escolas", label: "Escolas", icon: School },
+    ],
+  },
+  {
+    group: "Operação",
+    items: [
+      { to: "/app/admin/vendas", label: "Vendas", icon: Wallet },
+      { to: "/app/admin/suporte", label: "Suporte", icon: LifeBuoy },
+    ],
+  },
+  {
+    group: "Análise",
+    items: [{ to: "/app/admin/copiloto", label: "Copiloto de gestão", icon: BotIcon }],
+  },
+]
 
 export function navForRole(role: string, dono = false): NavGroup[] {
-  const base = SCHOOL_ROLES.includes(role)
-    ? SCHOOL_NAV
-    : role === "parent"
-      ? PARENT_NAV
-      : STUDENT_ROLES.includes(role)
-        ? STUDENT_NAV
-        : TEACHER_NAV
+  if (dono) return OWNER_NAV
 
-  return dono ? [...base, ADMIN_GROUP] : base
+  if (SCHOOL_ROLES.includes(role)) return SCHOOL_NAV
+  if (role === "parent") return PARENT_NAV
+  if (STUDENT_ROLES.includes(role)) return STUDENT_NAV
+  return TEACHER_NAV
 }

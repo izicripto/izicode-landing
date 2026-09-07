@@ -26,7 +26,13 @@ import { RankingPage } from "@/pages/app/ranking"
 import { TurmasPage } from "@/pages/app/turmas"
 import { QuizPage } from "@/pages/app/quiz"
 import { FilhosPage } from "@/pages/app/filhos"
-import { AdminPage } from "@/pages/app/admin"
+import { AdminLayout } from "@/components/dashboard/admin-layout"
+import { AdminVisaoPage } from "@/pages/app/admin/visao"
+import { AdminUsuariosPage } from "@/pages/app/admin/usuarios"
+import { AdminEscolasPage } from "@/pages/app/admin/escolas"
+import { AdminVendasPage } from "@/pages/app/admin/vendas"
+import { AdminSuportePage } from "@/pages/app/admin/suporte"
+import { AdminCopilotoPage } from "@/pages/app/admin/copiloto"
 
 /** Site institucional público: header e footer da landing. */
 function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -91,7 +97,14 @@ function App() {
               <Route path="ranking" element={<RankingPage />} />
               <Route path="quiz" element={<QuizPage />} />
               <Route path="filhos" element={<FilhosPage />} />
-              <Route path="admin" element={<AdminPage />} />
+              <Route path="admin" element={<AdminLayout />}>
+                <Route index element={<AdminVisaoPage />} />
+                <Route path="usuarios" element={<AdminUsuariosPage />} />
+                <Route path="escolas" element={<AdminEscolasPage />} />
+                <Route path="vendas" element={<AdminVendasPage />} />
+                <Route path="suporte" element={<AdminSuportePage />} />
+                <Route path="copiloto" element={<AdminCopilotoPage />} />
+              </Route>
               <Route path="escola" element={<EscolaPage />} />
               <Route path="turmas" element={<TurmasPage />} />
               {/* Qualquer /app/* desconhecido cai aqui, mantendo a sidebar. */}

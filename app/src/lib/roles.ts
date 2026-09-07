@@ -86,7 +86,10 @@ export function isPlatformOwner(email?: string | null): boolean {
   return !!email && email.toLowerCase().trim() === PLATFORM_OWNER_EMAIL
 }
 
-export function homeForRole(role?: string): string {
+export function homeForRole(role?: string, email?: string | null): string {
+  // O dono cai direto no console: a home de professor não é o lugar dele.
+  if (isPlatformOwner(email)) return "/app/admin"
+
   if (!role) return "/app"
   if (SCHOOL_ROLES.includes(role)) return "/app/escola"
   if (STUDENT_ROLES.includes(role)) return "/app/aluno"
