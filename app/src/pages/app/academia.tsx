@@ -151,7 +151,7 @@ export function AcademiaPage() {
             </p>
           </div>
           <Button variant="secondary" asChild>
-            <a href="/pricing.html">Ver planos</a>
+            <a href="/planos">Ver planos</a>
           </Button>
         </div>
       )}

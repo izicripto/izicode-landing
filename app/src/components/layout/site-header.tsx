@@ -14,7 +14,10 @@ const NAV_LINKS = [
   { href: "#sobre", label: "Sobre" },
   { href: "#metodologia", label: "Metodologia" },
   { href: "#ferramentas", label: "Ferramentas" },
-  { href: "/portal", label: "Portal" },
+  // Sem o .html isto dava 404: o portal é uma página estática em
+  // public/, não uma rota do router.
+  { href: "/portal.html", label: "Portal" },
+  { href: "/planos", label: "Planos" },
   { href: "#faq", label: "FAQ" },
 ]
 

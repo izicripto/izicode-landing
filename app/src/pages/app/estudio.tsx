@@ -184,7 +184,7 @@ export function EstudioPage() {
                 precisar configurar chave própria.
               </p>
               <Button variant="outline" size="sm" className="mt-3 bg-white" asChild>
-                <a href="/pricing.html">Ver planos</a>
+                <a href="/planos">Ver planos</a>
               </Button>
             </div>
           )}

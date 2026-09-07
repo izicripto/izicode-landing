@@ -313,7 +313,7 @@ export function AssistentePage() {
                 No PRO a chave da Izicode já vem inclusa — sem configurar nada.
               </span>
               <Button size="sm" variant="outline" className="bg-white" asChild>
-                <a href="/pricing.html">Ver planos</a>
+                <a href="/planos">Ver planos</a>
               </Button>
             </div>
           )}

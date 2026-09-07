@@ -1,23 +1,24 @@
 // Service Worker para Izicode Edu PWA
-// Versão 1.4.0 — HTML/JS sempre buscados com cache:'no-store' (ver fetch handler)
+// Versão 1.5.0 — precache alinhado com as telas que existem hoje
 
-const CACHE_NAME = 'izicode-edu-v1.4';
+const CACHE_NAME = 'izicode-edu-v1.5';
 const OFFLINE_URL = '/offline.html';
 
-// Recursos para cache inicial
+// Recursos para cache inicial.
+//
+// A lista antiga guardava dashboard.html, create-project.html,
+// library.html e dashboards/aluno.html — todas substituídas por rotas do
+// SPA. Pré-cachear página aposentada só aumenta a chance de alguém
+// receber a versão velha, então aqui ficam apenas as portas de entrada
+// que continuam existindo e o que o app precisa para abrir offline.
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/dashboard.html',
   '/login.html',
-  '/dashboards/aluno.html',
-  '/create-project.html',
-  '/library.html',
+  '/portal.html',
   '/manifest.json',
-  '/logo.svg',
   '/images/logo.png',
   '/js/firebase-config.js',
-  '/js/auth.js',
   OFFLINE_URL
 ];
 

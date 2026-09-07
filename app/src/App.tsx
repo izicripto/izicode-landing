@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { SiteHeader } from "@/components/layout/site-header"
 import { SiteFooter } from "@/components/layout/site-footer"
 import { HomePage } from "@/pages/home"
+import { PlanosPage } from "@/pages/planos"
 import { AuthProvider } from "@/lib/auth-context"
 import { RequireAuth } from "@/components/dashboard/require-auth"
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout"
@@ -46,6 +47,15 @@ function App() {
             element={
               <SiteLayout>
                 <HomePage />
+              </SiteLayout>
+            }
+          />
+
+          <Route
+            path="/planos"
+            element={
+              <SiteLayout>
+                <PlanosPage />
               </SiteLayout>
             }
           />

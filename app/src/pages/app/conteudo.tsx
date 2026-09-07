@@ -167,7 +167,7 @@ export function ConteudoPage() {
               : `Plano gratuito: ${restantes} de ${FREE_AI_GENERATIONS} gerações de IA restantes. O modo manual é ilimitado.`}
           </span>
           <Button size="sm" variant="outline" className="bg-white" asChild>
-            <a href="/pricing.html">Ver planos</a>
+            <a href="/planos">Ver planos</a>
           </Button>
         </div>
       )}

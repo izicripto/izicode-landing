@@ -193,7 +193,7 @@ export function CursoPage() {
                 módulos de todas as trilhas da Academia.
               </p>
               <Button className="mt-5" asChild>
-                <a href="/pricing.html">Ver planos</a>
+                <a href="/planos">Ver planos</a>
               </Button>
             </div>
           ) : (
