@@ -1517,6 +1517,250 @@ Avalie três coisas separadamente, para não confundir domínio técnico com dom
             },
         ],
     },
+    {
+        id: "makey-makey-para-professores",
+        title: "Makey Makey para Professores",
+        tool: "Makey Makey",
+        level: "Iniciante",
+        logo: "images/makey_makey.png",
+        description: "Transforme qualquer objeto condutor em teclado e leve computação física para a sala sem escrever código.",
+        outcome: "Ao final, você monta com a turma um projeto interativo — piano de frutas, mapa falante ou quiz de chão — conectando ciências, geografia e linguagens à computação física.",
+        modules: [
+            {
+                id: "m1",
+                title: "Por que Makey Makey em Sala de Aula?",
+                duration: "10 min",
+                free: true,
+                content: `
+## O que é o Makey Makey
+
+O Makey Makey é uma placa que o computador enxerga como **teclado e mouse**. Você liga a placa por USB, prende um jacaré numa banana, encosta na banana — e o computador recebe a tecla "seta para cima". Nenhum programa para instalar, nenhuma linha de código.
+
+É a forma mais rápida que existe de mostrar **computação física** para uma turma: o momento em que a criança percebe que apertar uma tecla e encostar numa fruta são a mesma coisa para o computador costuma provocar uma reação que nenhum slide provoca.
+
+## O que faz dele diferente
+
+Comparado com Arduino ou Micro:bit, o Makey Makey tem uma característica que muda o planejamento da aula: **a curva de entrada é praticamente zero**.
+
+| | Makey Makey | Arduino | Micro:bit |
+|---|---|---|---|
+| Instalar software | não | sim | sim (ou editor online) |
+| Escrever código | não | sim | sim |
+| Primeiro resultado | 2 minutos | 20-40 minutos | 10-20 minutos |
+| Custo aproximado | R$ 150-250 | R$ 60-120 | R$ 200-300 |
+
+Isso não faz dele "melhor". Faz dele adequado para um momento diferente: **o primeiro contato**, e as turmas mais novas, onde o obstáculo não é o conceito e sim a digitação.
+
+## Onde ele cabe no currículo
+
+O erro comum é tratar o Makey Makey como brinquedo de feira de ciências. Ele funciona melhor quando é o **meio** de mostrar outra coisa:
+
+- **Ciências** — condutividade elétrica deixa de ser definição decorada e vira teste: o grafite conduz? a água da torneira conduz? e a destilada?
+- **Geografia** — mapa de papel com as regiões ligadas a áudios gravados pelos próprios alunos
+- **Língua portuguesa** — livro tátil onde tocar numa palavra reproduz a leitura em voz alta
+- **Matemática** — reta numérica no chão, em que pisar num número dispara a operação
+- **Arte e música** — instrumentos com objetos do cotidiano
+
+## O que você precisa
+
+- 1 placa Makey Makey (a versão clássica basta)
+- 1 computador com navegador
+- Jacarés e fios (vêm no kit)
+- Objetos condutores: frutas, massinha caseira, papel-alumínio, grafite de lápis 6B, água, moedas, e as próprias pessoas
+
+> Uma placa atende bem um grupo de 4 a 5 alunos. Numa turma de 30, três ou quatro placas em rodízio funcionam melhor do que uma para cada — a discussão em grupo é parte do aprendizado.
+                `.trim(),
+            },
+            {
+                id: "m2",
+                title: "Como Funciona: Circuito Fechado e Condutividade",
+                duration: "15 min",
+                free: false,
+                content: `
+## O conceito que sustenta tudo
+
+O Makey Makey não detecta toque. Ele detecta **circuito fechado**.
+
+A placa tem uma entrada "TERRA" (Earth) e várias entradas de tecla. Quando existe um caminho condutor entre a TERRA e uma entrada, a placa entende que aquela tecla foi pressionada.
+
+Por isso o aluno precisa segurar o fio-terra: **ele faz parte do circuito**. Ao encostar na banana, o caminho se fecha assim:
+
+\`\`\`
+TERRA -> mão do aluno -> corpo -> outra mão -> banana -> jacaré -> entrada SETA
+\`\`\`
+
+Essa é a explicação que evita a pergunta mais comum da aula ("por que não funciona?"): quase sempre alguém soltou o fio-terra.
+
+## Por que o corpo humano conduz
+
+O corpo é cerca de 60% água com sais dissolvidos, e íons conduzem corrente. A corrente envolvida aqui é minúscula — microampères — e a placa opera em 5V pelo USB. Não há risco.
+
+Vale dizer isso à turma explicitamente. A pergunta "vou tomar choque?" aparece sempre, e responder com o número (5 volts, menos que uma pilha de 9V) constrói confiança melhor do que "pode ficar tranquilo".
+
+## O que conduz e o que não conduz
+
+Esta é a atividade investigativa mais rica do Makey Makey. Em vez de entregar a lista, **entregue a placa e deixe a turma descobrir**:
+
+| Conduz bem | Conduz mal ou não conduz |
+|---|---|
+| Frutas e legumes (água + sais) | Plástico |
+| Massinha caseira com sal | Madeira seca |
+| Papel-alumínio | Vidro |
+| Grafite (lápis 6B, bem marcado) | Borracha |
+| Água da torneira | Papel comum seco |
+| Pessoas | Tecido seco |
+| Moedas e talheres | Isopor |
+
+## O experimento que gera discussão
+
+Peça para testarem **água destilada** e depois adicionarem uma pitada de sal. A água pura conduz muito mal; com sal, conduz. É a diferença entre "água conduz eletricidade" (o que quase todo mundo acredita) e "íons dissolvidos conduzem eletricidade" — que é o correto, e explica por que a chuva é mais perigosa perto de uma rede elétrica.
+
+## Resistência importa
+
+Nem todo material condutor fecha o circuito bem o bastante. O grafite funciona se o desenho for **grosso, escuro e contínuo** — um traço fino de lápis HB costuma falhar.
+
+Isso é oportunidade, não defeito: quando o desenho não funciona, a turma tem um problema real para resolver, e resolver reforça o conceito melhor do que qualquer explicação anterior.
+                `.trim(),
+            },
+            {
+                id: "m3",
+                title: "Primeira Aula Prática: O Piano de Frutas",
+                duration: "20 min",
+                free: false,
+                content: `
+## Por que começar por aqui
+
+O piano de frutas é o projeto de entrada por três motivos: monta em cinco minutos, o resultado é imediato e sonoro, e todo mundo entende o que está acontecendo sem explicação prévia.
+
+## Montagem, passo a passo
+
+1. Conecte a placa ao computador pelo cabo USB. Nenhum driver, nenhum software.
+2. Abra um piano online no navegador — o próprio site do Makey Makey tem um, e há vários gratuitos.
+3. Prenda um jacaré na entrada **TERRA** da placa e entregue a outra ponta para o aluno segurar.
+4. Prenda um jacaré em cada entrada de seta (↑ ↓ ← →) e a outra ponta em uma fruta.
+5. O aluno segura o fio-terra e encosta nas frutas.
+
+> **Se não funcionar**, a causa é quase sempre uma destas três: o fio-terra soltou, o jacaré está preso na casca seca em vez da polpa, ou o site precisa que a página esteja em foco (clique na página antes).
+
+## Como conduzir a aula
+
+Resista a explicar antes. A sequência que funciona melhor:
+
+1. **Monte na frente da turma sem dizer o que vai acontecer.** Encoste na banana. Deixe o som falar.
+2. **Pergunte o que aconteceu** antes de responder. As hipóteses da turma são o material da aula.
+3. **Peça previsões**: "e se eu soltar este fio?", "e se dois alunos derem as mãos?" — este último quase sempre surpreende, e é a demonstração mais bonita de circuito em série.
+4. **Só então** apresente o conceito de circuito fechado.
+
+## Variações por faixa etária
+
+**Fundamental I** — piano de frutas e o desafio de descobrir quais objetos da sala funcionam. O registro pode ser um cartaz com duas colunas.
+
+**Fundamental II** — introduza a medição: com um multímetro simples, comparar a resistência dos materiais e relacionar com "funcionou bem / funcionou mal".
+
+**Ensino Médio** — conectar com o conteúdo de eletrodinâmica: resistência, condutividade, o modelo de íons em solução. O Makey Makey vira o instrumento de verificação de uma teoria já apresentada.
+
+## O que registrar
+
+Peça que cada grupo documente: os materiais testados, a previsão antes do teste, o resultado e uma explicação. A previsão registrada **antes** é o que transforma a brincadeira em método científico.
+                `.trim(),
+            },
+            {
+                id: "m4",
+                title: "Do Lúdico ao Currículo: Projetos por Disciplina",
+                duration: "20 min",
+                free: false,
+                content: `
+## O risco de parar no piano de frutas
+
+O Makey Makey encanta com facilidade, e é exatamente aí que ele costuma ficar preso: a aula é ótima, a turma adora, e no dia seguinte não sobra nenhum conteúdo. A diferença entre atividade e aprendizagem está no que a turma **produz**, não no que ela experimenta.
+
+A pergunta que orienta o planejamento: *o que a turma precisa entender para o projeto funcionar?*
+
+## Mapa falante (Geografia)
+
+A turma desenha um mapa grande em papel kraft. Cada região recebe uma área de papel-alumínio ligada a uma entrada. Tocar na região dispara um áudio que os próprios alunos gravaram.
+
+**O que exige entender:** localização e limites das regiões, e — porque só há seis entradas — a decisão de *quais* informações merecem estar no mapa. Essa escolha é o conteúdo.
+
+## Linha do tempo tátil (História)
+
+Mesma ideia, aplicada a uma sequência cronológica. Cada ponto dispara a narração de um evento.
+
+**O que exige entender:** ordem cronológica e relação de causa entre eventos, já que a turma precisa decidir o que precede o quê.
+
+## Livro sonoro (Língua Portuguesa)
+
+Páginas com palavras ou sílabas em papel-alumínio; tocar reproduz a leitura em voz alta, gravada pela turma.
+
+**Especialmente útil** na alfabetização e com alunos em processo de aquisição da leitura: a associação entre grafia e som fica no controle da própria criança, que pode repetir quantas vezes quiser sem pedir a ninguém.
+
+## Reta numérica de chão (Matemática)
+
+Números grandes no chão, com papel-alumínio, ligados às entradas. Pisar num número dispara uma operação num programa em Scratch.
+
+**O que exige entender:** o conceito de valor posicional e a operação escolhida. Aqui o Makey Makey se combina bem com Scratch — a placa gera o evento, o Scratch decide o que fazer com ele.
+
+## Quiz de ciências (Ciências)
+
+Quatro alternativas ligadas a quatro entradas. A resposta correta toca um som; as erradas, outro.
+
+**O que exige entender:** o conteúdo em si e — na hora de escrever as alternativas erradas — quais são os erros plausíveis. Formular um bom distrator exige entender o conceito melhor do que responder a pergunta.
+
+## Um lembrete de planejamento
+
+Seis entradas na frente da placa (setas, espaço e clique) e mais seis atrás. A limitação é pedagogicamente útil: obriga a turma a priorizar. Não trate como obstáculo a contornar.
+                `.trim(),
+            },
+            {
+                id: "m5",
+                title: "Projeto Final: Painel Interativo da Turma",
+                duration: "25 min",
+                free: false,
+                content: `
+## O projeto
+
+Um painel interativo, produzido pela turma, sobre um tema do currículo. Ao tocar em cada área, o painel responde com som, fala ou animação.
+
+É o projeto que reúne tudo: condutividade, circuito fechado, escolha de conteúdo e produção coletiva.
+
+## Sequência sugerida — quatro aulas
+
+**Aula 1 — Escolher e planejar.** A turma define o tema e as seis informações que entram. Discussão sobre o que é essencial, já que o número de entradas é limitado. Rascunho do painel no papel.
+
+**Aula 2 — Produzir o conteúdo.** Gravação dos áudios ou criação das animações em Scratch. É onde a maior parte do conteúdo curricular é de fato trabalhada.
+
+**Aula 3 — Montar.** Desenho do painel, aplicação do papel-alumínio nas áreas sensíveis, ligação dos jacarés. Testes e ajustes — quase sempre alguma área não funciona, e descobrir por quê é parte da aula.
+
+**Aula 4 — Apresentar.** A turma apresenta para outra turma ou para as famílias. Explicar como funciona consolida o entendimento mais do que qualquer prova.
+
+## Cuidados de montagem
+
+- **Áreas condutoras não podem se tocar.** Duas tiras de alumínio encostadas fecham circuitos ao mesmo tempo e o painel dispara sozinho. Deixe pelo menos 2 cm entre elas.
+- **Cole o alumínio pela parte de baixo**, com fita, e deixe a face de cima limpa. Fita transparente por cima isola e impede o contato.
+- **Fixe os jacarés** com fita atrás do painel. O motivo mais comum de falha na apresentação é um jacaré que soltou no transporte.
+- **O fio-terra precisa estar acessível.** Uma alça de papel-alumínio na lateral, que a pessoa segura, resolve melhor do que entregar um fio solto.
+
+## Como avaliar
+
+Avaliar só o painel pronto premia quem tem mais habilidade manual. Distribua entre:
+
+| Critério | O que observar |
+|---|---|
+| Domínio do conteúdo | as informações escolhidas são as mais relevantes do tema? |
+| Compreensão técnica | o grupo explica por que o circuito funciona? |
+| Resolução de problemas | como lidaram com o que não funcionou de primeira? |
+| Colaboração | o trabalho foi distribuído ou concentrado em um aluno? |
+| Comunicação | a apresentação foi clara para quem não participou? |
+
+## Para onde ir depois
+
+O Makey Makey resolve a entrada, mas tem um teto: ele só gera eventos de teclado. Quando a turma começar a pedir "e se ele medisse a temperatura?" ou "e se acendesse uma luz", o caminho natural é o **Micro:bit** — que mantém a programação em blocos e acrescenta sensores e saídas — e depois o **Arduino**.
+
+Essa pergunta surgindo da turma é o melhor sinal de que o Makey Makey cumpriu o papel dele.
+                `.trim(),
+            },
+        ],
+    },
 ];
 
 export function getAllCourses() {

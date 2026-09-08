@@ -57,6 +57,7 @@ oposto do que estamos tentando conseguir.
 | Micro:bit para Professores | 1º módulo |
 | Code.org para Professores | 1º módulo |
 | Python para Professores | 1º módulo |
+| Makey Makey para Professores | 1º módulo |
 
 Scratch é a porta de entrada natural: não exige comprar nada, roda no
 navegador da escola e é onde a maioria dos professores começa. Quem termina
