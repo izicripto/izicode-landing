@@ -29,28 +29,6 @@ const GARANTIAS = [
 export function Hero() {
   return (
     <section className="relative overflow-hidden pt-10 pb-16 lg:pt-16 lg:pb-24">
-      {/*
-        A foto ocupa a metade direita inteira, indo até a borda da janela em
-        vez de parar na largura do container. Ficar dentro do container
-        deixava sobra dos dois lados e fazia a imagem competir em tamanho
-        com o texto; sangrando para fora, ela vira plano de fundo e o texto
-        continua sendo a única coisa a ler.
-
-        Fica fora do grid, posicionada em absoluto, porque um item de grid
-        não consegue escapar da largura máxima do pai.
-      */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] overflow-hidden rounded-l-[2.5rem] lg:block">
-        <img
-          src="/hero-lab.jpg"
-          alt="Alunos trabalhando em laboratório de robótica"
-          fetchPriority="high"
-          className="izi-foto-viva h-full w-full object-cover"
-        />
-        {/* Véu na borda esquerda: sem ele, a foto encosta no texto e as
-            linhas mais longas ficam difíceis de ler contra a imagem. */}
-        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent" />
-      </div>
-
       <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
         <div className="text-center lg:text-left">
           {/*
@@ -113,12 +91,27 @@ export function Hero() {
         </div>
 
         {/*
-          Em telas largas esta coluna é só o espaço que a foto absoluta
-          ocupa — ela precisa existir para o grid reservar a metade direita.
-          A altura mínima garante que a foto tenha corpo mesmo quando o
-          texto for curto.
+          A foto é um cartão arredondado dentro da coluna, com margem até a
+          borda da janela — não uma faixa sangrada.
+
+          Uma versão anterior fazia a imagem ir até a borda e ocupar toda a
+          altura da seção. Ficou grande demais: a foto virava o assunto da
+          tela e o texto, que é onde a decisão acontece, passava a disputar
+          atenção com ela.
+
+          A altura é relativa à janela (76vh) com um teto absoluto, para
+          crescer em telas grandes sem estourar em monitores muito altos.
+          O overflow-hidden é o que recorta o zoom da animação: sem ele, a
+          imagem ampliada vazaria por cima do texto ao lado.
         */}
-        <div className="hidden lg:block lg:min-h-[32rem]" aria-hidden="true" />
+        <div className="relative hidden overflow-hidden rounded-3xl shadow-2xl lg:block lg:h-[min(76vh,40rem)]">
+          <img
+            src="/hero-lab.jpg"
+            alt="Alunos trabalhando em laboratório de robótica"
+            fetchPriority="high"
+            className="izi-foto-viva h-full w-full object-cover"
+          />
+        </div>
 
         {/*
           No celular a foto vem depois do texto, e não antes: a primeira
@@ -127,11 +120,11 @@ export function Hero() {
           sem nenhum apoio visual justamente onde vem a maior parte do
           tráfego.
         */}
-        <div className="lg:hidden">
+        <div className="overflow-hidden rounded-3xl shadow-xl lg:hidden">
           <img
             src="/hero-lab.jpg"
             alt="Alunos trabalhando em laboratório de robótica"
-            className="h-56 w-full rounded-3xl object-cover shadow-xl sm:h-72"
+            className="izi-foto-viva h-56 w-full object-cover sm:h-72"
           />
         </div>
       </div>
