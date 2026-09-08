@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { SiteHeader } from "@/components/layout/site-header"
 import { SiteFooter } from "@/components/layout/site-footer"
+import { BannerInstalar } from "@/components/layout/banner-instalar"
 import { HomePage } from "@/pages/home"
 import { PlanosPage } from "@/pages/planos"
 import { ContatoPage } from "@/pages/contato"
@@ -41,6 +42,9 @@ import { AdminCopilotoPage } from "@/pages/app/admin/copiloto"
 function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
+      {/* Acima do cabeçalho de propósito: empurra a página em vez de cobrir
+          o conteúdo, e some sozinho quando não há instalação a oferecer. */}
+      <BannerInstalar />
       <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter />

@@ -35,6 +35,25 @@
     />
     <meta name="twitter:image" content="https://izicode.com.br/hero-lab.jpg" />
 
+    <!--
+      Instalação como aplicativo.
+
+      O manifest, o service worker e o script de instalação já existiam e
+      respondiam 200, mas nenhuma página os referenciava — a plataforma
+      simplesmente não era instalável. Sem a linha abaixo o navegador nem
+      chega a considerar a instalação, e o banner de instalar não teria o
+      que oferecer.
+
+      As meta do apple-* existem porque o Safari não lê o manifest: no
+      iPhone o "Adicionar à Tela de Início" usa estas.
+    -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0284c7" />
+    <link rel="apple-touch-icon" href="/images/logo.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Izicode" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
