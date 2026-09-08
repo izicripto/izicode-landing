@@ -58,6 +58,52 @@ exports.newLeadNotification = functions.firestore.document('leads/{leadId}').onC
  * secret na própria query string da URL, não em header/assinatura HMAC).
  * Fail-closed: sem secret configurado ou secret incorreto, rejeita com 401.
  */
+/**
+ * Confere a assinatura de um webhook no padrao Standard Webhooks.
+ *
+ * O conteudo assinado e "<webhook-id>.<webhook-timestamp>.<corpo cru>", e
+ * o corpo precisa ser exatamente os bytes recebidos: reserializar o JSON
+ * com JSON.stringify muda espacos e ordem de chaves, e a assinatura passa
+ * a nunca bater. Por isso usamos req.rawBody.
+ */
+function assinaturaValida(req, segredo) {
+    const crypto = require('crypto');
+    const id = req.headers['webhook-id'];
+    const timestamp = req.headers['webhook-timestamp'];
+    const cabecalho = req.headers['webhook-signature'];
+    if (!id || !timestamp || !cabecalho) return false;
+
+    // Evento antigo demais e recusado: sem isso, quem capturasse uma
+    // entrega valida poderia reenvia-la para sempre e liberar planos.
+    const idadeSegundos = Math.abs(Date.now() / 1000 - Number(timestamp));
+    if (!Number.isFinite(idadeSegundos) || idadeSegundos > 300) {
+        console.error('AbacatePay Webhook: evento fora da janela de tempo.');
+        return false;
+    }
+
+    const corpo = req.rawBody ? req.rawBody.toString('utf8') : JSON.stringify(req.body || {});
+    const conteudo = `${id}.${timestamp}.${corpo}`;
+
+    // O padrao guarda o segredo como "whsec_<base64>"; um segredo em texto
+    // puro tambem funciona, e e o que geramos por aqui.
+    const chave = String(segredo).startsWith('whsec_')
+        ? Buffer.from(String(segredo).slice(6), 'base64')
+        : Buffer.from(String(segredo), 'utf8');
+
+    const esperada = crypto.createHmac('sha256', chave).update(conteudo).digest('base64');
+
+    // O header pode trazer varias assinaturas separadas por espaco, cada
+    // uma no formato "v1,<base64>".
+    return String(cabecalho).split(' ').some((parte) => {
+        const valor = parte.includes(',') ? parte.split(',')[1] : parte;
+        const a = Buffer.from(valor || '');
+        const b = Buffer.from(esperada);
+        // Comparacao em tempo constante: com === o tempo de resposta
+        // entrega quantos caracteres iniciais ja batem.
+        return a.length === b.length && crypto.timingSafeEqual(a, b);
+    });
+}
+
 exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
     if (req.method !== 'POST') {
         res.status(405).send({ error: 'Method not allowed' });
@@ -65,9 +111,34 @@ exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
     }
 
     const expectedSecret = functions.config().abacatepay?.webhook_secret;
-    const providedSecret = req.query?.webhookSecret;
-    if (!expectedSecret || providedSecret !== expectedSecret) {
-        console.error("AbacatePay Webhook: webhookSecret ausente ou inválido. Recusando.");
+    if (!expectedSecret) {
+        console.error('AbacatePay Webhook: abacatepay.webhook_secret nao configurado. Recusando.');
+        res.status(401).send({ error: 'Unauthorized' });
+        return;
+    }
+
+    // A AbacatePay v2 assina os webhooks pelo padrao Standard Webhooks:
+    // tres headers (webhook-id, webhook-timestamp, webhook-signature) e
+    // HMAC-SHA256 sobre "id.timestamp.corpo".
+    //
+    // Nao ha segredo na query string. A versao anterior deste codigo lia
+    // req.query.webhookSecret, convencao da v1, e por isso recusava todo
+    // evento com 401 — o painel da AbacatePay mostrava "Falha" em cada
+    // entrega e o log daqui dizia so "secret ausente ou invalido", sem
+    // pista de que o mecanismo inteiro era outro.
+    const autenticado =
+        assinaturaValida(req, expectedSecret) ||
+        // Reserva para um webhook cadastrado a moda antiga, com o segredo
+        // na propria URL.
+        (req.query?.webhookSecret && req.query.webhookSecret === expectedSecret);
+
+    if (!autenticado) {
+        // Registra os NOMES do que veio, nunca os valores.
+        console.error(
+            'AbacatePay Webhook: nao autenticado. Recusando. ' +
+            `query=[${Object.keys(req.query || {}).join(', ')}] ` +
+            `headers=[${Object.keys(req.headers || {}).filter((h) => /webhook|signature|secret/i.test(h)).join(', ')}]`
+        );
         res.status(401).send({ error: 'Unauthorized' });
         return;
     }
@@ -82,17 +153,42 @@ exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
         'billing.paid'
     ];
 
-    const event = req.body?.event;
-    const billing = req.body?.data?.billing || req.body?.data || {};
+    // O nome do campo do evento variou entre versoes da API, entao
+    // aceitamos os tres nomes em uso em vez de depender de um so.
+    const event = req.body?.event || req.body?.type || req.body?.data?.event;
 
     if (!EVENTOS_PAGOS.includes(event)) {
-        console.log("AbacatePay Webhook: evento ignorado:", event);
+        // Nomes dos campos, nunca os valores: e o que permite descobrir a
+        // forma real do payload sem escrever dado de cliente no log.
+        console.log(
+            `AbacatePay Webhook: evento ignorado: ${event} | ` +
+            `campos=[${Object.keys(req.body || {}).join(', ')}] | ` +
+            `campos de data=[${Object.keys(req.body?.data || {}).join(', ')}]`
+        );
         res.status(200).send({ received: true, ignored: true });
         return;
     }
 
-    const metadata = billing?.metadata || billing?.frequency?.metadata || {};
-    const email = billing?.customer?.metadata?.email || billing?.customer?.email;
+    // Onde a cobranca fica no payload depende do tipo do evento:
+    //   transparent.completed -> data.transparent   (Pix e boleto)
+    //   checkout.completed    -> data.checkout
+    //   billing.paid (v1)     -> data.billing
+    // Descobrir isso custou uma rodada de log: a documentacao mostra um
+    // 'data' generico, e o codigo procurava so por 'billing'.
+    const corpoData = req.body?.data || {};
+    const cobranca =
+        corpoData.transparent ||
+        corpoData.checkout ||
+        corpoData.billing ||
+        corpoData.subscription ||
+        corpoData;
+
+    const metadata = cobranca?.metadata || corpoData?.metadata || {};
+    const email =
+        corpoData?.customer?.email ||
+        corpoData?.customer?.metadata?.email ||
+        cobranca?.customer?.email ||
+        corpoData?.payerInformation?.email;
     const paymentId = metadata.paymentId;
 
     try {
@@ -109,7 +205,7 @@ exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
             // Reserva: cobrança feita fora do fluxo (link manual, cobrança
             // recriada no painel da AbacatePay). Reconstrói pelo billingId
             // e, em último caso, pelo e-mail do cliente.
-            const billingId = billing?.id;
+            const billingId = cobranca?.id;
             if (billingId) {
                 const porBilling = await db.collection('payments').where('billingId', '==', billingId).limit(1).get();
                 if (!porBilling.empty) {
@@ -121,7 +217,13 @@ exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
 
         if (!snap || !snap.exists) {
             if (!email) {
-                console.error('AbacatePay Webhook: pagamento não identificado e sem e-mail.');
+                console.error(
+                    'AbacatePay Webhook: pagamento nao identificado e sem e-mail. ' +
+                    `evento=${event} | data=[${Object.keys(req.body?.data || {}).join(', ')}] | ` +
+                    `cobranca=[${Object.keys(cobranca || {}).join(', ')}] | ` +
+                    `metadata=[${Object.keys(metadata || {}).join(', ')}] | ` +
+                    `cobranca.id=${cobranca?.id ?? '(ausente)'}`
+                );
                 res.status(400).send({ error: 'Unidentified payment' });
                 return;
             }
@@ -138,7 +240,7 @@ exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
                 plan: metadata.plan || 'pro_mensal',
                 tipo: metadata.schoolId ? 'escola' : 'assinatura',
                 schoolId: metadata.schoolId || null,
-                billingId: billing?.id || null,
+                billingId: cobranca?.id || null,
                 status: 'pending',
                 origem: 'webhook-sem-checkout',
                 createdAt: admin.firestore.FieldValue.serverTimestamp()

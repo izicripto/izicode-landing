@@ -1,5 +1,6 @@
 import { Hero } from "@/components/home/hero"
 import { Stats } from "@/components/home/stats"
+import { Audiences } from "@/components/home/audiences"
 import { Solutions } from "@/components/home/solutions"
 import { About } from "@/components/home/about"
 import { Tools } from "@/components/home/tools"
@@ -13,6 +14,7 @@ export function HomePage() {
     <>
       <Hero />
       <Stats />
+      <Audiences />
       <Solutions />
       <About />
       <Tools />

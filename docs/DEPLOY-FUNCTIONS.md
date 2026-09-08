@@ -176,13 +176,36 @@ Em devMode dá para fechar o ciclo inteiro sem dinheiro real: `POST /v2/transpar
 
 Se a chave for recusada, `createAbacatePayCheckout` responde `failed-precondition` (não `internal`), e a tela mostra o aviso fixo de "pagamento indisponível" com o caminho para falar com a equipe — em vez de pedir para a pessoa tentar de novo, o que nunca funcionaria, já que o problema é nosso.
 
-O `webhook_secret` é inventado por você — qualquer string longa serve. Depois, no painel da AbacatePay, cadastre o webhook apontando para:
+### Como a AbacatePay v2 autentica o webhook
 
-```
-https://us-central1-izicodeedu-532ac.cloudfunctions.net/abacatePayWebhook?webhookSecret=O_MESMO_SEGREDO
+Não é um segredo na query string — isso era a convenção da v1. A v2 usa o padrão **Standard Webhooks**: três headers (`webhook-id`, `webhook-timestamp`, `webhook-signature`) e uma assinatura HMAC-SHA256 sobre `id.timestamp.corpo`.
+
+No painel, cadastre:
+
+| campo | valor |
+|---|---|
+| URL | `https://us-central1-izicodeedu-532ac.cloudfunctions.net/abacatePayWebhook` |
+| Secret | o mesmo valor de `abacatepay.webhook_secret` |
+| Eventos | `transparent.completed` (os demais são ignorados sem erro) |
+
+Dois detalhes que só apareceram testando de verdade, e que valem para quem for depurar isto no futuro:
+
+- **A assinatura é sobre o corpo cru.** Reserializar com `JSON.stringify(req.body)` muda espaçamento e ordem de chaves, e a assinatura nunca bate. A função usa `req.rawBody`.
+- **A cobrança não vem em `data.billing`.** O campo depende do evento: `transparent.completed` traz `data.transparent`, `checkout.completed` traz `data.checkout`. A documentação mostra um `data` genérico, e o código lia só `billing` — o resultado era um 401 seguido de "pagamento não identificado", sem pista de que a forma do payload era outra.
+
+### Como saber se o webhook está funcionando
+
+O painel da AbacatePay tem **Chamadas do webhook**, com o status de cada entrega e um botão de reenviar. Do nosso lado:
+
+```bash
+gcloud functions logs read abacatePayWebhook --project izicodeedu-532ac --region us-central1 --limit 10
 ```
 
-Sem esse parâmetro na URL, a função responde 401 e nenhum pagamento libera acesso.
+Uma entrega bem-sucedida registra `pagamento <id> aplicado`. Os logs de recusa mostram os **nomes** dos campos e headers recebidos, nunca os valores — foi assim que descobrimos o mecanismo real de autenticação sem escrever segredo nenhum no log.
+
+### Se o webhook falhar, ninguém fica sem o que pagou
+
+`reconciliarPagamentos` roda a cada 10 minutos e confere na AbacatePay os pagamentos pendentes entre 2 minutos e 6 horas atrás. É a rede que cobre o caso em que o webhook não chega e a pessoa já fechou a aba — sem ela, alguém poderia pagar e nunca receber o acesso.
 
 ## O ciclo de compra, de ponta a ponta
 

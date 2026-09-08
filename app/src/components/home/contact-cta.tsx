@@ -8,16 +8,31 @@ export function ContactCta() {
           Transforme sua Escola em um Polo de Inovação
         </h2>
         <p className="mx-auto mt-6 max-w-2xl text-xl font-medium text-primary-foreground/90">
-          Invista no futuro da sua instituição
+          Comece hoje pelo plano gratuito, ou fale com a gente sobre implantação na sua instituição.
         </p>
-        <Button
-          asChild
-          size="lg"
-          variant="secondary"
-          className="mt-12 h-16 rounded-3xl bg-white px-12 text-lg font-black text-primary hover:bg-white/90"
-        >
-          <a href="/contato">Falar com Especialista</a>
-        </Button>
+        {/* Dois caminhos: quem já se convenceu lendo a página não deveria
+            precisar agendar uma reunião para começar a usar. */}
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Button
+            asChild
+            size="lg"
+            variant="secondary"
+            className="h-14 rounded-2xl bg-white px-10 text-base font-black text-primary hover:bg-white/90"
+          >
+            <a href="/login.html">Criar conta grátis</a>
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="h-14 rounded-2xl border-white/40 bg-transparent px-10 text-base font-bold text-primary-foreground hover:bg-white/10 hover:text-primary-foreground"
+          >
+            <a href="/contato">Falar com especialista</a>
+          </Button>
+        </div>
+        <p className="mt-5 text-sm text-primary-foreground/80">
+          Sem cartão de crédito. O plano gratuito não expira.
+        </p>
       </div>
     </section>
   )
