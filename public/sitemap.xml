@@ -1,87 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Mapa do site para os buscadores.
+
+  Duas regras que a versão anterior quebrava:
+
+  1. Só entram URLs que respondem 200. /pricing.html e /contact.html
+     estavam listadas, mas hoje são redirecionamentos para /planos e
+     /contato — o Google descarta URLs assim e a página real nunca era
+     anunciada.
+  2. Nada de área logada. O painel exige autenticação, então indexá-lo só
+     geraria resultados que levam à tela de login.
+
+  Ao criar uma página nova, acrescente aqui. A prioridade é relativa
+  dentro do próprio site: serve para dizer o que importa mais, não para
+  disputar com outros domínios.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
     <loc>https://izicode.com.br/</loc>
-    <lastmod>2026-02-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <!-- Páginas comerciais: é por onde chega quem está decidindo. -->
   <url>
-    <loc>https://izicode.com.br/shop-kit.html</loc>
-    <lastmod>2026-02-01</lastmod>
+    <loc>https://izicode.com.br/planos</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://izicode.com.br/library.html</loc>
-    <lastmod>2026-02-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://izicode.com.br/olimpiadas.html</loc>
-    <lastmod>2026-08-15</lastmod>
+    <loc>https://izicode.com.br/contato</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://izicode.com.br/pricing.html</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://izicode.com.br/contact.html</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://izicode.com.br/portal.html</loc>
-    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Conteúdo aberto: é o que atrai busca orgânica de professor. -->
+  <url>
+    <loc>https://izicode.com.br/library.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://izicode.com.br/guia.html?doc=07-MANUAL-IMPLEMENTACAO</loc>
-    <lastmod>2026-08-15</lastmod>
+    <loc>https://izicode.com.br/olimpiadas.html</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://izicode.com.br/guia.html?doc=05-GUIA-BNCC-TECNOLOGIA</loc>
-    <lastmod>2026-08-15</lastmod>
+    <loc>https://izicode.com.br/shop-kit.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+
+  <!-- Guias: material de referência que responde a busca de professor. -->
   <url>
     <loc>https://izicode.com.br/guia.html?doc=01-GUIA-HACKATHON-ESCOLAR</loc>
-    <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://izicode.com.br/guia.html?doc=02-GUIA-OLIMPIADAS-COMPETICOES</loc>
-    <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://izicode.com.br/guia.html?doc=03-GUIA-PRATICAS-RESTAURATIVAS</loc>
-    <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://izicode.com.br/guia.html?doc=04-GUIA-PROJETOS-ODS</loc>
-    <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://izicode.com.br/guia.html?doc=05-GUIA-BNCC-TECNOLOGIA</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://izicode.com.br/guia.html?doc=06-GUIA-ECOLOGIA-SUSTENTABILIDADE</loc>
-    <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://izicode.com.br/guia.html?doc=07-MANUAL-IMPLEMENTACAO</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
 </urlset>

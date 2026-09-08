@@ -8,8 +8,11 @@ import { Methodology } from "@/components/home/methodology"
 import { Champions } from "@/components/home/champions"
 import { Faq } from "@/components/home/faq"
 import { ContactCta } from "@/components/home/contact-cta"
+import { useSeo, SEO_PAGINAS } from "@/lib/seo"
 
 export function HomePage() {
+  useSeo(SEO_PAGINAS.home)
+
   return (
     <>
       <Hero />

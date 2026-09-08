@@ -17,6 +17,7 @@ import {
 import { db } from "@/lib/firebase"
 import { NOMES_PLANO } from "@/lib/planos"
 import { Button } from "@/components/ui/button"
+import { useSeo, SEO_PAGINAS } from "@/lib/seo"
 
 /** Mesmos valores gravados pelo formulário antigo: o painel de suporte e
  *  qualquer relatório já existente continuam entendendo os leads novos. */
@@ -38,6 +39,8 @@ const inputClass =
   "w-full rounded-xl border bg-background px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
 
 export function ContatoPage() {
+  useSeo(SEO_PAGINAS.contato)
+
   const [passo, setPasso] = useState(1)
   const [nome, setNome] = useState("")
   const [email, setEmail] = useState("")

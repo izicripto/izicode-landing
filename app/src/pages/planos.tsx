@@ -24,6 +24,7 @@ import {
   type Plano,
 } from "@/lib/planos"
 import { Button } from "@/components/ui/button"
+import { useSeo, SEO_PAGINAS } from "@/lib/seo"
 
 const PLANO_FREE = PLANOS_PROFESSOR.find((p) => p.id === "free")!
 const PRO_MENSAL = PLANOS_PROFESSOR.find((p) => p.id === "pro_mensal")!
@@ -297,6 +298,8 @@ const ATALHOS = [
 ]
 
 export function PlanosPage() {
+  useSeo(SEO_PAGINAS.planos)
+
   const [anual, setAnual] = useState(false)
   const proAtivo = anual ? PRO_ANUAL : PRO_MENSAL
 

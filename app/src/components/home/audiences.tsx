@@ -32,8 +32,12 @@ const PUBLICOS = [
     fundo: "bg-violet-100",
     titulo: "Represento uma escola",
     descricao:
-      "Gestão de turmas, acompanhamento por aluno e formação da equipe docente. A escola testa tudo antes de contratar.",
-    itens: ["Código de demonstração gratuito", "Preço por professores e alunos", "Formação de implantação"],
+      "A plataforma para gerir turmas e acompanhar alunos — e, se a escola quiser, a nossa equipe implantando o laboratório maker junto.",
+    itens: [
+      "Código de demonstração gratuito",
+      "Preço por professores e alunos",
+      "Consultoria e formação docente à parte",
+    ],
     cta: "Pedir demonstração",
     href: "/contato?plano=escola",
   },
