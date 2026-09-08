@@ -31,6 +31,24 @@ const require = createRequire(join(raiz, "functions/"))
 const { marked } = require("marked")
 
 const DOMINIO = "https://izicode.com.br"
+
+/**
+ * Medição das páginas de guia.
+ *
+ * Os guias são a porta de entrada da busca orgânica — são eles que
+ * ranqueiam — e estavam sem medição nenhuma. Na prática o canal que
+ * funciona era o único invisível: não dava para saber qual guia traz
+ * gente, nem quantos seguem daqui para a plataforma.
+ *
+ * O mesmo identificador de app/index.html. Se mudar lá, muda aqui.
+ */
+const MEDICAO = `<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17924419542"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'AW-17924419542');
+</script>`
 const ORIGEM = join(raiz, "public/docs")
 const DESTINO = join(raiz, "public/guias")
 
@@ -213,6 +231,7 @@ ${JSON.stringify(
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/guias.css">
+${MEDICAO}
 </head>
 <body>
 
@@ -299,6 +318,7 @@ function indice(lista) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/guias.css">
+${MEDICAO}
 </head>
 <body>
 
