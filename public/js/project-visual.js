@@ -16,27 +16,27 @@
  */
 
 const TEMAS = {
-    robotica:    { icone: "bot",        de: "#0ea5e9", para: "#4f46e5" },
-    veiculo:     { icone: "car",        de: "#6366f1", para: "#a21caf" },
-    sensor:      { icone: "radar",      de: "#0891b2", para: "#0e7490" },
-    temperatura: { icone: "thermo",     de: "#f97316", para: "#dc2626" },
-    planta:      { icone: "sprout",     de: "#16a34a", para: "#047857" },
-    ar:          { icone: "wind",       de: "#06b6d4", para: "#0284c7" },
-    velocidade:  { icone: "gauge",      de: "#eab308", para: "#ea580c" },
-    seguranca:   { icone: "lock",       de: "#475569", para: "#1e293b" },
-    nuvem:       { icone: "cloud",      de: "#38bdf8", para: "#6366f1" },
-    luz:         { icone: "bulb",       de: "#facc15", para: "#f59e0b" },
-    semaforo:    { icone: "cone",       de: "#f43f5e", para: "#b91c1c" },
-    som:         { icone: "music",      de: "#a855f7", para: "#7e22ce" },
-    contador:    { icone: "users",      de: "#14b8a6", para: "#0f766e" },
-    desenho:     { icone: "pen",        de: "#ec4899", para: "#9333ea" },
-    display:     { icone: "monitor",    de: "#3b82f6", para: "#1d4ed8" },
-    codigo:      { icone: "code",       de: "#64748b", para: "#334155" },
-    jogo:        { icone: "gamepad",    de: "#8b5cf6", para: "#4338ca" },
-    criativo:    { icone: "palette",    de: "#f472b6", para: "#c026d3" },
-    bussola:     { icone: "compass",    de: "#0ea5e9", para: "#0369a1" },
-    passos:      { icone: "footprints", de: "#f59e0b", para: "#b45309" },
-    cidade:      { icone: "building",   de: "#22d3ee", para: "#0e7490" },
+    robotica:    { icone: "bot",        de: "#0ea5e9", para: "#4f46e5", realce: "#bae6fd" },
+    veiculo:     { icone: "car",        de: "#6366f1", para: "#a21caf", realce: "#e9d5ff" },
+    sensor:      { icone: "radar",      de: "#0891b2", para: "#0e7490", realce: "#a5f3fc" },
+    temperatura: { icone: "thermo",     de: "#f97316", para: "#dc2626", realce: "#fed7aa" },
+    planta:      { icone: "sprout",     de: "#16a34a", para: "#047857", realce: "#bbf7d0" },
+    ar:          { icone: "wind",       de: "#06b6d4", para: "#0284c7", realce: "#cffafe" },
+    velocidade:  { icone: "gauge",      de: "#eab308", para: "#ea580c", realce: "#fef08a" },
+    seguranca:   { icone: "lock",       de: "#475569", para: "#1e293b", realce: "#cbd5e1" },
+    nuvem:       { icone: "cloud",      de: "#38bdf8", para: "#6366f1", realce: "#e0f2fe" },
+    luz:         { icone: "bulb",       de: "#facc15", para: "#f59e0b", realce: "#fef9c3" },
+    semaforo:    { icone: "cone",       de: "#f43f5e", para: "#b91c1c", realce: "#fecdd3" },
+    som:         { icone: "music",      de: "#a855f7", para: "#7e22ce", realce: "#f3e8ff" },
+    contador:    { icone: "users",      de: "#14b8a6", para: "#0f766e", realce: "#ccfbf1" },
+    desenho:     { icone: "pen",        de: "#ec4899", para: "#9333ea", realce: "#fbcfe8" },
+    display:     { icone: "monitor",    de: "#3b82f6", para: "#1d4ed8", realce: "#dbeafe" },
+    codigo:      { icone: "code",       de: "#64748b", para: "#334155", realce: "#e2e8f0" },
+    jogo:        { icone: "gamepad",    de: "#8b5cf6", para: "#4338ca", realce: "#ddd6fe" },
+    criativo:    { icone: "palette",    de: "#f472b6", para: "#c026d3", realce: "#fce7f3" },
+    bussola:     { icone: "compass",    de: "#0ea5e9", para: "#0369a1", realce: "#bae6fd" },
+    passos:      { icone: "footprints", de: "#f59e0b", para: "#b45309", realce: "#fde68a" },
+    cidade:      { icone: "building",   de: "#22d3ee", para: "#0e7490", realce: "#cffafe" },
 };
 
 /** Ordem importa: a primeira palavra que casar vence. Sempre sem acento. */
@@ -131,9 +131,28 @@ export function visualDoProjeto(projeto, opcoes) {
     // o segundo card herdar a cor do primeiro.
     const gid = "pv-" + String(projeto.id).replace(/[^a-z0-9]/gi, "");
 
+    // As trilhas e os nós são os mesmos do componente do painel, e o ícone
+    // fica sobre a mesma placa translúcida. Ali a placa é uma <div> por
+    // cima do SVG; aqui tudo precisa caber num SVG só, então ela vira um
+    // <rect> arredondado — as medidas estão em unidades do viewBox, que
+    // rende o dobro do pixel exibido no card.
+    const TRILHAS = [
+        "M0 40 H90 L110 60 H180",
+        "M400 70 H330 L310 90 H250",
+        "M0 170 H70 L95 145 H150",
+        "M400 185 H320 L300 165 H240",
+        "M40 220 V180 L60 160 V120",
+        "M360 0 V45 L340 65 V100",
+    ];
+    const NOS = [[110, 60], [310, 90], [95, 145], [300, 165], [60, 160], [340, 65]];
+
     return (
-        '<svg class="' + classe + '" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" ' +
-        'aria-hidden="true" focusable="false">' +
+        '<div class="' + classe + '" aria-hidden="true" ' +
+             'style="position:relative;display:flex;align-items:center;justify-content:center;' +
+             'overflow:hidden;isolation:isolate">' +
+        '<svg style="position:absolute;inset:0;width:100%;height:100%" ' +
+             'viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" ' +
+             'aria-hidden="true" focusable="false">' +
           "<defs>" +
             '<linearGradient id="' + gid + '" x1="0" y1="0" x2="1" y2="1">' +
               '<stop offset="0%" stop-color="' + tema.de + '"/>' +
@@ -141,13 +160,31 @@ export function visualDoProjeto(projeto, opcoes) {
             "</linearGradient>" +
           "</defs>" +
           '<rect width="400" height="220" fill="url(#' + gid + ')"/>' +
-          '<circle cx="330" cy="40" r="70" fill="#ffffff" opacity="0.10"/>' +
-          '<circle cx="60" cy="190" r="50" fill="#ffffff" opacity="0.08"/>' +
-          '<g transform="translate(200 110) scale(3.6) translate(-12 -12)" ' +
-             'fill="none" stroke="#ffffff" stroke-width="1.6" ' +
-             'stroke-linecap="round" stroke-linejoin="round" opacity="0.95">' +
-            '<path d="' + traco + '"/>' +
+          '<g stroke="' + tema.realce + '" stroke-width="1.5" fill="none" opacity="0.35">' +
+            TRILHAS.map(function (d) { return '<path d="' + d + '"/>'; }).join("") +
           "</g>" +
-        "</svg>"
+          '<g fill="' + tema.realce + '" opacity="0.5">' +
+            NOS.map(function (n) {
+                return '<circle cx="' + n[0] + '" cy="' + n[1] + '" r="3.5"/>';
+            }).join("") +
+          "</g>" +
+        "</svg>" +
+        // A placa e o ícone ficam FORA do SVG de fundo, como no componente
+        // do painel. Dentro dele os dois escalariam junto com o card, e num
+        // card alto a placa passava de 60% da altura. Aqui o fundo se
+        // estica e o ícone continua do mesmo tamanho, em qualquer card.
+        // Estilo embutido de propósito: o CSS do Tailwind destas páginas é
+        // um arquivo já compilado, e classes como bg-white/15 podem não ter
+        // sido geradas — a placa sumiria sem erro nenhum.
+        '<div style="position:relative;display:flex;align-items:center;justify-content:center;' +
+             'width:72px;height:72px;border-radius:20px;background:rgba(255,255,255,.15);' +
+             'box-shadow:inset 0 0 0 1px rgba(255,255,255,.25);backdrop-filter:blur(2px)">' +
+          '<svg class="pv-icone" width="36" height="36" viewBox="0 0 24 24" fill="none" ' +
+               'stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" ' +
+               'stroke-linejoin="round" aria-hidden="true" focusable="false">' +
+            '<path d="' + traco + '"/>' +
+          "</svg>" +
+        "</div>" +
+        "</div>"
     );
 }
