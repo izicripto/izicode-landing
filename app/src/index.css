@@ -217,3 +217,39 @@ html {
     scroll-behavior: auto;
   }
 }
+
+/*
+  Movimento lento da foto do herói (efeito Ken Burns).
+
+  Um zoom que vai e volta em 28 segundos, com deslocamento mínimo. A
+  lentidão é o ponto: rápido o bastante para a imagem não parecer congelada,
+  devagar o bastante para ninguém conseguir apontar o que está se mexendo —
+  se o olho acompanha o movimento, ele compete com o texto ao lado, que é
+  onde a decisão acontece.
+
+  A escala nunca desce abaixo de 1.06 para o deslocamento não revelar as
+  bordas da imagem.
+*/
+@keyframes izi-respiro {
+  from {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.14) translate3d(-1.2%, -1.6%, 0);
+  }
+}
+
+.izi-foto-viva {
+  animation: izi-respiro 28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Movimento contínuo pode causar mal-estar em quem tem sensibilidade
+   vestibular. Quem pediu menos animação recebe a foto parada, no mesmo
+   enquadramento ampliado. */
+@media (prefers-reduced-motion: reduce) {
+  .izi-foto-viva {
+    animation: none;
+    transform: scale(1.06);
+  }
+}

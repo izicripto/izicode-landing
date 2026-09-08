@@ -29,9 +29,40 @@ const GARANTIAS = [
 export function Hero() {
   return (
     <section className="relative overflow-hidden pt-10 pb-16 lg:pt-16 lg:pb-24">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
+      {/*
+        A foto ocupa a metade direita inteira, indo até a borda da janela em
+        vez de parar na largura do container. Ficar dentro do container
+        deixava sobra dos dois lados e fazia a imagem competir em tamanho
+        com o texto; sangrando para fora, ela vira plano de fundo e o texto
+        continua sendo a única coisa a ler.
+
+        Fica fora do grid, posicionada em absoluto, porque um item de grid
+        não consegue escapar da largura máxima do pai.
+      */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] overflow-hidden rounded-l-[2.5rem] lg:block">
+        <img
+          src="/hero-lab.jpg"
+          alt="Alunos trabalhando em laboratório de robótica"
+          fetchPriority="high"
+          className="izi-foto-viva h-full w-full object-cover"
+        />
+        {/* Véu na borda esquerda: sem ele, a foto encosta no texto e as
+            linhas mais longas ficam difíceis de ler contra a imagem. */}
+        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent" />
+      </div>
+
+      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
         <div className="text-center lg:text-left">
-          <Badge className="mb-6 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-bold uppercase tracking-wide text-primary hover:bg-primary/10">
+          {/*
+            max-w-full e whitespace-normal desfazem o shrink-0 e o
+            nowrap que vêm do componente Badge. Sem isso, este texto
+            longo define uma largura mínima de 453px para a coluna
+            inteira — e num celular de 390px o herói todo passava a
+            transbordar, escondido pelo overflow-hidden da seção: o
+            título e os botões ficavam cortados à direita sem nenhum
+            sinal de que havia algo além da borda.
+          */}
+          <Badge className="mb-6 h-auto max-w-full whitespace-normal rounded-full bg-primary/10 px-4 py-1.5 text-center text-sm font-bold uppercase leading-snug tracking-wide text-primary hover:bg-primary/10">
             <span className="mr-2 size-2 animate-pulse rounded-full bg-primary" />
             Plataforma + consultoria em robótica educacional
           </Badge>
@@ -81,16 +112,26 @@ export function Hero() {
           </p>
         </div>
 
-        <div className="group relative hidden lg:block">
-          <div className="absolute -inset-4 -z-10 rotate-3 rounded-[2.5rem] bg-primary/20 opacity-60 blur-lg transition-all group-hover:rotate-1" />
-          {/* Altura limitada de propósito: sem o teto, a imagem estica a
-              linha do grid e empurra os botões para fora da primeira tela
-              num notebook de 768px — justamente onde está a conversão. */}
+        {/*
+          Em telas largas esta coluna é só o espaço que a foto absoluta
+          ocupa — ela precisa existir para o grid reservar a metade direita.
+          A altura mínima garante que a foto tenha corpo mesmo quando o
+          texto for curto.
+        */}
+        <div className="hidden lg:block lg:min-h-[32rem]" aria-hidden="true" />
+
+        {/*
+          No celular a foto vem depois do texto, e não antes: a primeira
+          tela pertence à frase e aos botões. A versão anterior escondia a
+          imagem por completo abaixo de 1024px, o que deixava a abertura
+          sem nenhum apoio visual justamente onde vem a maior parte do
+          tráfego.
+        */}
+        <div className="lg:hidden">
           <img
             src="/hero-lab.jpg"
             alt="Alunos trabalhando em laboratório de robótica"
-            fetchPriority="high"
-            className="max-h-[30rem] w-full rounded-[2rem] object-cover shadow-2xl transition-transform group-hover:scale-[1.01]"
+            className="h-56 w-full rounded-3xl object-cover shadow-xl sm:h-72"
           />
         </div>
       </div>
