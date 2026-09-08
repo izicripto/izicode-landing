@@ -97,7 +97,7 @@
                 <div class="w-full md:w-80 bg-slate-50 border-r border-slate-100 p-8 flex flex-col">
                     <div id="modalImageContainer"
                         class="w-full aspect-video rounded-3xl overflow-hidden mb-6 bg-white shadow-inner flex items-center justify-center border border-slate-200 p-2">
-                        <img id="modalImage" alt="" class="w-full h-full object-cover rounded-xl">
+                        <!-- preenchido por viewProject() com o visual do projeto -->
                     </div>
 
                     <div class="space-y-6 flex-1">
@@ -202,6 +202,7 @@
     <script type="module">
         import { initShell } from './js/shell.js';
         import { getAllProjects } from './js/projects-data.js';
+        import { visualDoProjeto } from './js/project-visual.js';
 
         await initShell({ requireAuth: true });
 
@@ -212,38 +213,31 @@
 
         let currentActiveProject = null;
 
+        /**
+         * O que o roteiro traz de fato, lido do próprio conteúdo.
+         *
+         * Antes, todo card prometia "Inclui Esquema Elétrico e Código" —
+         * e só 14 dos 37 têm bloco de código, 10 têm seção de ligações.
+         * Promessa que a página não cumpre custa mais caro do que a
+         * ausência dela: o professor abre esperando o código e desiste.
+         */
+        function oQueInclui(p) {
+            const texto = p.content || '';
+            const partes = [];
+            if (/```/.test(texto)) partes.push('Código');
+            if (/conex|ligaç|esquema|montagem|pinagem/i.test(texto)) partes.push('Ligações');
+            if (/materiais|componentes/i.test(texto)) partes.push('Lista de materiais');
+            if (p.teacherGuide) partes.push('Guia do professor');
+            return partes.length ? 'Inclui ' + partes.join(' · ') : 'Roteiro completo da atividade';
+        }
+
         function render() {
             container.innerHTML = projects.map((p, index) => {
-                let imageSrc = 'images/arduino.png';
-
-                if (p.image) {
-                    if (p.image.startsWith('http')) {
-                        imageSrc = p.image;
-                    } else {
-                        // Clean the name and ensure it points to the local images folder
-                        let cleanName = p.image.replace(/^\//, '').replace(/^images\//, '');
-
-                        // Map specific generic names to existing high-quality photos
-                        if (cleanName.includes('scratch-game')) cleanName = 'pupils-doing-task-laptops-focused-teacher-monitoring-them.jpg';
-                        if (cleanName.includes('microbit-weather')) cleanName = 'mixed-race-boy-glasses-rising-hand-answer-lesson.jpg';
-                        if (cleanName.includes('tinkercad-city')) cleanName = 'woman-looking-into-tablet-happy-girl.jpg';
-                        if (cleanName.includes('arduino-traffic')) cleanName = 'close-up-making-robots.jpg';
-                        if (cleanName === 'python') cleanName = 'tools/python.jpg';
-
-                        // If no extension, default to .jpg
-                        if (!cleanName.includes('.')) cleanName += '.jpg';
-
-                        imageSrc = 'images/' + cleanName;
-                    }
-                }
-
                 return `
                 <div class="glass-card rounded-[2.5rem] p-4 flex flex-col group animate-fade-in" style="animation-delay: ${index * 0.1}s">
                     <div class="relative h-56 rounded-[2rem] overflow-hidden mb-6 bg-slate-100">
-                        <img src="${imageSrc}" 
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100" 
-                             onerror="this.src='images/arduino.png'">
-                        
+                        ${visualDoProjeto(p, { classe: 'w-full h-full object-cover group-hover:scale-110 transition-transform duration-700' })}
+
                         <div class="absolute top-4 left-4 flex flex-col gap-2">
                             <span class="px-3 py-1 bg-white/90 backdrop-blur-md text-slate-900 text-[10px] font-black uppercase tracking-widest rounded-full shadow-sm w-fit">${p.difficulty}</span>
                             <span class="px-3 py-1 bg-brand-600/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-sm w-fit">${p.duration}</span>
@@ -252,7 +246,7 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-8">
                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                 <p class="text-white font-display font-bold text-lg mb-1">Passo a Passo Completo</p>
-                                <p class="text-slate-300 text-xs">Inclui Esquema Elétrico e Código</p>
+                                <p class="text-slate-300 text-xs">${oQueInclui(p)}</p>
                            </div>
                         </div>
                     </div>
@@ -285,22 +279,8 @@
             document.getElementById('modalDiff').innerText = project.difficulty;
             document.getElementById('modalDuration').innerText = project.duration;
 
-            let imageSrc = 'images/arduino.png';
-            if (project.image) {
-                if (project.image.startsWith('http')) {
-                    imageSrc = project.image;
-                } else {
-                    let cleanName = project.image.replace(/^\//, '').replace(/^images\//, '');
-                    if (cleanName.includes('scratch-game')) cleanName = 'pupils-doing-task-laptops-focused-teacher-monitoring-them.jpg';
-                    if (cleanName.includes('microbit-weather')) cleanName = 'mixed-race-boy-glasses-rising-hand-answer-lesson.jpg';
-                    if (cleanName.includes('tinkercad-city')) cleanName = 'woman-looking-into-tablet-happy-girl.jpg';
-                    if (cleanName.includes('arduino-traffic')) cleanName = 'close-up-making-robots.jpg';
-                    if (cleanName === 'python') cleanName = 'tools/python.jpg';
-                    if (!cleanName.includes('.')) cleanName += '.jpg';
-                    imageSrc = 'images/' + cleanName;
-                }
-            }
-            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('modalImageContainer').innerHTML =
+                visualDoProjeto(project, { classe: 'w-full h-full object-cover rounded-xl' });
 
             // Tools & BNCC
             document.getElementById('modalTools').innerHTML = project.tools.map(t => `<span class="px-2 py-1 bg-white border border-slate-200 text-slate-600 text-[10px] font-bold rounded-md">${t}</span>`).join('');
@@ -357,7 +337,11 @@
                     const finalPart = sectionsAfterHeader.split(/## .* (Programação|Código|Dicas)/i)[0];
                     assemblyMd = "# Guia de Montagem e Conexões\n\n" + (parts[1] ? "## " + parts[1] + "\n\n" : "") + finalPart;
                 } else {
-                    assemblyMd = "# Guia de Montagem\n\nConfigure o hardware seguindo o esquema padrão do Arduino.";
+                    assemblyMd =
+                        "# Guia de Montagem\n\n" +
+                        "Este roteiro descreve a montagem dentro da visão geral, sem uma seção separada " +
+                        "de conexões. Confira a aba **Visão Geral** para a lista de componentes e a ordem " +
+                        "das ligações.";
                 }
 
                 // Diagramas técnicos.
@@ -440,7 +424,18 @@
                 if (parts.length > 1) {
                     finalHtml = marked.parse("# Programação Técnica\n\n" + parts.slice(1).join('\n'));
                 } else {
-                    finalHtml = marked.parse("# Código\n\nCrie um novo sketch no Arduino IDE e implemente a lógica.");
+                    // Sem trecho de código no roteiro, dizer isso é melhor do
+                    // que a frase antiga ("crie um sketch e implemente a
+                    // lógica"), que ocupava o lugar do código sem entregar
+                    // nada — o professor clicava na aba e ia embora achando
+                    // que a página tinha falhado.
+                    finalHtml = marked.parse(
+                        "# Código\n\n" +
+                        "Este roteiro não traz o código pronto: a proposta é a turma escrever a lógica " +
+                        "a partir do guia de montagem.\n\n" +
+                        "Se quiser um ponto de partida, o **Gerador IA** monta um sketch comentado para " +
+                        "este projeto a partir da lista de componentes."
+                    );
                 }
             } else if (tab === 'teacher') {
                 const guide = currentActiveProject.teacherGuide;
@@ -456,10 +451,12 @@
                                 <div class="text-center md:text-left">
                                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 mb-4">
                                         <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
-                                        <span class="text-[10px] font-black uppercase tracking-widest text-brand-200">Plano Pedagógico Exclusivo</span>
+                                        <span class="text-[10px] font-black uppercase tracking-widest text-brand-200">${guide ? 'Plano deste projeto' : 'Orientação geral'}</span>
                                     </div>
                                     <h2 class="text-4xl md:text-5xl font-black mb-2 font-display tracking-tight">Guia do Educador</h2>
-                                    <p class="text-slate-400 text-lg max-w-2xl font-medium">Instruções de mediação e parâmetros de avaliação alinhados às diretrizes educacionais vigentes.</p>
+                                    <p class="text-slate-400 text-lg max-w-2xl font-medium">${guide
+                                        ? 'Objetivo, habilidades e avaliação escritos para este roteiro.'
+                                        : 'Este roteiro ainda não tem plano próprio. O que segue vale para qualquer projeto de robótica — use como ponto de partida e adapte à sua turma.'}</p>
                                 </div>
                             </div>
                         </div>
@@ -499,7 +496,7 @@
                                 <span class="text-5xl mb-6 filter drop-shadow-lg">📚</span>
                                 <h4 class="font-bold text-[10px] uppercase tracking-[0.2em] text-white/50 mb-3">Diretrizes BNCC</h4>
                                 <div class="flex flex-wrap justify-center gap-2 mt-auto">
-                                    ${currentActiveProject.bncc.map(b => `<span class="px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-lg text-[10px] font-black border border-white/10">${b}</span>`).join('')}
+                                    ${(currentActiveProject.bncc || []).map(b => `<span class="px-3 py-1.5 bg-white/20 backdrop-blur-md rounded-lg text-[10px] font-black border border-white/10">${b}</span>`).join('') || '<span class="text-[11px] text-white/70">Sem código BNCC mapeado</span>'}
                                 </div>
                             </div>
 

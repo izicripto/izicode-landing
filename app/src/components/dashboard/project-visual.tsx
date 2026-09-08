@@ -84,7 +84,9 @@ const KEYWORDS: [string[], keyof typeof THEMES][] = [
   [["carro", "autonomo", "veiculo"], "veiculo"],
   [["robo", "braco", "servo", "robotico"], "robotica"],
   [["bussola", "norte"], "bussola"],
-  [["pedometro", "passos"], "passos"],
+  // Só "pedometro": "passos" solto casava com "Primeiros Passos com
+  // Raspberry Pi", e o curso de introdução ganhava ícone de pegadas.
+  [["pedometro"], "passos"],
   [["cidade", "smart", "3d", "maquete"], "cidade"],
   [["historia", "animacao", "stop", "desenho", "arte"], "criativo"],
   [["jogo", "jogos", "console", "retropie", "pong", "memoria"], "jogo"],
