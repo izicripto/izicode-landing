@@ -54,6 +54,30 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Izicode" />
 
+    <!--
+      Medição.
+
+      Esta tag existia só em public/index.html — que o deploy sobrescreve
+      com o build do React ("cp -r app/dist/. public/" no workflow). Ou
+      seja: estava no repositório e nunca foi servida. O site publicado
+      rodava sem medição nenhuma, o que torna impossível saber de onde vem
+      quem chega, e impossível rodar campanha paga: sem conversão medida,
+      o Google Ads não tem como otimizar nem como dizer o que deu certo.
+
+      AW- é a conta do Google Ads. Falta ainda uma propriedade GA4 (G-...)
+      para o comportamento no site; quando existir, entra como um segundo
+      gtag('config', ...) logo abaixo.
+    -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17924419542"></script>
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag("js", new Date())
+      gtag("config", "AW-17924419542")
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
