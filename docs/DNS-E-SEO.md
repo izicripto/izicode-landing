@@ -78,21 +78,90 @@ para perceber que o domínio parou de redirecionar.
 4. Em **Inspeção de URL**, cole `https://izicode.com.br/` e peça
    *Solicitar indexação*. Repita para `https://izicode.com.br/planos`.
 
-## 3. E-mail no domínio
+## 3. Criar o contato@izicode.com.br
 
-Precisa de uma decisão comercial antes do registro técnico, porque muda o
-custo:
+### Qual serviço usar
 
-| opção | custo | observação |
+| opção | custo | limitação |
 |---|---|---|
-| **Zoho Mail** | grátis até 5 contas | suficiente para `contato@`; o mais direto para começar |
-| **Google Workspace** | ~R$ 35/usuário/mês | integra com a conta Google que já usamos no Firebase |
-| **Encaminhamento** | grátis | recebe e joga num Gmail existente; não permite *enviar* como `@izicode.com.br` |
+| **Zoho Mail (grátis)** | R$ 0 | 5 contas, 5 GB cada, **só webmail e aplicativo** — o plano gratuito não tem IMAP/POP |
+| Google Workspace | ~R$ 33–42/usuário/mês | cobrado em dólar com IOF, a menos que contratado por revenda nacional |
+| Encaminhamento simples | R$ 0 | recebe num Gmail existente, mas não permite *responder* como `@izicode.com.br` |
 
-Qualquer um deles fornece os registros MX (e normalmente um TXT de SPF)
-para colar no Registro.br. **Enquanto isso não for feito, vale trocar o
-endereço anunciado no site por um que realmente receba** — é melhor exibir
-um Gmail do que um endereço que devolve erro.
+Para uma única caixa de contato, com volume baixo, o **Zoho grátis** é o
+caminho: é o único serviço gratuito que aceita domínio próprio de verdade.
+A falta de IMAP só atrapalha quem quer ler pelo Outlook ou Thunderbird —
+pelo navegador e pelo app do celular funciona normalmente.
+
+Se mais tarde a equipe crescer e precisar de agenda e drive compartilhados,
+migrar para o Google Workspace é uma troca de registros MX, não uma
+mudança de endereço.
+
+### Passo a passo no Zoho
+
+1. Abra <https://www.zoho.com/pt-br/mail/zohomail-pricing.html> e desça até
+   o **Plano Gratuito Para Sempre** (ele não aparece no topo da página, que
+   mostra só os planos pagos). Clique em *Inscrever-se*.
+2. Escolha **"Cadastrar-se com um domínio que já possuo"** e informe
+   `izicode.com.br`.
+3. O Zoho pede para **provar a posse do domínio**. Escolha o método TXT e
+   ele mostra um valor único. No Registro.br, adicione:
+
+   | Nome | Tipo | Dados |
+   |---|---|---|
+   | (em branco, é a raiz) | TXT | `zoho-verification=zbXXXXXXXX.zmverify.zoho.com` |
+
+   Volte ao Zoho e clique em *Verificar*. Pode levar alguns minutos.
+4. Crie a caixa `contato` — o endereço vira `contato@izicode.com.br`.
+   Esta primeira conta é também a administradora.
+5. O Zoho então mostra os **registros MX**. No Registro.br, adicione as
+   três linhas (o número antes do host é a prioridade; o painel do
+   Registro.br tem um campo separado para ela):
+
+   | Nome | Tipo | Prioridade | Dados |
+   |---|---|---|---|
+   | (raiz) | MX | 10 | `mx.zoho.com` |
+   | (raiz) | MX | 20 | `mx2.zoho.com` |
+   | (raiz) | MX | 50 | `mx3.zoho.com` |
+
+   > Confira os hosts na tela do Zoho antes de colar. Contas criadas em
+   > outras regiões usam `mx.zoho.eu` ou `mx.zoho.in`, e um host errado faz
+   > o e-mail sumir sem aviso.
+
+6. Adicione o **SPF**, que diz aos outros servidores que o Zoho tem
+   permissão de enviar em nome do domínio. Sem ele, boa parte das mensagens
+   cai em spam:
+
+   | Nome | Tipo | Dados |
+   |---|---|---|
+   | (raiz) | TXT | `v=spf1 include:zoho.com ~all` |
+
+7. Ative o **DKIM** no painel do Zoho (*Configuração de e-mail → DKIM*).
+   Ele gera um TXT com nome parecido com `zmail._domainkey`. Copie nome e
+   valor exatamente como aparecem.
+
+> **Atenção aos TXT que já existem.** O domínio já tem
+> `hosting-site=izicodeedu-532ac` (Firebase) e vai ganhar o do Search
+> Console. Todos convivem: são registros TXT separados, e apagar um para
+> criar outro quebraria o que ele sustentava. A **única** exceção é o SPF —
+> desse pode existir só um por domínio. Se um dia houver outro serviço
+> enviando e-mail, junte tudo numa linha só, em vez de criar um segundo:
+> `v=spf1 include:zoho.com include:outroservico.com ~all`
+
+### Conferir se funcionou
+
+```bash
+# os MX aparecem?
+nslookup -type=MX izicode.com.br 8.8.8.8
+
+# o SPF esta publicado?
+nslookup -type=TXT izicode.com.br 8.8.8.8 | grep spf
+```
+
+E o teste que realmente importa: mandar um e-mail de fora (de um Gmail
+pessoal, por exemplo) para `contato@izicode.com.br` e confirmar que ele
+chega. Depois responder por lá e ver se a resposta sai com o endereço
+certo — receber e enviar são coisas separadas, e o SPF só afeta a segunda.
 
 ## 4. Depois da configuração: o SEO orgânico
 
