@@ -1,13 +1,29 @@
-// Soma de todos os anos documentados no currículo (2022–2026):
-// Turmas 26+20+27+38+14=125 · Alunos 540+474+556+689+323=2582
-// Projetos 38+30+32+45+13=158 · Equipes 52+47=99 (só 2025 e 2026 reportam
-// contagem de equipes nos dados de origem — os demais anos não têm esse
-// campo, então a soma reflete só o que está documentado).
+/*
+  Números do currículo, somados por período.
+  ------------------------------------------
+  A conta fica escrita aqui de propósito: são os números que a empresa
+  apresenta publicamente, e daqui a um ano ninguém vai lembrar de onde
+  saiu "2.902". Com as parcelas à vista, dá para conferir, corrigir uma
+  delas e refazer o total sem adivinhação.
+
+  Turmas    26 + 20 + 27 + 38 + 14        = 125  + 15  = 140
+  Alunos   540 + 474 + 556 + 689 + 323    = 2582 + 320 = 2902
+  Equipes   52 + 47                       = 99   + 7   = 106
+  Projetos  38 + 30 + 32 + 45 + 13        = 158  + 12  = 170
+
+  As cinco primeiras parcelas vêm dos anos documentados de 2022 a 2026. A
+  última é o levantamento mais recente, ainda sem ano atribuído nos dados
+  de origem.
+
+  Equipes tem só duas parcelas porque apenas 2025 e 2026 registram esse
+  campo — os anos anteriores não o reportam, então o total reflete o que
+  está documentado, e não uma estimativa.
+*/
 const STATS = [
-  { value: "125+", label: "Turmas atendidas" },
-  { value: "2.582+", label: "Alunos impactados" },
-  { value: "99+", label: "Equipes formadas" },
-  { value: "158+", label: "Projetos maker aplicados" },
+  { value: "140+", label: "Turmas atendidas" },
+  { value: "2.902+", label: "Alunos impactados" },
+  { value: "106+", label: "Equipes formadas" },
+  { value: "170+", label: "Projetos maker aplicados" },
 ]
 
 export function Stats() {
