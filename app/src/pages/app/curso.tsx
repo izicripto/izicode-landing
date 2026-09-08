@@ -79,6 +79,11 @@ export function CursoPage() {
   // prometer uma coisa e a tela a entregar outra.
   const canAccess = (m: typeof active) => moduloLiberado(courseId, m, userData)
   const isDone = active ? completed.includes(active.id) : false
+  // Concluído = todos os módulos marcados. Comparar só o tamanho das duas
+  // listas seria frágil: um id repetido em `completed` daria o curso por
+  // concluído sem que a pessoa tivesse aberto tudo.
+  const cursoConcluido =
+    modules.length > 0 && modules.every((m) => completed.includes(m.id))
   const progressPct = modules.length ? Math.round((completed.length / modules.length) * 100) : 0
 
   async function markComplete() {
@@ -93,7 +98,7 @@ export function CursoPage() {
         { merge: true }
       )
       setCompleted(next)
-      const ultimo = next.length >= modules.length
+      const ultimo = modules.every((m) => next.includes(m.id))
       if (ultimo) {
         toast.sucesso("Curso concluído!", `Você terminou "${course.title}". O certificado fica no seu perfil.`)
       } else {
@@ -189,6 +194,42 @@ export function CursoPage() {
               )
             })}
           </div>
+
+          {/*
+            Recompensa de conclusão: o site oficial da ferramenta.
+
+            Fica oculto até a última marcação. A ideia é que a trilha
+            termine entregando algo — a pessoa fecha o curso já com o
+            endereço certo na mão, em vez de procurar no Google, onde o
+            primeiro resultado nem sempre é o site oficial.
+
+            Abre em nova aba para o curso continuar atrás, com o progresso
+            preservado. O rel="noopener noreferrer" acompanha o
+            target="_blank" porque sem ele a página aberta ganha acesso a
+            window.opener e pode redirecionar a nossa aba pelas costas.
+          */}
+          {cursoConcluido && course.toolUrl && (
+            <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+              <p className="flex items-center gap-1.5 text-[0.65rem] font-bold uppercase tracking-wider text-emerald-800">
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                Trilha concluída
+              </p>
+              <div className="mt-2.5 flex items-center gap-2.5">
+                {course.logo && (
+                  <img src={`/${course.logo}`} alt="" className="h-9 w-9 shrink-0 object-contain" />
+                )}
+                <p className="min-w-0 text-sm font-semibold leading-snug">
+                  {course.tool ?? "Site oficial"}
+                </p>
+              </div>
+              <Button size="sm" variant="outline" className="mt-3 w-full" asChild>
+                <a href={course.toolUrl} target="_blank" rel="noopener noreferrer">
+                  Abrir o site oficial
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              </Button>
+            </div>
+          )}
         </aside>
 
         <section>
@@ -271,45 +312,6 @@ export function CursoPage() {
             </article>
           )}
 
-          {/*
-            Link para a ferramenta oficial.
-
-            Fica no fim porque é o passo seguinte natural: quem terminou de
-            ler sobre o Scratch quer abrir o Scratch. Sem isto, a pessoa sai
-            do painel para buscar o endereço no Google — e o resultado da
-            busca nem sempre é o site oficial.
-
-            Abre em nova aba de propósito: o curso continua aberto atrás,
-            com o progresso e o módulo onde a pessoa parou. O
-            rel="noopener noreferrer" acompanha o target="_blank" porque
-            sem ele a página aberta ganha acesso a window.opener e pode
-            redirecionar a nossa aba pelas costas.
-          */}
-          {course.toolUrl && (
-            <aside className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border bg-muted/40 p-5">
-              <div className="flex items-center gap-3">
-                {course.logo && (
-                  <img
-                    src={`/${course.logo}`}
-                    alt=""
-                    className="h-10 w-10 shrink-0 object-contain"
-                  />
-                )}
-                <div>
-                  <p className="font-semibold">Abrir o {course.tool ?? "site oficial"}</p>
-                  <p className="text-sm text-muted-foreground">
-                    Site oficial da ferramenta — abre em uma nova aba.
-                  </p>
-                </div>
-              </div>
-              <Button variant="outline" asChild>
-                <a href={course.toolUrl} target="_blank" rel="noopener noreferrer">
-                  Ir para {course.tool ?? "o site"}
-                  <ExternalLink className="h-4 w-4" />
-                </a>
-              </Button>
-            </aside>
-          )}
         </section>
       </div>
     </>
