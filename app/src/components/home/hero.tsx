@@ -73,11 +73,14 @@ export function Hero() {
 
         <div className="group relative hidden lg:block">
           <div className="absolute -inset-4 -z-10 rotate-3 rounded-[2.5rem] bg-primary/20 opacity-60 blur-lg transition-all group-hover:rotate-1" />
+          {/* Altura limitada de propósito: sem o teto, a imagem estica a
+              linha do grid e empurra os botões para fora da primeira tela
+              num notebook de 768px — justamente onde está a conversão. */}
           <img
             src="/hero-lab.jpg"
             alt="Alunos trabalhando em laboratório de robótica"
             fetchPriority="high"
-            className="w-full rounded-[2rem] object-cover shadow-2xl transition-transform group-hover:scale-[1.01]"
+            className="max-h-[30rem] w-full rounded-[2rem] object-cover shadow-2xl transition-transform group-hover:scale-[1.01]"
           />
         </div>
       </div>
