@@ -9,16 +9,28 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 
+/**
+ * Links do cabeçalho.
+ *
+ * Os âncoras precisam da barra inicial. Eram "#solucoes", que funciona na
+ * home mas em /planos vira "/planos#solucoes" — uma âncora que não existe
+ * naquela página, então o clique não faz nada e a pessoa fica sem entender
+ * o que aconteceu. Com "/#solucoes" o navegador resolve os dois casos: na
+ * home rola sem recarregar, e de qualquer outra rota volta para a home e
+ * rola até a seção.
+ *
+ * "/portal.html" e "/guias/" levam o caminho completo porque são páginas
+ * estáticas em public/, não rotas do router — sem isso, dão 404.
+ */
 const NAV_LINKS = [
-  { href: "#solucoes", label: "Soluções" },
-  { href: "#sobre", label: "Sobre" },
-  { href: "#metodologia", label: "Metodologia" },
-  { href: "#ferramentas", label: "Ferramentas" },
-  // Sem o .html isto dava 404: o portal é uma página estática em
-  // public/, não uma rota do router.
+  { href: "/#solucoes", label: "Soluções" },
+  { href: "/#sobre", label: "Sobre" },
+  { href: "/#metodologia", label: "Metodologia" },
+  { href: "/#ferramentas", label: "Ferramentas" },
+  { href: "/guias/", label: "Guias" },
   { href: "/portal.html", label: "Portal" },
   { href: "/planos", label: "Planos" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#faq", label: "FAQ" },
 ]
 
 export function SiteHeader() {

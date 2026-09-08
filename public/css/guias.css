@@ -1,0 +1,256 @@
+/*
+  Páginas de guia.
+  Folha própria, sem depender do Tailwind do app React: estas páginas são
+  HTML estático gerado por scripts/gerar-guias.mjs e precisam abrir rápido
+  mesmo em conexão ruim — é conteúdo que professor abre no celular, no
+  intervalo, para preparar aula.
+*/
+
+:root {
+  --tinta: #0f172a;
+  --tinta-suave: #475569;
+  --linha: #e2e8f0;
+  --fundo: #ffffff;
+  --fundo-suave: #f8fafc;
+  --marca: #0284c7;
+  --marca-escura: #0369a1;
+  --realce: #eff6ff;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--tinta);
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------- topo */
+
+.gz-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--linha);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.gz-marca {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: Outfit, sans-serif;
+  font-weight: 800;
+  color: var(--tinta);
+  text-decoration: none;
+}
+.gz-marca img { border-radius: 8px; }
+
+.gz-nav { display: flex; align-items: center; gap: 1.25rem; }
+.gz-nav a { color: var(--tinta-suave); text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+.gz-nav a:hover { color: var(--marca); }
+
+.gz-botao {
+  display: inline-block;
+  padding: 0.6rem 1.15rem;
+  border-radius: 999px;
+  background: var(--marca);
+  color: #fff !important;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.gz-botao:hover { background: var(--marca-escura); }
+
+.gz-link { color: var(--marca); font-weight: 600; text-decoration: none; }
+.gz-link:hover { text-decoration: underline; }
+
+/* ------------------------------------------------------- conteúdo */
+
+/*
+  Largura de leitura: cerca de 70 caracteres por linha. Linha mais longa
+  faz o olho perder o começo da linha seguinte, que é o que cansa numa
+  leitura longa como esta.
+*/
+.gz-pagina { max-width: 46rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+.gz-trilha { font-size: 0.85rem; color: var(--tinta-suave); margin-bottom: 1.75rem; }
+.gz-trilha a { color: var(--tinta-suave); text-decoration: none; }
+.gz-trilha a:hover { color: var(--marca); text-decoration: underline; }
+.gz-trilha span[aria-hidden] { margin: 0 0.35rem; opacity: 0.5; }
+
+.gz-capa { margin-bottom: 2.5rem; }
+.gz-capa h1 { margin-bottom: 0.75rem; }
+.gz-capa p { font-size: 1.15rem; color: var(--tinta-suave); }
+
+.gz-artigo h1 {
+  font-family: Outfit, sans-serif;
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  margin: 0 0 1.75rem;
+}
+
+.gz-artigo h2 {
+  font-family: Outfit, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 2.75rem 0 1rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--linha);
+}
+
+.gz-artigo h3 {
+  font-family: Outfit, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 2rem 0 0.6rem;
+}
+
+.gz-artigo h4 { font-size: 1.05rem; font-weight: 700; margin: 1.5rem 0 0.5rem; }
+
+.gz-artigo p { margin: 0 0 1.15rem; }
+.gz-artigo strong { font-weight: 700; color: var(--tinta); }
+
+.gz-artigo a { color: var(--marca); text-decoration: underline; text-underline-offset: 2px; }
+
+.gz-artigo ul, .gz-artigo ol { margin: 0 0 1.25rem; padding-left: 1.35rem; }
+.gz-artigo li { margin-bottom: 0.5rem; }
+.gz-artigo li::marker { color: var(--marca); }
+
+.gz-artigo blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 3px solid var(--marca);
+  background: var(--realce);
+  border-radius: 0 12px 12px 0;
+  color: var(--tinta-suave);
+}
+.gz-artigo blockquote p:last-child { margin-bottom: 0; }
+
+/*
+  Tabelas rolam dentro do próprio contêiner. Os guias têm tabelas de 4 e 5
+  colunas; sem isto, elas empurram a largura da página inteira no celular e
+  o texto todo passa a rolar de lado.
+*/
+.gz-artigo table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.gz-artigo th, .gz-artigo td {
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--linha);
+  text-align: left;
+}
+.gz-artigo th { background: var(--fundo-suave); font-weight: 700; }
+
+.gz-artigo code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.88em;
+  background: var(--fundo-suave);
+  padding: 0.15em 0.4em;
+  border-radius: 5px;
+  border: 1px solid var(--linha);
+}
+.gz-artigo pre {
+  background: var(--fundo-suave);
+  border: 1px solid var(--linha);
+  border-radius: 12px;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.gz-artigo pre code { background: none; border: none; padding: 0; }
+
+.gz-artigo hr { border: none; border-top: 1px solid var(--linha); margin: 2.5rem 0; }
+
+.gz-artigo img { max-width: 100%; height: auto; border-radius: 12px; }
+
+/* ------------------------------------------------------------ CTA */
+
+.gz-cta {
+  margin: 3.5rem 0 2rem;
+  padding: 1.75rem;
+  border: 1px solid var(--linha);
+  border-radius: 20px;
+  background: var(--fundo-suave);
+}
+.gz-cta h2 { font-family: Outfit, sans-serif; font-size: 1.35rem; margin: 0 0 0.6rem; }
+.gz-cta p { margin: 0 0 1rem; color: var(--tinta-suave); }
+.gz-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin: 0 !important; }
+
+/* --------------------------------------------------------- listas */
+
+.gz-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+.gz-lista a {
+  display: block;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid var(--linha);
+  border-radius: 18px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.gz-lista a:hover {
+  border-color: var(--marca);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(2, 132, 199, 0.08);
+}
+.gz-lista h2 { font-family: Outfit, sans-serif; font-size: 1.2rem; margin: 0 0 0.4rem; }
+.gz-lista p { margin: 0; color: var(--tinta-suave); font-size: 0.95rem; }
+
+.gz-relacionados { margin-top: 2.5rem; }
+.gz-relacionados h2 { font-family: Outfit, sans-serif; font-size: 1.2rem; margin: 0 0 0.75rem; }
+.gz-relacionados ul { margin: 0; padding-left: 1.2rem; }
+.gz-relacionados li { margin-bottom: 0.4rem; }
+.gz-relacionados a { color: var(--marca); }
+
+/* --------------------------------------------------------- rodapé */
+
+.gz-rodape {
+  border-top: 1px solid var(--linha);
+  padding: 2rem 1.25rem;
+  text-align: center;
+  color: var(--tinta-suave);
+  font-size: 0.9rem;
+}
+.gz-rodape p { margin: 0.35rem 0; }
+.gz-rodape a { color: var(--tinta-suave); }
+
+/* -------------------------------------------------------- detalhes */
+
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--marca);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (max-width: 560px) {
+  .gz-nav { gap: 0.85rem; }
+  .gz-nav a:not(.gz-botao) { display: none; }
+  .gz-artigo h2 { font-size: 1.4rem; }
+}
+
+@media print {
+  .gz-topo, .gz-cta, .gz-relacionados, .gz-rodape, .gz-trilha { display: none; }
+  body { font-size: 11pt; }
+}

@@ -192,3 +192,28 @@
     border-color: #94a3b8 !important;
   }
 }
+/*
+  Navegação por âncora com cabeçalho fixo.
+
+  O cabeçalho tem 5rem de altura e fica grudado no topo. Sem margem de
+  rolagem, clicar em "Metodologia" leva a seção para o topo da janela —
+  ou seja, para debaixo do cabeçalho, escondendo justamente o título que
+  a pessoa clicou para ver.
+
+  Vale para qualquer elemento com id, e não só para as seções da home,
+  porque a página de planos também navega por âncora (#escola, #aulas).
+*/
+[id] {
+  scroll-margin-top: 6rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Quem pede menos animação no sistema recebe o salto direto. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -19,7 +19,20 @@
 <body class="bg-white min-h-screen flex flex-col font-sans text-slate-700">
     <!-- Navbar -->
     <nav class="p-6 md:px-12 flex justify-between items-center max-w-7xl mx-auto w-full">
-        <a href="portal.html" onclick="if (window.history.length > 1) { window.history.back(); return false; }" class="flex items-center gap-4 group">
+        <!--
+            A logo leva SEMPRE ao portal, nunca ao histórico.
+
+            Aqui havia um onclick com history.back(), e ele criava um laço
+            sem saída: de um curso a logo levava à Academia, e da Academia a
+            logo "voltava" para o curso — as duas telas se apontando para
+            sempre, sem caminho para a inicial.
+
+            Logo é ponto fixo de referência: seu valor está justamente em
+            ir ao mesmo lugar toda vez, de onde quer que a pessoa esteja.
+            Quem quer voltar tem o botão do navegador e o link "Voltar ao
+            Portal" ao lado.
+        -->
+        <a href="portal.html" class="flex items-center gap-4 group">
             <div
                 class="bg-white p-2 rounded-2xl shadow-sm border border-slate-100 group-hover:border-brand-200 group-hover:shadow-brand-200/50 group-hover:scale-105 transition-all duration-300">
                 <img src="images/logo.png" alt="Izicode Logo"

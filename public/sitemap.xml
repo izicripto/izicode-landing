@@ -57,39 +57,47 @@
     <priority>0.6</priority>
   </url>
 
-  <!-- Guias: material de referência que responde a busca de professor. -->
+  <!-- Guias: material de referência que responde a busca de professor.
+       Ficam em caminho limpo (/guias/<assunto>) e são HTML estático — a
+       versão anterior usava ?doc=... e montava o texto por JavaScript. -->
+
   <url>
-    <loc>https://izicode.com.br/guia.html?doc=01-GUIA-HACKATHON-ESCOLAR</loc>
+    <loc>https://izicode.com.br/guias/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://izicode.com.br/guia.html?doc=02-GUIA-OLIMPIADAS-COMPETICOES</loc>
+    <loc>https://izicode.com.br/guias/bncc-tecnologia/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://izicode.com.br/guia.html?doc=03-GUIA-PRATICAS-RESTAURATIVAS</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://izicode.com.br/guia.html?doc=04-GUIA-PROJETOS-ODS</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://izicode.com.br/guia.html?doc=05-GUIA-BNCC-TECNOLOGIA</loc>
+    <loc>https://izicode.com.br/guias/manual-de-implementacao/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://izicode.com.br/guia.html?doc=06-GUIA-ECOLOGIA-SUSTENTABILIDADE</loc>
+    <loc>https://izicode.com.br/guias/hackathon-escolar/</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://izicode.com.br/guia.html?doc=07-MANUAL-IMPLEMENTACAO</loc>
+    <loc>https://izicode.com.br/guias/olimpiadas-e-competicoes/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/guias/projetos-ods/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/guias/ecologia-e-sustentabilidade/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/guias/praticas-restaurativas/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
