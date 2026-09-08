@@ -1,0 +1,357 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 560" width="940" height="560"
+     role="img" aria-labelledby="titulo descricao">
+  <title id="titulo">Montagem do Semáforo Inteligente com Arduino</title>
+  <desc id="descricao">Diagrama de montagem: um Arduino Uno ligado a uma protoboard com três LEDs
+    (vermelho, amarelo e verde). O anodo de cada LED passa por um resistor de 220 ohms e vai
+    aos pinos digitais 13, 12 e 11. Os catodos vão juntos ao trilho negativo, que se liga ao
+    GND do Arduino.</desc>
+
+  <defs>
+    <!-- Brilho suave do plástico da protoboard -->
+    <linearGradient id="plastico" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdfdfb"/>
+      <stop offset="0.5" stop-color="#f2f1ec"/>
+      <stop offset="1" stop-color="#e4e2da"/>
+    </linearGradient>
+
+    <!-- Placa do Arduino: verde-azulado escuro, como a Uno original -->
+    <linearGradient id="pcb" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c6b78"/>
+      <stop offset="1" stop-color="#134d57"/>
+    </linearGradient>
+
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8eaec"/>
+      <stop offset="0.45" stop-color="#b6bcc2"/>
+      <stop offset="1" stop-color="#8d949b"/>
+    </linearGradient>
+
+    <!-- Domo do LED: claro em cima, saturado embaixo -->
+    <radialGradient id="ledVermelho" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#ff9d94"/>
+      <stop offset="0.45" stop-color="#e8302a"/>
+      <stop offset="1" stop-color="#96110d"/>
+    </radialGradient>
+    <radialGradient id="ledAmarelo" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#ffe9a3"/>
+      <stop offset="0.45" stop-color="#f5b917"/>
+      <stop offset="1" stop-color="#9c7005"/>
+    </radialGradient>
+    <radialGradient id="ledVerde" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#a8f0a4"/>
+      <stop offset="0.45" stop-color="#2fae37"/>
+      <stop offset="1" stop-color="#116a17"/>
+    </radialGradient>
+
+    <!-- Corpo bege do resistor -->
+    <linearGradient id="corpoResistor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8d6ac"/>
+      <stop offset="0.5" stop-color="#d3b986"/>
+      <stop offset="1" stop-color="#ad9463"/>
+    </linearGradient>
+
+    <filter id="sombra" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.18"/>
+    </filter>
+
+    <!-- Um furo da protoboard, reutilizado dezenas de vezes -->
+    <g id="furo">
+      <rect x="-3.1" y="-3.1" width="6.2" height="6.2" rx="1.2" fill="#3f4650"/>
+      <rect x="-2" y="-2" width="4" height="4" rx="0.8" fill="#12161c"/>
+    </g>
+  </defs>
+
+  <rect width="940" height="560" fill="#f7f8fa"/>
+
+  <!-- ================================================== PROTOBOARD -->
+  <g transform="translate(470,96)">
+    <rect x="0" y="0" width="430" height="330" rx="8" fill="url(#plastico)" stroke="#c9c7bd" filter="url(#sombra)"/>
+
+    <!-- Trilhos de alimentação: vermelho em cima, azul embaixo -->
+    <line x1="16" y1="20" x2="414" y2="20" stroke="#d1332b" stroke-width="1.6"/>
+    <line x1="16" y1="52" x2="414" y2="52" stroke="#2b62c4" stroke-width="1.6"/>
+    <text x="8" y="24" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#d1332b">+</text>
+    <text x="8" y="57" font-family="system-ui,sans-serif" font-size="15" font-weight="700" fill="#2b62c4">–</text>
+
+    <!-- Furos dos trilhos (grupos de 5) -->
+    <g>
+      <!-- gerados em passo de 14px, pulando a cada 5 -->
+      <g transform="translate(30,30)"><use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/></g>
+      <g transform="translate(114,30)"><use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/></g>
+      <g transform="translate(198,30)"><use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/></g>
+      <g transform="translate(282,30)"><use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/></g>
+      <g transform="translate(366,30)"><use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/></g>
+
+      <g transform="translate(30,42)"><use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/></g>
+      <g transform="translate(114,42)"><use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/></g>
+      <g transform="translate(198,42)"><use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/></g>
+      <g transform="translate(282,42)"><use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/></g>
+      <g transform="translate(366,42)"><use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/></g>
+    </g>
+
+    <!-- Área central: fileiras A–E e F–J, com o canal no meio -->
+    <g transform="translate(30,86)">
+      <!-- letras -->
+      <g font-family="system-ui,sans-serif" font-size="9" fill="#8b8b83" text-anchor="middle">
+        <text x="-16" y="4">J</text><text x="-16" y="22">I</text><text x="-16" y="40">H</text>
+        <text x="-16" y="58">G</text><text x="-16" y="76">F</text>
+        <text x="-16" y="126">E</text><text x="-16" y="144">D</text><text x="-16" y="162">C</text>
+        <text x="-16" y="180">B</text><text x="-16" y="198">A</text>
+      </g>
+
+      <!-- Cinco linhas de cima (F–J) -->
+      <g id="metadeCima">
+        <g transform="translate(0,0)">
+          <use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/>
+          <use href="#furo" x="70"/><use href="#furo" x="84"/><use href="#furo" x="98"/><use href="#furo" x="112"/><use href="#furo" x="126"/>
+          <use href="#furo" x="140"/><use href="#furo" x="154"/><use href="#furo" x="168"/><use href="#furo" x="182"/><use href="#furo" x="196"/>
+          <use href="#furo" x="210"/><use href="#furo" x="224"/><use href="#furo" x="238"/><use href="#furo" x="252"/><use href="#furo" x="266"/>
+          <use href="#furo" x="280"/><use href="#furo" x="294"/><use href="#furo" x="308"/><use href="#furo" x="322"/><use href="#furo" x="336"/>
+        </g>
+        <use href="#metadeCima" y="18"/>
+      </g>
+      <g transform="translate(0,18)">
+        <use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/>
+        <use href="#furo" x="70"/><use href="#furo" x="84"/><use href="#furo" x="98"/><use href="#furo" x="112"/><use href="#furo" x="126"/>
+        <use href="#furo" x="140"/><use href="#furo" x="154"/><use href="#furo" x="168"/><use href="#furo" x="182"/><use href="#furo" x="196"/>
+        <use href="#furo" x="210"/><use href="#furo" x="224"/><use href="#furo" x="238"/><use href="#furo" x="252"/><use href="#furo" x="266"/>
+        <use href="#furo" x="280"/><use href="#furo" x="294"/><use href="#furo" x="308"/><use href="#furo" x="322"/><use href="#furo" x="336"/>
+      </g>
+      <g transform="translate(0,36)">
+        <use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/>
+        <use href="#furo" x="70"/><use href="#furo" x="84"/><use href="#furo" x="98"/><use href="#furo" x="112"/><use href="#furo" x="126"/>
+        <use href="#furo" x="140"/><use href="#furo" x="154"/><use href="#furo" x="168"/><use href="#furo" x="182"/><use href="#furo" x="196"/>
+        <use href="#furo" x="210"/><use href="#furo" x="224"/><use href="#furo" x="238"/><use href="#furo" x="252"/><use href="#furo" x="266"/>
+        <use href="#furo" x="280"/><use href="#furo" x="294"/><use href="#furo" x="308"/><use href="#furo" x="322"/><use href="#furo" x="336"/>
+      </g>
+      <g transform="translate(0,54)">
+        <use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/>
+        <use href="#furo" x="70"/><use href="#furo" x="84"/><use href="#furo" x="98"/><use href="#furo" x="112"/><use href="#furo" x="126"/>
+        <use href="#furo" x="140"/><use href="#furo" x="154"/><use href="#furo" x="168"/><use href="#furo" x="182"/><use href="#furo" x="196"/>
+        <use href="#furo" x="210"/><use href="#furo" x="224"/><use href="#furo" x="238"/><use href="#furo" x="252"/><use href="#furo" x="266"/>
+        <use href="#furo" x="280"/><use href="#furo" x="294"/><use href="#furo" x="308"/><use href="#furo" x="322"/><use href="#furo" x="336"/>
+      </g>
+      <g transform="translate(0,72)">
+        <use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/>
+        <use href="#furo" x="70"/><use href="#furo" x="84"/><use href="#furo" x="98"/><use href="#furo" x="112"/><use href="#furo" x="126"/>
+        <use href="#furo" x="140"/><use href="#furo" x="154"/><use href="#furo" x="168"/><use href="#furo" x="182"/><use href="#furo" x="196"/>
+        <use href="#furo" x="210"/><use href="#furo" x="224"/><use href="#furo" x="238"/><use href="#furo" x="252"/><use href="#furo" x="266"/>
+        <use href="#furo" x="280"/><use href="#furo" x="294"/><use href="#furo" x="308"/><use href="#furo" x="322"/><use href="#furo" x="336"/>
+      </g>
+
+      <!-- Canal central: separa as duas metades eletricamente -->
+      <rect x="-8" y="86" width="360" height="22" fill="#dedcd2"/>
+      <line x1="-8" y1="88" x2="352" y2="88" stroke="#c6c4b9" stroke-width="1.5"/>
+      <line x1="-8" y1="106" x2="352" y2="106" stroke="#c6c4b9" stroke-width="1.5"/>
+
+      <!-- Cinco linhas de baixo (A–E) -->
+      <g transform="translate(0,122)">
+        <use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/>
+        <use href="#furo" x="70"/><use href="#furo" x="84"/><use href="#furo" x="98"/><use href="#furo" x="112"/><use href="#furo" x="126"/>
+        <use href="#furo" x="140"/><use href="#furo" x="154"/><use href="#furo" x="168"/><use href="#furo" x="182"/><use href="#furo" x="196"/>
+        <use href="#furo" x="210"/><use href="#furo" x="224"/><use href="#furo" x="238"/><use href="#furo" x="252"/><use href="#furo" x="266"/>
+        <use href="#furo" x="280"/><use href="#furo" x="294"/><use href="#furo" x="308"/><use href="#furo" x="322"/><use href="#furo" x="336"/>
+      </g>
+      <g transform="translate(0,140)">
+        <use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/>
+        <use href="#furo" x="70"/><use href="#furo" x="84"/><use href="#furo" x="98"/><use href="#furo" x="112"/><use href="#furo" x="126"/>
+        <use href="#furo" x="140"/><use href="#furo" x="154"/><use href="#furo" x="168"/><use href="#furo" x="182"/><use href="#furo" x="196"/>
+        <use href="#furo" x="210"/><use href="#furo" x="224"/><use href="#furo" x="238"/><use href="#furo" x="252"/><use href="#furo" x="266"/>
+        <use href="#furo" x="280"/><use href="#furo" x="294"/><use href="#furo" x="308"/><use href="#furo" x="322"/><use href="#furo" x="336"/>
+      </g>
+      <g transform="translate(0,158)">
+        <use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/>
+        <use href="#furo" x="70"/><use href="#furo" x="84"/><use href="#furo" x="98"/><use href="#furo" x="112"/><use href="#furo" x="126"/>
+        <use href="#furo" x="140"/><use href="#furo" x="154"/><use href="#furo" x="168"/><use href="#furo" x="182"/><use href="#furo" x="196"/>
+        <use href="#furo" x="210"/><use href="#furo" x="224"/><use href="#furo" x="238"/><use href="#furo" x="252"/><use href="#furo" x="266"/>
+        <use href="#furo" x="280"/><use href="#furo" x="294"/><use href="#furo" x="308"/><use href="#furo" x="322"/><use href="#furo" x="336"/>
+      </g>
+      <g transform="translate(0,176)">
+        <use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/>
+        <use href="#furo" x="70"/><use href="#furo" x="84"/><use href="#furo" x="98"/><use href="#furo" x="112"/><use href="#furo" x="126"/>
+        <use href="#furo" x="140"/><use href="#furo" x="154"/><use href="#furo" x="168"/><use href="#furo" x="182"/><use href="#furo" x="196"/>
+        <use href="#furo" x="210"/><use href="#furo" x="224"/><use href="#furo" x="238"/><use href="#furo" x="252"/><use href="#furo" x="266"/>
+        <use href="#furo" x="280"/><use href="#furo" x="294"/><use href="#furo" x="308"/><use href="#furo" x="322"/><use href="#furo" x="336"/>
+      </g>
+      <g transform="translate(0,194)">
+        <use href="#furo"/><use href="#furo" x="14"/><use href="#furo" x="28"/><use href="#furo" x="42"/><use href="#furo" x="56"/>
+        <use href="#furo" x="70"/><use href="#furo" x="84"/><use href="#furo" x="98"/><use href="#furo" x="112"/><use href="#furo" x="126"/>
+        <use href="#furo" x="140"/><use href="#furo" x="154"/><use href="#furo" x="168"/><use href="#furo" x="182"/><use href="#furo" x="196"/>
+        <use href="#furo" x="210"/><use href="#furo" x="224"/><use href="#furo" x="238"/><use href="#furo" x="252"/><use href="#furo" x="266"/>
+        <use href="#furo" x="280"/><use href="#furo" x="294"/><use href="#furo" x="308"/><use href="#furo" x="322"/><use href="#furo" x="336"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================================================== ARDUINO -->
+  <g transform="translate(40,150)">
+    <rect x="0" y="0" width="330" height="215" rx="10" fill="url(#pcb)" stroke="#0d3d45" filter="url(#sombra)"/>
+
+    <!-- USB e alimentação -->
+    <rect x="-8" y="26" width="46" height="42" rx="3" fill="url(#metal)" stroke="#7d848b"/>
+    <rect x="-4" y="32" width="34" height="30" rx="2" fill="#9aa1a8"/>
+    <rect x="-6" y="132" width="44" height="36" rx="5" fill="#15181c"/>
+    <ellipse cx="16" cy="150" rx="9" ry="9" fill="#2a2f36"/>
+
+    <!-- Barras de pinos -->
+    <rect x="58" y="4" width="250" height="18" rx="2" fill="#14181d"/>
+    <rect x="52" y="193" width="150" height="18" rx="2" fill="#14181d"/>
+    <rect x="212" y="193" width="96" height="18" rx="2" fill="#14181d"/>
+
+    <!-- Furos dos pinos digitais -->
+    <g fill="#3d444c">
+      <rect x="62" y="8" width="6" height="10" rx="1"/><rect x="76" y="8" width="6" height="10" rx="1"/>
+      <rect x="90" y="8" width="6" height="10" rx="1"/><rect x="104" y="8" width="6" height="10" rx="1"/>
+      <rect x="118" y="8" width="6" height="10" rx="1"/><rect x="132" y="8" width="6" height="10" rx="1"/>
+      <rect x="146" y="8" width="6" height="10" rx="1"/><rect x="160" y="8" width="6" height="10" rx="1"/>
+      <rect x="180" y="8" width="6" height="10" rx="1"/><rect x="194" y="8" width="6" height="10" rx="1"/>
+      <rect x="208" y="8" width="6" height="10" rx="1"/><rect x="222" y="8" width="6" height="10" rx="1"/>
+      <rect x="236" y="8" width="6" height="10" rx="1"/><rect x="250" y="8" width="6" height="10" rx="1"/>
+      <rect x="264" y="8" width="6" height="10" rx="1"/><rect x="278" y="8" width="6" height="10" rx="1"/>
+    </g>
+
+    <!-- Rótulos dos pinos usados -->
+    <g font-family="system-ui,sans-serif" font-size="11" font-weight="800" fill="#0f172a" text-anchor="middle">
+      <text x="65" y="-6">13</text>
+      <text x="79" y="-6">12</text>
+      <text x="93" y="-6">11</text>
+    </g>
+    <text x="183" y="34" font-family="system-ui,sans-serif" font-size="9" fill="#8fc3cb" text-anchor="middle">DIGITAL (PWM ~)</text>
+
+    <!-- Pinos de alimentação embaixo -->
+    <g fill="#3d444c">
+      <rect x="58" y="197" width="6" height="10" rx="1"/><rect x="72" y="197" width="6" height="10" rx="1"/>
+      <rect x="86" y="197" width="6" height="10" rx="1"/><rect x="100" y="197" width="6" height="10" rx="1"/>
+      <rect x="114" y="197" width="6" height="10" rx="1"/><rect x="128" y="197" width="6" height="10" rx="1"/>
+      <rect x="142" y="197" width="6" height="10" rx="1"/><rect x="156" y="197" width="6" height="10" rx="1"/>
+    </g>
+    <text x="120" y="186" font-family="system-ui,sans-serif" font-size="9" fill="#8fc3cb" text-anchor="middle">POWER</text>
+    <text x="117" y="228" font-family="system-ui,sans-serif" font-size="10" font-weight="700" fill="#2c3e46" text-anchor="middle">GND</text>
+
+    <!-- Microcontrolador e cristal -->
+    <rect x="118" y="112" width="118" height="42" rx="3" fill="#1b1f24"/>
+    <circle cx="128" cy="122" r="3" fill="#3a4149"/>
+    <text x="177" y="138" font-family="system-ui,sans-serif" font-size="9" fill="#7d858d" text-anchor="middle">ATmega328P</text>
+    <rect x="252" y="120" width="26" height="14" rx="4" fill="url(#metal)"/>
+
+    <text x="250" y="176" font-family="system-ui,sans-serif" font-size="13" font-weight="800" fill="#e8f6f8" text-anchor="middle">ARDUINO UNO</text>
+  </g>
+
+  <!-- ================================================ COMPONENTES -->
+  <!--
+    Topologia, para cada LED:
+
+      pino digital -> fio -> coluna A -> RESISTOR -> coluna B
+      coluna B -> anodo do LED ... catodo -> coluna C
+      coluna C -> fio -> trilho negativo -> GND
+
+    Colunas diferentes em cada ponta de cada componente. Duas pernas no
+    mesmo furo estariam no mesmo nó elétrico — ou seja, em curto, e o
+    componente não faria nada.
+
+    Tudo fica na metade de cima (fileiras F–J): o canal central separa as
+    duas metades, então misturar os lados quebraria o circuito.
+    Grade: colunas a cada 14px a partir de x=500; fileira I em y=200,
+    fileira G em y=236.
+  -->
+
+  <!-- · resistores de 220 Ω (vermelho, vermelho, marrom, dourado) · -->
+  <g id="resistores">
+    <!-- vermelho: coluna 514 -> 542 -->
+    <g transform="translate(514,200)">
+      <line x1="0" y1="0" x2="28" y2="0" stroke="#9aa1a8" stroke-width="2.2"/>
+      <rect x="6" y="-7" width="16" height="14" rx="6" fill="url(#corpoResistor)" stroke="#8d7648" stroke-width="0.7"/>
+      <rect x="8.5" y="-7" width="3.2" height="14" fill="#c0392b"/>
+      <rect x="13" y="-7" width="3.2" height="14" fill="#c0392b"/>
+      <rect x="17.5" y="-7" width="3" height="14" fill="#6b4423"/>
+      <rect x="21" y="-7" width="2" height="14" fill="#c9a227"/>
+    </g>
+    <!-- amarelo: 626 -> 654 -->
+    <g transform="translate(626,200)">
+      <line x1="0" y1="0" x2="28" y2="0" stroke="#9aa1a8" stroke-width="2.2"/>
+      <rect x="6" y="-7" width="16" height="14" rx="6" fill="url(#corpoResistor)" stroke="#8d7648" stroke-width="0.7"/>
+      <rect x="8.5" y="-7" width="3.2" height="14" fill="#c0392b"/>
+      <rect x="13" y="-7" width="3.2" height="14" fill="#c0392b"/>
+      <rect x="17.5" y="-7" width="3" height="14" fill="#6b4423"/>
+      <rect x="21" y="-7" width="2" height="14" fill="#c9a227"/>
+    </g>
+    <!-- verde: 738 -> 766 -->
+    <g transform="translate(738,200)">
+      <line x1="0" y1="0" x2="28" y2="0" stroke="#9aa1a8" stroke-width="2.2"/>
+      <rect x="6" y="-7" width="16" height="14" rx="6" fill="url(#corpoResistor)" stroke="#8d7648" stroke-width="0.7"/>
+      <rect x="8.5" y="-7" width="3.2" height="14" fill="#c0392b"/>
+      <rect x="13" y="-7" width="3.2" height="14" fill="#c0392b"/>
+      <rect x="17.5" y="-7" width="3" height="14" fill="#6b4423"/>
+      <rect x="21" y="-7" width="2" height="14" fill="#c9a227"/>
+    </g>
+  </g>
+
+  <!-- · LEDs: anodo na coluna do resistor, catodo duas colunas à direita · -->
+  <!-- vermelho: anodo 542, catodo 570 -->
+  <g>
+    <line x1="542" y1="236" x2="542" y2="212" stroke="#9aa1a8" stroke-width="2.2"/>
+    <line x1="570" y1="236" x2="570" y2="220" stroke="#9aa1a8" stroke-width="2.2"/>
+    <g transform="translate(556,206)">
+      <rect x="-15" y="0" width="30" height="5" rx="2" fill="#c62b25" stroke="#6d0d0a" stroke-width="0.6"/>
+      <path d="M -12 0 L -12 -8 A 12 12 0 0 1 12 -8 L 12 0 Z" fill="url(#ledVermelho)" stroke="#6d0d0a" stroke-width="0.8"/>
+    </g>
+  </g>
+  <!-- amarelo: anodo 654, catodo 682 -->
+  <g>
+    <line x1="654" y1="236" x2="654" y2="212" stroke="#9aa1a8" stroke-width="2.2"/>
+    <line x1="682" y1="236" x2="682" y2="220" stroke="#9aa1a8" stroke-width="2.2"/>
+    <g transform="translate(668,206)">
+      <rect x="-15" y="0" width="30" height="5" rx="2" fill="#dda413" stroke="#7a5804" stroke-width="0.6"/>
+      <path d="M -12 0 L -12 -8 A 12 12 0 0 1 12 -8 L 12 0 Z" fill="url(#ledAmarelo)" stroke="#7a5804" stroke-width="0.8"/>
+    </g>
+  </g>
+  <!-- verde: anodo 766, catodo 794 -->
+  <g>
+    <line x1="766" y1="236" x2="766" y2="212" stroke="#9aa1a8" stroke-width="2.2"/>
+    <line x1="794" y1="236" x2="794" y2="220" stroke="#9aa1a8" stroke-width="2.2"/>
+    <g transform="translate(780,206)">
+      <rect x="-15" y="0" width="30" height="5" rx="2" fill="#279c2e" stroke="#0c4a11" stroke-width="0.6"/>
+      <path d="M -12 0 L -12 -8 A 12 12 0 0 1 12 -8 L 12 0 Z" fill="url(#ledVerde)" stroke="#0c4a11" stroke-width="0.8"/>
+    </g>
+  </g>
+
+  <!-- ======================================================= FIOS -->
+  <!-- Sinal: pino digital -> coluna de entrada do resistor.
+       Cor por LED, para a turma seguir cada caminho com o dedo. -->
+  <path d="M 105 154 C 105 470 514 470 514 208" fill="none" stroke="#d1332b" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M 119 154 C 119 490 626 490 626 208" fill="none" stroke="#e0a800" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M 133 154 C 133 510 738 510 738 208" fill="none" stroke="#2f9e41" stroke-width="3.2" stroke-linecap="round"/>
+
+  <!-- Catodos -> trilho negativo (linha azul, y=138) -->
+  <path d="M 570 236 C 570 180 570 160 570 146" fill="none" stroke="#1f2937" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M 682 236 C 682 180 682 160 682 146" fill="none" stroke="#1f2937" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M 794 236 C 794 180 794 160 794 146" fill="none" stroke="#1f2937" stroke-width="2.6" stroke-linecap="round"/>
+
+  <!-- GND do Arduino -> trilho negativo -->
+  <path d="M 157 347 C 260 430 420 210 514 142" fill="none" stroke="#1f2937" stroke-width="3.2" stroke-linecap="round"/>
+
+  <!-- ==================================================== RÓTULOS -->
+  <g font-family="system-ui,sans-serif">
+    <text x="40" y="42" font-size="21" font-weight="800" fill="#0f172a">Semáforo Inteligente — montagem</text>
+    <text x="40" y="64" font-size="13" fill="#475569">Arduino Uno · 3 LEDs · 3 resistores de 220 Ω · protoboard</text>
+
+    <g font-size="11" font-weight="700">
+      <text x="556" y="452" fill="#b02a24" text-anchor="middle">LED vermelho</text>
+      <text x="668" y="452" fill="#96700a" text-anchor="middle">LED amarelo</text>
+      <text x="780" y="452" fill="#1f7a2a" text-anchor="middle">LED verde</text>
+    </g>
+
+    <g font-size="10" fill="#64748b">
+      <text x="528" y="178" text-anchor="middle">220 Ω</text>
+      <text x="640" y="178" text-anchor="middle">220 Ω</text>
+      <text x="752" y="178" text-anchor="middle">220 Ω</text>
+    </g>
+
+    <text x="470" y="490" font-size="11" fill="#475569">
+      Perna longa (anodo) → resistor → pino digital. Perna curta (catodo) → trilho negativo → GND.
+    </text>
+    <text x="470" y="510" font-size="11" fill="#475569">
+      Sem o resistor o LED queima: ele limita a corrente que sai do pino.
+    </text>
+  </g>
+</svg>
