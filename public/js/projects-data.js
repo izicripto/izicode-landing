@@ -15,20 +15,11 @@ export const projects = [
         image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 9 - Indústria, Inovação e Infraestrutura",
         bncc: ["EF08TEC04", "EF09TEC01"],
-        schematic: "https://docs.arduino.cc/static/6df7cf50811eef2506253761cc27e467/A000066-schematic.pdf", // Link to schematic or placeholder image
-        hardwareDiagram: "https://docs.arduino.cc/static/f58d249f086888c3a5062340-pinout.png",
-        softwareFlow: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&q=80&w=800", // Logical flow visual
         teacherGuide: {
             objective: "Ensinar lógica de controle em malha fechada e calibração de sensores analógicos.",
             skills: ["Resolução de problemas", "Pensamento Algorítmico", "Colaboração"],
             assessment: "O robô consegue completar uma volta completa em menos de 30 segundos?"
         },
-        hacksterLink: "https://www.hackster.io/Pj.gour/line-follower-robot-arduino-b10bf4",
-        stepImages: [
-            "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1555664424-778a1e5e1b48?auto=format&fit=crop&q=80&w=800"
-        ],
         content: `
 # Robô Seguidor de Linha (Guia Completo)
 
@@ -1473,20 +1464,11 @@ Discuta com a turma: Qual a importância de preservar jogos antigos? Por que exi
         image: "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 2 - Fome Zero",
         bncc: ["EF08TEC04", "EM13TEC04"],
-        schematic: "https://docs.arduino.cc/static/219323c2a0ba-schematic.pdf",
-        hardwareDiagram: "https://docs.arduino.cc/static/f16216628859-mkr-pinout.png",
-        softwareFlow: "https://images.unsplash.com/photo-1454165833767-027ffea30c4b?auto=format&fit=crop&q=80&w=800",
         teacherGuide: {
             objective: "Explorar a automação aplicada à sustentabilidade e monitoramento remoto via IoT.",
             skills: ["Domínio de ferramentas cloud", "Eletrônica aplicada", "Análise de dados"],
-            assessment: "O sistema envia dados corretamente para o dashboard e ativa a bomba no limiar definido?",
-            hacksterLink: "https://www.hackster.io/mishraanurag/smart-garden-iot-cloud-8275e5"
+            assessment: "O sistema envia dados corretamente para o dashboard e ativa a bomba no limiar definido?"
         },
-        stepImages: [
-            "https://images.unsplash.com/photo-1592150621124-3c344a39a5ec?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1530836361253-219323c2a0ba?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1516216628859-9bccecca29ca?auto=format&fit=crop&q=80&w=800"
-        ],
         content: `
 # Horta Inteligente IoT (Official Cloud Project)
 
@@ -1650,20 +1632,11 @@ Como essa integração permite criar apps mobile nativos ou sistemas de gestão 
         image: "https://images.unsplash.com/photo-1593344484962-796055d4a3a4?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 9 - Indústria e Inovação",
         bncc: ["EF08TEC04", "EF09TEC01"],
-        schematic: "https://docs.arduino.cc/static/radar-circuit-view.pdf",
-        hardwareDiagram: "https://docs.arduino.cc/static/ultrasonic-wiring.png",
-        softwareFlow: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800",
         teacherGuide: {
             objective: "Demonstrar a aplicação de sensores em sistemas de segurança e medir a velocidade de resposta humana.",
             skills: ["Física do som", "Lógica condicional", "Design de interface sonora"],
-            assessment: "O tempo entre os bipes reduz proporcionalmente à distância medida?",
-            hacksterLink: "https://www.hackster.io/akarsh98/arduino-uno-ultrasonic-radar-1-0-c6ee0d"
+            assessment: "O tempo entre os bipes reduz proporcionalmente à distância medida?"
         },
-        stepImages: [
-            "https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=800",
-            "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800"
-        ],
         content: `
 # Radar de Estacionamento (Automotive Guide)
 

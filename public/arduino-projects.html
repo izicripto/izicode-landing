@@ -360,7 +360,15 @@
                     assemblyMd = "# Guia de Montagem\n\nConfigure o hardware seguindo o esquema padrão do Arduino.";
                 }
 
-                // Technical Diagrams Section
+                // Diagramas técnicos.
+                //
+                // Quando uma imagem não carrega, o painel some em vez de
+                // mostrar um cartaz de "em construção". Era assim antes, e
+                // foi o que escondeu o problema: os três projetos que
+                // preenchiam estes campos apontavam para PDFs e para URLs da
+                // arduino.cc que retornavam 404, e a tela exibia um cartaz
+                // com cara de intencional. Falha disfarçada de escolha
+                // ninguém conserta, porque ninguém percebe.
                 let diagramsHtml = "";
                 if (currentActiveProject.schematic || currentActiveProject.hardwareDiagram || currentActiveProject.softwareFlow) {
                     diagramsHtml = `
@@ -374,7 +382,7 @@
                                     <div class="flex flex-col gap-3">
                                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Schematic Diagram</p>
                                         <div class="diagram-card aspect-[3/4] flex items-center justify-center bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm group cursor-pointer">
-                                            <img src="${currentActiveProject.schematic}" class="max-h-full object-contain p-4 group-hover:scale-105 transition-transform" onerror="this.src='images/construction.png'">
+                                            <img src="${currentActiveProject.schematic}" class="max-h-full object-contain p-4 group-hover:scale-105 transition-transform" onerror="this.closest('.diagram-card').parentElement.remove()">
                                         </div>
                                     </div>
                                 ` : ''}
@@ -382,7 +390,7 @@
                                     <div class="flex flex-col gap-3">
                                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Diagram Hardware Version</p>
                                         <div class="diagram-card aspect-[3/4] flex items-center justify-center bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm group cursor-pointer">
-                                            <img src="${currentActiveProject.hardwareDiagram}" class="max-h-full object-contain p-4 group-hover:scale-105 transition-transform" onerror="this.src='images/construction.png'">
+                                            <img src="${currentActiveProject.hardwareDiagram}" class="max-h-full object-contain p-4 group-hover:scale-105 transition-transform" onerror="this.closest('.diagram-card').parentElement.remove()">
                                         </div>
                                     </div>
                                 ` : ''}
@@ -390,7 +398,7 @@
                                     <div class="flex flex-col gap-3">
                                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Diagram Software Version</p>
                                         <div class="diagram-card aspect-[3/4] flex items-center justify-center bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm group cursor-pointer">
-                                            <img src="${currentActiveProject.softwareFlow}" class="max-h-full object-contain p-4 group-hover:scale-105 transition-transform" onerror="this.src='images/construction.png'">
+                                            <img src="${currentActiveProject.softwareFlow}" class="max-h-full object-contain p-4 group-hover:scale-105 transition-transform" onerror="this.closest('.diagram-card').parentElement.remove()">
                                         </div>
                                     </div>
                                 ` : ''}
@@ -417,7 +425,7 @@
 
                         return `
                                     <div class="group relative aspect-video rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-sm">
-                                        <img src="${stepSrc}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='images/arduino.png'">
+                                        <img src="${stepSrc}" alt="Etapa ${i + 1} da montagem" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.closest('.group').remove()">
                                         <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-black px-2.5 py-1 rounded-lg">FOTO 0${i + 1}</div>
                                     </div>
                                 `;
