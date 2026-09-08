@@ -4,101 +4,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Em Construção - Izicode Edu</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@700;800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="css/tw/e7b59c45.css">
+    <title>Página não encontrada — Izicode Edu</title>
+
+    <!-- Esta página responde 404 para qualquer endereço que não existe.
+         Não deve entrar no índice de busca: o que o Google precisa indexar
+         são os guias e a home, não o aviso de link quebrado. -->
+    <meta name="robots" content="noindex, follow">
+
+    <!--
+      Tudo aqui é absoluto e embutido, de propósito.
+
+      O Hosting serve este arquivo para QUALQUER endereço inexistente, em
+      qualquer profundidade. Com caminho relativo, um visitante que caísse
+      em /guias/algo-removido pediria /guias/algo-removido/css/... — que
+      também não existe — e receberia a página sem estilo nenhum, com as
+      imagens quebradas. Era exatamente o que acontecia.
+
+      Pelo mesmo motivo o CSS é inline e não há dependência de fonte
+      externa: a página de erro é a que precisa funcionar quando o resto
+      já não está funcionando.
+    -->
     <style>
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-20px);
-            }
+        :root {
+            --tinta: #0f172a;
+            --tinta-suave: #475569;
+            --linha: #e2e8f0;
+            --fundo: #ffffff;
+            --fundo-suave: #f8fafc;
+            --marca: #0284c7;
+            --marca-escura: #0369a1;
+            color-scheme: light;
         }
 
-        .float-animation {
-            animation: float 3s ease-in-out infinite;
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.25rem;
+            background: var(--fundo-suave);
+            color: var(--tinta);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .cartao {
+            width: 100%;
+            max-width: 34rem;
+            background: var(--fundo);
+            border: 1px solid var(--linha);
+            border-radius: 1rem;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, .06), 0 12px 32px rgba(15, 23, 42, .06);
+        }
+
+        .marca {
+            display: inline-flex;
+            align-items: center;
+            gap: .6rem;
+            text-decoration: none;
+            color: var(--tinta);
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .marca img { width: 2rem; height: 2rem; border-radius: .45rem; }
+
+        .codigo {
+            font-size: .8125rem;
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--marca);
+            margin: 0 0 .5rem;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            line-height: 1.25;
+            margin: 0 0 .75rem;
+            letter-spacing: -.02em;
+        }
+
+        p { margin: 0 0 1.5rem; color: var(--tinta-suave); }
+
+        .caminhos {
+            list-style: none;
+            margin: 0 0 2rem;
+            padding: 0;
+            border-top: 1px solid var(--linha);
+        }
+
+        .caminhos li { border-bottom: 1px solid var(--linha); }
+
+        .caminhos a {
+            display: flex;
+            align-items: baseline;
+            gap: .75rem;
+            padding: .85rem .25rem;
+            text-decoration: none;
+            color: var(--tinta);
+        }
+
+        .caminhos a:hover,
+        .caminhos a:focus-visible { color: var(--marca-escura); }
+
+        .caminhos strong { font-weight: 600; white-space: nowrap; }
+
+        .caminhos span { font-size: .9375rem; color: var(--tinta-suave); }
+
+        .voltar {
+            display: inline-block;
+            padding: .7rem 1.4rem;
+            border-radius: .6rem;
+            background: var(--marca);
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .voltar:hover,
+        .voltar:focus-visible { background: var(--marca-escura); }
+
+        a:focus-visible { outline: 2px solid var(--marca); outline-offset: 3px; }
+
+        .rodape {
+            margin-top: 2rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--linha);
+            font-size: .9375rem;
+            color: var(--tinta-suave);
+        }
+
+        .rodape a { color: var(--marca-escura); font-weight: 600; }
+
+        @media (max-width: 30rem) {
+            .cartao { padding: 2rem 1.35rem; }
+            h1 { font-size: 1.5rem; }
+            .caminhos a { flex-direction: column; gap: .15rem; }
         }
     </style>
 </head>
 
-<body
-    class="bg-gradient-to-br from-slate-50 via-brand-50 to-slate-100 min-h-screen flex items-center justify-center p-6">
-    <div class="max-w-3xl w-full">
-        <!-- Card Principal -->
-        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
-            <!-- Header com Logo -->
-            <div class="bg-gradient-to-r from-brand-500 to-brand-600 p-8 text-center">
-                <img src="images/logo.png" alt="Izicode Logo"
-                    class="w-24 h-24 mx-auto mb-4 bg-white rounded-2xl p-3 shadow-lg float-animation">
-                <h1 class="font-display text-2xl md:text-3xl font-bold text-white">Izicode Edu</h1>
-            </div>
+<body>
+    <main class="cartao">
+        <a class="marca" href="/">
+            <img src="/images/logo.png" alt="">
+            Izicode Edu
+        </a>
 
-            <!-- Conteúdo -->
-            <div class="p-8 md:p-12 text-center">
-                <!-- Ilustração de Construção -->
-                <div class="mb-8 flex justify-center">
-                    <img src="images/construction.png" alt="Em Construção" class="w-64 h-64 object-contain">
-                </div>
+        <p class="codigo">Erro 404</p>
+        <h1>Esta página não existe</h1>
+        <p>
+            O endereço pode ter mudado, ou o link que trouxe você até aqui
+            está desatualizado. O conteúdo continua no ar — só em outro lugar.
+        </p>
 
-                <h2 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-                    Esta Página Está em Construção 🚧
-                </h2>
-
-                <p class="text-lg text-slate-600 mb-6 leading-relaxed">
-                    Estamos trabalhando para trazer novidades incríveis! Nossa equipe está construindo algo especial
-                    para transformar a educação.
-                </p>
-
-                <!-- Destaque VIP -->
-                <div class="bg-gradient-to-r from-brand-50 to-blue-50 rounded-2xl p-6 mb-8 border-2 border-brand-200">
-                    <p class="font-display font-bold text-brand-700 text-2xl mb-3">✨ Acesso Antecipado Garantido!</p>
-                    <p class="text-slate-700 font-medium">
-                        Quando esta página estiver pronta, <span class="text-brand-600 font-bold">você será um dos
-                            primeiros a receber acesso exclusivo</span> às nossas novidades e funcionalidades.
-                    </p>
-                </div>
-
-                <!-- Info Box -->
-                <div class="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100">
-                    <div class="text-left">
-                        <div>
-                            <p class="font-semibold text-slate-900 mb-1">O que está acontecendo?</p>
-                            <p class="text-slate-600 text-sm leading-relaxed">
-                                Esta funcionalidade ainda está sendo desenvolvida. Estamos criando uma experiência
-                                incrível para você e sua escola. Fique ligado!
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Botão de Retorno -->
-                <a href="/"
-                    class="inline-flex items-center justify-center gap-2 bg-brand-600 text-white font-bold px-10 py-4 rounded-xl hover:bg-brand-700 transition-all shadow-lg hover:shadow-xl hover:scale-105">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Voltar para a Home
+        <ul class="caminhos">
+            <li>
+                <a href="/guias/">
+                    <strong>Guias</strong>
+                    <span>Material gratuito para professores, sem cadastro</span>
                 </a>
-            </div>
-        </div>
+            </li>
+            <li>
+                <a href="/planos">
+                    <strong>Planos</strong>
+                    <span>O que está incluído em cada plano</span>
+                </a>
+            </li>
+            <li>
+                <a href="/app">
+                    <strong>Plataforma</strong>
+                    <span>Entrar na sua conta</span>
+                </a>
+            </li>
+        </ul>
 
-        <!-- Footer Info -->
-        <div class="text-center mt-6">
-            <p class="text-slate-500 text-sm">
-                Precisa de ajuda? Entre em contato através do nosso
-                <a href="/#contato"
-                    class="text-brand-600 font-semibold hover:text-brand-700 transition-colors">formulário de
-                    contato</a>
-            </p>
-        </div>
-    </div>
+        <a class="voltar" href="/">Voltar para a página inicial</a>
+
+        <p class="rodape">
+            Se você chegou aqui por um link nosso, avise a gente em
+            <a href="/contato">contato</a> — a gente conserta.
+        </p>
+    </main>
 </body>
 
 </html>

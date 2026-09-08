@@ -8,6 +8,38 @@ admin.initializeApp();
  *  PLATFORM_OWNER_EMAIL no app. */
 const PLATFORM_OWNER_EMAIL = 'izicripto@gmail.com';
 
+/** Gerações de IA no plano gratuito. Espelha FREE_AI_GENERATIONS do app. */
+const LIMITE_GRATUITO_IA = 3;
+
+/**
+ * Identificador que veio do cliente e vai virar caminho no Firestore.
+ *
+ * `collection('x').doc(id)` e `doc(\`a/b/${id}\`)` montam um caminho com o
+ * texto cru. Se o texto tiver barra, ou for "." ou "..", o SDK levanta uma
+ * exceção antes de qualquer conferência nossa — a função morre com 500 e o
+ * cliente recebe "erro interno" no lugar de "não encontrado".
+ *
+ * Isso não era brecha de dado: nada escapava do lugar certo. Era pior de
+ * outro jeito — qualquer pessoa, sem estar logada, conseguia encher o
+ * monitoramento de erro 500 à vontade, e aí a falha de verdade some no meio
+ * do ruído. Um caso passava direto: "a/b/c" completa um caminho de
+ * documento válido e apontava a leitura para uma subcoleção que ninguém
+ * pretendia expor.
+ *
+ * As regras são as do próprio Firestore para id de documento.
+ */
+function idDeDocumentoValido(id) {
+    return (
+        typeof id === 'string' &&
+        id.length > 0 &&
+        Buffer.byteLength(id, 'utf8') <= 1500 &&
+        !id.includes('/') &&
+        id !== '.' &&
+        id !== '..' &&
+        !/^__.*__$/.test(id)
+    );
+}
+
 exports.newLeadNotification = functions.firestore.document('leads/{leadId}').onCreate(async (snap, context) => {
     const lead = snap.data();
     const config = functions.config().telegram;
@@ -189,7 +221,12 @@ exports.abacatePayWebhook = functions.https.onRequest(async (req, res) => {
         corpoData?.customer?.metadata?.email ||
         cobranca?.customer?.email ||
         corpoData?.payerInformation?.email;
-    const paymentId = metadata.paymentId;
+    // Vem do payload da AbacatePay, ou seja, de fora. Um valor torto aqui
+    // faria o SDK levantar exceção ao montar o caminho e derrubaria o
+    // processamento inteiro — inclusive o plano B por billingId logo abaixo.
+    // Tratando como "não veio id", o plano B ainda encontra o pagamento.
+    // Webhook que falha é cliente que pagou e ficou sem acesso.
+    const paymentId = idDeDocumentoValido(metadata.paymentId) ? metadata.paymentId : null;
 
     try {
         const db = admin.firestore();
@@ -358,6 +395,10 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
             escolaId = doPerfil;
             const escola = await admin.firestore().collection('schools').doc(escolaId).get();
             nomeEscola = escola.exists ? (escola.data() || {}).name || null : null;
+        } else if (escolaId && !idDeDocumentoValido(escolaId)) {
+            // veio do cliente e nem sequer é um id possível: descarta antes
+            // de montar caminho com ele.
+            escolaId = null;
         } else if (escolaId) {
             // schoolId veio só do cliente: aceita apenas se a escola existir
             // e a pessoa for a administradora cadastrada nela.
@@ -571,7 +612,7 @@ exports.confirmPayment = functions.https.onCall(async (data, context) => {
     }
 
     const paymentId = String((data && data.paymentId) || '').trim();
-    if (!paymentId) {
+    if (!idDeDocumentoValido(paymentId)) {
         throw new functions.https.HttpsError('invalid-argument', 'Informe qual pagamento conferir.');
     }
 
@@ -772,7 +813,12 @@ exports.generateAIProject = functions.https.onCall(async (data, context) => {
     const isPro = userData.role === 'professor-pro' || userData.role === 'admin' || userData.subscription?.plan === 'pro';
     const usageCount = userData.aiUsageCount || 0;
 
-    if (!isPro && usageCount >= 3) {
+    // Precisa bater com FREE_AI_GENERATIONS em app/src/lib/roles.ts e com
+    // o comparativo da pagina de planos ("3 no total"). Sao tres lugares
+    // afirmando o mesmo numero: se um mudar sozinho, a tela promete uma
+    // coisa e o servidor entrega outra — e quem descobre e o professor,
+    // no meio de uma aula.
+    if (!isPro && usageCount >= LIMITE_GRATUITO_IA) {
         throw new functions.https.HttpsError('resource-exhausted', 'Limite de uso gratuito atingido. Assine o plano PRO.');
     }
 
@@ -951,7 +997,7 @@ exports.studentLogin = functions.https.onCall(async (data) => {
 
     const studentId = String((data && data.studentId) || "").trim();
     const secret = String((data && data.secret) || "").trim().toLowerCase();
-    if (!studentId || !secret) {
+    if (!idDeDocumentoValido(studentId) || !secret) {
         throw new functions.https.HttpsError("invalid-argument", "Informe o aluno e a palavra secreta.");
     }
 
