@@ -1761,6 +1761,285 @@ Essa pergunta surgindo da turma é o melhor sinal de que o Makey Makey cumpriu o
             },
         ],
     },
+    {
+        id: "tinkercad-para-professores",
+        title: "Tinkercad para Professores",
+        tool: "Tinkercad",
+        level: "Iniciante",
+        logo: "images/tinkercad.jpg",
+        description: "Modelagem 3D, simulação de circuitos e programação em blocos — tudo no navegador, de graça, sem instalar nada.",
+        outcome: "Ao final, você conduz aulas de Arduino sem possuir um Arduino, cria peças 3D com a turma e gerencia todos os alunos numa sala virtual sem exigir e-mail de ninguém.",
+        modules: [
+            {
+                id: "m1",
+                title: "Por que Tinkercad Resolve o Problema de Orçamento",
+                duration: "12 min",
+                free: true,
+                content: `
+## Três ferramentas num endereço
+
+O Tinkercad é gratuito, roda no navegador e reúne três ambientes que normalmente exigiriam software pago e computador potente:
+
+| Ambiente | Para que serve |
+|---|---|
+| **3D Design** | modelagem de peças para impressão 3D ou visualização |
+| **Circuits** | montagem e **simulação** de circuitos com Arduino |
+| **Codeblocks** | modelagem 3D por programação em blocos |
+
+É mantido pela Autodesk — a mesma empresa do AutoCAD e do Fusion 360 — e o plano educacional é gratuito, sem versão de avaliação nem limite de tempo.
+
+## O ponto que muda o planejamento
+
+O **Circuits** simula Arduino. Isso não é um detalhe: significa dar aula de eletrônica e programação de Arduino **sem possuir um único Arduino**.
+
+O aluno monta o circuito na tela, escreve o código, clica em "Iniciar Simulação" e o LED acende. Se ligar o LED sem resistor, o simulador queima o LED — e avisa por quê. Errar sem custo é justamente o que uma bancada real não permite.
+
+Para a maior parte das escolas brasileiras, essa é a diferença entre ter e não ter aula de robótica:
+
+| | Bancada física | Tinkercad Circuits |
+|---|---|---|
+| Custo por aluno | R$ 60 a 300 | R$ 0 |
+| Componente queimado | prejuízo | recomeçar |
+| Aula em casa | impossível | mesma conta, mesmo projeto |
+| Tempo de montagem | 15-20 min | 2-3 min |
+
+## O que a simulação não substitui
+
+Vale dizer isso com clareza, para não vender o que a ferramenta não entrega. O simulador não ensina:
+
+- soldar, cortar e descascar fio
+- lidar com mau contato, que é a causa mais comum de falha real
+- a diferença entre o componente do catálogo e o que chegou na caixa
+- a sensação física de montar algo que funciona na sua mão
+
+O caminho que funciona: **projetar e depurar no Tinkercad, montar em kits compartilhados**. Trinta alunos simulam ao mesmo tempo; cinco kits rodam em rodízio para a montagem final. Assim o kit deixa de ser gargalo e passa a ser a etapa de fechamento.
+
+## Requisitos
+
+- Navegador atualizado e internet. Não precisa de placa de vídeo dedicada.
+- Funciona em Chromebook, que é o parque de máquinas de muitas escolas.
+- Uma conta de professor. Os alunos **não precisam de e-mail** — o módulo 5 explica como.
+
+> Em computadores antigos, o 3D Design pode ficar lento com muitos objetos. O Circuits é bem mais leve e costuma rodar em qualquer máquina que abra o navegador.
+                `.trim(),
+            },
+            {
+                id: "m2",
+                title: "3D Design: Sólidos, Furos e a Lógica de Agrupar",
+                duration: "18 min",
+                free: false,
+                content: `
+## Um único conceito sustenta tudo
+
+Modelagem no Tinkercad é **combinar formas**. Não há escultura nem curvas livres: você posiciona sólidos e decide o que some.
+
+Cada objeto é de um de dois tipos:
+
+- **Sólido** — matéria, ocupa espaço
+- **Furo** (*hole*) — anti-matéria, remove o que estiver embaixo dele
+
+Ao **agrupar** (Ctrl+G), os furos subtraem os sólidos. Essa operação única explica praticamente todas as peças que a turma vai fazer: um copo é um cilindro sólido com um cilindro-furo dentro; uma chave é um retângulo com furos.
+
+Se a turma entende sólido, furo e agrupar, já consegue modelar. O resto é prática.
+
+## A primeira aula: chaveiro com o nome
+
+Projeto de entrada por três motivos: resultado pessoal, poucos passos e imprimível em menos de 20 minutos.
+
+1. Arraste uma **caixa** para o plano e ajuste para cerca de 40 × 15 × 3 mm.
+2. Arraste **Texto**, digite o nome, coloque sobre a caixa e ajuste a altura para 2 mm.
+3. Arraste um **cilindro**, mude para **Furo**, reduza para 4 mm e posicione onde entra a argola.
+4. Selecione tudo e **agrupe**.
+5. Exporte em **.STL** para a impressora.
+
+## Os erros que aparecem sempre
+
+Vale antecipar, porque economizam metade do tempo da aula:
+
+**Objeto flutuando.** O eixo Z fica na alça de cone acima do objeto, não nas laterais. Peça a leve conferir sempre pela vista frontal — a superior esconde exatamente esse erro.
+
+**Texto que não cola.** Se o texto só encosta na base, ele imprime solto. Precisa **penetrar** alguns décimos de milímetro na peça antes de agrupar.
+
+**Agrupou e sumiu tudo.** Um furo grande englobou os sólidos. Ctrl+Z, reduzir o furo, agrupar de novo.
+
+**Peça fina demais.** Abaixo de 2 mm quebra na hora de tirar da mesa. Estabeleça esse mínimo como regra da turma.
+
+## Onde isso encontra o currículo
+
+| Disciplina | Projeto |
+|---|---|
+| Matemática | volume e área de sólidos — o Tinkercad mostra as dimensões enquanto o aluno redimensiona |
+| Ciências | modelo de célula, sistema solar em escala, peças de encaixe |
+| Geografia | maquete de relevo em camadas |
+| História | réplica de artefato estudado |
+| Arte | escultura modular, azulejaria com padrões |
+
+Matemática é onde a ferramenta rende mais: pedir uma caixa com volume exato de 60 cm³ transforma a fórmula em restrição de projeto, e o aluno testa combinações até fechar a conta.
+                `.trim(),
+            },
+            {
+                id: "m3",
+                title: "Circuits: Arduino Sem Ter um Arduino",
+                duration: "22 min",
+                free: false,
+                content: `
+## Montando o primeiro circuito
+
+No Circuits você arrasta componentes de um painel lateral e liga com cliques. Comece pelo LED, que é o "olá mundo" da eletrônica:
+
+1. Arraste **Arduino Uno R3** para a área de trabalho.
+2. Arraste um **LED** e um **resistor de 220 Ω**.
+3. Ligue: pino 13 → resistor → perna longa do LED (ânodo). Perna curta (cátodo) → GND.
+4. Abra o **Código**, escolha **Blocos** ou **Texto**.
+5. Clique em **Iniciar Simulação**.
+
+O LED pisca. Nenhum componente comprado, nenhum cabo solto.
+
+## A lição que só o simulador dá de graça
+
+Monte de novo **sem o resistor** e simule. O Tinkercad queima o LED na tela e explica que a corrente passou do limite.
+
+Numa bancada real, esse erro custa um componente e é invisível — o LED simplesmente para de funcionar e ninguém sabe por quê. No simulador, o erro é **anunciado**, e o aluno associa causa e efeito na hora.
+
+É a razão pedagógica mais forte para simular antes de montar: o erro fica barato o suficiente para ser explorado de propósito.
+
+## Blocos e texto lado a lado
+
+O editor mostra o código em blocos e o C++ correspondente **ao mesmo tempo**. Ao arrastar um bloco, a linha aparece do outro lado.
+
+Essa é a melhor rampa que existe entre programação em blocos e código escrito. A sequência que funciona em turma:
+
+1. Primeiros projetos só em blocos
+2. Blocos com o painel de texto visível ao lado — sem cobrar leitura ainda
+3. Pedir para localizar no texto o que um bloco específico produziu
+4. Alternar: escrever em texto, conferir se o bloco correspondente aparece
+
+## Sequência de projetos que funciona
+
+| Projeto | Conceito | Duração |
+|---|---|---|
+| LED piscando | saída digital, \`delay()\` | 1 aula |
+| Semáforo | sequência e temporização | 1 aula |
+| Botão + LED | entrada digital, \`if\` | 1-2 aulas |
+| LDR + LED | entrada analógica, luz automática | 2 aulas |
+| Sensor de temperatura | leitura, conversão, monitor serial | 2 aulas |
+| Ultrassônico | distância, bibliotecas | 2-3 aulas |
+
+Da mesma forma que no Arduino real, quase todo projeto é combinação de cinco ideias: saída digital, entrada digital, entrada analógica, PWM e funções auxiliares.
+
+## Depurar sem hardware
+
+O **Monitor Serial** funciona na simulação. \`Serial.println()\` mostra o valor lido, e é assim que o aluno descobre que o sensor lê 512 e não 0 ou 1.
+
+Ensinar a imprimir o valor antes de tentar consertar é provavelmente o hábito mais útil que essa ferramenta permite instalar cedo.
+                `.trim(),
+            },
+            {
+                id: "m4",
+                title: "Codeblocks: Modelar 3D Programando",
+                duration: "15 min",
+                free: false,
+                content: `
+## O terceiro ambiente
+
+O **Codeblocks** monta objetos 3D por programação em blocos. Em vez de arrastar um cilindro, você escreve "criar cilindro, raio 10, altura 30". Ao rodar, o objeto aparece sendo construído.
+
+É o ambiente menos conhecido do Tinkercad e o mais interessante para matemática.
+
+## Por que ele importa
+
+No 3D Design, fazer trinta cubos em espiral é trabalho manual repetitivo. No Codeblocks, é um laço com três linhas.
+
+Isso muda o que a ferramenta ensina. Ela deixa de exercitar coordenação e passa a exercitar **abstração**: para desenhar a espiral, o aluno precisa expressar a regra que gera a espiral.
+
+## Onde ele encaixa melhor
+
+**Repetição e laços.** Uma escada de dez degraus: criar um degrau e repetir dez vezes, deslocando a cada volta.
+
+**Variáveis com significado geométrico.** Uma torre em que cada andar é 10% menor: o tamanho é variável, e a variável tem consequência visível.
+
+**Ângulos e trigonometria.** Distribuir doze objetos num círculo exige rotacionar 30° a cada um. É trigonometria com resultado imediato na tela — e o erro aparece como um objeto fora de lugar, não como uma resposta errada no caderno.
+
+**Parametrização.** Uma peça em que trocar um número muda a peça inteira. É o conceito que separa desenhar de projetar.
+
+## Sugestão de sequência
+
+1. Criar um objeto e mudar as dimensões
+2. Mover e rotacionar por comandos
+3. Laço simples — dez cubos em linha
+4. Laço com variável que cresce — pirâmide de cubos
+5. Laço com rotação — objetos em círculo
+6. Projeto livre com pelo menos um laço e uma variável
+
+## Uma escolha de quando usar
+
+O Codeblocks não substitui o 3D Design; resolve outro problema. Peça com muitas partes repetidas ou que precise ser facilmente ajustável: Codeblocks. Peça de forma livre, orgânica: 3D Design.
+
+Deixar essa decisão com o aluno — e pedir que justifique — costuma render mais discussão do que o projeto em si.
+                `.trim(),
+            },
+            {
+                id: "m5",
+                title: "Sala Virtual: Turma Inteira Sem Pedir E-mail",
+                duration: "18 min",
+                free: false,
+                content: `
+## O problema que isso resolve
+
+Criar conta em serviço online costuma travar em duas barreiras: aluno de Fundamental I geralmente não tem e-mail, e cadastrar dados de menor de idade exige cuidado com a LGPD.
+
+O Tinkercad tem um modo de turma feito exatamente para isso.
+
+## Como funciona
+
+1. Crie uma conta de **educador** (gratuita) em tinkercad.com.
+2. Vá em **Classes** e crie uma turma.
+3. Adicione os alunos pelo **nome** — sem e-mail.
+4. O sistema gera um **código de turma** e um apelido para cada aluno.
+5. O aluno entra em tinkercad.com/joinclass, digita o código e escolhe o próprio nome na lista.
+
+Nenhum e-mail de criança é coletado, e você vê todos os projetos da turma num painel só.
+
+## Por que isso importa para a LGPD
+
+A lei trata dado de criança e adolescente com proteção reforçada: o tratamento deve ocorrer no melhor interesse do menor e, em regra, com consentimento específico de um responsável.
+
+Não coletar e-mail nem dado pessoal além do nome **reduz drasticamente** a superfície de exposição. Ainda assim, comunique as famílias sobre quais ferramentas a escola usa — transparência é obrigação da instituição, independentemente do quanto a ferramenta coleta.
+
+## Conduzindo a turma
+
+**Projeto inicial pronto.** Monte o projeto-base, copie e distribua para a turma. Todo mundo começa do mesmo ponto, e a aula não se perde em configuração.
+
+**Acompanhar durante a aula.** O painel mostra os projetos em andamento. Dá para ver quem travou sem precisar circular de mesa em mesa.
+
+**Copiar entre alunos.** Um projeto pode ser duplicado para outro. Útil para retomar quem faltou, sem que a pessoa comece do zero.
+
+## Projeto final sugerido
+
+**Luminária impressa com acionamento automático.** Reúne os três ambientes:
+
+1. **3D Design** — modelar a cúpula e a base, com passagem para o fio
+2. **Circuits** — simular LDR + LED, para acender sozinha no escuro
+3. **Codeblocks** — gerar um padrão repetido de furos na cúpula
+4. Imprimir a peça e montar o circuito num kit compartilhado
+
+Rende de quatro a seis aulas e produz algo que o aluno leva para casa — o que, na prática, é o que faz o projeto ser lembrado.
+
+## Avaliação
+
+| Critério | O que observar |
+|---|---|
+| Modelagem | a peça é imprimível? respeita espessura mínima? |
+| Circuito | funciona na simulação? tem resistor onde precisa? |
+| Programação | o código faz o que o projeto pede? |
+| Processo | como o aluno lidou com o que não funcionou? |
+| Justificativa | ele explica as escolhas de projeto? |
+
+O critério de processo é o que diferencia quem entendeu de quem copiou um tutorial — e o histórico de versões do Tinkercad ajuda: dá para ver a evolução do projeto, não só o resultado.
+                `.trim(),
+            },
+        ],
+    },
 ];
 
 export function getAllCourses() {
