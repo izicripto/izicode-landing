@@ -8,6 +8,7 @@ import { isProUser } from "@/lib/roles"
 import { loadCourses, type Course } from "@/lib/legacy-data"
 import { PageHeader } from "@/components/dashboard/page-header"
 import { Button } from "@/components/ui/button"
+import { CURSO_LIVRE, rotuloAcessoCurso } from "@/lib/acesso"
 
 export function AcademiaPage() {
   const { user, userData } = useAuth()
@@ -48,7 +49,7 @@ export function AcademiaPage() {
               pro ? "bg-amber-100 text-amber-800" : "bg-muted text-muted-foreground"
             }`}
           >
-            {pro ? "Todos os módulos liberados" : "1º módulo grátis"}
+            {pro ? "Todos os módulos liberados" : "1 curso grátis + 1º módulo dos demais"}
           </span>
         }
       />
@@ -62,9 +63,9 @@ export function AcademiaPage() {
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => {
+            const cursoAberto = course.id === CURSO_LIVRE
             const done = progress[course.id]?.length ?? 0
             const total = course.modules?.length ?? 0
-            const freeCount = course.modules?.filter((m) => m.free).length ?? 0
             const pct = total > 0 ? Math.round((done / total) * 100) : 0
 
             if (course.comingSoon) {
@@ -91,15 +92,26 @@ export function AcademiaPage() {
               <Link
                 key={course.id}
                 to={`/app/academia/${course.id}`}
-                className="group flex flex-col rounded-2xl border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
+                className={`group flex flex-col rounded-2xl border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg ${
+                  cursoAberto && !pro ? "border-emerald-300 ring-2 ring-emerald-100" : ""
+                }`}
               >
                 <div className="mb-4 flex items-center justify-between">
                   {course.logo && (
                     <img src={`/${course.logo}`} alt={course.tool ?? ""} className="h-10 w-10 object-contain" />
                   )}
-                  <span className="rounded-full bg-sky-50 px-3 py-1 text-[0.6rem] font-bold uppercase tracking-wider text-sky-700">
-                    {course.level}
-                  </span>
+                  {/* No plano gratuito, o curso aberto ganha destaque: é por
+                      onde a pessoa começa, e uma lista onde tudo parece
+                      igualmente trancado não convida a clicar em nada. */}
+                  {cursoAberto && !pro ? (
+                    <span className="rounded-full bg-emerald-100 px-3 py-1 text-[0.6rem] font-bold uppercase tracking-wider text-emerald-800">
+                      Grátis por completo
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-sky-50 px-3 py-1 text-[0.6rem] font-bold uppercase tracking-wider text-sky-700">
+                      {course.level}
+                    </span>
+                  )}
                 </div>
 
                 <h3 className="font-display text-lg font-bold group-hover:text-primary">{course.title}</h3>
@@ -127,14 +139,19 @@ export function AcademiaPage() {
                     <BookOpen className="h-3.5 w-3.5" />
                     {total} módulos
                   </span>
-                  <span className={pro ? "text-emerald-600" : "flex items-center gap-1 text-amber-600"}>
-                    {pro ? "Completo" : (
-                      <>
-                        <Lock className="h-3 w-3" />
-                        {freeCount} grátis
-                      </>
-                    )}
-                  </span>
+                  {/* O estado vem da regra central (lib/acesso.ts), e não
+                      de uma conta feita aqui: a lista e a tela do curso
+                      precisam dizer a mesma coisa, senão a pessoa clica
+                      num "grátis" e encontra um cadeado. */}
+                  {(() => {
+                    const acesso = rotuloAcessoCurso(course.id, userData)
+                    return (
+                      <span className={acesso.livre ? "text-emerald-600" : "flex items-center gap-1 text-amber-600"}>
+                        {!acesso.livre && <Lock className="h-3 w-3" />}
+                        {acesso.texto}
+                      </span>
+                    )
+                  })()}
                 </div>
               </Link>
             )

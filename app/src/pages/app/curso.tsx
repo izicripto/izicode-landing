@@ -13,16 +13,15 @@ import {
 } from "lucide-react"
 import { db } from "@/lib/firebase"
 import { useAuth } from "@/lib/auth-context"
-import { isProUser } from "@/lib/roles"
 import { loadCourses, type Course } from "@/lib/legacy-data"
 import { Markdown } from "@/components/dashboard/markdown"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/toast"
+import { moduloLiberado, CURSO_LIVRE } from "@/lib/acesso"
 
 export function CursoPage() {
   const { courseId } = useParams<{ courseId: string }>()
   const { user, userData } = useAuth()
-  const pro = isProUser(userData)
 
   const [course, setCourse] = useState<Course | null>(null)
   const [loading, setLoading] = useState(true)
@@ -73,7 +72,11 @@ export function CursoPage() {
 
   const modules = course.modules ?? []
   const active = modules[moduleIndex]
-  const canAccess = (m: typeof active) => Boolean(m?.free) || pro
+  // Vem de lib/acesso.ts, a mesma regra que a lista da Academia usa. Antes
+  // era `m.free || pro`, calculado aqui — e qualquer mudança na política
+  // teria de ser lembrada em dois arquivos, o que é como a lista passa a
+  // prometer uma coisa e a tela a entregar outra.
+  const canAccess = (m: typeof active) => moduloLiberado(courseId, m, userData)
   const isDone = active ? completed.includes(active.id) : false
   const progressPct = modules.length ? Math.round((completed.length / modules.length) * 100) : 0
 
@@ -197,12 +200,18 @@ export function CursoPage() {
               </div>
               <h2 className="font-display text-xl font-bold text-amber-900">Módulo exclusivo PRO</h2>
               <p className="mx-auto mt-2 max-w-md text-sm text-amber-900/80">
-                O primeiro módulo de cada trilha é gratuito. Com o plano PRO você libera todos os
-                módulos de todas as trilhas da Academia.
+                O primeiro módulo desta trilha é gratuito, e a trilha de{" "}
+                <strong>Scratch para Professores</strong> está aberta por inteiro. O plano PRO
+                libera todos os módulos de todas as trilhas.
               </p>
-              <Button className="mt-5" asChild>
-                <a href="/planos">Ver planos</a>
-              </Button>
+              <div className="mt-5 flex flex-wrap justify-center gap-3">
+                <Button asChild>
+                  <a href="/planos">Ver planos</a>
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link to={`/app/academia/${CURSO_LIVRE}`}>Fazer a trilha gratuita</Link>
+                </Button>
+              </div>
             </div>
           ) : (
             <article className="rounded-2xl border bg-card p-6 shadow-sm sm:p-8">

@@ -254,3 +254,112 @@ a:focus-visible, button:focus-visible {
   .gz-topo, .gz-cta, .gz-relacionados, .gz-rodape, .gz-trilha { display: none; }
   body { font-size: 11pt; }
 }
+
+/* ------------------------------------------------ parede de plano */
+
+/*
+  Onde a prévia termina.
+
+  O degradê no topo faz o texto acima desaparecer aos poucos, em vez de ser
+  cortado numa linha reta — assim fica claro que o conteúdo continua, e não
+  que a página acabou ali. É a mesma leitura que jornais usam: o corte
+  precisa parecer deliberado, não um defeito de carregamento.
+*/
+.gz-parede {
+  position: relative;
+  margin-top: -4rem;
+  padding: 5rem 1.75rem 2rem;
+  border-radius: 20px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, var(--fundo) 3.5rem, var(--fundo-suave) 100%);
+  border: 1px solid var(--linha);
+  border-top: none;
+  text-align: center;
+}
+
+.gz-parede-selo {
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  background: var(--realce);
+  color: var(--marca-escura);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.gz-parede h2 {
+  font-family: Outfit, sans-serif;
+  font-size: 1.5rem;
+  margin: 0 0 0.6rem;
+  /* Sem a borda e o respiro que os h2 do artigo têm: este não é mais uma
+     seção do texto, é o fim dele. */
+  border: none;
+  padding: 0;
+}
+
+.gz-parede p { color: var(--tinta-suave); margin: 0 0 1rem; }
+.gz-parede .gz-acoes { justify-content: center; margin: 1.5rem 0 0 !important; }
+.gz-parede-nota { font-size: 0.85rem; margin-top: 1.5rem !important; }
+.gz-parede-nota a { color: var(--marca); }
+
+/* ------------------------------------------------------- Academia */
+
+/*
+  Ponte do guia para as trilhas.
+
+  Quem acabou de ler mil palavras sobre BNCC é exatamente o público da
+  Academia — mas os guias não mencionavam que ela existe. O bloco fica
+  depois do CTA principal: primeiro a oferta direta (criar conta), depois
+  o caminho para quem quer se aprofundar antes de decidir.
+*/
+.gz-academia {
+  margin: 2rem 0;
+  padding: 1.75rem;
+  border: 1px solid var(--linha);
+  border-radius: 20px;
+}
+.gz-academia-selo {
+  margin: 0 0 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--marca);
+}
+.gz-academia h2 {
+  font-family: Outfit, sans-serif;
+  font-size: 1.35rem;
+  margin: 0 0 0.6rem;
+  border: none;
+  padding: 0;
+}
+.gz-academia > p { color: var(--tinta-suave); margin: 0 0 1.25rem; }
+
+.gz-trilhas { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.gz-trilhas a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--linha);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--tinta);
+  font-weight: 600;
+  transition: border-color 0.15s, background 0.15s;
+}
+.gz-trilhas a:hover { border-color: var(--marca); background: var(--realce); }
+/* O selo diz o preço antes do clique: descobrir o cadeado depois de entrar
+   é o tipo de surpresa que faz a pessoa fechar a aba. */
+.gz-trilhas span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--tinta-suave);
+}
+.gz-trilhas li:first-child span { color: #047857; }

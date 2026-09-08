@@ -35,6 +35,27 @@ const ORIGEM = join(raiz, "public/docs")
 const DESTINO = join(raiz, "public/guias")
 
 /**
+ * Regra de acesso aos guias
+ * -------------------------
+ * Dois guias abertos por inteiro, cinco com prévia. A escolha dos dois
+ * livres não é aleatória: BNCC e Manual de Implementação são os de maior
+ * volume de busca e os que melhor mostram a qualidade do material — quem
+ * chega por eles vê o padrão antes de decidir pagar.
+ *
+ * A prévia existe porque bloquear a página inteira destruiria o motivo de
+ * ela existir. Estas páginas foram feitas para o Google indexar e trazer
+ * professor novo; atrás de login, o robô vê uma parede e a página some da
+ * busca.
+ *
+ * O corte acontece AQUI, na geração: o HTML publicado contém só a prévia.
+ * Esconder o texto completo com CSS seria mostrar ao Google uma coisa e ao
+ * leitor outra — o que os buscadores tratam como fraude e punem.
+ *
+ * A regra completa está em docs/REGRAS-DE-ACESSO.md.
+ */
+const SECOES_NA_PREVIA = 3
+
+/**
  * Nome do arquivo → caminho na URL.
  *
  * Os slugs não repetem a palavra "guia", que já está no diretório, e usam
@@ -73,6 +94,7 @@ const GUIAS = {
   },
   "05-GUIA-BNCC-TECNOLOGIA": {
     slug: "bncc-tecnologia",
+    livre: true,
     titulo: "Tecnologia educacional alinhada à BNCC: guia para professores",
     descricao:
       "Como implementar tecnologia na escola dentro da Competência Geral 5 (Cultura Digital) " +
@@ -87,6 +109,7 @@ const GUIAS = {
   },
   "07-MANUAL-IMPLEMENTACAO": {
     slug: "manual-de-implementacao",
+    livre: true,
     titulo: "Manual de implementação de tecnologia educacional na escola",
     descricao:
       "Da decisão à primeira aula: diagnóstico, orçamento, formação da equipe e cronograma " +
@@ -101,6 +124,42 @@ function semEmoji(texto) {
 
 function escapar(s) {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
+}
+
+/**
+ * Corta o HTML na prévia, sempre num limite de seção.
+ *
+ * Parar no meio de um parágrafo pareceria erro de renderização; parar num
+ * <h2> deixa claro que ali termina o trecho aberto e começa o restante.
+ * Devolve também quantas seções ficaram de fora, porque dizer "faltam 9
+ * seções" é mais honesto — e mais convincente — do que "veja mais".
+ */
+function cortarNaPrevia(html, secoes) {
+  const partes = html.split(/(?=<h2)/)
+  if (partes.length <= secoes + 1) return { previa: html, restantes: 0 }
+  return {
+    previa: partes.slice(0, secoes + 1).join(""),
+    restantes: partes.length - secoes - 1,
+  }
+}
+
+function paredeDePlano(restantes) {
+  return `
+  <aside class="gz-parede">
+    <p class="gz-parede-selo">Continua no plano PRO</p>
+    <h2>Faltam ${restantes} ${restantes === 1 ? "seção" : "seções"} deste guia</h2>
+    <p>O restante traz os quadros de atividade, a sequência por etapa de ensino e os
+       modelos prontos para levar direto à turma.</p>
+    <p class="gz-acoes">
+      <a class="gz-botao" href="/planos">Ver o plano PRO</a>
+      <a class="gz-link" href="/login.html">Já tenho conta</a>
+    </p>
+    <p class="gz-parede-nota">
+      Dois guias são abertos por inteiro:
+      <a href="/guias/bncc-tecnologia/">BNCC e cultura digital</a> e
+      <a href="/guias/manual-de-implementacao/">manual de implementação</a>.
+    </p>
+  </aside>`
 }
 
 function pagina({ titulo, descricao, slug, conteudo, outros }) {
@@ -186,6 +245,20 @@ ${conteudo}
       <a class="gz-link" href="/planos">Ver planos e preços</a>
     </p>
   </aside>
+
+  <section class="gz-academia">
+    <p class="gz-academia-selo">Academia do Professor</p>
+    <h2>Aprenda a ferramenta, não só a teoria</h2>
+    <p>Trilhas em vídeo e texto para quem vai dar a aula amanhã. A de
+       <strong>Scratch para Professores</strong> é aberta por inteiro, sem pagar nada — as demais
+       têm o primeiro módulo liberado.</p>
+    <ul class="gz-trilhas">
+      <li><a href="/login.html">Scratch para Professores <span>grátis por completo</span></a></li>
+      <li><a href="/login.html">Arduino do Zero <span>1º módulo grátis</span></a></li>
+      <li><a href="/login.html">Micro:bit para Professores <span>1º módulo grátis</span></a></li>
+      <li><a href="/login.html">Python para Professores <span>1º módulo grátis</span></a></li>
+    </ul>
+  </section>
 
   <section class="gz-relacionados">
     <h2>Outros guias</h2>
@@ -302,7 +375,14 @@ for (const g of lista) {
   const semTitulo = md.replace(/^#\s+.*\n/, "")
   const corpo = marked.parse(semTitulo)
 
-  const conteudo = `    <h1>${escapar(semEmoji(g.titulo))}</h1>\n${corpo
+  // Guia livre sai inteiro; os demais saem com a prévia e a parede.
+  const { previa, restantes } = g.livre
+    ? { previa: corpo, restantes: 0 }
+    : cortarNaPrevia(corpo, SECOES_NA_PREVIA)
+
+  const miolo = previa + (restantes > 0 ? paredeDePlano(restantes) : "")
+
+  const conteudo = `    <h1>${escapar(semEmoji(g.titulo))}</h1>\n${miolo
     .split("\n")
     .map((l) => (l ? "    " + l : l))
     .join("\n")}`
