@@ -20,6 +20,8 @@ export interface Course {
   id: string
   title: string
   tool?: string
+  /** Endereço oficial da ferramenta, para o link no fim do curso. */
+  toolUrl?: string
   level?: string
   logo?: string
   description?: string

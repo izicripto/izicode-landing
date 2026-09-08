@@ -10,6 +10,7 @@ import {
   Loader2,
   ChevronRight,
   AlertCircle,
+  ExternalLink,
 } from "lucide-react"
 import { db } from "@/lib/firebase"
 import { useAuth } from "@/lib/auth-context"
@@ -268,6 +269,46 @@ export function CursoPage() {
                 )}
               </div>
             </article>
+          )}
+
+          {/*
+            Link para a ferramenta oficial.
+
+            Fica no fim porque é o passo seguinte natural: quem terminou de
+            ler sobre o Scratch quer abrir o Scratch. Sem isto, a pessoa sai
+            do painel para buscar o endereço no Google — e o resultado da
+            busca nem sempre é o site oficial.
+
+            Abre em nova aba de propósito: o curso continua aberto atrás,
+            com o progresso e o módulo onde a pessoa parou. O
+            rel="noopener noreferrer" acompanha o target="_blank" porque
+            sem ele a página aberta ganha acesso a window.opener e pode
+            redirecionar a nossa aba pelas costas.
+          */}
+          {course.toolUrl && (
+            <aside className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border bg-muted/40 p-5">
+              <div className="flex items-center gap-3">
+                {course.logo && (
+                  <img
+                    src={`/${course.logo}`}
+                    alt=""
+                    className="h-10 w-10 shrink-0 object-contain"
+                  />
+                )}
+                <div>
+                  <p className="font-semibold">Abrir o {course.tool ?? "site oficial"}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Site oficial da ferramenta — abre em uma nova aba.
+                  </p>
+                </div>
+              </div>
+              <Button variant="outline" asChild>
+                <a href={course.toolUrl} target="_blank" rel="noopener noreferrer">
+                  Ir para {course.tool ?? "o site"}
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              </Button>
+            </aside>
           )}
         </section>
       </div>
