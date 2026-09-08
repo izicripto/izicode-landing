@@ -46,6 +46,7 @@ export function BibliotecaPage() {
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
+            aria-label="Buscar projetos por título ou tema"
             value={term}
             onChange={(e) => setTerm(e.target.value)}
             placeholder="Buscar por título ou tema..."
@@ -53,6 +54,7 @@ export function BibliotecaPage() {
           />
         </div>
         <select
+          aria-label="Filtrar por ferramenta"
           value={tool}
           onChange={(e) => setTool(e.target.value)}
           className="rounded-xl border bg-background px-3.5 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"

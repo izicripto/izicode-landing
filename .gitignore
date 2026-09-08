@@ -92,3 +92,11 @@ env/
 # Ao testar localmente e preciso copiar dist para public — mas nao commite
 # o resultado.
 public/app-build/
+
+# Credenciais em arquivo. O JSON de conta de servico do Google usa esse
+# formato de nome, e basta um `git add -A` distraido para ele entrar no
+# repositorio — de onde nao sai mais, porque commit antigo continua legivel.
+*-key.json
+*-credentials.json
+*serviceaccount*.json
+*service-account*.json

@@ -71,7 +71,7 @@ const TOOLS = [
 export function OverviewPage() {
   const { user, userData } = useAuth()
   const { projects, loading } = useProjects()
-  const pro = isProUser(userData)
+  const pro = isProUser(userData, user?.email)
 
   const firstName = (userData?.displayName || user?.displayName || "Professor").split(" ")[0]
   const memberSince = userData?.createdAt?.toDate

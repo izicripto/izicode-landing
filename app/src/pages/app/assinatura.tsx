@@ -52,10 +52,10 @@ const TENTATIVAS = 6
 const INTERVALO_MS = 5000
 
 export function AssinaturaPage() {
-  const { userData, role } = useAuth()
+  const { user, userData, role } = useAuth()
   const toast = useToast()
   const [params, setParams] = useSearchParams()
-  const pro = isProUser(userData)
+  const pro = isProUser(userData, user?.email)
 
   const [criando, setCriando] = useState<string | null>(null)
   const [conferindo, setConferindo] = useState(false)

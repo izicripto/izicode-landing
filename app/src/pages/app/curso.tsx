@@ -77,7 +77,7 @@ export function CursoPage() {
   // era `m.free || pro`, calculado aqui — e qualquer mudança na política
   // teria de ser lembrada em dois arquivos, o que é como a lista passa a
   // prometer uma coisa e a tela a entregar outra.
-  const canAccess = (m: typeof active) => moduloLiberado(courseId, m, userData)
+  const canAccess = (m: typeof active) => moduloLiberado(courseId, m, userData, user?.email)
   const isDone = active ? completed.includes(active.id) : false
   // Concluído = todos os módulos marcados. Comparar só o tamanho das duas
   // listas seria frágil: um id repetido em `completed` daria o curso por

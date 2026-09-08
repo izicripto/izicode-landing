@@ -689,8 +689,14 @@ exports.aiChat = functions.https.onCall(async (data, context) => {
     // documento — a conta dona da plataforma continua tendo IA mesmo que
     // o doc dela esteja incompleto ou tenha sido alterado.
     const ehDono = (context.auth.token.email || '').toLowerCase() === PLATFORM_OWNER_EMAIL;
+    // 'dev' saiu daqui de proposito. Ele nao e' atribuido por nenhum
+    // fluxo de cadastro — existe so como conveniencia de exibicao para a
+    // conta dona — e aceita-lo aqui transformava um campo que o cliente
+    // escreve em chave de acesso a IA paga. Quem e' dono ja passa por
+    // 'ehDono', que le o e-mail assinado dentro do token e nao pode ser
+    // forjado.
     const isPro = ehDono || userData.role === 'professor-pro' || userData.role === 'admin' ||
-        userData.role === 'dev' || userData.subscription?.plan === 'pro';
+        userData.subscription?.plan === 'pro';
 
     if (!isPro) {
         // Fail-closed: sem plano pago, o cliente deve usar a própria chave.

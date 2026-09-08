@@ -24,8 +24,12 @@ import { isProUser, type UserData } from "@/lib/roles"
 export const CURSO_LIVRE = "scratch-para-professores"
 
 /** O curso está aberto por inteiro para esta pessoa? */
-export function cursoLiberado(courseId: string | undefined, userData: UserData | null): boolean {
-  if (isProUser(userData)) return true
+export function cursoLiberado(
+  courseId: string | undefined,
+  userData: UserData | null,
+  email?: string | null
+): boolean {
+  if (isProUser(userData, email)) return true
   return courseId === CURSO_LIVRE
 }
 
@@ -39,18 +43,20 @@ export function cursoLiberado(courseId: string | undefined, userData: UserData |
 export function moduloLiberado(
   courseId: string | undefined,
   modulo: { free?: boolean } | undefined,
-  userData: UserData | null
+  userData: UserData | null,
+  email?: string | null
 ): boolean {
-  if (cursoLiberado(courseId, userData)) return true
+  if (cursoLiberado(courseId, userData, email)) return true
   return Boolean(modulo?.free)
 }
 
 /** Texto curto do estado do curso, para etiquetas de lista. */
 export function rotuloAcessoCurso(
   courseId: string,
-  userData: UserData | null
+  userData: UserData | null,
+  email?: string | null
 ): { texto: string; livre: boolean } {
-  if (isProUser(userData)) return { texto: "Liberado", livre: true }
+  if (isProUser(userData, email)) return { texto: "Liberado", livre: true }
   if (courseId === CURSO_LIVRE) return { texto: "Curso grátis", livre: true }
   return { texto: "1º módulo grátis", livre: false }
 }

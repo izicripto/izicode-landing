@@ -79,8 +79,8 @@ function MessageBody({ text }: { text: string }) {
 }
 
 export function AssistentePage() {
-  const { userData } = useAuth()
-  const pro = isProUser(userData)
+  const { user, userData } = useAuth()
+  const pro = isProUser(userData, user?.email)
   const chat = useChat(pro)
   const [input, setInput] = useState("")
   const [showKeyForm, setShowKeyForm] = useState(false)
@@ -326,6 +326,7 @@ export function AssistentePage() {
             className="flex items-end gap-2 border-t bg-background p-3"
           >
             <textarea
+              aria-label="Sua mensagem para o assistente"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {

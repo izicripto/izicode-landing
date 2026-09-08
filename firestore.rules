@@ -62,13 +62,26 @@ service cloud.firestore {
 
       allow read: if isOwner(userId) || isAdmin() || sameSchool();
 
-      // A user may only self-assign non-privileged roles/plans.
-      // Promotion to 'admin', 'professor-pro' or a paid subscription plan
-      // must go through an admin or a trusted Cloud Function (Admin SDK
-      // writes bypass these rules entirely, so that path is unaffected).
+      // Papéis que a pessoa pode atribuir a si mesma.
+      //
+      // Lista de PERMISSÃO, e não de bloqueio. A versão anterior barrava
+      // 'admin' e 'professor-pro' e liberava o resto — e esqueceu 'dev'.
+      // Como 'dev' conta como PRO tanto no app quanto na function aiChat,
+      // qualquer conta gratuita podia se promover e passar a usar a IA na
+      // chave paga da Izicode, sem limite.
+      //
+      // Com lista de permissão o erro se inverte: um papel novo nasce
+      // bloqueado até alguém decidir liberá-lo, em vez de nascer liberado
+      // até alguém lembrar de bloqueá-lo.
+      //
+      // Estes são os papéis que o onboarding atribui de fato. Promoção a
+      // 'admin', 'dev', 'professor-pro' ou plano pago passa por um admin
+      // ou por uma Cloud Function — o Admin SDK ignora estas regras, então
+      // esse caminho continua funcionando.
       function isSafeSelfRole() {
         return !('role' in request.resource.data) ||
-               (request.resource.data.role != 'admin' && request.resource.data.role != 'professor-pro');
+               request.resource.data.role in
+                 ['student', 'parent', 'teacher', 'freelance_teacher', 'school_admin'];
       }
 
       function isSafeSelfSubscription() {

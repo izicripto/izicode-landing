@@ -14,10 +14,10 @@ const PRESETS = [
 ]
 
 export function TutorPage() {
-  const { userData } = useAuth()
+  const { user, userData } = useAuth()
   // O tutor herda o plano da conta responsável/aluno: quando é PRO, usa a
   // chave da Izicode; senão, a chave pessoal configurada no dispositivo.
-  const pro = isProUser(userData)
+  const pro = isProUser(userData, user?.email)
   const chat = useChat(pro, "aluno")
   const [input, setInput] = useState("")
   const [showKeyForm, setShowKeyForm] = useState(false)
@@ -67,6 +67,7 @@ export function TutorPage() {
           <div className="mt-3 flex flex-wrap gap-2">
             <input
               type="password"
+              aria-label="Chave da API do Gemini"
               value={keyDraft}
               onChange={(e) => setKeyDraft(e.target.value)}
               placeholder={chat.apiKey ? "•••••••••• (já configurada)" : "Cole a chave aqui"}
@@ -170,6 +171,7 @@ export function TutorPage() {
           className="flex items-center gap-2 border-t-2 border-sky-100 bg-background p-3"
         >
           <input
+            aria-label="Sua pergunta para o Tutor IA"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={chat.sending || needsKey}

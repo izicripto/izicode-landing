@@ -62,12 +62,31 @@ export function remainingFreeGenerations(userData: UserData | null): number {
  * webhook de pagamento). Checar só uma delas deixava contas pagas sem
  * acesso — por isso as duas contam aqui, num único lugar.
  */
-export function isProUser(userData: UserData | null): boolean {
+/**
+ * Tem acesso PRO?
+ *
+ * O `email` vem do usuário autenticado do Firebase (`user.email`), não do
+ * documento no Firestore — este último é gravável pelo próprio dono, e
+ * confiar nele deixaria qualquer pessoa se declarar a dona da plataforma
+ * escrevendo o e-mail no próprio perfil.
+ *
+ * O papel 'dev' foi retirado desta lista. Ele não é atribuído por nenhum
+ * fluxo de cadastro e existia só como conveniência de exibição — mas as
+ * regras do Firestore permitiam que a pessoa o escrevesse no próprio
+ * documento, o que transformava um campo do cliente em passe para a IA
+ * paga da Izicode. A conta dona continua reconhecida, agora pelo e-mail
+ * assinado no token, que ninguém consegue forjar.
+ */
+export function isProUser(userData: UserData | null, email?: string | null): boolean {
+  if (isPlatformOwner(email)) return true
   if (!userData) return false
   return (
     userData.role === "professor-pro" ||
     userData.role === "admin" ||
-    userData.role === "dev" ||
+    // 'dev' não entra aqui. Ele não é atribuído por nenhum fluxo de
+    // cadastro — existe como conveniência de exibição para a conta dona,
+    // que já é reconhecida pelo e-mail assinado no token. Aceitá-lo
+    // transformava um campo gravável pelo cliente em passe para o PRO.
     userData.subscription?.plan === "pro"
   )
 }

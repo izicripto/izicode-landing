@@ -26,7 +26,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const { user, userData, role, signOut } = useAuth()
   const groups = navForRole(role, isPlatformOwner(user?.email))
   const displayName = userData?.displayName || user?.displayName || user?.email || "Usuário"
-  const planLabel = isProUser(userData) ? "Plano PRO" : ROLE_LABELS[role] || "Plano Gratuito"
+  const planLabel = isProUser(userData, user?.email) ? "Plano PRO" : ROLE_LABELS[role] || "Plano Gratuito"
 
   return (
     <div className="flex h-full flex-col">

@@ -10,9 +10,9 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/toast"
 
 export function EstudioPage() {
-  const { userData } = useAuth()
+  const { user, userData } = useAuth()
   const navigate = useNavigate()
-  const pro = isProUser(userData)
+  const pro = isProUser(userData, user?.email)
   const restantes = remainingFreeGenerations(userData)
   const semSaldo = !pro && restantes === 0
 

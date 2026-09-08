@@ -25,7 +25,7 @@ const GRADES = [
 export function ConteudoPage() {
   const { user, userData } = useAuth()
   const navigate = useNavigate()
-  const pro = isProUser(userData)
+  const pro = isProUser(userData, user?.email)
 
   // O limite do plano gratuito é de GERAÇÕES de IA (o que de fato tem
   // custo) e quem aplica é a Cloud Function. Escrever e salvar no modo

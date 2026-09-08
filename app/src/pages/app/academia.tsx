@@ -15,7 +15,7 @@ export function AcademiaPage() {
   const [courses, setCourses] = useState<Course[]>([])
   const [progress, setProgress] = useState<Record<string, string[]>>({})
   const [loading, setLoading] = useState(true)
-  const pro = isProUser(userData)
+  const pro = isProUser(userData, user?.email)
 
   useEffect(() => {
     loadCourses().then((data) => {
@@ -144,7 +144,7 @@ export function AcademiaPage() {
                       precisam dizer a mesma coisa, senão a pessoa clica
                       num "grátis" e encontra um cadeado. */}
                   {(() => {
-                    const acesso = rotuloAcessoCurso(course.id, userData)
+                    const acesso = rotuloAcessoCurso(course.id, userData, user?.email)
                     return (
                       <span className={acesso.livre ? "text-emerald-600" : "flex items-center gap-1 text-amber-600"}>
                         {!acesso.livre && <Lock className="h-3 w-3" />}
