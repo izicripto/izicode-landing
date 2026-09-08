@@ -120,6 +120,20 @@ function App() {
               <Route path="*" element={<NaoEncontradaPage />} />
             </Route>
           </Route>
+
+          {/*
+            Curinga do nível público.
+
+            Sem ele, qualquer caminho fora da lista acima não casava com
+            rota nenhuma e o React renderizava NADA — tela branca, sem erro
+            e sem mensagem, que é a pior falha possível porque não dá nem
+            para a pessoa entender que se perdeu.
+
+            Foi o que aconteceu com /index.html: várias páginas estáticas
+            apontavam para lá (o endereço da home é "/"), e quem clicava na
+            logo do portal caía numa tela em branco.
+          */}
+          <Route path="*" element={<NaoEncontradaPage />} />
         </Routes>
       </BrowserRouter>
       </ToastProvider>
