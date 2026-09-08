@@ -81,3 +81,14 @@ env/
 *.sql
 *.sqlite
 *.db
+
+# Saida do build do app React.
+#
+# A CI roda `cp -r app/dist/. public/` no momento do deploy, entao estes
+# arquivos existem no servidor mas nao devem existir no repositorio: o
+# nome deles carrega um hash que muda a cada build, e versiona-los enche o
+# historico de arquivos que ninguem le e que ficam obsoletos sozinhos.
+#
+# Ao testar localmente e preciso copiar dist para public — mas nao commite
+# o resultado.
+public/app-build/

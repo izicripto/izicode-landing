@@ -113,7 +113,7 @@ function pagina({ titulo, descricao, slug, conteudo, outros }) {
 <title>${escapar(titulo)} — Izicode Edu</title>
 <meta name="description" content="${escapar(descricao)}">
 <link rel="canonical" href="${url}">
-<link rel="icon" type="image/png" href="/izicode-logo.png">
+<link rel="icon" type="image/png" href="/images/logo.png">
 
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Izicode Edu">
@@ -141,7 +141,7 @@ ${JSON.stringify(
     publisher: {
       "@type": "Organization",
       name: "Izicode Edu",
-      logo: { "@type": "ImageObject", url: `${DOMINIO}/izicode-logo.png` },
+      logo: { "@type": "ImageObject", url: `${DOMINIO}/images/logo.png` },
     },
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
   },
@@ -158,7 +158,7 @@ ${JSON.stringify(
 <body>
 
 <header class="gz-topo">
-  <a class="gz-marca" href="/"><img src="/izicode-logo.png" alt="Izicode Edu" width="36" height="36"><span>Izicode Edu</span></a>
+  <a class="gz-marca" href="/"><img src="/images/logo.png" alt="Izicode Edu" width="36" height="36"><span>Izicode Edu</span></a>
   <nav class="gz-nav">
     <a href="/guias/">Guias</a>
     <a href="/planos">Planos</a>
@@ -214,7 +214,7 @@ function indice(lista) {
 <title>Guias para professores — robótica, BNCC e cultura maker | Izicode Edu</title>
 <meta name="description" content="Guias gratuitos para professores e escolas: BNCC e cultura digital, hackathon escolar, olimpíadas de tecnologia, projetos ODS e implantação de laboratório maker.">
 <link rel="canonical" href="${DOMINIO}/guias/">
-<link rel="icon" type="image/png" href="/izicode-logo.png">
+<link rel="icon" type="image/png" href="/images/logo.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Guias para professores — Izicode Edu">
 <meta property="og:description" content="Material gratuito sobre robótica educacional, BNCC e cultura maker.">
@@ -228,7 +228,7 @@ function indice(lista) {
 <body>
 
 <header class="gz-topo">
-  <a class="gz-marca" href="/"><img src="/izicode-logo.png" alt="Izicode Edu" width="36" height="36"><span>Izicode Edu</span></a>
+  <a class="gz-marca" href="/"><img src="/images/logo.png" alt="Izicode Edu" width="36" height="36"><span>Izicode Edu</span></a>
   <nav class="gz-nav">
     <a href="/guias/">Guias</a>
     <a href="/planos">Planos</a>
