@@ -107,7 +107,7 @@ export function Hero() {
         <div className="relative hidden overflow-hidden rounded-3xl shadow-2xl lg:block lg:h-[min(76vh,40rem)]">
           <img
             src="/hero-lab.jpg"
-            alt="Alunos trabalhando em laboratório de robótica"
+            alt="Mãos soldando uma placa eletrônica sobre bancada de madeira, ao lado de uma caixa organizadora com sensores e módulos de robótica"
             fetchPriority="high"
             className="izi-foto-viva h-full w-full object-cover"
           />
@@ -123,7 +123,7 @@ export function Hero() {
         <div className="overflow-hidden rounded-3xl shadow-xl lg:hidden">
           <img
             src="/hero-lab.jpg"
-            alt="Alunos trabalhando em laboratório de robótica"
+            alt="Mãos soldando uma placa eletrônica sobre bancada de madeira, ao lado de uma caixa organizadora com sensores e módulos de robótica"
             className="izi-foto-viva h-56 w-full object-cover sm:h-72"
           />
         </div>
