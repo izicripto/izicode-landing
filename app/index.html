@@ -68,6 +68,10 @@
       para o comportamento no site; quando existir, entra como um segundo
       gtag('config', ...) logo abaixo.
     -->
+    <!-- Sincrono e ANTES do gtag: declara o consentimento como negado por
+         padrao. Invertida a ordem, a tag grava o cookie antes de perguntar
+         e o aviso vira enfeite. -->
+    <script src="/js/consentimento.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17924419542"></script>
     <script>
       window.dataLayer = window.dataLayer || []

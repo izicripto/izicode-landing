@@ -57,6 +57,33 @@ export function SiteFooter() {
             (41) 99899-6996
           </a>
         </p>
+
+        {/*
+          Termos e Privacidade precisam estar alcançáveis de qualquer página:
+          é exigência da LGPD e o Google Ads reprova anúncio cuja página de
+          destino colete dados sem política de privacidade visível.
+
+          "Preferências de cookies" cumpre o que a Política promete — poder
+          rever a escolha depois. A função é global, definida em
+          public/js/consentimento.js, que roda antes do app.
+        */}
+        <p className="mt-4 text-sm font-medium tracking-wide text-slate-500">
+          <a href="/termos/" className="hover:text-white transition-colors">
+            Termos de Uso
+          </a>
+          <span aria-hidden="true" className="px-2 text-slate-600">·</span>
+          <a href="/privacidade/" className="hover:text-white transition-colors">
+            Política de Privacidade
+          </a>
+          <span aria-hidden="true" className="px-2 text-slate-600">·</span>
+          <button
+            type="button"
+            onClick={() => window.izicodeAbrirCookies?.()}
+            className="font-medium tracking-wide hover:text-white transition-colors"
+          >
+            Preferências de cookies
+          </button>
+        </p>
       </div>
     </footer>
   )

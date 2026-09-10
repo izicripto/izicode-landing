@@ -42,7 +42,8 @@ const DOMINIO = "https://izicode.com.br"
  *
  * O mesmo identificador de app/index.html. Se mudar lá, muda aqui.
  */
-const MEDICAO = `<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17924419542"></script>
+const MEDICAO = `<script src="/js/consentimento.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17924419542"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
@@ -292,6 +293,7 @@ ${outros.map((o) => `      <li><a href="/guias/${o.slug}/">${escapar(semEmoji(o.
 <footer class="gz-rodape">
   <p>© Izicode Edu — plataforma e consultoria em robótica educacional.</p>
   <p><a href="/contato">Fale com a gente</a> · <a href="/planos">Planos</a> · <a href="/">Início</a></p>
+  <p><a href="/termos/">Termos de Uso</a> · <a href="/privacidade/">Política de Privacidade</a> · <a href="#" onclick="izicodeAbrirCookies();return false">Preferências de cookies</a></p>
 </footer>
 
 </body>
