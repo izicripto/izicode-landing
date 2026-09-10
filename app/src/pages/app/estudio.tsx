@@ -176,15 +176,44 @@ export function EstudioPage() {
             </div>
           </Link>
 
+          {/*
+            Antes esta caixa dizia só que o PRO dispensa "configurar chave
+            própria" — o que sugeria, a quem acabou de entrar, que o plano
+            gratuito exigia ir criar uma chave no Google antes de qualquer
+            coisa. Não exige: o Estúdio chama generateAIProject, que usa a
+            chave da Izicode, e o plano gratuito tem três gerações prontas.
+
+            Esconder isso custava caro justo no momento mais decisivo, que é
+            a primeira visita. Agora a caixa começa pelo que a pessoa já tem
+            e só depois oferece o PRO — e muda de tom quando as três acabam,
+            que é quando a oferta finalmente faz sentido.
+          */}
           {!pro && (
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
-              <div className="mb-2 flex items-center gap-2 text-amber-800">
-                <Lock className="h-4 w-4" />
-                <strong className="text-sm font-bold">Plano Gratuito</strong>
+            <div
+              className={
+                restantes > 0
+                  ? "rounded-2xl border border-emerald-200 bg-emerald-50 p-5"
+                  : "rounded-2xl border border-amber-200 bg-amber-50 p-5"
+              }
+            >
+              <div
+                className={
+                  restantes > 0
+                    ? "mb-2 flex items-center gap-2 text-emerald-800"
+                    : "mb-2 flex items-center gap-2 text-amber-800"
+                }
+              >
+                {restantes > 0 ? <Sparkles className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+                <strong className="text-sm font-bold">
+                  {restantes > 0
+                    ? `Você tem ${restantes} ${restantes === 1 ? "geração grátis" : "gerações grátis"}`
+                    : "Suas gerações grátis acabaram"}
+                </strong>
               </div>
-              <p className="text-sm text-amber-900/80">
-                No PRO você gera planos sem limite, com a chave de IA da Izicode inclusa — sem
-                precisar configurar chave própria.
+              <p className={restantes > 0 ? "text-sm text-emerald-900/80" : "text-sm text-amber-900/80"}>
+                {restantes > 0
+                  ? "Use agora, sem configurar nada: a chave de IA é nossa. No PRO elas passam a ser ilimitadas."
+                  : "No PRO você volta a gerar planos, sem limite e com a chave de IA da Izicode inclusa."}
               </p>
               <Button variant="outline" size="sm" className="mt-3 bg-white" asChild>
                 <a href="/planos">Ver planos</a>
