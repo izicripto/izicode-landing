@@ -2,6 +2,13 @@
 <html lang="pt-BR">
 
 <head>
+<!-- Consentimento antes de tudo: firebase-config.js chama getAnalytics,
+     que inicializa o GA4. Como e modulo, ele so roda depois da analise
+     do documento; este script e classico e sincrono, entao declara o
+     estado negado primeiro. Invertida a ordem, o cookie e gravado antes
+     de perguntar. -->
+<script src="/js/consentimento.js"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meus Projetos - Izicode Edu</title>

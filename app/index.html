@@ -80,6 +80,11 @@
       }
       gtag("js", new Date())
       gtag("config", "AW-17924419542")
+      // GA4 da mesma casa (a propriedade ja existia no firebaseConfig, em
+      // app/src/lib/firebase.ts, mas getAnalytics nunca era chamado — ou
+      // seja, existia e nao media nada). Vai pelo gtag, e nao pelo SDK do
+      // Firebase, para respeitar o mesmo consentimento declarado acima.
+      gtag("config", "G-7FZBXZXZ16")
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />

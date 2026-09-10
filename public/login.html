@@ -2,6 +2,13 @@
 <html lang="pt-BR">
 
 <head>
+<!-- Consentimento antes de tudo: firebase-config.js chama getAnalytics,
+     que inicializa o GA4. Como e modulo, ele so roda depois da analise
+     do documento; este script e classico e sincrono, entao declara o
+     estado negado primeiro. Invertida a ordem, o cookie e gravado antes
+     de perguntar. -->
+<script src="/js/consentimento.js"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Izicode Edu</title>
@@ -79,12 +86,111 @@
     </div>
 
     <script type="module">
-        import { auth, provider, signInWithPopup, db, doc, setDoc, getDoc } from './js/firebase-config.js';
+        import { auth, provider, signInWithPopup, signInWithRedirect, getRedirectResult, db, doc, setDoc, getDoc } from './js/firebase-config.js';
+
+        /**
+         * Entrar com o Google: janela, e redirecionamento quando a janela
+         * nao abre.
+         *
+         * signInWithPopup falha no navegador embutido do Instagram, do
+         * Facebook e do LinkedIn — que e' exatamente por onde chega quem
+         * clica num anuncio em rede social. Ali o popup e' bloqueado e o
+         * botao simplesmente nao faz nada: a pessoa conclui que o site esta
+         * quebrado e vai embora, depois de ja ter custado o clique.
+         *
+         * O popup continua sendo o caminho preferido porque nao tira a
+         * pessoa da pagina. So quando ele falha por motivo de ambiente e'
+         * que trocamos por redirecionamento, que funciona em qualquer
+         * navegador.
+         */
+        const FALHA_DE_AMBIENTE = [
+            'auth/popup-blocked',
+            'auth/operation-not-supported-in-this-environment',
+            'auth/cancelled-popup-request',
+            'auth/web-storage-unsupported',
+        ];
+
+        async function entrarComGoogle() {
+            try {
+                return await signInWithPopup(auth, provider);
+            } catch (erro) {
+                if (FALHA_DE_AMBIENTE.includes(erro && erro.code)) {
+                    // Sai da pagina: o retorno cai em getRedirectResult, no
+                    // carregamento seguinte.
+                    await signInWithRedirect(auth, provider);
+                    return null;
+                }
+                throw erro;
+            }
+        }
 
         const btn = document.getElementById('googleLoginBtn');
         const btnText = document.getElementById('btnText');
         const googleIcon = document.getElementById('googleIcon');
         const spinner = document.getElementById('spinner');
+
+        /**
+         * O que fazer depois que o Google confirmou quem e' a pessoa.
+         *
+         * Vale para os dois caminhos: a janela (popup) e a volta do
+         * redirecionamento. Duplicar isso significaria que quem entrou pelo
+         * navegador do Instagram teria um comportamento diferente de quem
+         * entrou pelo Chrome — e a diferenca so apareceria em producao.
+         */
+        async function concluirEntrada(user) {
+            btnText.textContent = 'Verificando perfil...';
+
+            const userDocRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userDocRef);
+
+            if (userSnap.exists()) {
+                const userData = userSnap.data();
+                const email = user.email;
+
+                const isHardcoded = ['izicripto@gmail.com', 'izicodeedu@gmail.com', 'r.berlanda04@gmail.com'].includes(email);
+
+                if (userData.onboardingCompleted || isHardcoded) {
+                    const saved = sessionStorage.getItem('redirect_after_login');
+                    sessionStorage.removeItem('redirect_after_login');
+                    // Destino unico: /app (SPA). O proprio painel decide qual
+                    // home mostrar conforme o papel.
+                    window.location.href = saved || "/app";
+                    return;
+                }
+            }
+
+            btnText.textContent = 'Indo para configuração...';
+            const urlParams = new URLSearchParams(window.location.search);
+            const schoolId = urlParams.get('schoolId');
+            const role = urlParams.get('role');
+            let target = "onboarding";
+            const params = [];
+            if (schoolId) params.push(`schoolId=${schoolId}`);
+            if (role) params.push(`role=${role}`);
+            if (params.length > 0) target += "?" + params.join("&");
+            window.location.href = target;
+        }
+
+        /**
+         * Volta do redirecionamento.
+         *
+         * Quando o popup falha e caimos para signInWithRedirect, a pessoa
+         * sai da pagina e volta ja autenticada. Sem esta chamada ela voltaria
+         * para a tela de login como se nada tivesse acontecido — logada no
+         * Firebase, mas parada aqui.
+         */
+        getRedirectResult(auth)
+            .then((resultado) => {
+                if (resultado && resultado.user) {
+                    btn.disabled = true;
+                    googleIcon.classList.add('hidden');
+                    spinner.classList.remove('hidden');
+                    return concluirEntrada(resultado.user);
+                }
+            })
+            .catch((erro) => {
+                console.error('[Login] Falha na volta do redirecionamento:', erro);
+            });
 
         btn.addEventListener('click', async () => {
             btn.disabled = true;
@@ -93,66 +199,11 @@
             spinner.classList.remove('hidden');
 
             try {
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-
-                btnText.textContent = 'Verificando perfil...';
-
-                // 1. Verificar se usuário já tem perfil configurado
-                const userDocRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userDocRef);
-
-                if (userSnap.exists()) {
-                    const userData = userSnap.data();
-                    let detectedRole = userData.role || 'student';
-                    const email = user.email;
-
-                    // --- REDIRECTION OVERRIDES (Sync with dashboard-roles.js) ---
-                    if (email === 'izicripto@gmail.com') detectedRole = 'dev';
-                    else if (email === 'izicodeedu@gmail.com') detectedRole = 'school_admin';
-                    else if (email === 'r.berlanda04@gmail.com') detectedRole = 'freelance_teacher';
-                    // -----------------------------------------------------------
-
-                    console.log(`[Login] Role resolvida para ${email}: ${detectedRole}`);
-
-                    // Só redirecionar se o onboarding estiver completo OU se for um dos overrides
-                    const isHardcoded = ['izicripto@gmail.com', 'izicodeedu@gmail.com', 'r.berlanda04@gmail.com'].includes(email);
-
-                    if (userData.onboardingCompleted || isHardcoded) {
-                        console.log("[Login] Perfil completo ou override detectado.");
-                        // Destino único: /app (SPA). O próprio painel decide
-                        // qual home mostrar conforme o papel, então não é mais
-                        // preciso espalhar essa regra por várias páginas.
-                        const saved = sessionStorage.getItem('redirect_after_login');
-                        sessionStorage.removeItem('redirect_after_login');
-                        window.location.href = saved || "/app";
-                        return;
-                    } else {
-                        console.log("[Login] Onboarding pendente.");
-                    }
-                }
-
-                // 2. Se não tem perfil (Novo Usuário), vai para Onboarding
-                console.log("Novo usuário, indo para onboarding...");
-                btnText.textContent = 'Indo para configuração...';
-
-                setTimeout(() => {
-                    // Check for invite params in current URL (if they were preserved on redirect to login)
-                    // Or more likely: The user came from a link like login.html?schoolId=... 
-                    // We need to pass them to onboarding
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const schoolId = urlParams.get('schoolId');
-                    const role = urlParams.get('role');
-
-                    let target = "onboarding";
-                    const params = [];
-                    if (schoolId) params.push(`schoolId=${schoolId}`);
-                    if (role) params.push(`role=${role}`);
-
-                    if (params.length > 0) target += "?" + params.join("&");
-
-                    window.location.href = target;
-                }, 500);
+                const result = await entrarComGoogle();
+                // Sem resultado significa que fomos para o redirecionamento:
+                // a pagina ja esta saindo, e a volta cai em getRedirectResult.
+                if (!result) return;
+                await concluirEntrada(result.user);
 
             } catch (error) {
                 console.error(error);

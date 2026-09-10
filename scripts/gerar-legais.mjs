@@ -46,6 +46,7 @@ window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'AW-17924419542');
+gtag('config', 'G-7FZBXZXZ16');
 </script>`
 
 const escapar = (t) =>
