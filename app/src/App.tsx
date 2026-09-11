@@ -12,6 +12,7 @@ import { RequireAuth } from "@/components/dashboard/require-auth"
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout"
 import { RoleHome } from "@/pages/app/role-home"
 import { EstudioPage } from "@/pages/app/estudio"
+import { MontadorPage } from "@/pages/app/montador"
 import { ProjetosPage } from "@/pages/app/projetos"
 import { AcademiaPage } from "@/pages/app/academia"
 import { ArduinoPage } from "@/pages/app/arduino"
@@ -95,6 +96,7 @@ function App() {
             <Route path="/app" element={<DashboardLayout />}>
               <Route index element={<RoleHome />} />
               <Route path="estudio" element={<EstudioPage />} />
+              <Route path="montador" element={<MontadorPage />} />
               <Route path="assistente" element={<AssistentePage />} />
               <Route path="conteudo" element={<ConteudoPage />} />
               <Route path="projetos" element={<ProjetosPage />} />

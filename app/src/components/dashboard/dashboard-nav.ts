@@ -17,6 +17,7 @@ import {
   Bot as BotIcon,
   type LucideIcon,
   CreditCard,
+  Wrench,
 } from "lucide-react"
 import { SCHOOL_ROLES, STUDENT_ROLES } from "@/lib/roles"
 
@@ -46,6 +47,7 @@ const TEACHER_NAV: NavGroup[] = [
     group: "Estúdio IA",
     items: [
       { to: "/app/estudio", label: "Estúdio IA", icon: Sparkles },
+      { to: "/app/montador", label: "Montador de Soluções", icon: Wrench },
       { to: "/app/assistente", label: "Assistente IA", icon: Bot },
       { to: "/app/conteudo", label: "Criação de Conteúdo", icon: PenLine },
     ],
@@ -77,6 +79,7 @@ const SCHOOL_NAV: NavGroup[] = [
     group: "Estúdio IA",
     items: [
       { to: "/app/estudio", label: "Estúdio IA", icon: Sparkles },
+      { to: "/app/montador", label: "Montador de Soluções", icon: Wrench },
       { to: "/app/assistente", label: "Assistente IA", icon: Bot },
       { to: "/app/conteudo", label: "Criação de Conteúdo", icon: PenLine },
     ],
@@ -102,7 +105,10 @@ const STUDENT_NAV: NavGroup[] = [
   },
   {
     group: "Recursos",
-    items: [{ to: "/app/biblioteca", label: "Biblioteca", icon: Library }],
+    items: [
+      { to: "/app/biblioteca", label: "Biblioteca", icon: Library },
+      { to: "/app/montador", label: "Montador de Soluções", icon: Wrench },
+    ],
   },
 ]
 
