@@ -73,8 +73,32 @@
         analytics_storage: "granted",
       })
     }
+    fechar()
+  }
+
+  /**
+   * Tira a caixa e devolve o espaco que ela ocupava.
+   *
+   * Ela e fixa no rodape, entao cobre o que estiver embaixo — e, pior,
+   * intercepta o clique. Num guia isso pode cair em cima do botao de ver
+   * planos, e a pessoa clica achando que o site nao responde. Enquanto a
+   * caixa esta na tela, o corpo da pagina ganha um espaco do tamanho dela
+   * no fim; quando ela sai, o espaco sai junto.
+   */
+  function fechar() {
     var caixa = document.getElementById("izicode-cookies")
     if (caixa) caixa.remove()
+    document.body.style.paddingBottom = anterior || ""
+    window.removeEventListener("resize", medir)
+  }
+
+  var anterior = null
+
+  function medir() {
+    var caixa = document.getElementById("izicode-cookies")
+    if (!caixa) return
+    // 16px da margem de baixo da propria caixa
+    document.body.style.paddingBottom = caixa.offsetHeight + 32 + "px"
   }
 
   // Deixa a decisão acessível ao rodapé ("Preferências de cookies"), que a
@@ -131,6 +155,11 @@
     caixa.querySelector(".iz-sim").addEventListener("click", function () { aplicar(true) })
     caixa.querySelector(".iz-nao").addEventListener("click", function () { aplicar(false) })
     document.body.appendChild(caixa)
+
+    anterior = document.body.style.paddingBottom
+    medir()
+    // o texto quebra em mais linhas no celular, e a altura muda ao girar
+    window.addEventListener("resize", medir)
   }
 
   if (!escolha) {

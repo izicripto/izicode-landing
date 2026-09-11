@@ -1,5 +1,5 @@
 # 🚀 RELATÓRIO CTO - Izicode Edu
-**Data:** 01/02/2026  
+**Data:** 11/09/2026
 **Responsável:** IZICODE EDU (Agente CTO/SEO)
 
 ---
@@ -9,128 +9,89 @@
 ### ✅ O QUE JÁ TEMOS (Funcional)
 | Item | Status | Observação |
 |------|--------|------------|
-| Landing Page (`index.html`) | ✅ Funcional | Design profissional, responsivo |
-| Dashboard Professor | ✅ Funcional | Hub de ferramentas integrado |
-| Área do Aluno | ✅ Funcional | Gamificação com XP, badges, quiz |
-| Login Google (Firebase Auth) | ✅ Funcional | Integração completa |
-| Documentação (7 Guias) | ✅ Completa | Hackathon, ODS, BNCC, etc. |
-| Deploy Vercel | ✅ Configurado | `vercel.json` presente |
-| Deploy Firebase | ✅ Configurado | `firebase.json` presente |
+| Landing Page (`public/index.html`) | ✅ Funcional | Design responsivo, imagens próprias, sem depender de Unsplash |
+| App do painel (`/app`, React + Vite) | ✅ Funcional | SPA com React Router, sidebar fixa, carregamento sob demanda |
+| Dashboard Professor | ✅ Funcional | Hub de ferramentas integrado (Estúdio IA, Arduino, Biblioteca, Turmas) |
+| Área do Aluno | ✅ Funcional | Gamificação com XP, badges, quiz, ranking |
+| Login Google (Firebase Auth) | ✅ Funcional | Sessão resiliente ao navegador embutido do Instagram |
+| Pagamentos (AbacatePay v2 - Pix) | ✅ Funcional | Webhook com assinatura HMAC validada, reconciliação periódica |
+| LGPD | ✅ Funcional | Termos, Política de Privacidade e consentimento de cookies em todas as páginas |
+| SEO Técnico | ✅ Funcional | `sitemap.xml`, `robots.txt`, GA4 sob consentimento |
+| PWA | ✅ Funcional | `manifest.json` + banner de instalação ativo |
+| Deploy Firebase Hosting | ✅ Configurado | `firebase.json` com headers de segurança (CSP, X-Frame-Options etc.) |
+| Firestore Rules | ✅ Revisadas | Lista de permissão por papel, sem brecha de autopromoção |
 
-### 🖼️ IMAGENS DISPONÍVEIS
-```
-public/images/
-├── 01.jpg                      (11.8 MB - Hero/Background)
-├── children-making-robot (2).jpg (1.8 MB - Crianças fazendo robô)
-├── close-up-making-robots.jpg   (2.1 MB - Close-up robôs)
-├── logo.png                     (16 KB - Logo oficial)
-├── arduino.png                  (4.5 KB - Ícone Arduino)
-├── scratch.png                  (5 KB - Ícone Scratch)
-├── code.png                     (1.7 KB - Ícone Code)
-├── pi.png                       (7.3 KB - Ícone Raspberry Pi)
-├── tinkercad.jpg                (9.9 KB - Ícone Tinkercad)
-├── makey makey.jpg              (10.9 KB - Makey Makey)
-└── SVGs das ferramentas         (Logos vetoriais)
-```
+### 🖼️ IMAGENS
+As imagens usadas no site são próprias e já otimizadas para web (ex.: `01.jpg` está em ~214 KB, não mais os 11 MB de versões anteriores). Não há mais dependência de imagens externas do Unsplash na landing.
 
 ---
 
-## 🔴 PROBLEMAS IDENTIFICADOS
+## 🟡 PONTOS DE ATENÇÃO ATUAIS
 
-### 1. **IMAGENS NÃO UTILIZADAS**
-As imagens do repositório NÃO estão no código HTML:
-- `01.jpg` → Não está no site
-- `children-making-robot (2).jpg` → Não está no site
-- `close-up-making-robots.jpg` → Não está no site
-- O site usa imagens do **Unsplash** (URLs externas)
+### 1. **Documentação de operação**
+- Os relatórios internos (`STATUS_REPORT.md`, `DEV-MASTERPLAN.md`, `docs/PROJECT-DOSSIER.md`) ficam desatualizados rápido porque muita entrega acontece por commits pequenos e frequentes. Vale revisá-los periodicamente contra o histórico do Git em vez de assumir que descrevem o estado atual.
 
-### 2. **SEO CRÍTICO**
-- ❌ Sem `sitemap.xml`
-- ❌ Sem `robots.txt`
-- ❌ Sem Schema.org (JSON-LD)
-- ❌ Sem Open Graph completo
-- ❌ Sem Twitter Cards
-- ❌ Sem canonical URLs
+### 2. **Monetização**
+- Fluxo de pagamento via AbacatePay está fechado (checkout, webhook, reconciliação). Não há integração com Hotmart — foi descontinuada.
+- Preço da escola depende de contagem de assentos (`calcularEscola` em `functions/index.js`) e precisa continuar espelhando `app/src/lib/planos.ts` linha a linha.
 
-### 3. **PERFORMANCE**
-- ⚠️ Imagens locais muito pesadas (01.jpg = 11MB!)
-- ⚠️ Sem lazy loading
-- ⚠️ Sem compressão de imagens
-- ⚠️ TailwindCSS via CDN (deveria ser build)
+### 3. **Conteúdo em expansão**
+- Academia do Professor já cobre Scratch, Arduino, Micro:bit, Code.org, Python, Makey Makey e Tinkercad. Biblioteca com roteiros de projeto prontos, incluindo projetos ODS.
+- Regra de acesso vigente: 2 guias e 1 curso livres; resto exige plano PRO.
 
-### 4. **FUNCIONALIDADES INCOMPLETAS**
-- ⚠️ `create-project.html` - Gerador IA (precisa backend)
-- ⚠️ `library.html` - Biblioteca de projetos (precisa conteúdo)
-- ⚠️ `ia-assistant.html` - Assistente IA (precisa integração)
-- ⚠️ `mentorship.html` - Página de mentoria (precisa conteúdo)
-
-### 5. **FIRESTORE RULES**
-- ⚠️ Arquivo `firestore.rules` pode estar muito permissivo
+### 4. **Segurança**
+- Autopromoção de papel via Firestore já foi corrigida (lista de permissão, não de bloqueio).
+- Webhook de pagamento é fail-closed sem segredo configurado, e recusa eventos fora da janela de tempo (anti-replay).
+- Chave client-side do Firebase é pública por design (documentado em `SECURITY.md`), restrita por domínio e protegida pelas regras do Firestore — não é uma falha de segurança.
 
 ---
 
 ## 📋 ROADMAP DE IMPLEMENTAÇÃO
 
-### FASE 1: IMAGEM PROFISSIONAL (URGENTE) 🔥
-**Objetivo:** Finalizar visual para apresentar a clientes
+### FASE 1: IMAGEM PROFISSIONAL — ✅ CONCLUÍDA
+- [x] Imagens otimizadas para web.
+- [x] Imagens próprias substituindo Unsplash no Hero.
+- [x] Seção "Ferramentas" usando assets commitados.
 
-- [ ] 1.1 Otimizar imagens (comprimir 01.jpg de 11MB → 200KB)
-- [ ] 1.2 Substituir Unsplash por imagens próprias no Hero
-- [ ] 1.3 Adicionar fotos de crianças fazendo robôs nas seções
-- [ ] 1.4 Corrigir seção "Ferramentas" (usar PNGs commitados)
-- [ ] 1.5 Verificar responsividade mobile
+### FASE 2: SEO & MARKETING — ✅ CONCLUÍDA
+- [x] `sitemap.xml` publicado.
+- [x] `robots.txt` publicado.
+- [x] Google Analytics (GA4) configurado e sob consentimento.
+- [x] CSP ajustada para permitir conversão do Google Ads.
+- [ ] Página de blog/conteúdo (ainda não iniciada).
 
-### FASE 2: SEO & MARKETING 📈
-- [ ] 2.1 Criar `sitemap.xml`
-- [ ] 2.2 Criar `robots.txt`
-- [ ] 2.3 Adicionar Schema.org (Organization, Course, FAQ)
-- [ ] 2.4 Configurar Open Graph + Twitter Cards
-- [ ] 2.5 Configurar Google Analytics (já tem measurementId)
-- [ ] 2.6 Criar página de blog/conteúdo
+### FASE 3: PLATAFORMA EDUCACIONAL — ✅ EM PRODUÇÃO
+- [x] Gerador de Projetos IA salvando no Firestore com limite gratuito real.
+- [x] Biblioteca de Projetos com conteúdo real.
+- [x] Sistema de XP real (não mockado).
+- [x] Trilhas de aprendizado na Academia do Professor.
 
-### FASE 3: PLATAFORMA EDUCACIONAL 🎓
-- [ ] 3.1 Backend para Gerador de Projetos IA
-- [ ] 3.2 Biblioteca de Projetos (JSON/Firestore)
-- [ ] 3.3 Sistema de XP real (não mockado)
-- [ ] 3.4 Trilhas de aprendizado dinâmicas
-- [ ] 3.5 Integração com LMS ou criação própria
-
-### FASE 4: MONETIZAÇÃO 💰
-- [ ] 4.1 Integração Hotmart (Kit Missão Maker)
-- [ ] 4.2 Área de membros premium
-- [ ] 4.3 Sistema de assinaturas para escolas
-- [ ] 4.4 Marketplace de projetos
+### FASE 4: MONETIZAÇÃO — ✅ EM PRODUÇÃO (via AbacatePay)
+- [x] Checkout Pix (AbacatePay v2) integrado.
+- [x] Webhook de confirmação de pagamento com validação de assinatura.
+- [x] Reconciliação periódica de pagamentos pendentes.
+- [ ] Sistema de cupons de desconto (não iniciado).
+- [ ] Marketplace de projetos entre professores (não iniciado).
 
 ---
 
-## 🎯 PRÓXIMA AÇÃO IMEDIATA
+## 🎯 PRÓXIMA AÇÃO SUGERIDA
 
-**TAREFA:** Integrar as imagens do repositório no site
-
-**Arquivos a modificar:**
-1. `public/index.html` - Trocar URLs do Unsplash por imagens locais
-2. Otimizar `01.jpg` e outras imagens pesadas
-
-**Resultado esperado:**
-- Site 100% com imagens próprias
-- Performance melhorada
-- Pronto para mostrar a clientes
+**TAREFA:** Revisar e alinhar a documentação interna (`STATUS_REPORT.md`, `DEV-MASTERPLAN.md`, `docs/PROJECT-DOSSIER.md`) a cada marco relevante, evitando que voltem a descrever um estado do produto que já foi superado pelo código.
 
 ---
 
-## 🔑 CHAVES/ACESSOS NECESSÁRIOS
-
-Para implementar todas as funcionalidades:
+## 🔑 CHAVES/ACESSOS
 
 | Serviço | Status | Uso |
 |---------|--------|-----|
-| Firebase | ✅ Configurado | Auth + Firestore |
-| Vercel | ✅ Configurado | Deploy |
-| Google Analytics | ✅ Configurado | Métricas |
-| Hotmart API | ❓ Pendente | Vendas do Kit |
-| OpenAI/Anthropic | ❓ Pendente | Gerador IA de Projetos |
-| Cloudinary/ImgBB | ❓ Sugestão | CDN de imagens |
+| Firebase | ✅ Configurado | Auth + Firestore + Hosting + Functions |
+| AbacatePay | ✅ Configurado | Checkout Pix e webhook de pagamento |
+| Google Analytics (GA4) | ✅ Configurado | Métricas, sob consentimento de cookies |
+| Google Ads | ✅ Configurado | Conversão liberada na CSP |
+| Gemini (Google IA) | ✅ Configurado | Chave gerenciada (plano PRO) e chave pessoal (plano gratuito) |
+| Hotmart | ❌ Descontinuado | Substituído por AbacatePay |
 
 ---
 
-*Relatório gerado automaticamente pelo Agente CTO - IZICODE EDU*
+*Relatório atualizado manualmente a partir do histórico real de commits do repositório.*

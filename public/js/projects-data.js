@@ -317,6 +317,11 @@ Exporte os modelos em formato \`.STL\`. Se a escola possuir uma impressora 3D, i
         image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 9 - Inovação",
         bncc: ["EM13TEC04", "EM13MAT403"],
+        teacherGuide: {
+            objective: "Mostrar que um assistente baseado em regras responde por correspondência de texto, e não por compreensão.",
+            skills: ["Condicionais encadeadas", "Manipulação de texto", "Leitura crítica de IA"],
+            assessment: "O chatbot responde de forma diferente a duas perguntas previstas e dá uma resposta padrão para uma pergunta que ninguém programou?"
+        },
         content: `
 # Chatbot Simples em Python
 
@@ -379,6 +384,11 @@ O Chatbot "pensa" de verdade ou ele apenas reage ao que foi programado? Como pod
         image: "https://images.unsplash.com/photo-1521791136064-7986c2923216?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 11 - Cidades Sustentáveis",
         bncc: ["EF06CI04"],
+        teacherGuide: {
+            objective: "Ensinar controle de tempo e de sequência: o computador decidindo o que acontece e por quanto tempo.",
+            skills: ["Sequência lógica", "Temporização", "Leitura de circuito simples"],
+            assessment: "O ciclo verde, amarelo e vermelho se repete na ordem certa e nos tempos definidos, sem ninguém tocar no circuito?"
+        },
         content: `
 # Semáforo Inteligente
 
@@ -429,6 +439,11 @@ void loop() {
         image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF04MA16"],
+        teacherGuide: {
+            objective: "Introduzir coordenadas de tela e detecção de colisão a partir de um jogo que a turma já entende de olhar.",
+            skills: ["Noção de coordenadas", "Detecção de colisão", "Teste e ajuste"],
+            assessment: "A bola rebate nas bordas e na raquete, e o jogo reconhece quando ela passa direto?"
+        },
         content: `
 # Jogo Pong no Scratch
 
@@ -458,6 +473,11 @@ Recrie um dos primeiros videogames da história. O objetivo é controlar uma raq
         image: "https://images.unsplash.com/photo-1519709042477-8d67af318bc5?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 9 - Inovação",
         bncc: ["EF06CI13"],
+        teacherGuide: {
+            objective: "Tornar visível o campo magnético da Terra, e mostrar por que um sensor precisa ser calibrado antes de servir.",
+            skills: ["Magnetismo terrestre", "Calibração de sensor", "Orientação espacial"],
+            assessment: "Girando a placa, a indicação de Norte acompanha a de uma bússola comum colocada ao lado?"
+        },
         content: `
 # Bússola Digital com Micro:bit
 
@@ -493,6 +513,11 @@ O que acontece se você aproximar um imã ou um celular da bússola? Os dados co
         image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 9 - Indústria e Inovação",
         bncc: ["EM13TEC03"],
+        teacherGuide: {
+            objective: "Ensinar o ângulo como grandeza que se controla por código, ligando matemática e movimento mecânico.",
+            skills: ["Ângulo e amplitude", "Controle de servomotor", "Montagem mecânica"],
+            assessment: "O braço pega um objeto e o solta num ponto marcado, repetindo o movimento três vezes seguidas?"
+        },
         content: `
 # Braço Robótico com Servos
 
@@ -522,6 +547,11 @@ Um projeto avançado de mecânica e eletrônica onde os alunos montam um braço 
         image: "images/scratch.png",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF15LP05", "EF15AR26"],
+        teacherGuide: {
+            objective: "Ensinar estrutura narrativa ramificada: cada escolha do leitor muda o caminho e o final da história.",
+            skills: ["Escrita criativa", "Estrutura condicional", "Comunicação entre atores"],
+            assessment: "As duas escolhas levam a finais diferentes, e dá para recomeçar a história sem recarregar a página?"
+        },
         content: `
 # História Interativa no Scratch
 
@@ -675,6 +705,11 @@ Cada grupo apresenta sua tabela de calibração (valor no ar, valor na água) e 
         image: "images/microbit.png",
         ods: "ODS 3 - Saúde e Bem-Estar",
         bncc: ["EF06CI06"],
+        teacherGuide: {
+            objective: "Ensinar a transformar movimento físico em dado contável, e a discutir o erro de medição do sensor.",
+            skills: ["Leitura de acelerômetro", "Noção de erro de medição", "Autocuidado e saúde"],
+            assessment: "Andando 20 passos contados em voz alta, a contagem do aparelho fica a no máximo dois passos do número real?"
+        },
         content: `
 # Pedômetro com Micro:bit (MicroPython)
 
@@ -736,6 +771,11 @@ Desafio da turma: volta completa no pátio — cada aluno anota os passos da pla
         image: "images/scratch.png",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF06MA03"],
+        teacherGuide: {
+            objective: "Ensinar variáveis e condicionais encadeadas usando as quatro operações, que a turma já domina no papel.",
+            skills: ["Uso de variáveis", "Condicionais encadeadas", "Interface pensada para quem usa"],
+            assessment: "As quatro operações devolvem o resultado certo, e a divisão por zero mostra um aviso em vez de travar?"
+        },
         content: `
 # Calculadora Interativa no Scratch
 
@@ -896,6 +936,11 @@ Cada grupo demonstra o alarme com a mão em 3 distâncias (ex: 80 cm, 40 cm, 10 
         image: "images/microbit.png",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF06MA16"],
+        teacherGuide: {
+            objective: "Ensinar a guardar e comparar uma sequência que cresce, unindo memória de curto prazo e lógica de lista.",
+            skills: ["Sequência e lista", "Comparação de padrões", "Persistência diante do erro"],
+            assessment: "A sequência ganha um sinal a cada acerto, e o jogo termina no primeiro erro do jogador?"
+        },
         content: `
 # Jogo da Memória LED (Genius) no Micro:bit
 
@@ -966,6 +1011,11 @@ Torneio em duplas: um joga, o outro anota a rodada máxima alcançada. Depois tr
         image: "images/scratch.png",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF15AR04", "EF15AR26"],
+        teacherGuide: {
+            objective: "Ensinar que movimento na tela é ilusão criada por quadros em sequência, com tempo de espera entre eles.",
+            skills: ["Noção de quadro e tempo", "Expressão visual", "Planejamento de roteiro"],
+            assessment: "A animação tem pelo menos oito quadros e o movimento corre sem salto perceptível entre um e outro?"
+        },
         content: `
 # Animação Stop Motion no Scratch
 
@@ -1101,6 +1151,11 @@ Cada grupo registra a temperatura da sala, do pátio (sol e sombra) e da mão fe
         grade: "Ensino Fundamental II (8º e 9º ano)",
         ods: "ODS 9 - Indústria e Inovação",
         bncc: ["EF08TEC04", "EF09TEC01"],
+        teacherGuide: {
+            objective: "Ensinar o laço fechado entre sensor e ação: medir, decidir e agir, repetidamente e sem intervenção humana.",
+            skills: ["Laço de decisão", "Programação em blocos NEPO", "Calibração de distância"],
+            assessment: "O carro percorre dois metros com dois obstáculos no caminho sem encostar em nenhum?"
+        },
         content: `
 # Carro Autônomo com NEPO
 
@@ -1133,6 +1188,11 @@ Use o Open Roberta Lab (lab.open-roberta.org) para programar visualmente e expor
         grade: "Ensino Fundamental II (6º e 7º ano)",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF06CI04", "EF15AR13"],
+        teacherGuide: {
+            objective: "Ensinar a mapear uma grandeza contínua, a luz, em faixas discretas que viram notas musicais.",
+            skills: ["Leitura de sensor analógico", "Faixas e limiares", "Expressão musical"],
+            assessment: "Aproximando e afastando a mão do sensor, saem pelo menos três alturas de som distintas e previsíveis?"
+        },
         content: `
 # Piano de Luz com Micro:bit
 
@@ -1158,6 +1218,11 @@ Quanto mais luz, mais aguda a nota. Cubra o sensor para tocar notas graves!
         grade: "Ensino Fundamental I (4º e 5º ano)",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF04MA27"],
+        teacherGuide: {
+            objective: "Introduzir aleatoriedade e resposta a evento físico, com um objeto que a turma já usa em jogos.",
+            skills: ["Número aleatório", "Evento de movimento", "Noção de probabilidade"],
+            assessment: "Em vinte sacudidas, saem apenas números de 1 a 6 e aparece mais de um valor diferente?"
+        },
         content: `
 # Dado Digital
 
@@ -1183,6 +1248,11 @@ Adicione animação de "rolagem" antes de mostrar o número final!
         grade: "Ensino Médio",
         ods: "ODS 9 - Inovação",
         bncc: ["EM13TEC03", "EM13MAT307"],
+        teacherGuide: {
+            objective: "Ligar coordenadas cartesianas a movimento mecânico: o desenho planejado vira trajetória no papel.",
+            skills: ["Plano cartesiano", "Controle coordenado de motores", "Precisão mecânica"],
+            assessment: "O robô desenha um quadrado com os quatro lados visivelmente iguais e os cantos fechados?"
+        },
         content: `
 # Robô Desenhista
 
@@ -1210,6 +1280,11 @@ Inspirado em projetos do Open Roberta. Crie um plotter XY que desenha usando ser
         grade: "Ensino Fundamental II (7º e 8º ano)",
         ods: "ODS 2 - Fome Zero",
         bncc: ["EF07CI08", "EF08TEC04"],
+        teacherGuide: {
+            objective: "Ensinar limiar de acionamento: o sistema decide sozinho quando agir, a partir de um valor de referência.",
+            skills: ["Limiar de decisão", "Leitura de umidade do solo", "Consciência sobre uso de água"],
+            assessment: "A bomba liga com o sensor em solo seco e desliga quando o solo molha, sem ficar ligando e desligando sem parar?"
+        },
         content: `
 # Sistema de Irrigação Inteligente
 
@@ -1239,6 +1314,11 @@ Projeto do Open Roberta adaptado. Use sensor de umidade para automatizar irriga�
         grade: "Ensino Fundamental II (8º e 9º ano)",
         ods: "ODS 11 - Cidades Inteligentes",
         bncc: ["EF08TEC04"],
+        teacherGuide: {
+            objective: "Ensinar a inferir direção pela ordem em que dois sensores são acionados, e não apenas a contar eventos.",
+            skills: ["Ordem de eventos", "Lógica de entrada e saída", "Leitura de dados de ocupação"],
+            assessment: "A contagem sobe quando alguém entra, desce quando sai, e volta a zero depois de uma entrada e uma saída?"
+        },
         content: `
 # Contador de Pessoas
 
@@ -1264,6 +1344,11 @@ Usado em lojas, ônibus e controle de lotação.
         grade: "Ensino Fundamental II (6º ano)",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF06MA16"],
+        teacherGuide: {
+            objective: "Ensinar a medir o intervalo entre dois eventos, transformando tempo de reação em número comparável.",
+            skills: ["Medição de tempo", "Leitura de evento de botão", "Comparação de resultados"],
+            assessment: "O jogo mostra um tempo diferente a cada rodada e ignora quem aperta o botão antes do sinal acender?"
+        },
         content: `
 # Jogo de Reação com LEDs
 
@@ -1291,6 +1376,11 @@ Projeto do Open Roberta. Crie um jogo que testa tempo de reação.
         grade: "Ensino Médio",
         ods: "ODS 13 - Ação Climática",
         bncc: ["EM13TEC04", "EM13CNT301"],
+        teacherGuide: {
+            objective: "Ensinar leitura simultânea de vários sensores e a interpretar o conjunto, não cada número isolado.",
+            skills: ["Leitura de múltiplos sensores", "Interpretação de dados ambientais", "Argumentação com evidência"],
+            assessment: "Com a sala fechada e a turma reunida perto do sensor, os valores mudam de forma coerente e voltam ao normal depois de abrir a janela?"
+        },
         content: `
 # Estação de Qualidade do Ar
 
@@ -1318,6 +1408,11 @@ Inspirado em projetos do Open Roberta. Monitore múltiplos sensores ambientais.
         grade: "Ensino Médio",
         ods: "ODS 9 - Inovação",
         bncc: ["EM13TEC03"],
+        teacherGuide: {
+            objective: "Ensinar a comparar dois sinais para inferir posição, princípio usado em localização por som e por rádio.",
+            skills: ["Comparação de sinais", "Noção de intensidade sonora", "Depuração de leitura ruidosa"],
+            assessment: "O robô vira para o lado de onde veio o som em pelo menos quatro de cinco tentativas?"
+        },
         content: `
 # Robô Seguidor de Som
 
@@ -1346,6 +1441,11 @@ Projeto avançado do Open Roberta. Robô localiza fonte sonora por triangulaçã
         grade: "Ensino Fundamental II (7º ano)",
         ods: "ODS 4 - Educação de Qualidade",
         bncc: ["EF07LP01"],
+        teacherGuide: {
+            objective: "Ensinar codificação: transformar letras em sinais combinados e recuperar a mensagem do outro lado.",
+            skills: ["Codificação e decodificação", "Ritmo e precisão", "Comunicação a distância"],
+            assessment: "Um colega que não viu o código consegue decodificar uma palavra de quatro letras olhando só o LED?"
+        },
         content: `
 # Sinalizador Morse
 
@@ -1371,6 +1471,11 @@ Envie mensagens entre dois Micro:bits usando rádio!
         grade: "Ensino Fundamental II (9º ano)",
         ods: "ODS 9 - Inovação",
         bncc: ["EF09CI03"],
+        teacherGuide: {
+            objective: "Ensinar velocidade como distância dividida por tempo, com a turma medindo as duas em vez de recebê-las prontas.",
+            skills: ["Relação distância e tempo", "Medição com sensores", "Análise de resultado experimental"],
+            assessment: "Dois objetos lançados em velocidades visivelmente diferentes produzem leituras que respeitam essa diferença?"
+        },
         content: `
 # Medidor de Velocidade com Luz
 
@@ -1396,6 +1501,11 @@ Crie um radar de velocidade para carrinhos de brinquedo!
         grade: "Ensino Médio",
         image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800",
         ods: "ODS 9 - Inovação",
+        teacherGuide: {
+            objective: "Mostrar a diferença entre microcontrolador e computador completo, e o que muda quando existe sistema operacional.",
+            skills: ["Fundamentos de Linux", "Controle de GPIO", "Comparação entre arquiteturas"],
+            assessment: "O aluno acende um LED pela GPIO e explica por que aqui existe sistema operacional e no Arduino não?"
+        },
         content: `
 # Primeiros Passos com Raspberry Pi
 
@@ -1424,6 +1534,11 @@ Diferente do Arduino, o Raspberry Pi é um computador completo. Neste projeto, o
         image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=800", // Gaming/Hardware
         ods: "ODS 9 - Indústria, Inovação e Infraestrutura",
         bncc: ["EM13MAT315", "EM13LGG701"],
+        teacherGuide: {
+            objective: "Ensinar montagem de um sistema completo, do sistema operacional aos periféricos, e discutir preservação digital e direito de uso.",
+            skills: ["Administração de sistema Linux", "Configuração de periféricos", "Ética no uso de software"],
+            assessment: "O console inicia sozinho no menu, reconhece o controle e roda um jogo que a turma tenha direito de usar?"
+        },
         content: `
 # Console de Jogos com RetroPie
 
@@ -1562,6 +1677,11 @@ void onBombaStatusChange()  {
         grade: "Ensino Médio",
         ods: "ODS 11 - Cidades Inteligentes",
         bncc: ["EM13TEC05"],
+        teacherGuide: {
+            objective: "Ensinar que um estado físico pode ser espelhado na nuvem quase em tempo real, e o que acontece quando a conexão cai.",
+            skills: ["Comunicação com a nuvem", "Leitura de sensor magnético", "Tratamento de perda de conexão"],
+            assessment: "Abrir a porta muda o painel em poucos segundos, e o estado continua correto depois de desligar e religar a rede?"
+        },
         content: `
 # Alarme Residencial via Cloud API
 
@@ -1592,6 +1712,11 @@ Use o método \`ArduinoCloud.update()\` com frequência no loop para garantir qu
         grade: "Ensino Médio e Técnico",
         ods: "ODS 9 - Inovação",
         bncc: ["EM13TEC04"],
+        teacherGuide: {
+            objective: "Ensinar a consumir uma API REST autenticada, levando dados do hardware para uma interface própria.",
+            skills: ["Requisição HTTP autenticada", "Leitura de JSON", "Construção de interface"],
+            assessment: "A página feita pela turma mostra o mesmo valor do painel oficial e se atualiza sem recarregar?"
+        },
         content: `
 # Dashboard Personalizado via API REST Arduino
 
@@ -1709,6 +1834,11 @@ void loop() {
         grade: "Ensino Fundamental II (6º e 7º ano)",
         ods: "ODS 13 - Ação Climática",
         bncc: ["EF06CI13", "EF07TEC02"],
+        teacherGuide: {
+            objective: "Ensinar o uso de biblioteca externa para controlar um periférico, e a formatar a saída para quem vai ler.",
+            skills: ["Uso de biblioteca", "Formatação de saída", "Leitura de temperatura e umidade"],
+            assessment: "O display mostra temperatura e umidade com as unidades, sem sobrar caractere da leitura anterior na tela?"
+        },
         content: `
 # Monitor Ambiental com LCD (Project Hub Edition)
 
@@ -1739,6 +1869,11 @@ Use caracteres especiais! A biblioteca LCD permite criar o símbolo de grau (°)
         grade: "Ensino Médio e Técnico",
         ods: "ODS 16 - Paz, Justiça e Instituições Eficazes",
         bncc: ["EM13TEC05"],
+        teacherGuide: {
+            objective: "Ensinar controle de estado e comparação de sequência digitada, base de qualquer sistema de autenticação.",
+            skills: ["Controle de estado", "Comparação de sequência", "Integração entre teclado e atuador"],
+            assessment: "A senha certa destrava o servo, a errada mantém travado, e o cofre volta a travar sozinho depois de fechado?"
+        },
         content: `
 # Cofre Digital com Keypad
 
