@@ -1160,6 +1160,105 @@ Ao final de cada Hora do Código, o aluno pode gerar um certificado. Parece deta
 ## Desafio para aplicar
 
 Depois da primeira Hora do Código com a turma, abra o painel de progresso e identifique: qual lição travou mais gente, e qual aluno terminou primeiro. Prepare **uma** intervenção para cada caso — uma retomada coletiva e um desafio extra. Isso é diferenciação pedagógica com dado real, não com achismo.
+                `.trim(),
+            },
+            {
+                id: "m4",
+                title: "Sem Internet e Sem Laboratório: Atividades Desplugadas",
+                duration: "20 min",
+                free: false,
+                content: `
+## O problema que este módulo resolve
+
+Boa parte das escolas brasileiras tem uma sala de informática com menos máquinas do que alunos, internet instável, ou nenhuma das duas coisas. Em geral isso é tratado como impedimento: sem computador, sem aula de computação.
+
+O Code.org parte de outra premissa. Metade do currículo dele é **desplugada** — atividades em papel, com o corpo e com a turma toda, que ensinam os mesmos conceitos da parte online. Elas não são um plano B para quando a internet cai. São parte do currículo, e existem porque certos conceitos ficam mais claros longe da tela.
+
+## O que dá para ensinar sem uma máquina sequer
+
+| Conceito | Atividade desplugada | Como funciona |
+|---|---|---|
+| Algoritmo | Grafia com papel quadriculado | Um aluno descreve um desenho em passos; o colega executa sem ver o original |
+| Depuração | Encontre o erro | A turma recebe uma sequência de passos que não chega ao resultado e precisa achar onde quebra |
+| Laço | Coreografia repetida | Uma sequência de movimentos é anotada de forma compacta usando repetição |
+| Condicional | Jogo do "se... então" | Cada carta sorteada dispara uma ação diferente conforme uma regra |
+| Função | Receita com atalho | A turma nomeia um bloco de passos repetidos e passa a chamá-lo pelo nome |
+
+Todas estão disponíveis em code.org, com plano de aula, material para imprimir e tempo estimado.
+
+## O que muda no seu papel
+
+Na atividade online, o computador corrige. Na desplugada, **quem corrige é a turma**, e isso muda o que você observa.
+
+O momento mais valioso é quando o algoritmo de um aluno não produz o resultado esperado no colega. Ali fica visível que o computador faz exatamente o que foi dito, e não o que a pessoa quis dizer. Esse é o conceito mais difícil de transmitir na tela, porque na tela o erro vem com uma mensagem pronta.
+
+Duas orientações que mudam o resultado:
+
+- **Não conserte o algoritmo do aluno.** Peça para ele executar o próprio passo a passo, em voz alta, como se fosse a máquina. Quase sempre ele acha o erro sozinho.
+- **Deixe a ambiguidade acontecer.** Se o comando foi "ande até a parede", e o colega atravessou a mesa, isso é material de aula, não um acidente.
+
+## Combinando desplugado e online
+
+A sequência que funciona melhor em turma grande com poucas máquinas:
+
+1. Conceito na atividade desplugada, com a turma inteira, sem computador.
+2. Rodízio nas máquinas: metade da turma pratica o mesmo conceito online enquanto a outra metade faz uma variação desplugada.
+3. Fechamento coletivo, ligando o que aconteceu no papel ao que aconteceu na tela.
+
+Assim a máquina deixa de ser o gargalo da aula e vira uma das estações dela.
+
+## Desafio para aplicar
+
+Escolha **um** conceito que sua turma travou na parte online. Encontre a atividade desplugada correspondente no Code.org, aplique em 20 minutos de aula e depois volte à mesma lição online. Compare quanto tempo a turma levou desta vez. É a forma mais direta de comprovar, para você e para a coordenação, que o desplugado não é enrolação.
+                `.trim(),
+            },
+            {
+                id: "m5",
+                title: "Projeto Final: a Hora do Código da Escola Inteira",
+                duration: "35 min",
+                free: false,
+                content: `
+## Por que o projeto final aqui é um evento
+
+Nas outras trilhas, o projeto final é um artefato: um semáforo, um jogo, uma estação meteorológica. No Code.org o equivalente é outro, porque a ferramenta é currículo guiado e não ambiente de criação.
+
+O projeto final aqui é **organizar a Hora do Código da escola** — o formato pelo qual o Code.org efetivamente entra numa instituição. É também o que costuma destravar orçamento e horário para o resto do ano: é muito mais fácil defender um programa depois que a escola inteira já viu a coisa acontecendo.
+
+## Planejamento em quatro semanas
+
+| Quando | O que fazer |
+|---|---|
+| 4 semanas antes | Definir data e turmas participantes. Reservar laboratório ou organizar o rodízio de máquinas. |
+| 3 semanas antes | Criar as turmas no painel e imprimir os cartões de acesso. Escolher a atividade de cada faixa etária. |
+| 2 semanas antes | Rodar você mesmo a atividade de cada faixa, do começo ao fim, cronometrando. |
+| 1 semana antes | Testar a rede com várias máquinas ao mesmo tempo. Preparar o plano desplugado de contingência. |
+| No dia | Conduzir, fotografar e gerar os certificados. |
+
+O passo de cronometrar você mesmo é o mais pulado e o mais importante. Uma atividade anunciada como "uma hora" pode levar 25 minutos com a sua turma, ou não caber no tempo de aula. Sem essa medição, o evento vira improviso na frente da escola inteira.
+
+## O teste de rede que evita o desastre
+
+Trinta máquinas abrindo a mesma atividade ao mesmo tempo é uma situação que a rede da escola nunca viveu. Faça o teste com pelo menos um terço das máquinas ligadas simultaneamente, na mesma faixa de horário do evento.
+
+Se a rede não aguentar, existem duas saídas, e as duas precisam ser decididas antes e não no dia:
+
+- **Rodízio por turma**, em vez de todos ao mesmo tempo.
+- **Metade desplugada**, usando o módulo anterior, com troca no meio do tempo.
+
+## O que entregar à coordenação
+
+Um evento sem registro não vira programa. Ao final, monte uma página com quatro coisas:
+
+1. Quantos alunos participaram, por turma.
+2. A grade de progresso do painel, mostrando conclusão.
+3. Três fotos da turma trabalhando.
+4. Uma proposta de continuidade, com a sequência do Code.org que se encaixa em cada ano.
+
+Esse último item é o que diferencia um evento bonito de um programa aprovado. Sem ele, a Hora do Código vira uma lembrança de novembro.
+
+## Desafio para aplicar
+
+Monte o cronograma das quatro semanas com **datas reais** do seu calendário escolar e leve à coordenação. Peça uma única coisa concreta na conversa: a reserva do laboratório na data escolhida. Um pedido específico e pequeno é aprovado; um projeto grande e vago fica para depois.
 
 ---
 
