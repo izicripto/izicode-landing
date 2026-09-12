@@ -32,6 +32,22 @@
         }
     </style>
   <script src="/js/toast.js"></script>
+    <style>
+        /* Esconde visualmente sem esconder de leitor de tela. Declarada
+           aqui porque esta pagina carrega um CSS do Tailwind ja compilado,
+           onde uma classe que nao estava no build nao existe. */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
 </head>
 
 <body class="bg-white min-h-screen flex flex-col md:flex-row">
@@ -39,40 +55,30 @@
     <!--
         Metade Visual/Branding.
 
-        A foto cobre a coluna INTEIRA, e nao apenas a faixa de baixo. Ela e
-        retrato (1067x1600); num quadro quase quadrado, o recorte de
-        preenchimento comia a cabeca e os pes do robo, e sobrava um close do
-        meio que nao se lia como robo nenhum. Ocupando a coluna toda, a
-        proporcao do quadro fica perto da proporcao da foto e quase nada e
-        cortado.
+        A foto ocupa a coluna inteira, em tamanho cheio (cover) e sem
+        nenhuma camada por cima. A logo e a frase "Bem-vindo a Revolucao
+        Maker" nao sao mais elementos de HTML sobrepostos: elas estao
+        impressas na folha que a pessoa segura, dentro da propria imagem,
+        na area limpa entre o desenho do robo e as maos.
 
-        A foto aparece INTEIRA (background-size: contain), sem ampliacao.
-        Com cover ela era esticada ate preencher e 17% da altura ia embora —
-        e nao havia ancoragem que salvasse: centralizada sumiam a cabeca e
-        os pes do robo, ancorada embaixo sumiam os fios de cima.
+        Por isso sumiram o degrade branco e o bloco de texto que ficavam
+        aqui. Com a marca dentro da foto, qualquer camada por cima so
+        atrapalharia o que ela ja diz.
 
-        Contain deixa uma faixa de cada lado, porque a foto e mais estreita
-        que a coluna. A faixa recebe a cor media das bordas da propria foto,
-        entao le como continuacao do ambiente e nao como retangulo vazio. E
-        uma troca consciente: faixa discreta em vez de robo cortado.
+        A coluna usa md:flex e nao md:block de proposito: o CSS do
+        Tailwind desta pagina e um arquivo ja compilado, e md:block nao
+        esta nele. Trocada, a coluna ficava com o `hidden` valendo em
+        qualquer largura e a foto simplesmente nao aparecia.
 
-        O texto continua sempre legivel, que era a intencao do desenho
-        anterior: em vez de uma faixa branca solida cortando a imagem, um
-        degrade de branco opaco no topo ate quase transparente embaixo. O
-        texto fica sobre a parte opaca e a foto aparece inteira embaixo dele.
-
-        Degrade em estilo embutido, e nao em classe do Tailwind: esta pagina
-        carrega um CSS ja compilado, onde uma classe de gradiente que nao
-        estava no build simplesmente nao existe — e falharia em silencio.
+        O h1 e o paragrafo continuam no documento, visualmente escondidos:
+        texto dentro de JPEG nao e lido por leitor de tela nem por robo de
+        busca, e sem eles a pagina ficaria sem titulo nenhum.
     -->
-    <div class="hidden md:flex md:w-1/2 relative overflow-hidden" style="background-color: #cbbead;">
-        <div class="absolute inset-0"
-            style="background-image: url('images/telalogin.jpg'); background-size: contain; background-position: center bottom; background-repeat: no-repeat;"></div>
-        <div class="absolute inset-0" style="background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 27%, rgba(255,255,255,.45) 44%, rgba(255,255,255,.10) 100%);"></div>
-        <div class="relative z-10 w-full px-12 pt-16 text-center">
-            <img src="images/logo.png" alt="Izicode Logo" class="w-32 h-32 mx-auto mb-8">
-            <h1 class="font-display text-4xl font-bold text-slate-900 mb-4">Bem-vindo à Revolução Maker</h1>
-            <p class="text-slate-600 text-lg">Acesse as ferramentas que vão transformar a educação na sua escola.</p>
+    <div class="hidden md:flex md:w-1/2 relative overflow-hidden"
+        style="background-image: url('images/telalogin.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: #f1f2f4;">
+        <div class="sr-only">
+            <h1>Bem-vindo à Revolução Maker</h1>
+            <p>Acesse as ferramentas que vão transformar a educação na sua escola.</p>
         </div>
     </div>
 
