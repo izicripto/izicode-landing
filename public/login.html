@@ -46,6 +46,16 @@
         proporcao do quadro fica perto da proporcao da foto e quase nada e
         cortado.
 
+        A foto aparece INTEIRA (background-size: contain), sem ampliacao.
+        Com cover ela era esticada ate preencher e 17% da altura ia embora —
+        e nao havia ancoragem que salvasse: centralizada sumiam a cabeca e
+        os pes do robo, ancorada embaixo sumiam os fios de cima.
+
+        Contain deixa uma faixa de cada lado, porque a foto e mais estreita
+        que a coluna. A faixa recebe a cor media das bordas da propria foto,
+        entao le como continuacao do ambiente e nao como retangulo vazio. E
+        uma troca consciente: faixa discreta em vez de robo cortado.
+
         O texto continua sempre legivel, que era a intencao do desenho
         anterior: em vez de uma faixa branca solida cortando a imagem, um
         degrade de branco opaco no topo ate quase transparente embaixo. O
@@ -55,9 +65,9 @@
         carrega um CSS ja compilado, onde uma classe de gradiente que nao
         estava no build simplesmente nao existe — e falharia em silencio.
     -->
-    <div class="hidden md:flex md:w-1/2 relative overflow-hidden bg-slate-100">
+    <div class="hidden md:flex md:w-1/2 relative overflow-hidden" style="background-color: #cbbead;">
         <div class="absolute inset-0"
-            style="background-image: url('images/telalogin.jpg'); background-size: cover; background-position: center 45%;"></div>
+            style="background-image: url('images/telalogin.jpg'); background-size: contain; background-position: center bottom; background-repeat: no-repeat;"></div>
         <div class="absolute inset-0" style="background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 27%, rgba(255,255,255,.45) 44%, rgba(255,255,255,.10) 100%);"></div>
         <div class="relative z-10 w-full px-12 pt-16 text-center">
             <img src="images/logo.png" alt="Izicode Logo" class="w-32 h-32 mx-auto mb-8">
