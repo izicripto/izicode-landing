@@ -36,9 +36,30 @@
 
 <body class="bg-white min-h-screen flex flex-col md:flex-row">
 
-    <!-- Metade Azul Claro (Visual/Branding) -->
-    <div class="hidden md:flex md:w-1/2 bg-brand-100 items-center justify-center p-12">
-        <div class="max-w-md text-center">
+    <!--
+        Metade Visual/Branding.
+
+        A foto cobre a coluna INTEIRA, e nao apenas a faixa de baixo. Ela e
+        retrato (1067x1600); num quadro quase quadrado, o recorte de
+        preenchimento comia a cabeca e os pes do robo, e sobrava um close do
+        meio que nao se lia como robo nenhum. Ocupando a coluna toda, a
+        proporcao do quadro fica perto da proporcao da foto e quase nada e
+        cortado.
+
+        O texto continua sempre legivel, que era a intencao do desenho
+        anterior: em vez de uma faixa branca solida cortando a imagem, um
+        degrade de branco opaco no topo ate quase transparente embaixo. O
+        texto fica sobre a parte opaca e a foto aparece inteira embaixo dele.
+
+        Degrade em estilo embutido, e nao em classe do Tailwind: esta pagina
+        carrega um CSS ja compilado, onde uma classe de gradiente que nao
+        estava no build simplesmente nao existe — e falharia em silencio.
+    -->
+    <div class="hidden md:flex md:w-1/2 relative overflow-hidden bg-slate-100">
+        <div class="absolute inset-0"
+            style="background-image: url('images/telalogin.jpg'); background-size: cover; background-position: center 45%;"></div>
+        <div class="absolute inset-0" style="background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 27%, rgba(255,255,255,.45) 44%, rgba(255,255,255,.10) 100%);"></div>
+        <div class="relative z-10 w-full px-12 pt-16 text-center">
             <img src="images/logo.png" alt="Izicode Logo" class="w-32 h-32 mx-auto mb-8">
             <h1 class="font-display text-4xl font-bold text-slate-900 mb-4">Bem-vindo à Revolução Maker</h1>
             <p class="text-slate-600 text-lg">Acesse as ferramentas que vão transformar a educação na sua escola.</p>
