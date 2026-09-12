@@ -100,3 +100,7 @@ public/app-build/
 *-credentials.json
 *serviceaccount*.json
 *service-account*.json
+
+# Pasta descartavel da previa local (scripts/previa-local.mjs):
+# public/ misturado com o build do React, como o deploy monta.
+.previa/
