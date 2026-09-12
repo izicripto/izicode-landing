@@ -32,53 +32,16 @@
         }
     </style>
   <script src="/js/toast.js"></script>
-    <style>
-        /* Esconde visualmente sem esconder de leitor de tela. Declarada
-           aqui porque esta pagina carrega um CSS do Tailwind ja compilado,
-           onde uma classe que nao estava no build nao existe. */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-    </style>
 </head>
 
 <body class="bg-white min-h-screen flex flex-col md:flex-row">
 
-    <!--
-        Metade Visual/Branding.
-
-        A foto ocupa a coluna inteira, em tamanho cheio (cover) e sem
-        nenhuma camada por cima. A logo e a frase "Bem-vindo a Revolucao
-        Maker" nao sao mais elementos de HTML sobrepostos: elas estao
-        impressas na folha que a pessoa segura, dentro da propria imagem,
-        na area limpa entre o desenho do robo e as maos.
-
-        Por isso sumiram o degrade branco e o bloco de texto que ficavam
-        aqui. Com a marca dentro da foto, qualquer camada por cima so
-        atrapalharia o que ela ja diz.
-
-        A coluna usa md:flex e nao md:block de proposito: o CSS do
-        Tailwind desta pagina e um arquivo ja compilado, e md:block nao
-        esta nele. Trocada, a coluna ficava com o `hidden` valendo em
-        qualquer largura e a foto simplesmente nao aparecia.
-
-        O h1 e o paragrafo continuam no documento, visualmente escondidos:
-        texto dentro de JPEG nao e lido por leitor de tela nem por robo de
-        busca, e sem eles a pagina ficaria sem titulo nenhum.
-    -->
-    <div class="hidden md:flex md:w-1/2 relative overflow-hidden"
-        style="background-image: url('images/telalogin.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: #f1f2f4;">
-        <div class="sr-only">
-            <h1>Bem-vindo à Revolução Maker</h1>
-            <p>Acesse as ferramentas que vão transformar a educação na sua escola.</p>
+    <!-- Metade Azul Claro (Visual/Branding) -->
+    <div class="hidden md:flex md:w-1/2 bg-brand-100 items-center justify-center p-12">
+        <div class="max-w-md text-center">
+            <img src="images/logo.png" alt="Izicode Logo" class="w-32 h-32 mx-auto mb-8">
+            <h1 class="font-display text-4xl font-bold text-slate-900 mb-4">Bem-vindo à Revolução Maker</h1>
+            <p class="text-slate-600 text-lg">Acesse as ferramentas que vão transformar a educação na sua escola.</p>
         </div>
     </div>
 
