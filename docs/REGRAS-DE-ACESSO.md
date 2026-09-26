@@ -24,10 +24,15 @@ não existe motivo para pagar.
 | Projetos ODS | prévia (3 seções) |
 | Ecologia e sustentabilidade | prévia (3 seções) |
 | Práticas restaurativas | prévia (3 seções) |
+| Trilha maker do 1º ao 9º ano | **completo** |
+| Oficinas maker em rotação (1º ao 3º) | **completo** |
+| Feira de soluções maker (4º ao 6º) | **completo** |
 
-Os dois abertos não foram escolhidos ao acaso: são os de maior volume de
-busca e os que melhor mostram o padrão do material. Quem chega por eles vê a
-qualidade inteira antes de decidir pagar.
+Os três guias da Trilha Maker saem **completos, e não por ser exceção**:
+eles não vendem o plano do professor, vendem a consultoria de eventos.
+Coordenador de escola que pesquisa metodologia de feira maker não assina um
+plano de professor para terminar de ler — fecha a aba. Por isso terminam com
+um convite para conversar sobre consultoria, e não com a parede do plano.
 
 ### Por que prévia e não bloqueio
 

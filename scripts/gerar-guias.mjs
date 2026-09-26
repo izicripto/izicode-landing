@@ -135,6 +135,33 @@ const GUIAS = {
       "Da decisão à primeira aula: diagnóstico, orçamento, formação da equipe e cronograma " +
       "para implantar tecnologia educacional na escola.",
   },
+  "08-OFICINAS-ROTACAO-MAKER": {
+    slug: "oficinas-rotacao-maker",
+    livre: true,
+    consultoria: true,
+    titulo: "Oficinas maker em rotação para o 1º ao 3º ano",
+    descricao:
+      "Meio período, quatro estações simultâneas e sem competição: como montar a porta de " +
+      "entrada da cultura maker nos anos iniciais, com material de baixo custo.",
+  },
+  "09-FEIRA-SOLUCOES-MAKER": {
+    slug: "feira-solucoes-maker",
+    livre: true,
+    consultoria: true,
+    titulo: "Feira de soluções maker com sucata para o 4º ao 6º ano",
+    descricao:
+      "Evento de um dia em que equipes encontram um problema da escola e constroem a solução " +
+      "com material reaproveitado, com roteiro hora a hora, papéis e medalhas por categoria.",
+  },
+  "10-TRILHA-MAKER-ESCOLA": {
+    slug: "trilha-maker-escola",
+    livre: true,
+    consultoria: true,
+    titulo: "Trilha maker do 1º ao 9º ano: oficinas, feira e hackathon",
+    descricao:
+      "Três programas encadeados que levam o aluno da coordenação motora ao hackathon, com " +
+      "progressão de habilidades, calendário anual e identificação de perfis.",
+  },
 }
 
 /** Remove emoji do título, que fica estranho na aba do navegador e na busca. */
@@ -178,6 +205,30 @@ function paredeDePlano(restantes) {
       Dois guias são abertos por inteiro:
       <a href="/guias/bncc-tecnologia/">BNCC e cultura digital</a> e
       <a href="/guias/manual-de-implementacao/">manual de implementação</a>.
+    </p>
+  </aside>`
+}
+
+/**
+ * Fecho dos guias de consultoria.
+ *
+ * Estes guias saem inteiros, sem parede: eles nao vendem o plano do
+ * professor, vendem a consultoria de eventos. Coordenador de escola que
+ * pesquisa metodologia de feira maker nao assina plano de professor para
+ * terminar de ler — fecha a aba. Se o texto convencer, o que ele faz e
+ * pedir uma conversa, e e para isso que este bloco existe.
+ */
+function convitePlanejar(titulo) {
+  return `
+  <aside class="gz-cta">
+    <h2>Quer rodar isto na sua escola?</h2>
+    <p>Levamos a metodologia, a formação da equipe e o acompanhamento no dia.
+       A escola entra com espaço, professores e material arrecadado.</p>
+    <p>A sugestão para quem está começando é sempre a mesma: um piloto de
+       meio período, em uma turma só.</p>
+    <p class="gz-acoes">
+      <a class="gz-botao" href="/contato">Falar sobre consultoria</a>
+      <a class="gz-link" href="/guias/trilha-maker-escola/">Ver a trilha completa</a>
     </p>
   </aside>`
 }
@@ -397,7 +448,11 @@ for (const g of lista) {
 
   // O H1 do Markdown sai fora: a página usa o título otimizado para busca,
   // e dois H1 na mesma página confundem tanto leitor de tela quanto robô.
-  const semTitulo = md.replace(/^#\s+.*\n/, "")
+  // O \r entra no padrao de proposito: em JavaScript o retorno de carro
+  // conta como terminador de linha, entao "." NAO casa com ele. Sem isso,
+  // guia salvo no Windows (CRLF) passava batido e a pagina saia com DOIS
+  // <h1> — o do gerador e o do proprio markdown.
+  const semTitulo = md.replace(/^#[^\r\n]*\r?\n/, "")
   const corpo = marked.parse(semTitulo)
 
   // Guia livre sai inteiro; os demais saem com a prévia e a parede.
@@ -405,7 +460,15 @@ for (const g of lista) {
     ? { previa: corpo, restantes: 0 }
     : cortarNaPrevia(corpo, SECOES_NA_PREVIA)
 
-  const miolo = previa + (restantes > 0 ? paredeDePlano(restantes) : "")
+  // Guia de consultoria fecha com convite para conversar; os demais,
+  // com a parede do plano quando houve corte.
+  const miolo =
+    previa +
+    (g.consultoria
+      ? convitePlanejar(g.titulo)
+      : restantes > 0
+        ? paredeDePlano(restantes)
+        : "")
 
   const conteudo = `    <h1>${escapar(semEmoji(g.titulo))}</h1>\n${miolo
     .split("\n")
