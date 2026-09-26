@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trilha Maker — Apresentação para escolas | Izicode Edu</title>
+
+    <!-- Link para enviar e mostrar, não página de busca. Os guias públicos
+         em /guias/ é que carregam o SEO; esta aqui é material de reunião. -->
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Trilha Maker — do 1º ao 9º ano | Izicode Edu">
+    <meta property="og:description"
+        content="Três programas encadeados de evento maker para escolas: oficinas em rotação, feira de soluções com sucata e hackathon.">
+    <meta property="og:url" content="https://izicode.com.br/kits/trilha-maker.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!--
+        CSS próprio, e não o build do Tailwind.
+
+        As páginas deste site carregam um Tailwind já compilado, onde uma
+        classe que não estava no build simplesmente não existe e falha em
+        silêncio — já aconteceu duas vezes aqui. Além disso, esta página
+        precisa de regras de impressão, que nenhum outro kit tem: ela existe
+        para ser mostrada na reunião E deixada impressa na escola.
+    -->
+    <style>
+        :root {
+            --tinta: #0f172a;
+            --tinta-suave: #475569;
+            --tinta-fraca: #64748b;
+            --linha: #e2e8f0;
+            --fundo: #ffffff;
+            --fundo-suave: #f8fafc;
+            --marca: #0284c7;
+            --marca-escura: #0369a1;
+            --marca-clara: #e0f2fe;
+            --ouro: #b45309;
+            --ouro-claro: #fef3c7;
+            color-scheme: light;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: var(--fundo-suave);
+            color: var(--tinta);
+            font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 1rem;
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .folha {
+            max-width: 62rem;
+            margin: 0 auto;
+            background: var(--fundo);
+            padding: 3rem 2.5rem 4rem;
+        }
+
+        h1, h2, h3 { font-family: Outfit, "Space Grotesk", sans-serif; line-height: 1.2; text-wrap: balance; }
+        h1 { font-size: 2.6rem; margin: 0 0 .75rem; letter-spacing: -.02em; }
+        h2 { font-size: 1.5rem; margin: 3rem 0 1rem; }
+        h3 { font-size: 1.05rem; margin: 0 0 .35rem; }
+        p { margin: 0 0 1rem; }
+
+        /* --------------------------------------------------------- topo */
+        .topo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--linha);
+            margin-bottom: 2.5rem;
+        }
+        .marca { display: flex; align-items: center; gap: .7rem; font-weight: 700; }
+        .marca img { width: 2.4rem; height: 2.4rem; border-radius: .5rem; }
+        .etiqueta {
+            font-size: .7rem; font-weight: 700; letter-spacing: .1em;
+            text-transform: uppercase; color: var(--marca);
+            background: var(--marca-clara); padding: .35rem .8rem; border-radius: 999px;
+        }
+
+        .abertura { font-size: 1.15rem; color: var(--tinta-suave); max-width: 46rem; }
+
+        /* --------------------------------------------- as tres etapas */
+        .etapas { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); margin: 1.5rem 0 0; }
+        .etapa {
+            border: 1px solid var(--linha); border-radius: .9rem;
+            padding: 1.25rem; background: var(--fundo);
+            display: flex; flex-direction: column; gap: .5rem;
+        }
+        .etapa .ano {
+            font-size: .7rem; font-weight: 700; letter-spacing: .08em;
+            text-transform: uppercase; color: var(--marca-escura);
+        }
+        .etapa .formato { font-size: .85rem; color: var(--tinta-fraca); }
+        .etapa ul { margin: .35rem 0 0; padding-left: 1.1rem; font-size: .9rem; color: var(--tinta-suave); }
+        .etapa li { margin-bottom: .3rem; }
+        .etapa .saida {
+            margin-top: auto; padding-top: .8rem; border-top: 1px dashed var(--linha);
+            font-size: .85rem;
+        }
+        .etapa .saida strong { color: var(--tinta); }
+
+        /* ------------------------------------------------------ tabelas */
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: .92rem; }
+        th, td { text-align: left; padding: .6rem .7rem; border-bottom: 1px solid var(--linha); vertical-align: top; }
+        th { font-weight: 700; background: var(--fundo-suave); font-size: .82rem; }
+        td:first-child { font-weight: 600; }
+        /* max-width e o que prende: sem ele o contenedor cresce junto com a
+           tabela e quem passa a rolar de lado e a pagina inteira, no celular */
+        .tabela-rola { max-width: 100%; overflow-x: auto; }
+        .tabela-rola table { min-width: 30rem; }
+
+        /* --------------------------------------------------- destaques */
+        .nota {
+            border-left: 3px solid var(--marca); background: var(--marca-clara);
+            padding: 1rem 1.2rem; border-radius: 0 .6rem .6rem 0; margin: 1.5rem 0;
+        }
+        .nota p:last-child { margin-bottom: 0; }
+
+        .medalhas { display: flex; flex-wrap: wrap; gap: .45rem; margin: .5rem 0 1.5rem; }
+        .medalha {
+            font-size: .82rem; background: var(--ouro-claro); color: var(--ouro);
+            padding: .3rem .75rem; border-radius: 999px; font-weight: 600;
+        }
+
+        /* --------------------------------------------------- comecar */
+        .passos { counter-reset: p; list-style: none; padding: 0; margin: 1rem 0 0; }
+        .passos li {
+            counter-increment: p; position: relative; padding-left: 2.6rem; margin-bottom: 1rem;
+        }
+        .passos li::before {
+            content: counter(p); position: absolute; left: 0; top: .05rem;
+            width: 1.8rem; height: 1.8rem; border-radius: 50%;
+            background: var(--marca); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: .9rem;
+        }
+
+        /* ------------------------------------------------------ links */
+        .links { display: grid; gap: .6rem; margin: 1rem 0 0; }
+        .link-guia {
+            display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+            border: 1px solid var(--linha); border-radius: .7rem;
+            padding: .85rem 1rem; text-decoration: none; color: var(--tinta);
+        }
+        .link-guia:hover { border-color: var(--marca); background: var(--fundo-suave); }
+        .link-guia .url { font-size: .8rem; color: var(--marca-escura); white-space: nowrap; }
+
+        /* ---------------------------------------------------- contato */
+        .contato {
+            margin-top: 3rem; padding: 1.75rem; border-radius: 1rem;
+            background: var(--tinta); color: #f8fafc;
+        }
+        .contato h2 { margin: 0 0 .5rem; color: #fff; font-size: 1.3rem; }
+        .contato p { color: #cbd5e1; margin-bottom: 1rem; }
+        .contato a { color: #7dd3fc; font-weight: 600; }
+        .vias { display: flex; flex-wrap: wrap; gap: 1.5rem; font-size: .95rem; }
+
+        .rodape {
+            margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--linha);
+            font-size: .82rem; color: var(--tinta-fraca);
+        }
+
+        @media (max-width: 52rem) {
+            .folha { padding: 2rem 1.25rem 3rem; }
+            h1 { font-size: 2rem; }
+            .etapas { grid-template-columns: 1fr; }
+            .topo { flex-direction: column; align-items: flex-start; }
+            /* A URL tem nowrap para nao quebrar no meio do endereco. Numa tela
+               estreita isso empurrava o flex e fazia a PAGINA rolar de lado —
+               medido: o cartao chegava a 419px numa janela de 390. Empilhado,
+               o endereco ganha a linha inteira e nada transborda. */
+            .link-guia { flex-direction: column; gap: .25rem; }
+            .link-guia .url { white-space: normal; overflow-wrap: anywhere; }
+        }
+
+        /*
+            Impressão. Nenhum outro kit tem, e é o que faltava para o
+            material servir de folheto deixado na escola: sem isso, sai
+            com fundo cinza, sem as URLs dos links e com cartão cortado
+            no meio da página.
+        */
+        @media print {
+            body { background: #fff; font-size: 10.5pt; }
+            .folha { max-width: none; padding: 0; }
+            h2 { margin-top: 1.4rem; font-size: 1.15rem; }
+            h1 { font-size: 1.9rem; }
+            .etapas { grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+            .etapa, .nota, .contato, table, .link-guia { break-inside: avoid; }
+            .contato { background: #fff; color: var(--tinta); border: 1px solid var(--tinta); }
+            .contato h2, .contato p, .contato a { color: var(--tinta); }
+            /* na folha impressa o link não é clicável: o endereço precisa aparecer */
+            .link-guia::after { content: " " attr(href); font-size: 9pt; color: var(--tinta-fraca); }
+            .link-guia .url { display: none; }
+            .nao-imprime { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="folha">
+
+        <header class="topo">
+            <a class="marca" href="/">
+                <img src="/images/logo.png" alt="">
+                Izicode Edu
+            </a>
+            <span class="etiqueta">Consultoria · Eventos maker</span>
+        </header>
+
+        <h1>Trilha Maker: do 1º ao 9º ano</h1>
+        <p class="abertura">
+            Três programas encadeados que levam o aluno da coordenação motora ao
+            hackathon. Não são eventos avulsos — cada um entrega a base de que o
+            seguinte precisa.
+        </p>
+
+        <div class="etapas">
+            <article class="etapa">
+                <span class="ano">1º ao 3º ano</span>
+                <h3>Oficinas em Rotação</h3>
+                <span class="formato">Meio período · 4 estações simultâneas</span>
+                <ul>
+                    <li>Construir, Mover, Desenhar e Desmontar</li>
+                    <li>20 minutos por estação, sem tela</li>
+                    <li>Sem competição</li>
+                </ul>
+                <p class="saida"><strong>O aluno leva:</strong> passaporte maker carimbado</p>
+            </article>
+
+            <article class="etapa">
+                <span class="ano">4º ao 6º ano</span>
+                <h3>Feira de Soluções</h3>
+                <span class="formato">Dia inteiro · equipes de 4</span>
+                <ul>
+                    <li>Problema real da própria escola</li>
+                    <li>Solução só com material reaproveitado</li>
+                    <li>Apresentação de 3 minutos</li>
+                </ul>
+                <p class="saida"><strong>O aluno leva:</strong> certificado e medalha</p>
+            </article>
+
+            <article class="etapa">
+                <span class="ano">8º e 9º ano</span>
+                <h3>Hackathon Escolar</h3>
+                <span class="formato">Dois dias · equipes de 4 a 5</span>
+                <ul>
+                    <li>Desafio com protótipo funcional</li>
+                    <li>Mentoria técnica e checkpoints</li>
+                    <li>Pitch de 5 minutos com júri</li>
+                </ul>
+                <p class="saida"><strong>O aluno leva:</strong> projeto e premiação</p>
+            </article>
+        </div>
+
+        <h2>O problema que a trilha resolve</h2>
+        <p>
+            Escola que contrata um hackathon avulso costuma ter a mesma
+            experiência: o evento é bonito, gera foto, e as equipes travam. E
+            travam sempre nos mesmos quatro pontos.
+        </p>
+        <ul>
+            <li>Ninguém sabe transformar um incômodo em pergunta de pesquisa.</li>
+            <li>A equipe sai construindo sem desenhar, e o que sai não é o que imaginaram.</li>
+            <li>Ninguém testa até o fim, e a falha aparece no palco.</li>
+            <li>A apresentação vira leitura de cartaz.</li>
+        </ul>
+        <div class="nota">
+            <p>
+                Nenhum desses é problema de tecnologia. São hábitos de projeto, e
+                hábito não se instala em dois dias — instala-se em anos, em doses
+                pequenas, começando muito antes de existir um Arduino na mesa.
+            </p>
+        </div>
+
+        <h2>O que cada etapa constrói</h2>
+        <div class="tabela-rola">
+            <table>
+                <thead>
+                    <tr><th></th><th>1º–3º</th><th>4º–6º</th><th>8º–9º</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Motor</td><td>pinça e encaixe</td><td>cortar, furar, medir</td><td>soldar e montar circuito</td></tr>
+                    <tr><td>Pesquisa</td><td>perceber e nomear</td><td>entrevistar três pessoas</td><td>validar com dado e fonte</td></tr>
+                    <tr><td>Projeto</td><td>desenhar antes</td><td>desenho aprovado</td><td>especificação e escopo</td></tr>
+                    <tr><td>Teste</td><td>tentativa e erro</td><td>ajuste com hora marcada</td><td>iteração por checkpoints</td></tr>
+                    <tr><td>Fala</td><td>contar no círculo</td><td>pitch de 3 minutos</td><td>pitch sob arguição</td></tr>
+                    <tr><td>Equipe</td><td>revezar e esperar</td><td>quatro papéis</td><td>papéis com entrega técnica</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Os quatro perfis</h2>
+        <p>
+            Liderança, design, engenharia e investigação atravessam a trilha
+            inteira. Nos anos iniciais é <strong>observação</strong> em ficha, sem
+            nota e sem rótulo. A partir do 4º ano vira <strong>papel</strong>, com
+            crachá e entrega própria. No 8º e 9º vira <strong>especialidade</strong>.
+        </p>
+        <p>
+            O valor para a escola não está em classificar criança. Está em chegar
+            ao 8º ano com histórico para montar equipes equilibradas — e em dar ao
+            aluno a chance de descobrir que é bom em algo que a prova não mede.
+        </p>
+
+        <h2>Medalha por categoria, nunca por colocação</h2>
+        <p>
+            Na Feira de Soluções são oito categorias para oito equipes: toda equipe
+            recebe uma, e nenhuma recebe a mesma. Cada categoria nomeia uma
+            competência observada durante o dia.
+        </p>
+        <div class="medalhas">
+            <span class="medalha">Solução mais criativa</span>
+            <span class="medalha">Melhor uso de material reaproveitado</span>
+            <span class="medalha">Equipe mais colaborativa</span>
+            <span class="medalha">Apresentação mais clara</span>
+            <span class="medalha">Projeto mais útil para a escola</span>
+            <span class="medalha">Melhor teste e ajuste</span>
+            <span class="medalha">Melhor pesquisa</span>
+            <span class="medalha">Mais persistente</span>
+        </div>
+        <p>
+            Entre 9 e 12 anos, classificação pública desloca o foco do problema para
+            a comparação: a equipe passa a construir o que impressiona o júri em vez
+            do que resolve. Ranking tem lugar — no hackathon do 8º e 9º ano, quando
+            o aluno já separa a crítica ao projeto da crítica a ele.
+        </p>
+
+        <h2>O que cada um entrega</h2>
+        <div class="tabela-rola">
+        <table>
+            <thead>
+                <tr><th>Item</th><th>Izicode</th><th>Escola</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Metodologia e roteiros</td><td>✔</td><td></td></tr>
+                <tr><td>Formação da equipe docente</td><td>✔</td><td></td></tr>
+                <tr><td>Fichas de observação e critérios</td><td>✔</td><td></td></tr>
+                <tr><td>Modelos de certificado, crachá e passaporte</td><td>✔</td><td></td></tr>
+                <tr><td>Acompanhamento no dia do evento</td><td>✔</td><td></td></tr>
+                <tr><td>Material de divulgação para as famílias</td><td>✔</td><td></td></tr>
+                <tr><td>Espaço e mobiliário</td><td></td><td>✔</td></tr>
+                <tr><td>Professores nas estações e mediações</td><td></td><td>✔</td></tr>
+                <tr><td>Material de consumo e arrecadação</td><td></td><td>✔</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="nota">
+            <p>
+                O modelo é de <strong>transferência, não de dependência</strong>: a
+                partir do segundo ano a escola roda as oficinas com a própria equipe,
+                e a Izicode acompanha só os eventos maiores. Consultoria que precisa
+                voltar todo mês para o programa funcionar não formou ninguém.
+            </p>
+        </div>
+
+        <h2>Como começar</h2>
+        <ol class="passos">
+            <li>
+                <strong>Uma Oficina de Rotação, em uma turma só.</strong>
+                Meio período, custo de material baixo, e a equipe docente vê o
+                modelo funcionando antes de decidir qualquer coisa maior.
+            </li>
+            <li>
+                <strong>Uma Feira de Soluções no semestre seguinte</strong>, com as
+                turmas que já passaram pela oficina.
+            </li>
+            <li>
+                <strong>O Hackathon</strong> quando houver uma turma de 8º ou 9º que
+                já tenha feito pelo menos uma Feira.
+            </li>
+        </ol>
+        <p>
+            Escola que inverte essa ordem costuma concluir que "os alunos não deram
+            conta". Não é isso: o percurso foi pulado.
+        </p>
+
+        <h2>Metodologia completa, aberta</h2>
+        <p>
+            Os três programas estão publicados por inteiro, sem cadastro. Pode ler,
+            imprimir e levar para a coordenação antes de falar com a gente.
+        </p>
+        <div class="links">
+            <a class="link-guia" href="https://izicode.com.br/guias/trilha-maker-escola/">
+                <span><strong>A trilha completa</strong> — progressão, calendário e perfis</span>
+                <span class="url">izicode.com.br/guias/trilha-maker-escola/</span>
+            </a>
+            <a class="link-guia" href="https://izicode.com.br/guias/oficinas-rotacao-maker/">
+                <span><strong>Oficinas em Rotação</strong> — 1º ao 3º ano</span>
+                <span class="url">izicode.com.br/guias/oficinas-rotacao-maker/</span>
+            </a>
+            <a class="link-guia" href="https://izicode.com.br/guias/feira-solucoes-maker/">
+                <span><strong>Feira de Soluções</strong> — 4º ao 6º ano</span>
+                <span class="url">izicode.com.br/guias/feira-solucoes-maker/</span>
+            </a>
+            <a class="link-guia" href="https://izicode.com.br/guias/hackathon-escolar/">
+                <span><strong>Hackathon Escolar</strong> — 8º e 9º ano</span>
+                <span class="url">izicode.com.br/guias/hackathon-escolar/</span>
+            </a>
+        </div>
+
+        <section class="contato">
+            <h2>Conversar sobre a sua escola</h2>
+            <p>
+                Trinta minutos para entender o calendário de vocês e propor uma data
+                para o piloto.
+            </p>
+            <div class="vias">
+                <span>📱 <a href="https://wa.me/5541998996996">(41) 99899-6996</a></span>
+                <span>✉️ <a href="mailto:contato@izicode.com.br">contato@izicode.com.br</a></span>
+                <span>🌐 <a href="https://izicode.com.br/contato">izicode.com.br/contato</a></span>
+            </div>
+        </section>
+
+        <p class="rodape">
+            Izicode Edu — plataforma e consultoria em robótica educacional.
+            Desde 2022: 140+ turmas atendidas, 2.902+ alunos impactados,
+            170+ projetos maker aplicados.
+        </p>
+
+    </main>
+</body>
+
+</html>
