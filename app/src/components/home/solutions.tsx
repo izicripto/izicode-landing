@@ -44,6 +44,7 @@ const LINHAS = [
     resumo:
       "Quando a escola quer montar o laboratório e preparar o corpo docente, a gente vai junto — do diagnóstico à primeira aula.",
     itens: [
+      "Trilha Maker: oficinas, feira de soluções e hackathon, do 1º ao 9º ano",
       "Diagnóstico e plano de implementação do laboratório maker",
       "Formação docente prática, com as ferramentas em mãos",
       "Projetos maker com Arduino, Micro:bit e materiais acessíveis",
@@ -52,7 +53,10 @@ const LINHAS = [
     ],
     cta: "Falar sobre consultoria",
     href: "/contato",
-    secundario: null,
+    // Leva para a seção logo abaixo, que abre a Trilha Maker em detalhe.
+    // Quem lê "a consultoria" numa frase quer saber o que isso é na
+    // prática, e o que ela compra é um evento com data e entrega.
+    secundario: { texto: "Ver os eventos maker", href: "/#eventos" },
   },
 ]
 

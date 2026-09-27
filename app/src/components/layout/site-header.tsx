@@ -24,6 +24,12 @@ import {
  */
 const NAV_LINKS = [
   { href: "/#solucoes", label: "Soluções" },
+  // soOndeCabe: medido no navegador, com este nono item o cabecalho passava
+  // a rolar de lado a partir de 1024px — largura de notebook comum. Em vez
+  // de tirar um item de outra pessoa, este some abaixo de 1280px, onde ele
+  // comprovadamente cabe. Abaixo disso a secao continua alcancavel pelo
+  // link secundario do bloco de Solucoes e pelo menu do celular.
+  { href: "/#eventos", label: "Eventos", soOndeCabe: true },
   { href: "/#sobre", label: "Sobre" },
   { href: "/#metodologia", label: "Metodologia" },
   { href: "/#ferramentas", label: "Ferramentas" },
@@ -52,7 +58,10 @@ export function SiteHeader() {
             <a
               key={link.href}
               href={link.href}
-              className="text-base font-bold text-muted-foreground transition-colors hover:text-primary"
+              className={
+                "text-base font-bold text-muted-foreground transition-colors hover:text-primary" +
+                (link.soOndeCabe ? " hidden xl:inline" : "")
+              }
             >
               {link.label}
             </a>
