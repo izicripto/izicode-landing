@@ -44,7 +44,7 @@ const PILLARS = [
 
 export function Methodology() {
   return (
-    <section id="metodologia" className="bg-muted/40 py-28">
+    <section id="metodologia" className="bg-muted/40 py-20">
       <div className="mx-auto grid max-w-7xl items-center gap-16 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
         <div className="space-y-10">
           <h2 className="text-balance font-display text-4xl font-bold leading-tight tracking-tight text-primary lg:text-5xl">

@@ -35,25 +35,25 @@ const COMPETITIONS = [
 
 export function Champions() {
   return (
-    <section className="relative overflow-hidden bg-background py-24">
+    <section className="relative overflow-hidden bg-background py-20">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#0000_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.03]" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-        <span className="mb-8 inline-flex items-center gap-2 rounded-full border bg-muted/60 px-5 py-2 text-sm font-bold uppercase tracking-widest text-muted-foreground">
+        <span className="mb-5 inline-flex items-center gap-2 rounded-full border bg-muted/60 px-5 py-2 text-sm font-bold uppercase tracking-widest text-muted-foreground">
           Nossos alunos vão além
         </span>
         <h2 className="font-display text-4xl font-bold tracking-tight text-foreground lg:text-5xl">
           Apoio a <span className="text-primary">Campeões</span>
         </h2>
-        <p className="mx-auto mb-16 mt-6 max-w-3xl text-xl font-light leading-relaxed text-muted-foreground">
+        <p className="mx-auto mb-8 mt-6 max-w-3xl text-xl font-light leading-relaxed text-muted-foreground">
           Apoiamos ativamente a participação de nossos alunos e escolas parceiras nos maiores eventos de tecnologia do
           Brasil e do mundo.
         </p>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-3">
           {CHAMPIONS.map((c) => (
             <Card
               key={c.title}
-              className="rounded-[2rem] bg-muted/40 py-8 text-left shadow-none transition-all hover:-translate-y-1 hover:bg-muted/70 hover:shadow-lg"
+              className="rounded-[2rem] bg-muted/40 py-6 text-left shadow-none transition-all hover:-translate-y-1 hover:bg-muted/70 hover:shadow-lg"
             >
               <CardHeader>
                 <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10">
@@ -68,7 +68,7 @@ export function Champions() {
           ))}
         </div>
 
-        <div className="mt-20">
+        <div className="mt-12">
           <p className="mb-8 text-sm font-bold uppercase tracking-widest text-muted-foreground">
             Eventos e competições em que já mentoramos equipes
           </p>
@@ -87,7 +87,7 @@ export function Champions() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-center gap-6">
+        <div className="mt-10 flex flex-col items-center gap-6">
           <p className="text-lg font-medium uppercase tracking-wide text-muted-foreground">
             Apoiamos para ver nossos alunos vencerem
           </p>

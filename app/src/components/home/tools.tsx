@@ -19,7 +19,7 @@ const TOOLS: Tool[] = [
 
 export function Tools() {
   return (
-    <section id="ferramentas" className="bg-background py-28">
+    <section id="ferramentas" className="bg-background py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-14 max-w-3xl text-center">
           <h2 className="text-balance font-display text-4xl font-bold tracking-tight text-foreground lg:text-5xl">

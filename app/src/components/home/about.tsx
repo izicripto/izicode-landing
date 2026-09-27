@@ -25,7 +25,7 @@ const PILLARS = [
 
 export function About() {
   return (
-    <section id="sobre" className="bg-background py-28">
+    <section id="sobre" className="bg-background py-20">
       <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
         <Badge className="mb-6 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-bold uppercase tracking-wide text-primary hover:bg-primary/10">
           Sobre a Izicode Edu

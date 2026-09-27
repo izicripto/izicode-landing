@@ -6,12 +6,7 @@ import {
 } from "@/components/ui/accordion"
 
 const FAQS = [
-  {
-    question: "Quais são os serviços específicos da Izicode?",
-    answer:
-      "Três frentes, não uma coisa só: a plataforma (biblioteca de projetos, gerador de aulas com IA e gamificação) é gratuita para qualquer professor. Para a escola que quer implementação de verdade, vendemos formação docente e consultoria completa de laboratório maker. E para quem quer começar sozinho, sem depender da escola, tem o Kit Missão Maker.",
-  },
-  {
+    {
     question: "A Izicode ajuda na adequação à BNCC?",
     answer:
       "Sim! Todo nosso material é alinhado à Base Nacional Comum Curricular, focando especificamente nas competências de Cultura Digital, Pensamento Científico e Argumentação — e isso vale tanto para o conteúdo gratuito da plataforma quanto para a consultoria.",
@@ -35,7 +30,7 @@ const FAQS = [
 
 export function Faq() {
   return (
-    <section id="faq" className="bg-background py-28">
+    <section id="faq" className="bg-background py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <h2 className="text-balance font-display text-4xl font-bold tracking-tight text-foreground lg:text-5xl">

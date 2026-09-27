@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 
 export function ContactCta() {
   return (
-    <section id="contato" className="relative overflow-hidden bg-primary py-24 text-primary-foreground">
+    <section id="contato" className="relative overflow-hidden bg-primary py-20 text-primary-foreground">
       <div className="mx-auto max-w-7xl px-4 py-6 text-center sm:px-6 lg:px-8">
         <h2 className="text-balance font-display text-4xl font-bold leading-tight tracking-tight lg:text-5xl">
           Transforme sua Escola em um Polo de Inovação
