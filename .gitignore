@@ -104,3 +104,8 @@ public/app-build/
 # Pasta descartavel da previa local (scripts/previa-local.mjs):
 # public/ misturado com o build do React, como o deploy monta.
 .previa/
+
+# Propostas preenchidas: contem nome de escola, valor negociado e contato
+# de pessoa real. O repositorio e publico — o modelo em branco fica em
+# docs/PROPOSTA-TRILHA-MAKER.md; as copias preenchidas ficam aqui e nao sobem.
+propostas/
