@@ -4,14 +4,17 @@ Material para a equipe comercial usar com escolas, e para a escola usar com
 as famílias. **Não é conteúdo público**: fica aqui, no repositório, e não é
 publicado em `/guias/`.
 
-Os guias públicos explicam a metodologia e servem para a escola encontrar a
-Izicode pela busca. Este kit é o que se usa depois que ela encontrou.
+**A metodologia não é pública.** Os roteiros, as fichas de observação e os
+critérios estão em `docs/trilha-maker/` e são entregues dentro do contrato
+de consultoria, junto com a formação da equipe. No site há apenas a prévia
+comercial, na seção de Eventos da home.
 
-| Documento público | Para quem |
-|---|---|
-| [Trilha Maker: do 1º ao 9º ano](/guias/trilha-maker-escola/) | direção e coordenação |
-| [Oficinas em Rotação](/guias/oficinas-rotacao-maker/) | coordenação do Fundamental I |
-| [Feira de Soluções](/guias/feira-solucoes-maker/) | coordenação e professores |
+A exceção é o guia de Hackathon Escolar, que já era aberto antes da trilha
+existir e continua servindo de porta de entrada pela busca:
+izicode.com.br/guias/hackathon-escolar/
+
+A folha de apresentação para reunião, essa sim, é feita para enviar:
+izicode.com.br/kits/trilha-maker.html
 
 ---
 
@@ -33,7 +36,6 @@ Assunto: **Trilha maker na [NOME DA ESCOLA]: começando por uma turma**
 > maior, e o custo de material é baixo porque quase tudo é reaproveitado.
 >
 > A metodologia completa está aberta aqui, sem cadastro:
-> izicode.com.br/guias/trilha-maker-escola/
 >
 > Se fizer sentido, marco 30 minutos para entender o calendário de vocês.
 >

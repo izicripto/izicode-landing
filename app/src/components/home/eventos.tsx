@@ -1,45 +1,46 @@
-import { ArrowRight, Boxes, Medal, Rocket } from "lucide-react"
+import { Boxes, Medal, Rocket } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 /**
- * Trilha Maker: a oferta de eventos, dentro da linha de consultoria.
+ * Consultoria para eventos maker — prévia comercial.
  *
- * Escola não compra "consultoria" — compra um evento com ano escolar,
- * duração e entrega. São esses três dados em cada cartão, e nada além.
+ * O que esta seção NÃO faz: explicar a metodologia. A Trilha Maker é o que
+ * a escola contrata, e o conteúdo dela (roteiros, estações, fichas de
+ * observação, critérios) é material de negociação — vive em
+ * docs/trilha-maker/ e é entregue dentro do contrato de consultoria, não
+ * publicado.
  *
- * A primeira versão desta seção tinha 251 palavras e ocupava 1,3 tela: o
- * argumento de venda inteiro, o bloco do "problema que a trilha resolve" e
- * dois CTAs concorrendo. Era a maior seção da home. Quem precisa do
- * argumento clica na metodologia, que está aberta; quem está decidindo
- * precisa saber o que é, para quem e quanto dura.
+ * Uma versão anterior desta seção linkava os três guias completos, abertos
+ * no site. Isso entregava de graça o que a consultoria vende.
+ *
+ * Aqui fica só o que ajuda a escola a reconhecer que existe algo para ela:
+ * a faixa etária, o formato e o que o aluno leva para casa. O resto é
+ * conversa.
  */
 
-const ETAPAS = [
+const FORMATOS = [
   {
     icon: Boxes,
     anos: "1º ao 3º ano",
-    titulo: "Oficinas em Rotação",
+    titulo: "Oficinas maker",
     formato: "Meio período",
-    resumo: "Quatro estações, sem tela e sem competição.",
-    href: "/guias/oficinas-rotacao-maker/",
+    leva: "Passaporte maker",
     cor: "bg-sky-100 text-sky-700",
   },
   {
     icon: Medal,
     anos: "4º ao 6º ano",
-    titulo: "Feira de Soluções",
+    titulo: "Feira de soluções",
     formato: "Dia inteiro",
-    resumo: "Um problema real da escola, resolvido com material reaproveitado.",
-    href: "/guias/feira-solucoes-maker/",
+    leva: "Certificado e medalha",
     cor: "bg-amber-100 text-amber-700",
   },
   {
     icon: Rocket,
     anos: "8º e 9º ano",
-    titulo: "Hackathon Escolar",
+    titulo: "Hackathon escolar",
     formato: "Dois dias",
-    resumo: "Protótipo funcional, mentoria e pitch diante de um júri.",
-    href: "/guias/hackathon-escolar/",
+    leva: "Projeto e premiação",
     cor: "bg-indigo-100 text-indigo-700",
   },
 ]
@@ -47,49 +48,44 @@ const ETAPAS = [
 export function Eventos() {
   return (
     <section id="eventos" className="border-y bg-background py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <span className="text-xs font-bold uppercase tracking-wider text-primary">
-            Consultoria · Eventos maker
+            Consultoria
           </span>
           <h2 className="mt-3 font-display text-4xl font-bold tracking-tight">
-            Trilha Maker: do 1º ao 9º ano
+            Eventos maker na sua escola
           </h2>
           <p className="mt-3 text-lg text-muted-foreground">
-            Três programas encadeados, que a escola contrata juntos ou um de cada vez.
+            Organizamos e conduzimos o evento com a sua equipe: metodologia,
+            formação dos professores e acompanhamento no dia.
           </p>
         </div>
 
-        <div className="mt-10 grid gap-5 lg:grid-cols-3">
-          {ETAPAS.map((e) => (
-            <a
-              key={e.titulo}
-              href={e.href}
-              className="group flex flex-col rounded-2xl border bg-card p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"
+        <div className="mt-10 grid gap-4 sm:grid-cols-3">
+          {FORMATOS.map((f) => (
+            <div
+              key={f.titulo}
+              className="rounded-2xl border bg-card p-5 text-center shadow-sm"
             >
-              <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl ${e.cor}`}>
-                <e.icon className="h-5 w-5" />
+              <div
+                className={`mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${f.cor}`}
+              >
+                <f.icon className="h-5 w-5" />
               </div>
-
-              <p className="text-xs font-bold uppercase tracking-wider text-primary">{e.anos}</p>
-              <h3 className="mt-1 font-display text-xl font-bold">{e.titulo}</h3>
-              <p className="mt-0.5 text-sm text-muted-foreground">{e.formato}</p>
-
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-                {e.resumo}
+              <p className="text-xs font-bold uppercase tracking-wider text-primary">
+                {f.anos}
               </p>
-
-              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-                Ver a metodologia
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </span>
-            </a>
+              <h3 className="mt-1 font-display text-lg font-bold">{f.titulo}</h3>
+              <p className="mt-0.5 text-sm text-muted-foreground">{f.formato}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{f.leva}</p>
+            </div>
           ))}
         </div>
 
         <div className="mt-10 text-center">
           <Button asChild size="lg">
-            <a href="/contato">Falar sobre a trilha na sua escola</a>
+            <a href="/contato">Solicitar uma proposta</a>
           </Button>
           <p className="mt-3 text-sm text-muted-foreground">
             Para começar, a sugestão é um piloto de meio período, em uma turma só.

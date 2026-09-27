@@ -178,13 +178,13 @@ Desde 2022, trabalhando robótica e cultura maker dentro da sala de aula.
 | Equipes formadas | 106+ |
 | Projetos maker aplicados | 170+ |
 
-A metodologia completa dos três programas está publicada e aberta, sem
-cadastro. Pode conferir antes de decidir:
+Para conhecer o nosso padrão de material antes de decidir, o guia de
+hackathon escolar está aberto, sem cadastro:
+izicode.com.br/guias/hackathon-escolar/
 
-- izicode.com.br/guias/trilha-maker-escola/
-- izicode.com.br/guias/oficinas-rotacao-maker/
-- izicode.com.br/guias/feira-solucoes-maker/
-- izicode.com.br/guias/hackathon-escolar/
+Os roteiros completos dos três programas, as fichas de observação de perfis
+e os modelos de certificado fazem parte da consultoria e são entregues
+junto com a formação da equipe.
 
 Apresentação resumida: izicode.com.br/kits/trilha-maker.html
 

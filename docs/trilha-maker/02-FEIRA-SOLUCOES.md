@@ -283,5 +283,5 @@ e pitch sob tempo. O aluno que fez a Feira duas vezes chega lá sabendo
 pesquisar, desenhar antes de construir, testar e falar em público.
 
 O caminho completo está em
-[Trilha Maker: do 1º ao 9º ano](/guias/trilha-maker-escola/), e o evento
+[Trilha Maker: do 1º ao 9º ano](00-TRILHA-COMPLETA.md), e o evento
 final em [Hackathon Escolar](/guias/hackathon-escolar/).

@@ -252,4 +252,4 @@ construção e apresentação. E a Feira prepara o **Hackathon (8º e 9º ano)**
 onde entram programação, eletrônica e validação com dados.
 
 A progressão inteira está em
-[Trilha Maker: do 1º ao 9º ano](/guias/trilha-maker-escola/).
+[Trilha Maker: do 1º ao 9º ano](00-TRILHA-COMPLETA.md).

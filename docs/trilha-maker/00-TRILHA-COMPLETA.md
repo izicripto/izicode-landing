@@ -6,8 +6,8 @@ precisa.
 
 | Etapa | Programa | Formato | Ano escolar |
 |---|---|---|---|
-| 1 | [Oficinas Maker em Rotação](/guias/oficinas-rotacao-maker/) | meio período | 1º ao 3º |
-| 2 | [Feira de Soluções Maker](/guias/feira-solucoes-maker/) | dia inteiro | 4º ao 6º |
+| 1 | [Oficinas Maker em Rotação](01-OFICINAS-ROTACAO.md) | meio período | 1º ao 3º |
+| 2 | [Feira de Soluções Maker](02-FEIRA-SOLUCOES.md) | dia inteiro | 4º ao 6º |
 | 3 | [Hackathon Escolar](/guias/hackathon-escolar/) | dois dias | 8º e 9º |
 
 O 7º ano é, de propósito, ano de repetição: o aluno volta à Feira, agora em
