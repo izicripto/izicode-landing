@@ -36,12 +36,22 @@
 
 <body class="bg-white min-h-screen flex flex-col md:flex-row">
 
-    <!-- Metade Azul Claro (Visual/Branding) -->
-    <div class="hidden md:flex md:w-1/2 bg-brand-100 items-center justify-center p-12">
-        <div class="max-w-md text-center">
+    <!-- Metade Visual/Branding: texto na area branca superior (sempre
+         legivel) e a foto do robo abaixo em tamanho original, sem corte,
+         com uma leve transparencia e creditos no rodape. -->
+    <div class="hidden md:flex md:w-1/2 flex-col bg-white overflow-hidden">
+        <div class="text-center p-12">
             <img src="images/logo.png" alt="Izicode Logo" class="w-32 h-32 mx-auto mb-8">
             <h1 class="font-display text-4xl font-bold text-slate-900 mb-4">Bem-vindo à Revolução Maker</h1>
             <p class="text-slate-600 text-lg">Acesse as ferramentas que vão transformar a educação na sua escola.</p>
+        </div>
+        <div class="relative flex-1">
+            <img src="images/telalogin.jpg" alt="Robô educacional montado com Arduino"
+                style="width: 100%; height: 100%; object-fit: contain; display: block;">
+            <div class="absolute inset-0" style="background: rgba(255, 255, 255, 0.25); pointer-events: none;"></div>
+            <p class="absolute text-xs text-slate-400" style="bottom: 8px; left: 0; right: 0; text-align: center;">
+                Foto: robô educacional com Arduino — Izicode Edu
+            </p>
         </div>
     </div>
 
