@@ -1,4 +1,4 @@
-"""Gera o blog estático (public/blog/) no padrão dos guias. Uso: python scripts/gerar-blog.py public
+"""Gera o blog estático (public/blog/) no padrão dos guias. Uso: python scripts/gerar-blog.py public """
 import html, json, pathlib, sys
 
 RAIZ = pathlib.Path(sys.argv[1])  # .../izicodeeduportal/public
