@@ -57,6 +57,31 @@
     <priority>0.6</priority>
   </url>
 
+  <!-- Blog: artigos curtos que respondem a buscas de professor. -->
+  <url>
+    <loc>https://izicode.com.br/blog/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/blog/scratch-microbit-ou-arduino/</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/blog/primeira-aula-de-robotica/</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://izicode.com.br/blog/rubrica-avaliacao-projetos-maker/</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
   <!-- Guias: material de referência que responde a busca de professor.
        Ficam em caminho limpo (/guias/<assunto>) e são HTML estático — a
        versão anterior usava ?doc=... e montava o texto por JavaScript. -->

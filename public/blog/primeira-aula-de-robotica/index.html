@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Primeira aula de robótica: um roteiro de 50 minutos (sem kit) — Blog Izicode Edu</title>
+<meta name="description" content="Plano de aula pronto para a primeira aula de robótica: atividade desplugada de algoritmos, LED piscando no simulador Tinkercad e desafio do semáforo, em 50 minutos e sem comprar nada.">
+<link rel="canonical" href="https://izicode.com.br/blog/primeira-aula-de-robotica/">
+<link rel="icon" type="image/png" href="/images/logo.png">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Izicode Edu">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Primeira aula de robótica: um roteiro de 50 minutos (sem kit)">
+<meta property="og:description" content="Plano de aula pronto para a primeira aula de robótica: atividade desplugada de algoritmos, LED piscando no simulador Tinkercad e desafio do semáforo, em 50 minutos e sem comprar nada.">
+<meta property="og:url" content="https://izicode.com.br/blog/primeira-aula-de-robotica/">
+<meta property="og:image" content="https://izicode.com.br/hero-lab.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Primeira aula de robótica: um roteiro de 50 minutos (sem kit)",
+  "description": "Plano de aula pronto para a primeira aula de robótica: atividade desplugada de algoritmos, LED piscando no simulador Tinkercad e desafio do semáforo, em 50 minutos e sem comprar nada.",
+  "inLanguage": "pt-BR",
+  "datePublished": "2026-10-03",
+  "dateModified": "2026-10-03",
+  "image": "https://izicode.com.br/hero-lab.jpg",
+  "author": {
+    "@type": "Organization",
+    "name": "Izicode Edu",
+    "url": "https://izicode.com.br"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Izicode Edu",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://izicode.com.br/images/logo.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://izicode.com.br/blog/primeira-aula-de-robotica/"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/guias.css">
+<script src="/js/consentimento.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17924419542"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'AW-17924419542');
+gtag('config', 'G-7FZBXZXZ16');
+</script>
+</head>
+<body>
+
+<header class="gz-topo">
+  <a class="gz-marca" href="/"><img src="/images/logo.png" alt="Izicode Edu" width="36" height="36"><span>Izicode Edu</span></a>
+  <nav class="gz-nav">
+    <a href="/blog/">Blog</a>
+    <a href="/guias/">Guias</a>
+    <a href="/planos">Planos</a>
+    <a class="gz-botao" href="/login.html">Começar grátis</a>
+  </nav>
+</header>
+
+<main class="gz-pagina">
+  <nav class="gz-trilha" aria-label="Você está aqui">
+    <a href="/">Início</a> <span aria-hidden="true">›</span>
+    <a href="/blog/">Blog</a> <span aria-hidden="true">›</span>
+    <span>Primeira aula de robótica: um roteiro de 50 minutos (sem kit)</span>
+  </nav>
+
+  <article class="gz-artigo">
+    <h1>Primeira aula de robótica: um roteiro de 50 minutos (sem kit)</h1>
+    <p><small>Publicado em <time datetime="2026-10-03">3 de outubro de 2026</time> · Izicode Edu</small></p>
+
+    <p>A primeira aula de robótica define o tom do ano inteiro. Se ela for uma palestra sobre
+       componentes, a turma desliga; se for um caos de peças, ninguém aprende. O roteiro abaixo cabe
+       em uma aula de 50 minutos, funciona do 6º ano ao Ensino Médio e <strong>não exige kit</strong>:
+       só computadores com navegador e uma conta gratuita no Tinkercad.</p>
+
+    <h2 id="objetivos">Objetivos da aula</h2>
+    <ul>
+    <li>Entender que um robô executa <strong>exatamente</strong> as instruções que recebe — nem mais, nem menos.</li>
+    <li>Escrever, testar e corrigir um algoritmo simples.</li>
+    <li>Programar um LED em um Arduino simulado e adaptar o código para um semáforo.</li>
+    </ul>
+
+    <h2 id="preparacao">Preparação (antes da aula)</h2>
+    <ul>
+    <li>Crie uma turma no Tinkercad e gere o código de acesso — assim os alunos entram sem e-mail.</li>
+    <li>Teste o computador da sala: o simulador roda no navegador, sem instalar nada.</li>
+    <li>Separe 3 objetos para a atividade desplugada (por exemplo, uma garrafa, um livro e um estojo).</li>
+    </ul>
+
+    <h2 id="roteiro">Roteiro minuto a minuto</h2>
+    <table class="gz-tabela-texto">
+    <thead><tr><th>Tempo</th><th>Etapa</th><th>O que acontece</th></tr></thead>
+    <tbody>
+    <tr><td>0–5 min</td><td>Abertura</td><td>Pergunte: "o que um robô precisa para buscar uma garrafa do outro lado da sala?". Anote as respostas: sensores, motor, instruções.</td></tr>
+    <tr><td>5–15 min</td><td>Robô humano</td><td>Um aluno é o robô; a turma dita instruções para ele pegar a garrafa ("dê 3 passos", "vire 90° à direita"). O robô só obedece ao pé da letra. Os erros aparecem sozinhos.</td></tr>
+    <tr><td>15–20 min</td><td>Conceitos</td><td>Nomeie o que surgiu: <em>algoritmo</em> (a sequência), <em>bug</em> (a instrução errada) e <em>depuração</em> (achar e corrigir).</td></tr>
+    <tr><td>20–35 min</td><td>LED no simulador</td><td>No Tinkercad Circuits, cada dupla arrasta um Arduino Uno, um LED e um resistor, e usa os blocos para ligar e desligar o LED a cada segundo.</td></tr>
+    <tr><td>35–45 min</td><td>Desafio do semáforo</td><td>Três LEDs (verde, amarelo e vermelho) com tempos diferentes. Quem terminar adiciona um botão de pedestre.</td></tr>
+    <tr><td>45–50 min</td><td>Fechamento</td><td>Cada dupla responde em uma frase: "qual foi o bug mais difícil e como vocês acharam?".</td></tr>
+    </tbody>
+    </table>
+
+    <h2 id="dicas">Dicas que fazem diferença</h2>
+    <ul>
+    <li><strong>Trabalhe em duplas com papéis:</strong> um opera o mouse, o outro lê e confere o
+        circuito. Troquem a cada 10 minutos.</li>
+    <li><strong>Não corrija o código pelo aluno.</strong> Pergunte "o que você esperava que
+        acontecesse?" e "o que aconteceu?". A diferença entre as duas respostas é o bug.</li>
+    <li><strong>Resistor sempre:</strong> o simulador avisa quando o LED queima sem resistor. Use
+        isso — é a lição de eletrônica mais barata que existe.</li>
+    <li><strong>Salve o semáforo.</strong> Ele vira a base da aula seguinte, quando dá para
+        trocar os blocos pelo código em texto.</li>
+    </ul>
+
+    <h2 id="avaliacao">Como avaliar esta aula</h2>
+    <p>Não dê nota ao circuito pronto. Observe três coisas: se a dupla conseguiu descrever o
+       algoritmo antes de programar, se testou e corrigiu sozinha, e se a resposta do fechamento
+       mostra que entendeu o que é depuração. Para os projetos que vêm depois, uma rubrica ajuda a
+       manter a avaliação justa — veja o modelo no artigo sobre avaliação de projetos maker.</p>
+
+    <h2 id="proxima">E na próxima aula?</h2>
+    <p>Com o semáforo salvo, o caminho natural é ver o mesmo projeto em código escrito, entender
+       as funções <code>setup()</code> e <code>loop()</code> e, se a escola tiver placas, montar
+       o circuito de verdade. Se não tiver, o Tinkercad sustenta várias semanas de aulas com
+       sensores, motores e displays.</p>
+  </article>
+
+  <aside class="gz-cta">
+    <h2>Leve isso para a sua sala de aula</h2>
+    <p>A plataforma da Izicode gera planos de aula com IA, alinhados à BNCC, e traz roteiros
+       de projeto prontos para imprimir ou salvar em PDF. O plano gratuito não expira e não pede cartão.</p>
+    <p class="gz-acoes">
+      <a class="gz-botao" href="/login.html">Criar conta grátis</a>
+      <a class="gz-link" href="/planos">Ver planos e preços</a>
+    </p>
+  </aside>
+
+  <section class="gz-relacionados">
+    <h2>Continue lendo</h2>
+    <ul>
+      <li><a href="/blog/scratch-microbit-ou-arduino/">Scratch, micro:bit ou Arduino: qual usar em cada etapa da escola</a></li>
+      <li><a href="/blog/rubrica-avaliacao-projetos-maker/">Como avaliar projetos maker: rubrica pronta para usar</a></li>
+      <li><a href="/guias/hackathon-escolar/">Como organizar um hackathon escolar: guia completo</a></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="gz-rodape">
+  <p>© Izicode Edu — plataforma e consultoria em robótica educacional.</p>
+  <p><a href="/contato">Fale com a gente</a> · <a href="/planos">Planos</a> · <a href="/">Início</a></p>
+  <p><a href="/termos/">Termos de Uso</a> · <a href="/privacidade/">Política de Privacidade</a> · <a href="#" onclick="izicodeAbrirCookies();return false">Preferências de cookies</a></p>
+</footer>
+
+</body>
+</html>
