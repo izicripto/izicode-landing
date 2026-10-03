@@ -50,7 +50,7 @@ Plataforma B2B/B2C para escolas, professores autônomos e famílias, focada em r
 - [ ] Expandir Biblioteca e trilhas da Academia do Professor.
 
 ### 2. Monetização
-- [ ] Sistema de cupons de desconto.
+- [x] Cupons de desconto (03/10/2026): percentual ou valor fixo, por plano, com validade e limite de usos; criados em Admin → Cupons, aplicados e contados no servidor (`functions/cupons.js`). **Precisa de deploy de functions e rules.**
 - [ ] Marketplace de projetos entre professores.
 
 ### 3. Operação

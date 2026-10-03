@@ -37,6 +37,7 @@ import { AdminUsuariosPage } from "@/pages/app/admin/usuarios"
 import { AdminEscolasPage } from "@/pages/app/admin/escolas"
 import { AdminVendasPage } from "@/pages/app/admin/vendas"
 import { AdminSuportePage } from "@/pages/app/admin/suporte"
+import { AdminCuponsPage } from "@/pages/app/admin/cupons"
 import { AdminCopilotoPage } from "@/pages/app/admin/copiloto"
 
 /** Site institucional público: header e footer da landing. */
@@ -117,6 +118,7 @@ function App() {
                 <Route path="usuarios" element={<AdminUsuariosPage />} />
                 <Route path="escolas" element={<AdminEscolasPage />} />
                 <Route path="vendas" element={<AdminVendasPage />} />
+                <Route path="cupons" element={<AdminCuponsPage />} />
                 <Route path="suporte" element={<AdminSuportePage />} />
                 <Route path="copiloto" element={<AdminCopilotoPage />} />
               </Route>

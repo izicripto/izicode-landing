@@ -12,6 +12,8 @@ import {
   Copy,
   Check,
   QrCode,
+  TicketPercent,
+  X,
 } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import { isProUser } from "@/lib/roles"
@@ -23,7 +25,7 @@ import {
   calcularEscola,
   formatarPreco,
 } from "@/lib/planos"
-import type { CheckoutResposta } from "@/lib/checkout"
+import type { CheckoutResposta, PreviaCupom } from "@/lib/checkout"
 import {
   criarCheckout,
   confirmarPagamento,
@@ -31,6 +33,8 @@ import {
   lerPagamentoPendente,
   limparPagamentoPendente,
   descreverFalhaCheckout,
+  validarCupom,
+  motivoCupom,
   type StatusPagamento,
 } from "@/lib/checkout"
 import { PageHeader } from "@/components/dashboard/page-header"
@@ -69,6 +73,15 @@ export function AssinaturaPage() {
   // do painel.
   const [pix, setPix] = useState<CheckoutResposta | null>(null)
   const [copiado, setCopiado] = useState(false)
+
+  // Cupom: um campo só para a página. Ao aplicar, ele é conferido contra cada
+  // plano visível, e cada card mostra o próprio preço com desconto (ou nada,
+  // se o cupom não vale para ele). O servidor confere de novo ao gerar o Pix.
+  const [cupomTexto, setCupomTexto] = useState(params.get("cupom") ?? "")
+  const [cupomAplicado, setCupomAplicado] = useState<string | null>(null)
+  const [previas, setPrevias] = useState<Record<string, PreviaCupom>>({})
+  const [cupomErro, setCupomErro] = useState<string | null>(null)
+  const [validandoCupom, setValidandoCupom] = useState(false)
 
   // O id vem da URL de retorno da AbacatePay; o localStorage é a reserva
   // para quando a pessoa volta pelo botão do navegador, sem a query.
@@ -123,7 +136,11 @@ export function AssinaturaPage() {
   async function assinar(planId: string, assentos?: { professores: number; alunos: number }) {
     setCriando(planId)
     try {
-      const r = await criarCheckout({ plan: planId, ...assentos })
+      const r = await criarCheckout({
+        plan: planId,
+        ...assentos,
+        ...(previas[planId] && cupomAplicado ? { cupom: cupomAplicado } : {}),
+      })
       guardarPagamentoPendente(r.paymentId)
       setPix(r)
       // O id entra na URL para a pessoa poder recarregar a página, ou
@@ -136,6 +153,100 @@ export function AssinaturaPage() {
       if (titulo.includes("indisponíveis")) setIndisponivel(true)
       setCriando(null)
     }
+  }
+
+  async function aplicarCupom(alvos: { plan: string; professores?: number; alunos?: number }[]) {
+    const codigo = cupomTexto.trim()
+    if (!codigo) return
+    setValidandoCupom(true)
+    setCupomErro(null)
+    const resultados = await Promise.allSettled(alvos.map((a) => validarCupom({ ...a, cupom: codigo })))
+    const novas: Record<string, PreviaCupom> = {}
+    let motivo: string | null = null
+    resultados.forEach((r, i) => {
+      if (r.status === "fulfilled") novas[alvos[i].plan] = r.value
+      else motivo ??= motivoCupom(r.reason) ?? "Não foi possível conferir o cupom agora."
+    })
+    setPrevias(novas)
+    const validas = Object.values(novas)
+    if (validas.length > 0) {
+      setCupomAplicado(validas[0].codigo)
+    } else {
+      setCupomAplicado(null)
+      setCupomErro(motivo)
+    }
+    setValidandoCupom(false)
+  }
+
+  function removerCupom() {
+    setCupomAplicado(null)
+    setPrevias({})
+    setCupomErro(null)
+    setCupomTexto("")
+  }
+
+  /** Preço do card: riscado + com desconto quando o cupom vale para o plano. */
+  function preco(planId: string, centavos: number) {
+    const classe = "font-display text-3xl font-extrabold tabular-nums"
+    const previa = previas[planId]
+    if (!previa) return <span className={classe}>{formatarPreco(centavos)}</span>
+    return (
+      <>
+        <span className="text-base text-muted-foreground line-through tabular-nums">
+          {formatarPreco(previa.precoOriginalCentavos)}
+        </span>{" "}
+        <span className={classe + " text-emerald-700"}>{formatarPreco(previa.precoFinalCentavos)}</span>
+      </>
+    )
+  }
+
+  function campoCupom(alvos: { plan: string; professores?: number; alunos?: number }[]) {
+    return (
+      <div className="mb-6 max-w-xl rounded-2xl border bg-card p-4 shadow-sm">
+        {cupomAplicado ? (
+          <div className="flex flex-wrap items-center gap-3 text-sm">
+            <TicketPercent className="h-5 w-5 text-emerald-600" />
+            <p className="min-w-0 flex-1">
+              Cupom <strong className="font-mono">{cupomAplicado}</strong> aplicado
+              {alvos.length > 1 && Object.keys(previas).length < alvos.length
+                ? " — vale só para os planos com preço em verde."
+                : "."}
+            </p>
+            <Button variant="ghost" size="sm" onClick={removerCupom}>
+              <X className="h-4 w-4" />
+              Remover
+            </Button>
+          </div>
+        ) : (
+          <form
+            className="flex flex-wrap items-center gap-2"
+            onSubmit={(e) => {
+              e.preventDefault()
+              aplicarCupom(alvos)
+            }}
+          >
+            <TicketPercent className="h-5 w-5 text-muted-foreground" />
+            <label htmlFor="cupom" className="text-sm font-semibold">
+              Tem um cupom?
+            </label>
+            <input
+              id="cupom"
+              value={cupomTexto}
+              onChange={(e) => setCupomTexto(e.target.value.toUpperCase())}
+              placeholder="CÓDIGO"
+              maxLength={30}
+              autoComplete="off"
+              className="min-w-0 flex-1 rounded-xl border bg-background px-3 py-2 font-mono text-sm uppercase outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
+            />
+            <Button type="submit" variant="outline" size="sm" disabled={validandoCupom || !cupomTexto.trim()}>
+              {validandoCupom ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+              Aplicar
+            </Button>
+            {cupomErro && <p className="basis-full text-sm text-destructive">{cupomErro}</p>}
+          </form>
+        )}
+      </div>
+    )
   }
 
   /** Caminho de saída quando o pagamento automático não está disponível. */
@@ -226,6 +337,12 @@ export function AssinaturaPage() {
             <p className="font-display text-3xl font-extrabold tabular-nums">
               {formatarPreco(pix.amountCents)}
             </p>
+            {pix.coupon && pix.originalAmountCents && pix.originalAmountCents > pix.amountCents && (
+              <p className="mt-1 text-sm text-emerald-700">
+                Cupom {pix.coupon}: de {formatarPreco(pix.originalAmountCents)} por{" "}
+                {formatarPreco(pix.amountCents)}
+              </p>
+            )}
 
             <p className="mt-5 text-sm font-semibold">Ou copie o código Pix</p>
             <div className="mt-2 flex gap-2">
@@ -392,6 +509,7 @@ export function AssinaturaPage() {
         />
 
         {avisoIndisponivel}
+        {campoCupom([{ plan: "escola", professores, alunos }])}
 
         <div className="max-w-2xl rounded-3xl border bg-card p-7 shadow-sm">
           <dl className="grid gap-4 sm:grid-cols-2">
@@ -413,8 +531,8 @@ export function AssinaturaPage() {
             <p className="text-[0.7rem] font-bold uppercase tracking-wider text-muted-foreground">
               Mensalidade
             </p>
-            <p className="font-display text-3xl font-extrabold tabular-nums">
-              {formatarPreco(total)}
+            <p>
+              {preco("escola", total)}
               <span className="ml-1 text-sm font-normal text-muted-foreground">/mês</span>
             </p>
           </div>
@@ -441,7 +559,7 @@ export function AssinaturaPage() {
               </>
             ) : (
               <>
-                Gerar cobrança de {formatarPreco(total)}
+                Gerar cobrança de {formatarPreco(previas.escola?.precoFinalCentavos ?? total)}
                 <ArrowRight className="h-4 w-4" />
               </>
             )}
@@ -468,6 +586,7 @@ export function AssinaturaPage() {
       />
 
       {avisoIndisponivel}
+      {campoCupom(AUTOATENDIMENTO.map((p) => ({ plan: p.id })))}
 
       <div className="grid gap-5 lg:grid-cols-2">
         {AUTOATENDIMENTO.map((plano) => (
@@ -482,9 +601,7 @@ export function AssinaturaPage() {
             </p>
             <h3 className="mt-1 font-display text-2xl font-bold">{plano.nome}</h3>
             <p className="mt-3 flex items-baseline gap-1.5">
-              <span className="font-display text-3xl font-extrabold tabular-nums">
-                {formatarPreco(plano.precoCentavos)}
-              </span>
+              {preco(plano.id, plano.precoCentavos)}
               <span className="text-sm text-muted-foreground">
                 {plano.periodo === "ano" ? "/ano" : "/mês"}
               </span>

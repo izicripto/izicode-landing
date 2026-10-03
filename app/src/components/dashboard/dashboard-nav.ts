@@ -1,4 +1,5 @@
 import {
+  TicketPercent,
   Home,
   Library,
   Sparkles,
@@ -152,6 +153,7 @@ const OWNER_NAV: NavGroup[] = [
     group: "Operação",
     items: [
       { to: "/app/admin/vendas", label: "Vendas", icon: Wallet },
+      { to: "/app/admin/cupons", label: "Cupons", icon: TicketPercent },
       { to: "/app/admin/suporte", label: "Suporte", icon: LifeBuoy },
     ],
   },

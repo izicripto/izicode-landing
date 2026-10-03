@@ -260,6 +260,14 @@ service cloud.firestore {
     // seria deixar qualquer pessoa marcar o próprio pagamento como pago e
     // liberar o plano sem pagar nada. O cliente só lê, para a tela poder
     // acompanhar o status da própria compra.
+    // Cupons de desconto. Só o admin lê e escreve: liberar leitura deixaria
+    // qualquer conta listar todos os códigos. Quem compra valida o cupom pela
+    // function validarCupom, e o desconto é aplicado no servidor no checkout.
+    // O contador 'usos' é incrementado pelo servidor ao confirmar o pagamento.
+    match /coupons/{codigo} {
+      allow read, write: if isAdmin();
+    }
+
     match /payments/{paymentId} {
       allow read: if isAdmin() || (isAuthenticated() && resource.data.uid == request.auth.uid);
       allow write: if false;

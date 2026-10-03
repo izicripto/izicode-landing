@@ -20,7 +20,17 @@ export interface CheckoutResposta {
   brCodeBase64: string | null
   expiresAt: string | null
   amountCents: number
+  /** Preço antes do cupom (igual a amountCents quando não há cupom). */
+  originalAmountCents?: number
+  coupon?: string | null
   tipo: "assinatura" | "escola"
+}
+
+export interface PreviaCupom {
+  codigo: string
+  precoOriginalCentavos: number
+  descontoCentavos: number
+  precoFinalCentavos: number
 }
 
 export interface StatusPagamento {
@@ -69,10 +79,32 @@ export async function criarCheckout(params: {
   schoolId?: string
   professores?: number
   alunos?: number
+  cupom?: string
 }): Promise<CheckoutResposta> {
   const fn = httpsCallable<typeof params, CheckoutResposta>(functions, "createAbacatePayCheckout")
   const { data } = await fn(params)
   return data
+}
+
+/**
+ * Prévia do desconto. O servidor avalia o cupom de novo ao gerar o Pix —
+ * o valor daqui é só para a pessoa ver antes de pagar.
+ */
+export async function validarCupom(params: {
+  plan: string
+  cupom: string
+  professores?: number
+  alunos?: number
+}): Promise<PreviaCupom> {
+  const fn = httpsCallable<typeof params, PreviaCupom>(functions, "validarCupom")
+  const { data } = await fn(params)
+  return data
+}
+
+/** Cupom recusado: o servidor manda o motivo pronto para a tela. */
+export function motivoCupom(err: unknown): string | null {
+  const e = err as { code?: string; message?: string }
+  return e?.code?.includes("out-of-range") ? e.message || "Cupom inválido." : null
 }
 
 export async function confirmarPagamento(paymentId: string): Promise<StatusPagamento> {
@@ -105,6 +137,12 @@ export function descreverFalhaCheckout(
     return {
       titulo: "Entre na sua conta para assinar",
       detalhe: "O plano é liberado para a conta que fizer o pagamento.",
+    }
+  }
+  if (codigo.includes("out-of-range")) {
+    return {
+      titulo: "Cupom não aplicado",
+      detalhe: `${motivoCupom(err)} Remova o cupom para pagar o preço normal.`,
     }
   }
   if (codigo.includes("permission-denied")) {

@@ -1,6 +1,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const axios = require("axios");
+const { avaliarCupom, normalizarCodigo } = require("./cupons");
 
 admin.initializeApp();
 
@@ -356,6 +357,57 @@ function calcularEscola(professores, alunos) {
     };
 }
 
+/**
+ * Lê e avalia o cupom digitado. Sem cupom, devolve null. Cupom que não
+ * vale vira 'out-of-range' com o motivo (código exclusivo do cupom: o
+ * 'failed-precondition' a tela já lê como "pagamentos fora do ar") — a tela mostra a frase
+ * como está, e a pessoa pode tirar o cupom e pagar o preço cheio.
+ */
+async function resolverCupom(codigoBruto, plan, precoCentavos) {
+    if (codigoBruto == null || codigoBruto === '') return null;
+    const codigo = normalizarCodigo(codigoBruto);
+    if (!codigo) {
+        throw new functions.https.HttpsError('out-of-range', 'Cupom inválido ou desativado.');
+    }
+    const doc = await admin.firestore().collection('coupons').doc(codigo).get();
+    const r = avaliarCupom(doc.exists ? doc.data() : null, { plan, precoCentavos });
+    if (!r.ok) throw new functions.https.HttpsError('out-of-range', r.motivo);
+    return { codigo, ...r };
+}
+
+/** Preço do plano calculado no servidor — o mesmo que o checkout cobra. */
+function precoDoPlano(plan, data) {
+    const planConfig = ABACATEPAY_PLANS[plan];
+    if (!planConfig) return null;
+    return planConfig.tipo === 'escola'
+        ? calcularEscola(data.professores, data.alunos).totalCentavos
+        : planConfig.priceCents;
+}
+
+/**
+ * Pré-visualiza o desconto antes de gerar o Pix. Só informa: quem aplica o
+ * desconto de verdade é o createAbacatePayCheckout, que avalia o cupom de
+ * novo. Exige login para não virar um verificador público de códigos.
+ */
+exports.validarCupom = functions.https.onCall(async (data, context) => {
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'Entre na sua conta para usar um cupom.');
+    }
+    const { plan, cupom } = data || {};
+    const precoCentavos = precoDoPlano(plan, data || {});
+    if (!precoCentavos) {
+        throw new functions.https.HttpsError('invalid-argument', `Plano desconhecido: ${plan}`);
+    }
+    const r = await resolverCupom(cupom, plan, precoCentavos);
+    if (!r) throw new functions.https.HttpsError('invalid-argument', 'Digite um cupom.');
+    return {
+        codigo: r.codigo,
+        precoOriginalCentavos: precoCentavos,
+        descontoCentavos: r.descontoCentavos,
+        precoFinalCentavos: r.precoFinalCentavos
+    };
+});
+
 exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) => {
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'Entre na sua conta para continuar.');
@@ -411,6 +463,12 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
         }
     }
 
+    // Cupom: avaliado aqui, no servidor, sobre o preço que o servidor
+    // calculou. O desconto que a tela mostrou antes é só uma prévia.
+    const precoOriginalCents = priceCents;
+    const cupom = await resolverCupom((data || {}).cupom, plan, priceCents);
+    if (cupom) priceCents = cupom.precoFinalCentavos;
+
     if (!priceCents || priceCents < 100) {
         throw new functions.https.HttpsError('invalid-argument', 'Valor da cobrança inválido.');
     }
@@ -427,6 +485,9 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
         plan,
         tipo: planConfig.tipo,
         amountCents: priceCents,
+        originalAmountCents: precoOriginalCents,
+        coupon: cupom ? cupom.codigo : null,
+        discountCents: cupom ? cupom.descontoCentavos : 0,
         schoolId: escolaId,
         schoolName: nomeEscola,
         seats: contagem,
@@ -450,7 +511,7 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
                 method: 'PIX',
                 data: {
                     amount: priceCents,
-                    description: planConfig.name,
+                    description: cupom ? `${planConfig.name} (cupom ${cupom.codigo})` : planConfig.name,
                     // Uma hora é folgado para um Pix e evita que a pessoa
                     // volte no dia seguinte com um QR code morto na tela.
                     expiresIn: 3600,
@@ -496,6 +557,8 @@ exports.createAbacatePayCheckout = functions.https.onCall(async (data, context) 
             brCodeBase64: cobranca.brCodeBase64 || null,
             expiresAt: cobranca.expiresAt || null,
             amountCents: priceCents,
+            originalAmountCents: precoOriginalCents,
+            coupon: cupom ? cupom.codigo : null,
             tipo: planConfig.tipo
         };
     } catch (error) {
@@ -593,7 +656,18 @@ async function aplicarPagamento(pagamentoRef, dadosPagamento) {
         throw new Error('Pagamento sem uid e sem schoolId — nada a liberar.');
     }
 
-    await pagamentoRef.set({ status: 'paid', paidAt: agora }, { merge: true });
+    // O uso do cupom conta junto com o "pago", na mesma escrita: ou os dois
+    // acontecem, ou nenhum. Como aplicarPagamento sai cedo quando o pagamento
+    // já está 'paid', webhook repetido não conta o cupom duas vezes.
+    const lote = db.batch();
+    lote.set(pagamentoRef, { status: 'paid', paidAt: agora }, { merge: true });
+    if (dadosPagamento.coupon && idDeDocumentoValido(dadosPagamento.coupon)) {
+        lote.set(db.collection('coupons').doc(dadosPagamento.coupon), {
+            usos: admin.firestore.FieldValue.increment(1),
+            ultimoUsoEm: agora
+        }, { merge: true });
+    }
+    await lote.commit();
     return { jaAplicado: false, tipo: dadosPagamento.tipo };
 }
 
