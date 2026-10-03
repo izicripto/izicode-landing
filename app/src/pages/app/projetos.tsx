@@ -17,6 +17,7 @@ import { PageHeader, EmptyState } from "@/components/dashboard/page-header"
 import { Markdown, extractHeadings } from "@/components/dashboard/markdown"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/toast"
+import { imprimirRoteiro } from "@/lib/imprimir"
 
 function ProjectDetail({ project, onBack }: { project: Project; onBack: () => void }) {
   const headings = useMemo(() => extractHeadings(project.content ?? ""), [project.content])
@@ -30,9 +31,9 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
           <ArrowLeft className="h-4 w-4" />
           Voltar
         </Button>
-        <Button variant="outline" size="sm" onClick={() => window.print()}>
+        <Button variant="outline" size="sm" onClick={() => imprimirRoteiro(project.title)}>
           <Printer className="h-4 w-4" />
-          Imprimir roteiro
+          Imprimir ou salvar PDF
         </Button>
       </div>
 
@@ -152,11 +153,11 @@ function ProjectDetail({ project, onBack }: { project: Project; onBack: () => vo
               <p className="font-display text-sm font-bold">Levar para a sala</p>
               <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                 A impressão sai limpa: sem menus nem botões, com tabelas e códigos
-                formatados para papel.
+                formatados para papel. Para o PDF, escolha "Salvar como PDF" no destino.
               </p>
-              <Button variant="outline" size="sm" className="mt-3 w-full" onClick={() => window.print()}>
+              <Button variant="outline" size="sm" className="mt-3 w-full" onClick={() => imprimirRoteiro(project.title)}>
                 <Printer className="h-4 w-4" />
-                Imprimir roteiro
+                Imprimir ou salvar PDF
               </Button>
             </div>
           </div>

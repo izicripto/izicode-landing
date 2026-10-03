@@ -5,6 +5,7 @@ import { loadProjects, type LegacyProject } from "@/lib/legacy-data"
 import { Markdown } from "@/components/dashboard/markdown"
 import { ProjectVisual } from "@/components/dashboard/project-visual"
 import { Button } from "@/components/ui/button"
+import { imprimirRoteiro } from "@/lib/imprimir"
 
 interface FullProject extends LegacyProject {
   content?: string
@@ -59,7 +60,7 @@ export function ProjetoPage() {
 
   return (
     <>
-      <Button variant="ghost" size="sm" className="-ml-2 mb-4" onClick={() => navigate(-1)}>
+      <Button variant="ghost" size="sm" className="-ml-2 mb-4 print:hidden" onClick={() => navigate(-1)}>
         <ArrowLeft className="h-4 w-4" />
         Voltar
       </Button>
@@ -68,9 +69,14 @@ export function ProjetoPage() {
         id={project.id}
         title={project.title}
         tools={project.tools}
-        className="mb-6 h-44 w-full rounded-2xl sm:h-52"
+        className="mb-6 h-44 w-full rounded-2xl sm:h-52 print:hidden"
         size="hero"
       />
+
+      {/* Linha de identificação: só aparece no papel. */}
+      <p className="mb-2 hidden text-xs font-bold uppercase tracking-[0.18em] print:block">
+        Izicode Edu — Roteiro da biblioteca
+      </p>
 
       <header className="mb-7">
         <div className="mb-3 flex flex-wrap gap-1.5">
@@ -116,14 +122,14 @@ export function ProjetoPage() {
         </div>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_300px] lg:items-start">
-        <article className="rounded-2xl border bg-card p-6 shadow-sm sm:p-8">
+      <div className="grid gap-6 lg:grid-cols-[1fr_300px] lg:items-start print:block">
+        <article className="print-area rounded-2xl border bg-card p-6 shadow-sm sm:p-8">
           <Markdown content={project.content ?? ""} />
 
-          <div className="mt-8 flex flex-wrap gap-2 border-t pt-6">
-            <Button variant="outline" onClick={() => window.print()}>
+          <div className="mt-8 flex flex-wrap gap-2 border-t pt-6 print:hidden">
+            <Button variant="outline" onClick={() => imprimirRoteiro(project.title)}>
               <Printer className="h-4 w-4" />
-              Imprimir roteiro
+              Imprimir ou salvar PDF
             </Button>
             {project.hacksterLink && (
               <Button variant="outline" asChild>
@@ -136,7 +142,7 @@ export function ProjetoPage() {
           </div>
         </article>
 
-        <aside className="space-y-4 lg:sticky lg:top-6">
+        <aside className="space-y-4 lg:sticky lg:top-6 print:static print:mt-6 print:break-inside-avoid">
           {guide && (
             <div className="rounded-2xl border bg-card p-5 shadow-sm">
               <h2 className="font-display font-bold">Guia do professor</h2>

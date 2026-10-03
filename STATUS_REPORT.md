@@ -18,7 +18,7 @@
 - Nenhum bloqueio crítico aberto no momento. O foco atual é iteração de conversão (SEO, CSP, onboarding) e pequenos ajustes de UX identificados em uso real.
 
 ## 📅 PRÓXIMOS PASSOS (Roadmap)
-1. **Relatórios PDF:** permitir exportar roteiros gerados por IA em PDF para o professor.
+1. ~~**Relatórios PDF**~~ — feito em 03/10/2026: "Imprimir ou salvar PDF" nos roteiros da IA e da Biblioteca, com o PDF nomeado pelo título do roteiro.
 2. **Automação de marketing:** avaliar retomada de alertas via Telegram/LinkedIn para leads e consultores.
 3. **Conteúdo:** seguir expandindo a Biblioteca e as trilhas da Academia do Professor.
 

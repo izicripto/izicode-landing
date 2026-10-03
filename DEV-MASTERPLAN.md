@@ -46,7 +46,7 @@ Plataforma B2B/B2C para escolas, professores autônomos e famílias, focada em r
 
 ### 1. Conteúdo e Produto
 - [ ] Página de blog/conteúdo para SEO orgânico.
-- [ ] Relatórios PDF do roteiro gerado por IA para o professor.
+- [x] Roteiros em PDF (03/10/2026): roteiros da IA e da Biblioteca imprimem limpos e salvam em PDF com o nome do roteiro (`app/src/lib/imprimir.ts`).
 - [ ] Expandir Biblioteca e trilhas da Academia do Professor.
 
 ### 2. Monetização
