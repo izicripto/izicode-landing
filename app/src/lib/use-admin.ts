@@ -7,6 +7,7 @@ import {
   limit,
   orderBy,
   query,
+  setDoc,
   updateDoc,
 } from "firebase/firestore"
 import { db } from "@/lib/firebase"
@@ -85,7 +86,9 @@ export function useAdminData() {
       ])
 
       setUsers(uSnap.docs.map((d) => ({ ...(d.data() as Omit<AdminUser, "id">), id: d.id })))
-      setSchools(sSnap.docs.map((d) => ({ ...(d.data() as Omit<AdminSchool, "id">), id: d.id })))
+      const escolas = sSnap.docs.map((d) => ({ ...(d.data() as Omit<AdminSchool, "id">), id: d.id }))
+      setSchools(escolas)
+      sincronizarCodigos(escolas).catch((e) => console.warn("Índice de códigos não sincronizado:", e))
       setLeads(lSnap.docs.map((d) => ({ ...(d.data() as Omit<AdminLead, "id">), id: d.id })))
       setClasses(cSnap.docs.map((d) => ({ ...(d.data() as Omit<AdminClass, "id">), id: d.id })))
     } catch (err) {
@@ -195,4 +198,25 @@ export function useAdminData() {
     setLeadStatus,
     removeLead,
   }
+}
+
+// Os códigos de aluno e de professor de cada escola (cadastrados no documento da escola)
+// precisam existir no índice codigosEscola, que é o que o onboarding consulta. Ao abrir o
+// painel, o dono da plataforma cria os que estiverem faltando.
+async function sincronizarCodigos(escolas: AdminSchool[]) {
+  const existentes = new Set((await getDocs(collection(db, "codigosEscola"))).docs.map((d) => d.id))
+  const faltando: Promise<void>[] = []
+  for (const e of escolas) {
+    const pares: [string | undefined, "student" | "teacher"][] = [
+      [e.studentCode, "student"],
+      [e.teacherCode, "teacher"],
+    ]
+    for (const [codigo, tipo] of pares) {
+      const c = codigo?.trim().toUpperCase()
+      if (c && !existentes.has(c)) {
+        faltando.push(setDoc(doc(db, "codigosEscola", c), { schoolId: e.id, tipo, nome: e.name ?? "Escola" }))
+      }
+    }
+  }
+  await Promise.all(faltando)
 }

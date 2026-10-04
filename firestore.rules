@@ -47,6 +47,46 @@ service cloud.firestore {
     function isAdmin() {
       return isPlatformOwner() || hasRole('admin');
     }
+
+    // ---- vínculos com escola e turma ----
+    // Papel no documento do usuário é dado comum (a pessoa escolhe no onboarding), então
+    // "ser professor" NÃO dá acesso a nada de uma escola. O acesso vem do vínculo:
+    // ser o professor da turma, o gestor (adminId) da escola ou membro dela (schoolId).
+    function meuSchoolId() {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('schoolId', null)
+        : null;
+    }
+
+    function membroDaEscola(schoolId) {
+      return isAuthenticated() && schoolId != null && meuSchoolId() == schoolId;
+    }
+
+    function gestorDaEscola(schoolId) {
+      return isAuthenticated() && schoolId != null
+        && exists(/databases/$(database)/documents/schools/$(schoolId))
+        && get(/databases/$(database)/documents/schools/$(schoolId)).data.adminId == request.auth.uid;
+    }
+
+    function turma(classId) {
+      return get(/databases/$(database)/documents/classes/$(classId)).data;
+    }
+
+    function professorDaTurma(classId) {
+      return isAuthenticated()
+        && exists(/databases/$(database)/documents/classes/$(classId))
+        && turma(classId).get('teacherId', null) == request.auth.uid;
+    }
+
+    function cuidaDaTurma(classId) {
+      return professorDaTurma(classId)
+        || (exists(/databases/$(database)/documents/classes/$(classId)) && gestorDaEscola(turma(classId).get('schoolId', null)));
+    }
+
+    // Uid de aluno vem do login por palavra secreta: "student_{classId}_{studentId}".
+    function turmaDoAluno(studentUid) {
+      return studentUid is string && studentUid.matches('student_[^_]+_.+') ? studentUid.split('_')[1] : '';
+    }
     
     // Users collection
     match /users/{userId} {
@@ -107,8 +147,27 @@ service cloud.firestore {
         return after == before || after == before + 1;
       }
 
+      // Vincular-se a uma escola exige o código dela (índice codigosEscola), do tipo
+      // certo para o papel: código de aluno para aluno, de professor para professor.
+      // Antes qualquer conta gravava o schoolId de qualquer escola e passava a ler os
+      // dados das pessoas de lá.
+      function vinculoDeEscolaValido() {
+        let novo = request.resource.data.get('schoolId', null);
+        let antigo = resource == null ? null : resource.data.get('schoolId', null);
+        let c = request.resource.data.get('codigoEscola', '');
+        return novo == null || novo == antigo || (
+          c is string && c.size() > 0
+          && exists(/databases/$(database)/documents/codigosEscola/$(c))
+          && get(/databases/$(database)/documents/codigosEscola/$(c)).data.schoolId == novo
+          && (
+            (get(/databases/$(database)/documents/codigosEscola/$(c)).data.tipo == 'student' && request.resource.data.get('role', '') == 'student') ||
+            (get(/databases/$(database)/documents/codigosEscola/$(c)).data.tipo == 'teacher' && request.resource.data.get('role', '') in ['teacher', 'freelance_teacher'])
+          )
+        );
+      }
+
       allow create: if isAuthenticated() && request.auth.uid == userId &&
-                       isSafeSelfRole() && isSafeSelfSubscription();
+                       isSafeSelfRole() && isSafeSelfSubscription() && vinculoDeEscolaValido();
 
       // Duas portas distintas, de propósito:
       //
@@ -126,7 +185,8 @@ service cloud.firestore {
                          (isSafeSelfSubscription() ||
                            (('subscription' in request.resource.data) &&
                             request.resource.data.subscription.plan == resource.data.subscription.plan)) &&
-                         isSafeUsageIncrement()
+                         isSafeUsageIncrement() &&
+                         vinculoDeEscolaValido()
                        );
 
       allow delete: if isAdmin();
@@ -161,8 +221,18 @@ service cloud.firestore {
       return school != null && school.plan == 'active';
     }
 
+    // Índice código → escola. Quem tem o código confere; ninguém lista todos.
+    // Mantido pelo dono da plataforma (painel de escolas sincroniza com os códigos).
+    match /codigosEscola/{codigo} {
+      allow get: if isAuthenticated();
+      allow list: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Escola: só quem é dela (membro ou gestor) e o dono da plataforma. Antes qualquer
+    // conta listava todas as escolas com os códigos de aluno e de professor.
     match /schools/{schoolId} {
-      allow read: if isAuthenticated();
+      allow read: if isAdmin() || membroDaEscola(schoolId) || resource.data.get('adminId', null) == request.auth.uid;
       allow create: if isSchoolAdmin() || isAdmin();
       allow update: if (isSchoolAdmin() && request.auth.uid == resource.data.adminId &&
                           request.resource.data.plan == resource.data.plan) || isAdmin();
@@ -177,17 +247,25 @@ service cloud.firestore {
     // a senha inteira. Por isso nenhum aluno lê esta coleção: a tela de
     // entrada recebe nome e avatar pela Cloud Function lookupClass, que
     // devolve só isso, e a conferência da palavra acontece em studentLogin.
+    // Antes: qualquer conta que se declarasse 'teacher' lia e trocava a palavra secreta
+    // de todas as crianças de todas as turmas.
     match /classes/{classId}/students/{studentId} {
-      allow read, write: if isAdmin() || isSchoolAdmin() || isTeacher();
+      allow read, write: if isAdmin() || cuidaDaTurma(classId);
     }
 
     match /classes/{classId} {
-      allow read: if isAuthenticated();
+      // Turma: professor dela, gente da mesma escola e o aluno logado nela (token).
+      allow read: if isAdmin()
+        || resource.data.get('teacherId', null) == request.auth.uid
+        || membroDaEscola(resource.data.get('schoolId', null))
+        || gestorDaEscola(resource.data.get('schoolId', null))
+        || (isAuthenticated() && request.auth.token.get('classId', '') == classId);
       allow create: if isAdmin() ||
                        ((isSchoolTeacher() || isSchoolAdmin()) &&
+                        (membroDaEscola(request.resource.data.schoolId) || gestorDaEscola(request.resource.data.schoolId)) &&
                         isSchoolPlanActive(request.resource.data.schoolId));
       allow update, delete: if isAdmin() ||
-                               (isSchoolAdmin() && isSchoolPlanActive(resource.data.schoolId)) ||
+                               (gestorDaEscola(resource.data.schoolId) && isSchoolPlanActive(resource.data.schoolId)) ||
                                (isTeacher() && resource.data.teacherId == request.auth.uid &&
                                 isSchoolPlanActive(resource.data.schoolId));
     }
@@ -208,7 +286,9 @@ service cloud.firestore {
     match /studentProgress/{progressId} {
       allow read, update: if isStudent() && 
                              resource.data.studentId == request.auth.uid;
-      allow read: if isTeacher() || isSchoolAdmin();
+      // Professor/gestor só da turma do aluno (o uid do aluno carrega a turma).
+      allow read: if isAuthenticated() && turmaDoAluno(resource.data.studentId) != ''
+        && cuidaDaTurma(turmaDoAluno(resource.data.studentId));
       allow create: if isAuthenticated() && request.resource.data.studentId == request.auth.uid;
       allow read, write: if isAdmin();
     }

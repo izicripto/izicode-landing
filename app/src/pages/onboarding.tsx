@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { collection, doc, getDocs, limit, query, serverTimestamp, setDoc, where } from "firebase/firestore"
+import { collection, doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore"
 import {
   School,
   Sparkles,
@@ -75,7 +75,7 @@ export function OnboardingPage() {
   const [codigo, setCodigo] = useState("")
   const [validandoCodigo, setValidandoCodigo] = useState(false)
   const [erroCodigo, setErroCodigo] = useState<string | null>(null)
-  const [escola, setEscola] = useState<{ id: string; nome: string } | null>(null)
+  const [escola, setEscola] = useState<{ id: string; nome: string; codigo: string } | null>(null)
 
   // Campos por perfil
   const [instituicao, setInstituicao] = useState("")
@@ -105,24 +105,13 @@ export function OnboardingPage() {
     setValidandoCodigo(true)
     setErroCodigo(null)
     try {
-      const alunos = await getDocs(
-        query(collection(db, "schools"), where("studentCode", "==", cod), limit(1))
-      )
-      if (!alunos.empty) {
-        const d = alunos.docs[0]
-        setEscola({ id: d.id, nome: (d.data().name as string) ?? "sua escola" })
-        setPerfil("student")
-        setPasso(2)
-        return
-      }
-
-      const profs = await getDocs(
-        query(collection(db, "schools"), where("teacherCode", "==", cod), limit(1))
-      )
-      if (!profs.empty) {
-        const d = profs.docs[0]
-        setEscola({ id: d.id, nome: (d.data().name as string) ?? "sua escola" })
-        setPerfil("teacher")
+      // O código é conferido no índice codigosEscola: as regras deixam abrir um código
+      // conhecido, mas não listar as escolas (antes qualquer conta via todos os códigos).
+      const snap = await getDoc(doc(db, "codigosEscola", cod))
+      if (snap.exists()) {
+        const d = snap.data() as { schoolId: string; tipo: "student" | "teacher"; nome?: string }
+        setEscola({ id: d.schoolId, nome: d.nome ?? "sua escola", codigo: cod })
+        setPerfil(d.tipo === "student" ? "student" : "teacher")
         setPasso(2)
         return
       }
@@ -179,6 +168,8 @@ export function OnboardingPage() {
           role: perfil,
           ...extra,
           schoolId: escola?.id ?? null,
+          // As regras só aceitam o vínculo com a escola junto com o código dela.
+          ...(escola ? { codigoEscola: escola.codigo } : {}),
           isInstitutional: Boolean(escola),
           onboardingCompleted: true,
           status: "approved",
